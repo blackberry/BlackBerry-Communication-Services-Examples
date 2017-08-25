@@ -15,7 +15,7 @@ These samples require the BBM Enterprise SDK which you can find along with relat
     
 * Getting stated with the [BBM Enterprise SDK](http://community.blackberry.com/bbm-enterprise)
 * [Development Guide](http://help.blackberry.com/en/bbm-enterprise-sdk-for-android/current/)
-* [API Reference](https://developer.blackberry.com/files/bbm-enterprise/android/index.html)
+* [API Reference](https://developer.blackberry.com/files/bbm-enterprise/android/documents/reference/index.html)
 
 # License
 
