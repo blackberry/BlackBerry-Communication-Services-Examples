@@ -2,7 +2,7 @@
 
 # BBM Enterprise SDK iOS Samples
 
-This repository contains code for Android example applications that you can use to help build your messaging solution with the BBM Enterprise SDK.
+This repository contains code for iOS example applications that you can use to help build your messaging solution with the BBM Enterprise SDK.
 
 | Example Application                      | Description                              |
 | ---------------------------------------- | ---------------------------------------- |
