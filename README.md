@@ -7,7 +7,7 @@ This repository contains code for Android example applications that you can use 
 
 | Example Application                      | Description                              |
 | ---------------------------------------- | ---------------------------------------- |
-| [Simple Chat](https://developer.blackberry.com/files/bbm-enterprise/android/developerguide/examples/SimpleChat/README.html)      | Build a basic chat app using the BBM Enterprise SDK |
+| [Simple Chat](https://developer.blackberry.com/files/bbm-enterprise/android/documents/guide/html/examples/SimpleChat/README.html)      | Build a basic chat app using the BBM Enterprise SDK |
 
 # Getting Started
 
