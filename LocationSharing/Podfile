@@ -1,0 +1,37 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '9.0'
+
+target 'LocationSharing' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for LocationSharing app
+pod 'GoogleSignIn', '= 4.0.2'
+pod 'Firebase/Database', '= 3.14.0'
+pod 'Firebase/Auth', '= 3.14.0'
+
+# Override the default CocoaPOD architecture settings to build for all architectures
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
+        end
+    end
+
+# Firebase adds sqlite3 to OTHER_LDFLAGS but this makes the BBM Enterprise SDK shutdown.
+# These removes sqlite3 from OTHER_LDFLAGS.
+installer.pods_project.targets.each do |target|
+    if target.name == "Pods-LocationSharing"
+        puts "Updating #{target.name} OTHER_LDFLAGS"
+            target.build_configurations.each do |config|
+                xcconfig_path = config.base_configuration_reference.real_path
+                xcconfig = File.read(xcconfig_path)
+                #Remove sqlite3
+                new_xcconfig = xcconfig.sub('-l"sqlite3"', '')
+                File.open(xcconfig_path, "w") { |file| file << new_xcconfig }
+            end
+        end
+    end
+end
+
+end

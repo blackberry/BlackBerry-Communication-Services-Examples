@@ -1,0 +1,700 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		75FF5F647D5EA22EA9649C7B /* libPods-LocationSharing.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB50BEAF4A29B83E1FA8BB0F /* libPods-LocationSharing.a */; };
+		9CB42E541F22677900877477 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E531F22677900877477 /* Contact.m */; };
+		9CB42E581F22681500877477 /* CoreAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E571F22681500877477 /* CoreAccess.m */; };
+		9CB42E5C1F226A5700877477 /* ChatCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E5B1F226A5700877477 /* ChatCreator.m */; };
+		9CB42E5F1F226DB500877477 /* ContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E5E1F226DB500877477 /* ContactManager.m */; };
+		9CB42E671F226DD800877477 /* KeySync.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E621F226DD800877477 /* KeySync.m */; };
+		9CB42E681F226DD800877477 /* LocalUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E641F226DD800877477 /* LocalUser.m */; };
+		9CB42E691F226DD800877477 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E661F226DD800877477 /* NSString+Base64.m */; };
+		9CB42E6B1F227BF900877477 /* BBMEnterprise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB42E6A1F227BF900877477 /* BBMEnterprise.framework */; };
+		9CB42E791F227CB000877477 /* ca.pem in Resources */ = {isa = PBXBuildFile; fileRef = 9CB42E751F227CB000877477 /* ca.pem */; };
+		9CB42E7A1F227CB000877477 /* BBMLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E781F227CB000877477 /* BBMLog.m */; };
+		9CB42E7B1F227CDF00877477 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD640A321E70618C001AA785 /* GLKit.framework */; };
+		9CB42E7C1F227CEE00877477 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD640A2E1E706163001AA785 /* VideoToolbox.framework */; };
+		9CB42E7D1F227D1300877477 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AD640A2C1E706134001AA785 /* libz.tbd */; };
+		9CB42E7E1F227D1B00877477 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AD640A2A1E70611D001AA785 /* libstdc++.tbd */; };
+		9CB42E7F1F227D2A00877477 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AD640A301E70617C001AA785 /* libresolv.tbd */; };
+		9CE261C91ED8A5340043A4BC /* LocationMessageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE261C81ED8A5340043A4BC /* LocationMessageLoader.m */; };
+		9CE261CC1ED8AF920043A4BC /* BBMChatMessage+LocationApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE261CB1ED8AF920043A4BC /* BBMChatMessage+LocationApp.m */; };
+		9CE261CF1ED8B9F10043A4BC /* BBMChat+LocationApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE261CE1ED8B9F10043A4BC /* BBMChat+LocationApp.m */; };
+		9CE261D41EDC8E6D0043A4BC /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE261D31EDC8E6D0043A4BC /* LoginViewController.m */; };
+		9CFF7B931ED875FA00A28053 /* ChatSubjectViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFF7B8C1ED875FA00A28053 /* ChatSubjectViewCell.m */; };
+		9CFF7B941ED875FA00A28053 /* ContactPickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFF7B8E1ED875FA00A28053 /* ContactPickerTableViewController.m */; };
+		9CFF7B961ED875FA00A28053 /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFF7B921ED875FA00A28053 /* ContactTableViewCell.m */; };
+		AD382EB21E7ABBCB00846056 /* test.gpx in Resources */ = {isa = PBXBuildFile; fileRef = AD382EB11E7ABBCB00846056 /* test.gpx */; };
+		AD5B7F791E71A4D200150E79 /* LocationSharingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5B7F781E71A4D200150E79 /* LocationSharingViewController.m */; };
+		AD5B7F7B1E71A86E00150E79 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD5B7F7A1E71A86E00150E79 /* MapKit.framework */; };
+		AD5B7F7E1E71B04F00150E79 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5B7F7D1E71B04F00150E79 /* LocationManager.m */; };
+		AD5B7F811E71B11400150E79 /* LocationMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5B7F801E71B11400150E79 /* LocationMapAnnotation.m */; };
+		AD6409941E705F3F001AA785 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AD6409931E705F3F001AA785 /* main.m */; };
+		AD6409971E705F40001AA785 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AD6409961E705F40001AA785 /* AppDelegate.m */; };
+		AD6409A01E705F40001AA785 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD64099E1E705F40001AA785 /* Main.storyboard */; };
+		AD6409A21E705F40001AA785 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD6409A11E705F40001AA785 /* Assets.xcassets */; };
+		AD6409A51E705F40001AA785 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD6409A31E705F40001AA785 /* LaunchScreen.storyboard */; };
+		AD640A521E706492001AA785 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD640A4B1E706492001AA785 /* GoogleService-Info.plist */; };
+		AD640A651E718DCC001AA785 /* ChatsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD640A641E718DCC001AA785 /* ChatsTableViewController.m */; };
+		AD640A6B1E718E75001AA785 /* ChatListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = AD640A691E718E75001AA785 /* ChatListLoader.m */; };
+		AD640A6E1E719007001AA785 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD640A6D1E719007001AA785 /* ChatTableViewCell.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9C415DCD1ED7671A007F8846 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		6130075934D28B90FE764EBE /* Pods-LocationSharing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocationSharing.release.xcconfig"; path = "Pods/Target Support Files/Pods-LocationSharing/Pods-LocationSharing.release.xcconfig"; sourceTree = "<group>"; };
+		87FE9F307A612258DB084533 /* Pods-LocationSharing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocationSharing.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LocationSharing/Pods-LocationSharing.debug.xcconfig"; sourceTree = "<group>"; };
+		9C415DCF1ED7688F007F8846 /* ConfigSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigSettings.h; sourceTree = "<group>"; };
+		9CB42E521F22677900877477 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		9CB42E531F22677900877477 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		9CB42E561F22681500877477 /* CoreAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAccess.h; sourceTree = "<group>"; };
+		9CB42E571F22681500877477 /* CoreAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAccess.m; sourceTree = "<group>"; };
+		9CB42E5A1F226A5700877477 /* ChatCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCreator.h; sourceTree = "<group>"; };
+		9CB42E5B1F226A5700877477 /* ChatCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCreator.m; sourceTree = "<group>"; };
+		9CB42E5D1F226DB500877477 /* ContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactManager.h; sourceTree = "<group>"; };
+		9CB42E5E1F226DB500877477 /* ContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactManager.m; sourceTree = "<group>"; };
+		9CB42E611F226DD800877477 /* KeySync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeySync.h; sourceTree = "<group>"; };
+		9CB42E621F226DD800877477 /* KeySync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeySync.m; sourceTree = "<group>"; };
+		9CB42E631F226DD800877477 /* LocalUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalUser.h; sourceTree = "<group>"; };
+		9CB42E641F226DD800877477 /* LocalUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalUser.m; sourceTree = "<group>"; };
+		9CB42E651F226DD800877477 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		9CB42E661F226DD800877477 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
+		9CB42E6A1F227BF900877477 /* BBMEnterprise.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BBMEnterprise.framework; path = ../../sdk/BBMEnterprise.framework; sourceTree = "<group>"; };
+		9CB42E751F227CB000877477 /* ca.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ca.pem; sourceTree = "<group>"; };
+		9CB42E771F227CB000877477 /* BBMLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMLog.h; sourceTree = "<group>"; };
+		9CB42E781F227CB000877477 /* BBMLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMLog.m; sourceTree = "<group>"; };
+		9CE261C71ED8A5340043A4BC /* LocationMessageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationMessageLoader.h; sourceTree = "<group>"; };
+		9CE261C81ED8A5340043A4BC /* LocationMessageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationMessageLoader.m; sourceTree = "<group>"; };
+		9CE261CA1ED8AF920043A4BC /* BBMChatMessage+LocationApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BBMChatMessage+LocationApp.h"; sourceTree = "<group>"; };
+		9CE261CB1ED8AF920043A4BC /* BBMChatMessage+LocationApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BBMChatMessage+LocationApp.m"; sourceTree = "<group>"; };
+		9CE261CD1ED8B9F10043A4BC /* BBMChat+LocationApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BBMChat+LocationApp.h"; sourceTree = "<group>"; };
+		9CE261CE1ED8B9F10043A4BC /* BBMChat+LocationApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BBMChat+LocationApp.m"; sourceTree = "<group>"; };
+		9CE261D21EDC8E6D0043A4BC /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		9CE261D31EDC8E6D0043A4BC /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		9CFF7B8B1ED875FA00A28053 /* ChatSubjectViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatSubjectViewCell.h; sourceTree = "<group>"; };
+		9CFF7B8C1ED875FA00A28053 /* ChatSubjectViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatSubjectViewCell.m; sourceTree = "<group>"; };
+		9CFF7B8D1ED875FA00A28053 /* ContactPickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactPickerTableViewController.h; sourceTree = "<group>"; };
+		9CFF7B8E1ED875FA00A28053 /* ContactPickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactPickerTableViewController.m; sourceTree = "<group>"; };
+		9CFF7B911ED875FA00A28053 /* ContactTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactTableViewCell.h; sourceTree = "<group>"; };
+		9CFF7B921ED875FA00A28053 /* ContactTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewCell.m; sourceTree = "<group>"; };
+		AD382EA71E73305D00846056 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		AD382EB11E7ABBCB00846056 /* test.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.gpx; sourceTree = "<group>"; };
+		AD5B7F771E71A4D200150E79 /* LocationSharingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationSharingViewController.h; sourceTree = "<group>"; };
+		AD5B7F781E71A4D200150E79 /* LocationSharingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationSharingViewController.m; sourceTree = "<group>"; };
+		AD5B7F7A1E71A86E00150E79 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		AD5B7F7C1E71B04F00150E79 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
+		AD5B7F7D1E71B04F00150E79 /* LocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationManager.m; sourceTree = "<group>"; };
+		AD5B7F7F1E71B11400150E79 /* LocationMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationMapAnnotation.h; sourceTree = "<group>"; };
+		AD5B7F801E71B11400150E79 /* LocationMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationMapAnnotation.m; sourceTree = "<group>"; };
+		AD64098F1E705F3F001AA785 /* LocationSharing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocationSharing.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD6409931E705F3F001AA785 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		AD6409951E705F3F001AA785 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		AD6409961E705F40001AA785 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		AD64099F1E705F40001AA785 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		AD6409A11E705F40001AA785 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AD6409A41E705F40001AA785 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		AD6409A61E705F40001AA785 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AD640A2A1E70611D001AA785 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		AD640A2C1E706134001AA785 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		AD640A2E1E706163001AA785 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		AD640A301E70617C001AA785 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		AD640A321E70618C001AA785 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		AD640A4B1E706492001AA785 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "Google/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		AD640A5F1E708E88001AA785 /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
+		AD640A611E708EA7001AA785 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		AD640A631E718DCC001AA785 /* ChatsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatsTableViewController.h; sourceTree = "<group>"; };
+		AD640A641E718DCC001AA785 /* ChatsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatsTableViewController.m; sourceTree = "<group>"; };
+		AD640A681E718E75001AA785 /* ChatListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatListLoader.h; sourceTree = "<group>"; };
+		AD640A691E718E75001AA785 /* ChatListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatListLoader.m; sourceTree = "<group>"; };
+		AD640A6C1E719007001AA785 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatTableViewCell.h; sourceTree = "<group>"; };
+		AD640A6D1E719007001AA785 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatTableViewCell.m; sourceTree = "<group>"; };
+		CB50BEAF4A29B83E1FA8BB0F /* libPods-LocationSharing.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LocationSharing.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AD64098C1E705F3F001AA785 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9CB42E7F1F227D2A00877477 /* libresolv.tbd in Frameworks */,
+				9CB42E7E1F227D1B00877477 /* libstdc++.tbd in Frameworks */,
+				9CB42E7D1F227D1300877477 /* libz.tbd in Frameworks */,
+				9CB42E7C1F227CEE00877477 /* VideoToolbox.framework in Frameworks */,
+				9CB42E7B1F227CDF00877477 /* GLKit.framework in Frameworks */,
+				9CB42E6B1F227BF900877477 /* BBMEnterprise.framework in Frameworks */,
+				AD5B7F7B1E71A86E00150E79 /* MapKit.framework in Frameworks */,
+				75FF5F647D5EA22EA9649C7B /* libPods-LocationSharing.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9C415DCE1ED76884007F8846 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				9C415DCF1ED7688F007F8846 /* ConfigSettings.h */,
+			);
+			name = Config;
+			sourceTree = "<group>";
+		};
+		9CB42E551F22681500877477 /* Core Access */ = {
+			isa = PBXGroup;
+			children = (
+				9CB42E561F22681500877477 /* CoreAccess.h */,
+				9CB42E571F22681500877477 /* CoreAccess.m */,
+			);
+			path = "Core Access";
+			sourceTree = "<group>";
+		};
+		9CB42E591F226A5700877477 /* Chats */ = {
+			isa = PBXGroup;
+			children = (
+				9CB42E5A1F226A5700877477 /* ChatCreator.h */,
+				9CB42E5B1F226A5700877477 /* ChatCreator.m */,
+			);
+			path = Chats;
+			sourceTree = "<group>";
+		};
+		9CB42E601F226DD800877477 /* KeyManagement */ = {
+			isa = PBXGroup;
+			children = (
+				9CB42E611F226DD800877477 /* KeySync.h */,
+				9CB42E621F226DD800877477 /* KeySync.m */,
+				9CB42E631F226DD800877477 /* LocalUser.h */,
+				9CB42E641F226DD800877477 /* LocalUser.m */,
+				9CB42E651F226DD800877477 /* NSString+Base64.h */,
+				9CB42E661F226DD800877477 /* NSString+Base64.m */,
+			);
+			path = KeyManagement;
+			sourceTree = "<group>";
+		};
+		9CB42E731F227CA600877477 /* sdk */ = {
+			isa = PBXGroup;
+			children = (
+				9CB42E741F227CB000877477 /* Supporting Files */,
+				9CB42E761F227CB000877477 /* Utilities */,
+			);
+			name = sdk;
+			sourceTree = "<group>";
+		};
+		9CB42E741F227CB000877477 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9CB42E751F227CB000877477 /* ca.pem */,
+			);
+			name = "Supporting Files";
+			path = "../../../sdk/Supporting Files";
+			sourceTree = "<group>";
+		};
+		9CB42E761F227CB000877477 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				9CB42E771F227CB000877477 /* BBMLog.h */,
+				9CB42E781F227CB000877477 /* BBMLog.m */,
+			);
+			name = Utilities;
+			path = ../../../sdk/Utilities;
+			sourceTree = "<group>";
+		};
+		9CFF7B8A1ED875FA00A28053 /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+				9CFF7B8B1ED875FA00A28053 /* ChatSubjectViewCell.h */,
+				9CB42E5D1F226DB500877477 /* ContactManager.h */,
+				9CB42E5E1F226DB500877477 /* ContactManager.m */,
+				9CB42E521F22677900877477 /* Contact.h */,
+				9CB42E531F22677900877477 /* Contact.m */,
+				9CFF7B8C1ED875FA00A28053 /* ChatSubjectViewCell.m */,
+				9CFF7B8D1ED875FA00A28053 /* ContactPickerTableViewController.h */,
+				9CFF7B8E1ED875FA00A28053 /* ContactPickerTableViewController.m */,
+				9CFF7B911ED875FA00A28053 /* ContactTableViewCell.h */,
+				9CFF7B921ED875FA00A28053 /* ContactTableViewCell.m */,
+			);
+			path = Contacts;
+			sourceTree = "<group>";
+		};
+		AD6409861E705F3F001AA785 = {
+			isa = PBXGroup;
+			children = (
+				AD640A481E706492001AA785 /* Google Auth Config */,
+				AD6409911E705F3F001AA785 /* LocationSharing */,
+				AD6409901E705F3F001AA785 /* Products */,
+				AD640A291E70611D001AA785 /* Frameworks */,
+				CB84279937D6662A2400C00C /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		AD6409901E705F3F001AA785 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AD64098F1E705F3F001AA785 /* LocationSharing.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AD6409911E705F3F001AA785 /* LocationSharing */ = {
+			isa = PBXGroup;
+			children = (
+				9CB42E731F227CA600877477 /* sdk */,
+				9CB42E601F226DD800877477 /* KeyManagement */,
+				9CB42E591F226A5700877477 /* Chats */,
+				9CB42E551F22681500877477 /* Core Access */,
+				9C415DCE1ED76884007F8846 /* Config */,
+				AD6409951E705F3F001AA785 /* AppDelegate.h */,
+				AD6409961E705F40001AA785 /* AppDelegate.m */,
+				9CFF7B8A1ED875FA00A28053 /* Contacts */,
+				AD640A341E7063F5001AA785 /* Login */,
+				AD640A5E1E7080CB001AA785 /* LocationChat */,
+				AD64099E1E705F40001AA785 /* Main.storyboard */,
+				AD6409A11E705F40001AA785 /* Assets.xcassets */,
+				AD6409A31E705F40001AA785 /* LaunchScreen.storyboard */,
+				AD6409A61E705F40001AA785 /* Info.plist */,
+				AD382EB11E7ABBCB00846056 /* test.gpx */,
+				AD6409921E705F3F001AA785 /* Supporting Files */,
+			);
+			path = LocationSharing;
+			sourceTree = "<group>";
+		};
+		AD6409921E705F3F001AA785 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AD6409931E705F3F001AA785 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AD640A291E70611D001AA785 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9CB42E6A1F227BF900877477 /* BBMEnterprise.framework */,
+				AD382EA71E73305D00846056 /* AudioToolbox.framework */,
+				AD5B7F7A1E71A86E00150E79 /* MapKit.framework */,
+				AD640A611E708EA7001AA785 /* AVFoundation.framework */,
+				AD640A5F1E708E88001AA785 /* PushKit.framework */,
+				AD640A321E70618C001AA785 /* GLKit.framework */,
+				AD640A301E70617C001AA785 /* libresolv.tbd */,
+				AD640A2E1E706163001AA785 /* VideoToolbox.framework */,
+				AD640A2C1E706134001AA785 /* libz.tbd */,
+				AD640A2A1E70611D001AA785 /* libstdc++.tbd */,
+				CB50BEAF4A29B83E1FA8BB0F /* libPods-LocationSharing.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AD640A341E7063F5001AA785 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				9CE261D21EDC8E6D0043A4BC /* LoginViewController.h */,
+				9CE261D31EDC8E6D0043A4BC /* LoginViewController.m */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		AD640A481E706492001AA785 /* Google Auth Config */ = {
+			isa = PBXGroup;
+			children = (
+				AD640A4B1E706492001AA785 /* GoogleService-Info.plist */,
+			);
+			name = "Google Auth Config";
+			path = 3rdParty;
+			sourceTree = "<group>";
+		};
+		AD640A5E1E7080CB001AA785 /* LocationChat */ = {
+			isa = PBXGroup;
+			children = (
+				9CE261C71ED8A5340043A4BC /* LocationMessageLoader.h */,
+				9CE261C81ED8A5340043A4BC /* LocationMessageLoader.m */,
+				9CE261CA1ED8AF920043A4BC /* BBMChatMessage+LocationApp.h */,
+				9CE261CB1ED8AF920043A4BC /* BBMChatMessage+LocationApp.m */,
+				9CE261CD1ED8B9F10043A4BC /* BBMChat+LocationApp.h */,
+				9CE261CE1ED8B9F10043A4BC /* BBMChat+LocationApp.m */,
+				AD640A6C1E719007001AA785 /* ChatTableViewCell.h */,
+				AD640A6D1E719007001AA785 /* ChatTableViewCell.m */,
+				AD640A681E718E75001AA785 /* ChatListLoader.h */,
+				AD640A691E718E75001AA785 /* ChatListLoader.m */,
+				AD640A631E718DCC001AA785 /* ChatsTableViewController.h */,
+				AD640A641E718DCC001AA785 /* ChatsTableViewController.m */,
+				AD5B7F771E71A4D200150E79 /* LocationSharingViewController.h */,
+				AD5B7F781E71A4D200150E79 /* LocationSharingViewController.m */,
+				AD5B7F7C1E71B04F00150E79 /* LocationManager.h */,
+				AD5B7F7D1E71B04F00150E79 /* LocationManager.m */,
+				AD5B7F7F1E71B11400150E79 /* LocationMapAnnotation.h */,
+				AD5B7F801E71B11400150E79 /* LocationMapAnnotation.m */,
+			);
+			path = LocationChat;
+			sourceTree = "<group>";
+		};
+		CB84279937D6662A2400C00C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				87FE9F307A612258DB084533 /* Pods-LocationSharing.debug.xcconfig */,
+				6130075934D28B90FE764EBE /* Pods-LocationSharing.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AD64098E1E705F3F001AA785 /* LocationSharing */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD6409A91E705F40001AA785 /* Build configuration list for PBXNativeTarget "LocationSharing" */;
+			buildPhases = (
+				456BA7AB685B62A4162E2A36 /* [CP] Check Pods Manifest.lock */,
+				AD64098B1E705F3F001AA785 /* Sources */,
+				AD64098C1E705F3F001AA785 /* Frameworks */,
+				AD64098D1E705F3F001AA785 /* Resources */,
+				639BE9B721E364430AF2A5C7 /* [CP] Embed Pods Frameworks */,
+				6E1E4532E93DD5C65DA08185 /* [CP] Copy Pods Resources */,
+				9C415DCD1ED7671A007F8846 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LocationSharing;
+			productName = LocationSharing;
+			productReference = AD64098F1E705F3F001AA785 /* LocationSharing.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AD6409871E705F3F001AA785 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = BlackBerry;
+				TargetAttributes = {
+					AD64098E1E705F3F001AA785 = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = AD64098A1E705F3F001AA785 /* Build configuration list for PBXProject "LocationSharing" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AD6409861E705F3F001AA785;
+			productRefGroup = AD6409901E705F3F001AA785 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AD64098E1E705F3F001AA785 /* LocationSharing */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AD64098D1E705F3F001AA785 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9CB42E791F227CB000877477 /* ca.pem in Resources */,
+				AD6409A51E705F40001AA785 /* LaunchScreen.storyboard in Resources */,
+				AD640A521E706492001AA785 /* GoogleService-Info.plist in Resources */,
+				AD6409A21E705F40001AA785 /* Assets.xcassets in Resources */,
+				AD6409A01E705F40001AA785 /* Main.storyboard in Resources */,
+				AD382EB21E7ABBCB00846056 /* test.gpx in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		456BA7AB685B62A4162E2A36 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		639BE9B721E364430AF2A5C7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LocationSharing/Pods-LocationSharing-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6E1E4532E93DD5C65DA08185 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LocationSharing/Pods-LocationSharing-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AD64098B1E705F3F001AA785 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9CB42E541F22677900877477 /* Contact.m in Sources */,
+				9CFF7B931ED875FA00A28053 /* ChatSubjectViewCell.m in Sources */,
+				9CB42E7A1F227CB000877477 /* BBMLog.m in Sources */,
+				9CB42E5C1F226A5700877477 /* ChatCreator.m in Sources */,
+				9CB42E681F226DD800877477 /* LocalUser.m in Sources */,
+				9CFF7B961ED875FA00A28053 /* ContactTableViewCell.m in Sources */,
+				9CB42E5F1F226DB500877477 /* ContactManager.m in Sources */,
+				9CB42E691F226DD800877477 /* NSString+Base64.m in Sources */,
+				9CE261CF1ED8B9F10043A4BC /* BBMChat+LocationApp.m in Sources */,
+				9CE261C91ED8A5340043A4BC /* LocationMessageLoader.m in Sources */,
+				AD5B7F791E71A4D200150E79 /* LocationSharingViewController.m in Sources */,
+				AD640A651E718DCC001AA785 /* ChatsTableViewController.m in Sources */,
+				AD6409971E705F40001AA785 /* AppDelegate.m in Sources */,
+				AD5B7F7E1E71B04F00150E79 /* LocationManager.m in Sources */,
+				AD640A6B1E718E75001AA785 /* ChatListLoader.m in Sources */,
+				AD640A6E1E719007001AA785 /* ChatTableViewCell.m in Sources */,
+				9CE261CC1ED8AF920043A4BC /* BBMChatMessage+LocationApp.m in Sources */,
+				9CB42E671F226DD800877477 /* KeySync.m in Sources */,
+				9CB42E581F22681500877477 /* CoreAccess.m in Sources */,
+				9CE261D41EDC8E6D0043A4BC /* LoginViewController.m in Sources */,
+				AD5B7F811E71B11400150E79 /* LocationMapAnnotation.m in Sources */,
+				AD6409941E705F3F001AA785 /* main.m in Sources */,
+				9CFF7B941ED875FA00A28053 /* ContactPickerTableViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		AD64099E1E705F40001AA785 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AD64099F1E705F40001AA785 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		AD6409A31E705F40001AA785 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AD6409A41E705F40001AA785 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		AD6409A71E705F40001AA785 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AD6409A81E705F40001AA785 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AD6409AA1E705F40001AA785 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87FE9F307A612258DB084533 /* Pods-LocationSharing.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEAD_CODE_STRIPPING = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../../sdk",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = LocationSharing/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				KEEP_PRIVATE_EXTERNS = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../../sdk/lib",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.LocationSharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				"VALID_ARCHS[sdk=iphonesimulator*]" = armv7;
+			};
+			name = Debug;
+		};
+		AD6409AB1E705F40001AA785 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6130075934D28B90FE764EBE /* Pods-LocationSharing.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../../sdk",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = LocationSharing/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../../sdk/lib",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.LocationSharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				"VALID_ARCHS[sdk=iphonesimulator*]" = armv7;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AD64098A1E705F3F001AA785 /* Build configuration list for PBXProject "LocationSharing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD6409A71E705F40001AA785 /* Debug */,
+				AD6409A81E705F40001AA785 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD6409A91E705F40001AA785 /* Build configuration list for PBXNativeTarget "LocationSharing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD6409AA1E705F40001AA785 /* Debug */,
+				AD6409AB1E705F40001AA785 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AD6409871E705F3F001AA785 /* Project object */;
+}
