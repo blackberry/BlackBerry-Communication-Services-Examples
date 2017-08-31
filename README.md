@@ -19,7 +19,7 @@ These samples require the BBM Enterprise SDK which you can find along with relat
 
 # License
 
-These samples are released as Open Source and licensed under [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).  The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the [reative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
+These samples are released as Open Source and licensed under [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).  The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the [Creative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
 
 # Reporting Issues and Feature Requests
 
