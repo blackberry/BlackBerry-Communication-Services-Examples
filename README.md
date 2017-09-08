@@ -20,6 +20,8 @@ These samples require the BBM Enterprise SDK which you can find along with relat
 
 These samples are released as Open Source and licensed under [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 
+These samples were created using SDKs from Apple Inc. and may contain code licensed for use only with Apple products. Please review your Apple SDK Agreement for additional details.
+
 # Reporting Issues and Feature Requests
 
 If you find a issue in one of the Samples or have a Feature Request, simply file an [issue](https://github.com/blackberry/bbme-sdk-ios-samples/issues).
