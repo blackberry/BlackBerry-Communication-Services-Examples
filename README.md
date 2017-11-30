@@ -7,19 +7,22 @@ This repository contains code for Android example applications that you can use 
 
 | Example Application                      | Description                              |
 | ---------------------------------------- | ---------------------------------------- |
-| [Simple Chat](https://developer.blackberry.com/files/bbm-enterprise/android/documents/guide/html/examples/SimpleChat/README.html)      | Build a basic chat app using the BBM Enterprise SDK |
+| [Quick Start](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/QuickStart/README.html)      | Build a basic app to initialize and authenticate with the BBM Enterprise SDK using Google Open ID |
+| [Simple Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/SimpleChat/README.html)      | Build a basic chat app using the BBM Enterprise SDK |
+| [Soft Phone](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/SoftPhone/README.html) |	Build an app with voice and video calling using the BBM Enterprise SDK|
+| [White board](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Whiteboard/README.html) |	Build a shared white board app with the BBM Enterprise SDK | 
 
 # Getting Started
 
 These samples require the BBM Enterprise SDK which you can find along with related resources at the location below.
     
 * Getting stated with the [BBM Enterprise SDK](http://community.blackberry.com/bbm-enterprise)
-* [Development Guide](http://help.blackberry.com/en/bbm-enterprise-sdk-for-android/current/)
-* [API Reference](https://developer.blackberry.com/files/bbm-enterprise/android/documents/reference/index.html)
+* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+* [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/reference/android/index.html)
 
 # License
 
-These samples are released as Open Source and licensed under [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).  The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the [Creative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
+These samples are released as Open Source and licensed under [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).  The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the [reative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
 
 # Reporting Issues and Feature Requests
 

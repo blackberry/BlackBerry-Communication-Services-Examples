@@ -33,7 +33,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.1"
     defaultConfig {
-        applicationId "com.bbm.example.simplechat"
+        applicationId "com.bbm.example.whiteboard"
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
@@ -74,7 +74,7 @@ android {
 dependencies {
     // BBM SDK Dependencies
     compile(name: 'bbm_sdk-release', ext: 'aar')
-    // BBM UI Utilities and helpers
+    // BBM UI Utilities
     compile project(':BbmSdkSupport')
     // Other UI dependencies
     // Include Google play services auth module to use Open ID.
@@ -82,11 +82,16 @@ dependencies {
     //needed for firebase DB rules checking auth to work
     compile 'com.google.guava:guava:18.0'
     compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.google.android.gms:play-services-auth:10.0.1'
     compile 'com.google.firebase:firebase-database:10.0.1'
     compile 'com.google.firebase:firebase-auth:10.0.1'
+
+
+//    compile 'com.android.support.constraint:constraint-layout:1.0.1'
 }
 // By applying the plugin below this will ensure the project will not compile
 // if google-services.json is missing. When setting up this example please

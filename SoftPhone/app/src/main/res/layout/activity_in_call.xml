@@ -1,0 +1,163 @@
+<!--
+  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/call_toolbar_layout"
+        layout="@layout/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- The video content container -->
+    <FrameLayout
+        android:id="@+id/call_video_contents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
+
+        <!-- Call Details -->
+        <LinearLayout
+            android:id="@+id/call_details_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/in_call_title_spacing">
+
+            <TextView
+                android:id="@+id/call_quality_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/call_quality_negative_margin"
+                android:drawablePadding="@dimen/call_quality_drawable_padding"
+                android:paddingEnd="@dimen/in_call_minimize_icon_spacing"
+                android:paddingLeft="@dimen/in_call_title_text_margin"
+                android:paddingRight="@dimen/in_call_minimize_icon_spacing"
+                android:paddingStart="@dimen/in_call_title_text_margin"
+                android:text="@string/call_quality_poor"
+                android:textColor="@color/white"
+                android:textSize="@dimen/in_call_quality_text_size"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/voice_mode_call_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="start|left"
+                android:maxLines="1"
+                android:paddingEnd="@dimen/in_call_outer_padding"
+                android:paddingLeft="@dimen/in_call_title_text_margin"
+                android:paddingRight="@dimen/in_call_outer_padding"
+                android:paddingStart="@dimen/in_call_title_text_margin"
+                android:textColor="@color/white"
+                android:textSize="@dimen/in_call_primary_text_size" />
+
+            <TextView
+                android:id="@+id/voice_mode_call_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/in_call_separator_height"
+                android:ellipsize="none"
+                android:gravity="start|left"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/in_call_subtitle_left_margin"
+                android:paddingStart="@dimen/in_call_subtitle_left_margin"
+                android:textColor="@color/white"
+                android:textSize="@dimen/in_call_secondary_text_size" />
+
+        </LinearLayout>
+
+        <!-- Call Details -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/in_call_title_spacing"
+            android:background="@android:color/transparent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/local_video_layout"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:background="@color/transparent" />
+
+            <!-- Call interaction icons -->
+            <LinearLayout
+                android:id="@+id/call_interaction_icons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/call_screen_mute"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_mute_off"
+                    custom:fabSize="normal"
+                    custom:useCompatPadding="true" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/end_call"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/in_call_hangup"
+                    custom:fabSize="normal"
+                    custom:useCompatPadding="true" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/call_screen_enable_camera"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_video_off"
+                    custom:fabSize="normal"
+                    custom:useCompatPadding="true" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/video_button_progress_bar"
+            style="@android:style/Widget.ProgressBar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:alpha="0.7"
+            android:padding="@dimen/in_call_button_progress_overlay"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>
+
