@@ -19,12 +19,13 @@
 
 
 #import "LocationSharingViewController.h"
+#import "LocationSharingApp.h"
 #import <BBMEnterprise/BBMEnterprise.h>
 #import <MapKit/MKMapView.h>
 #import <MapKit/MKPolyline.h>
 #import <MapKit/MKPolylineRenderer.h>
 #import <MapKit/MKUserLocation.h>
-#import "CoreAccess.h"
+#import "BBMAccess.h"
 #import "LocationMessageLoader.h"
 #import "BBMChatMessage+LocationApp.h"
 #import "BBMChat+LocationApp.h"
@@ -66,7 +67,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.chat = [BBMCore getChatForId:self.chatId];
+    self.chat = [BBMAccess getChatForId:self.chatId];
 
     //Create a label to use as a custom title view to allow us to add a tap recognizer to it.
     //Tapping the title will allow the user to change the subject of the chat.
@@ -127,7 +128,7 @@
                                                      handler:^(UIAlertAction *action) {
                                                          NSString *subject = controller.textFields[0].text;
                                                          if (![subject isEqualToString:self.chat.subject]) {
-                                                             [BBMCore updateChatSubject:subject chatId:self.chat.chatId];
+                                                             [BBMAccess updateChatSubject:subject forChat:self.chat];
                                                          }
                                                      }];
     [controller addAction:okAction];
@@ -176,8 +177,6 @@
     }
 }
 
-#pragma mark - MKMapViewDelegate
-
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
     if ([overlay isKindOfClass:[MKPolyline class]])
@@ -204,7 +203,7 @@
 
 #pragma mark - Actions
 
-- (IBAction)toggleShowAllLocations:(id)sender
+- (IBAction)toggle:(id)sender
 {
     self.showAllLocations = !self.showAllLocations;
     self.showAllLocationsBarButton.title = self.showAllLocations ? @"View last location" : @"View all locations" ;

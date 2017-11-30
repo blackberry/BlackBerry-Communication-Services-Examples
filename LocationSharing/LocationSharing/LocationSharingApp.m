@@ -32,6 +32,7 @@
 @property (nonatomic, strong) BBMAuthController *authController;
 @property (nonatomic, strong) LocationManager *locationManager;
 @property (nonatomic, strong) ChatListLoader *chatListLoader;
+@property (nonatomic, strong) BBMEndpointManager *endpointManager;
 
 @property (nonatomic, strong) ObservableMonitor *serviceMonitor;
 @property (nonatomic, strong) ObservableMonitor *authMonitor;
@@ -108,6 +109,17 @@
         self.chatListLoader = [[ChatListLoader alloc] init];
     });
     return _chatListLoader;
+}
+
+- (BBMEndpointManager *)endpointManager
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        self.endpointManager = [[BBMEndpointManager alloc] init];
+        // The endpoint manager needs to know about auth changes to register an endpoint
+        [self.authController addDelegate:_endpointManager];
+    });
+    return _endpointManager;
 }
 
 #pragma mark - Monitors

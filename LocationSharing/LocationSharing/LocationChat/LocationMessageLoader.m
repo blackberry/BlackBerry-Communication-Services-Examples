@@ -20,7 +20,9 @@
 #import "LocationMessageLoader.h"
 
 #import <BBMEnterprise/BBMEnterprise.h>
-#import "CoreAccess.h"
+#import "BBMChatMessage+Util.h"
+#import "BBMAccess.h"
+#import "BBMUtilities.h"
 #import "LocationManager.h"
 
 @interface LocationMessageLoader ()
@@ -62,7 +64,7 @@
     chatMessageCriteria.tag = kMessageTag_Location;
     chatMessageCriteria.chatId = self.chat.chatId;
 
-    self.filteredLocationChatMessages = [[BBMCore model] chatMessageWithCriteria:chatMessageCriteria];
+    self.filteredLocationChatMessages = [[[BBMEnterpriseService service] model] chatMessageWithCriteria:chatMessageCriteria];
     typeof(self) __weak weakSelf = self;
     __block NSUInteger messageCount = 0;
     self.messageMonitor = [ObservableMonitor monitorActivatedWithName:@"messageMonitor" block:^{

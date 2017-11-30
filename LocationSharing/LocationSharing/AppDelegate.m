@@ -20,6 +20,7 @@
 #import "AppDelegate.h"
 #import "ConfigSettings.h"
 #import <GoogleSignIn/GoogleSignIn.h>
+#import "LocationSharingApp.h"
 
 @interface AppDelegate ()
 

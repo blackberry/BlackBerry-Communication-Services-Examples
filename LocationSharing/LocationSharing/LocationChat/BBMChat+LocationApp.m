@@ -19,8 +19,9 @@
 
 #import "BBMChat+LocationApp.h"
 #import <BBMEnterprise/BBMUser.h>
-#import "CoreAccess.h"
-#import "ContactManager.h"
+#import "BBMAppUser.h"
+#import "LocationSharingApp.h"
+#import "BBMAccess.h"
 
 @implementation BBMChat (LocationApp)
 
@@ -38,23 +39,22 @@
 
 - (NSString *)participantsDisplayNamesForTitle
 {
-    NSArray *participants = [BBMCore participantsForChat:self].array;
+    NSArray *participants = [BBMAccess participantsForChat:self].array;
     NSMutableArray *displayNames = [[NSMutableArray alloc] init];
     // Get userUris from the participants so that we can get the BBMUser objects from the user map
     NSArray *userUris = [participants valueForKey:@"userUri"];
     // user is an instance of BBMLiveMap. Using an array of userUris is faster than having a for loop
     // and calling valueForKey for each individual userUri.
-    NSArray *users = [[BBMCore model].user valuesForKeys:userUris];
+    NSArray *users = [[[BBMEnterpriseService service] model].user valuesForKeys:userUris];
     for (BBMUser *user in users) {
         if(user.bbmState == kBBMStatePending) {
             return @"";
         }
-        Contact *contact = [[ContactManager sharedInstance] contactForRegId:user.regId];
+        BBMAppUser *contact = [[[LocationSharingApp application] userManager] userForRegId:user.regId];
         NSString *name = contact.name;
         if (name != nil) {
             [displayNames addObject:name];
         }
-
     }
     return [displayNames componentsJoinedByString:@", "];
 }

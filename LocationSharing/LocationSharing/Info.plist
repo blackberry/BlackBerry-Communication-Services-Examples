@@ -38,12 +38,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app shares a user&apos;s real-time location with others using this app.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string> </string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app shares a user&apos;s real-time location with others using this app.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

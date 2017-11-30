@@ -30,6 +30,4 @@
 
 - (CGFloat)longitude;
 
-+ (NSString *)chatIDToURI:(NSString *)chatId;
-
 @end

@@ -27,7 +27,7 @@
 
 @implementation ContactTableViewCell
 
-- (void)setContact:(Contact *)contact
+- (void)setContact:(BBMAppUser *)contact
 {
     self.nameLabel.text = contact.name;
     self.emailLabel.text = contact.email;

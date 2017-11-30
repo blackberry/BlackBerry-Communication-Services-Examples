@@ -33,8 +33,6 @@ extern NSString * const kLatitudeKey;
  */
 @interface LocationManager : NSObject
 
-+ (instancetype)sharedInstance;
-
 - (void)startLocationManager;
 - (void)startMonitoring;
 - (void)stopMonitoring;

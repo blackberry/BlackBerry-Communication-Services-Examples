@@ -23,6 +23,7 @@
 #import "BBMAuthController.h"
 #import "LocationManager.h"
 #import "ChatListLoader.h"
+#import "BBMEndpointManager.h"
 
 // Protocol to inform delegate when login has been succesful
 @protocol LocationSharingLoginDelegate <NSObject>
@@ -39,7 +40,7 @@
 
 #pragma mark - Application Controllers
 
-// Manager for syncronizing keys via FIrebase
+// Manager for syncronizing keys via Firebase
 - (BBMKeyManager *)keyManager;
 
 // Provides list of users
@@ -51,7 +52,10 @@
 // Tracks user's location and sends location info to existing chats
 - (LocationManager *)locationManager;
 
-//Loads the list of chats the local user is a participant in
+// Loads the list of chats the local user is a participant in
 - (ChatListLoader *)chatListLoader;
+
+// Provides list of endpoints, deregisters endpoints, among other things
+- (BBMEndpointManager *)endpointManager;
 
 @end

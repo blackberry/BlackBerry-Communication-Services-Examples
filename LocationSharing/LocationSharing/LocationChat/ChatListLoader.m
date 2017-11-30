@@ -13,16 +13,14 @@
 * limitations under the License. 
   
 * This sample code was created by BlackBerry using SDKs from Apple Inc. 
-* and may contain code licensed for use only with Apple products
- .
+* and may contain code licensed for use only with Apple products. 
 * Please review your Apple SDK Agreement for additional details. 
 */ 
 
 #import "ChatListLoader.h"
 
 #import <BBMEnterprise/BBMEnterprise.h>
-#import "CoreAccess.h"
-#import "KeySync.h"
+#import "BBMAccess.h"
 
 @interface ChatListLoader ()
 @property (nonatomic) ObservableMonitor *chatsListMonitor;
@@ -32,29 +30,14 @@
 
 @implementation ChatListLoader
 
-+ (ChatListLoader *)sharedInstance
-{
-    static ChatListLoader *sharedInstance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[ChatListLoader alloc] _initPrivate];
-    });
-    return sharedInstance;
-}
 
-- (ChatListLoader *)_initPrivate
+- (id)init
 {
     self = [super init];
     if (self) {
         self.listeners = [NSMutableSet set];
     }
     return self;
-}
-
-- (id)init
-{
-    NSAssert(NO, @"Use the shared instance");
-    return nil;
 }
 
 - (void)addChangeListener:(id<ChatListListener>)listener
@@ -99,23 +82,20 @@
         BOOL allMessagesAreCurrent = YES;
         BOOL allUsersAreCurrent = YES;
 
-        NSArray *chats = [BBMCore getChats];
+        NSArray *chats = [BBMAccess getChats];
         for (BBMChat *chat in chats) {
-            BBMChatMessage *lastMessage = [BBMCore lastMessageForChat:chat];
+            BBMChatMessage *lastMessage = [BBMAccess resolvedLastMessageForChat:chat];
             if(lastMessage && lastMessage.bbmState == kBBMStatePending) {
                 allMessagesAreCurrent = NO;
             }
-            NSArray *participants = [BBMCore participantsForChat:chat].array;
-            for (BBMParticipant *chatParticipant in participants) {
+            NSArray *participants = [BBMAccess participantsForChat:chat].array;
+            for (BBMChatParticipant *chatParticipant in participants) {
                 BBMUser *chatUser = chatParticipant.resolvedUserUri;
                 if (chatUser && chatUser.bbmState == kBBMStatePending) {
                     allUsersAreCurrent = NO;
                 }
-                [[KeySync sharedInstance] syncUserKey:chatUser];
             }
-            if(chat.bbmState == kBBMStateCurrent && chat.mailboxId.length > 0) {
-                [[KeySync sharedInstance] syncChatKey:chat];
-            }
+
         }
         //If there are any last messages or users that are still pending then we wait for them
         //to be current to avoid sorting the chat list until we have everything we need.
