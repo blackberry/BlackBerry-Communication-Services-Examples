@@ -8,25 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		75FF5F647D5EA22EA9649C7B /* libPods-LocationSharing.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB50BEAF4A29B83E1FA8BB0F /* libPods-LocationSharing.a */; };
-		9CB42E541F22677900877477 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E531F22677900877477 /* Contact.m */; };
-		9CB42E581F22681500877477 /* CoreAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E571F22681500877477 /* CoreAccess.m */; };
-		9CB42E5C1F226A5700877477 /* ChatCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E5B1F226A5700877477 /* ChatCreator.m */; };
-		9CB42E5F1F226DB500877477 /* ContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E5E1F226DB500877477 /* ContactManager.m */; };
-		9CB42E671F226DD800877477 /* KeySync.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E621F226DD800877477 /* KeySync.m */; };
-		9CB42E681F226DD800877477 /* LocalUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E641F226DD800877477 /* LocalUser.m */; };
-		9CB42E691F226DD800877477 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E661F226DD800877477 /* NSString+Base64.m */; };
-		9CB42E6B1F227BF900877477 /* BBMEnterprise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB42E6A1F227BF900877477 /* BBMEnterprise.framework */; };
-		9CB42E791F227CB000877477 /* ca.pem in Resources */ = {isa = PBXBuildFile; fileRef = 9CB42E751F227CB000877477 /* ca.pem */; };
-		9CB42E7A1F227CB000877477 /* BBMLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB42E781F227CB000877477 /* BBMLog.m */; };
-		9CB42E7B1F227CDF00877477 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD640A321E70618C001AA785 /* GLKit.framework */; };
-		9CB42E7C1F227CEE00877477 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD640A2E1E706163001AA785 /* VideoToolbox.framework */; };
-		9CB42E7D1F227D1300877477 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AD640A2C1E706134001AA785 /* libz.tbd */; };
-		9CB42E7E1F227D1B00877477 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AD640A2A1E70611D001AA785 /* libstdc++.tbd */; };
-		9CB42E7F1F227D2A00877477 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AD640A301E70617C001AA785 /* libresolv.tbd */; };
+		9C415DBB1ED752CE007F8846 /* BBMAuthController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415D901ED752CE007F8846 /* BBMAuthController.m */; };
+		9C415DBC1ED752CE007F8846 /* BBMAuthenticatedAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415D921ED752CE007F8846 /* BBMAuthenticatedAccount.m */; };
+		9C415DBD1ED752CE007F8846 /* BBMGoogleTokenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415D961ED752CE007F8846 /* BBMGoogleTokenManager.m */; };
+		9C415DBE1ED752CE007F8846 /* BBMAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415D991ED752CE007F8846 /* BBMAccess.m */; };
+		9C415DBF1ED752CE007F8846 /* BBMChatCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415D9B1ED752CE007F8846 /* BBMChatCreator.m */; };
+		9C415DC01ED752CE007F8846 /* BBMChatMessage+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415D9D1ED752CE007F8846 /* BBMChatMessage+Util.m */; };
+		9C415DC11ED752CE007F8846 /* BBMKeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415DA01ED752CE007F8846 /* BBMKeyManager.m */; };
+		9C415DC21ED752CE007F8846 /* BBMKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415DA21ED752CE007F8846 /* BBMKeyPair.m */; };
+		9C415DC31ED752CE007F8846 /* BBMProfileKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415DA51ED752CE007F8846 /* BBMProfileKeys.m */; };
+		9C415DC41ED752CE007F8846 /* BBMFirebaseKeyStorageProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415DA81ED752CE007F8846 /* BBMFirebaseKeyStorageProvider.m */; };
+		9C415DC51ED752CE007F8846 /* BBMAppUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415DAB1ED752CE007F8846 /* BBMAppUser.m */; };
+		9C415DC61ED752CE007F8846 /* BBMUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415DAF1ED752CE007F8846 /* BBMUserManager.m */; };
+		9C415DC71ED752CE007F8846 /* BBMFirebaseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415DB21ED752CE007F8846 /* BBMFirebaseUserManager.m */; };
+		9C415DC81ED752CE007F8846 /* BBMUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415DB51ED752CE007F8846 /* BBMUtilities.m */; };
+		9C415DC91ED752CE007F8846 /* NSMutableAttributedString+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415DB71ED752CE007F8846 /* NSMutableAttributedString+Util.m */; };
+		9C415DCA1ED752CE007F8846 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C415DB91ED752CE007F8846 /* NSString+Base64.m */; };
+		9C51872C1F61915800549E76 /* BBMEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5187291F61915800549E76 /* BBMEndpoint.m */; };
+		9C51872D1F61915800549E76 /* BBMEndpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51872B1F61915800549E76 /* BBMEndpointManager.m */; };
 		9CE261C91ED8A5340043A4BC /* LocationMessageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE261C81ED8A5340043A4BC /* LocationMessageLoader.m */; };
 		9CE261CC1ED8AF920043A4BC /* BBMChatMessage+LocationApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE261CB1ED8AF920043A4BC /* BBMChatMessage+LocationApp.m */; };
 		9CE261CF1ED8B9F10043A4BC /* BBMChat+LocationApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE261CE1ED8B9F10043A4BC /* BBMChat+LocationApp.m */; };
 		9CE261D41EDC8E6D0043A4BC /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE261D31EDC8E6D0043A4BC /* LoginViewController.m */; };
+		9CEC28CC1ED85D1D00CC4F38 /* LocationSharingApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CEC28CB1ED85D1D00CC4F38 /* LocationSharingApp.m */; };
 		9CFF7B931ED875FA00A28053 /* ChatSubjectViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFF7B8C1ED875FA00A28053 /* ChatSubjectViewCell.m */; };
 		9CFF7B941ED875FA00A28053 /* ContactPickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFF7B8E1ED875FA00A28053 /* ContactPickerTableViewController.m */; };
 		9CFF7B961ED875FA00A28053 /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFF7B921ED875FA00A28053 /* ContactTableViewCell.m */; };
@@ -44,6 +48,8 @@
 		AD640A651E718DCC001AA785 /* ChatsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD640A641E718DCC001AA785 /* ChatsTableViewController.m */; };
 		AD640A6B1E718E75001AA785 /* ChatListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = AD640A691E718E75001AA785 /* ChatListLoader.m */; };
 		AD640A6E1E719007001AA785 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD640A6D1E719007001AA785 /* ChatTableViewCell.m */; };
+		C2C5431F1F7BD90300054FE1 /* BBMEnterprise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2C5431E1F7BD8F300054FE1 /* BBMEnterprise.framework */; };
+		C2C543201F7BD90300054FE1 /* BBMEnterprise.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C2C5431E1F7BD8F300054FE1 /* BBMEnterprise.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +59,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				C2C543201F7BD90300054FE1 /* BBMEnterprise.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -62,25 +69,47 @@
 /* Begin PBXFileReference section */
 		6130075934D28B90FE764EBE /* Pods-LocationSharing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocationSharing.release.xcconfig"; path = "Pods/Target Support Files/Pods-LocationSharing/Pods-LocationSharing.release.xcconfig"; sourceTree = "<group>"; };
 		87FE9F307A612258DB084533 /* Pods-LocationSharing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocationSharing.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LocationSharing/Pods-LocationSharing.debug.xcconfig"; sourceTree = "<group>"; };
+		9C415D8F1ED752CE007F8846 /* BBMAuthController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAuthController.h; sourceTree = "<group>"; };
+		9C415D901ED752CE007F8846 /* BBMAuthController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMAuthController.m; sourceTree = "<group>"; };
+		9C415D911ED752CE007F8846 /* BBMAuthenticatedAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAuthenticatedAccount.h; sourceTree = "<group>"; };
+		9C415D921ED752CE007F8846 /* BBMAuthenticatedAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMAuthenticatedAccount.m; sourceTree = "<group>"; };
+		9C415D931ED752CE007F8846 /* BBMAuthenticationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAuthenticationDelegate.h; sourceTree = "<group>"; };
+		9C415D951ED752CE007F8846 /* BBMGoogleTokenManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMGoogleTokenManager.h; sourceTree = "<group>"; };
+		9C415D961ED752CE007F8846 /* BBMGoogleTokenManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMGoogleTokenManager.m; sourceTree = "<group>"; };
+		9C415D981ED752CE007F8846 /* BBMAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAccess.h; sourceTree = "<group>"; };
+		9C415D991ED752CE007F8846 /* BBMAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMAccess.m; sourceTree = "<group>"; };
+		9C415D9A1ED752CE007F8846 /* BBMChatCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMChatCreator.h; sourceTree = "<group>"; };
+		9C415D9B1ED752CE007F8846 /* BBMChatCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMChatCreator.m; sourceTree = "<group>"; };
+		9C415D9C1ED752CE007F8846 /* BBMChatMessage+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BBMChatMessage+Util.h"; sourceTree = "<group>"; };
+		9C415D9D1ED752CE007F8846 /* BBMChatMessage+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BBMChatMessage+Util.m"; sourceTree = "<group>"; };
+		9C415D9F1ED752CE007F8846 /* BBMKeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMKeyManager.h; sourceTree = "<group>"; };
+		9C415DA01ED752CE007F8846 /* BBMKeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMKeyManager.m; sourceTree = "<group>"; };
+		9C415DA11ED752CE007F8846 /* BBMKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMKeyPair.h; sourceTree = "<group>"; };
+		9C415DA21ED752CE007F8846 /* BBMKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMKeyPair.m; sourceTree = "<group>"; };
+		9C415DA31ED752CE007F8846 /* BBMKeyStorageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMKeyStorageProvider.h; sourceTree = "<group>"; };
+		9C415DA41ED752CE007F8846 /* BBMProfileKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMProfileKeys.h; sourceTree = "<group>"; };
+		9C415DA51ED752CE007F8846 /* BBMProfileKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMProfileKeys.m; sourceTree = "<group>"; };
+		9C415DA71ED752CE007F8846 /* BBMFirebaseKeyStorageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMFirebaseKeyStorageProvider.h; sourceTree = "<group>"; };
+		9C415DA81ED752CE007F8846 /* BBMFirebaseKeyStorageProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMFirebaseKeyStorageProvider.m; sourceTree = "<group>"; };
+		9C415DAA1ED752CE007F8846 /* BBMAppUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAppUser.h; sourceTree = "<group>"; };
+		9C415DAB1ED752CE007F8846 /* BBMAppUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMAppUser.m; sourceTree = "<group>"; };
+		9C415DAC1ED752CE007F8846 /* BBMAppUserListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAppUserListener.h; sourceTree = "<group>"; };
+		9C415DAD1ED752CE007F8846 /* BBMAppUserSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAppUserSource.h; sourceTree = "<group>"; };
+		9C415DAE1ED752CE007F8846 /* BBMUserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMUserManager.h; sourceTree = "<group>"; };
+		9C415DAF1ED752CE007F8846 /* BBMUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMUserManager.m; sourceTree = "<group>"; };
+		9C415DB11ED752CE007F8846 /* BBMFirebaseUserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMFirebaseUserManager.h; sourceTree = "<group>"; };
+		9C415DB21ED752CE007F8846 /* BBMFirebaseUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMFirebaseUserManager.m; sourceTree = "<group>"; };
+		9C415DB41ED752CE007F8846 /* BBMUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMUtilities.h; sourceTree = "<group>"; };
+		9C415DB51ED752CE007F8846 /* BBMUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMUtilities.m; sourceTree = "<group>"; };
+		9C415DB61ED752CE007F8846 /* NSMutableAttributedString+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Util.h"; sourceTree = "<group>"; };
+		9C415DB71ED752CE007F8846 /* NSMutableAttributedString+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Util.m"; sourceTree = "<group>"; };
+		9C415DB81ED752CE007F8846 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		9C415DB91ED752CE007F8846 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		9C415DCF1ED7688F007F8846 /* ConfigSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigSettings.h; sourceTree = "<group>"; };
-		9CB42E521F22677900877477 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
-		9CB42E531F22677900877477 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
-		9CB42E561F22681500877477 /* CoreAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAccess.h; sourceTree = "<group>"; };
-		9CB42E571F22681500877477 /* CoreAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAccess.m; sourceTree = "<group>"; };
-		9CB42E5A1F226A5700877477 /* ChatCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCreator.h; sourceTree = "<group>"; };
-		9CB42E5B1F226A5700877477 /* ChatCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCreator.m; sourceTree = "<group>"; };
-		9CB42E5D1F226DB500877477 /* ContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactManager.h; sourceTree = "<group>"; };
-		9CB42E5E1F226DB500877477 /* ContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactManager.m; sourceTree = "<group>"; };
-		9CB42E611F226DD800877477 /* KeySync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeySync.h; sourceTree = "<group>"; };
-		9CB42E621F226DD800877477 /* KeySync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeySync.m; sourceTree = "<group>"; };
-		9CB42E631F226DD800877477 /* LocalUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalUser.h; sourceTree = "<group>"; };
-		9CB42E641F226DD800877477 /* LocalUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalUser.m; sourceTree = "<group>"; };
-		9CB42E651F226DD800877477 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
-		9CB42E661F226DD800877477 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
-		9CB42E6A1F227BF900877477 /* BBMEnterprise.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BBMEnterprise.framework; path = ../../sdk/BBMEnterprise.framework; sourceTree = "<group>"; };
-		9CB42E751F227CB000877477 /* ca.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ca.pem; sourceTree = "<group>"; };
-		9CB42E771F227CB000877477 /* BBMLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMLog.h; sourceTree = "<group>"; };
-		9CB42E781F227CB000877477 /* BBMLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMLog.m; sourceTree = "<group>"; };
+		9C5187281F61915800549E76 /* BBMEndpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMEndpoint.h; sourceTree = "<group>"; };
+		9C5187291F61915800549E76 /* BBMEndpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMEndpoint.m; sourceTree = "<group>"; };
+		9C51872A1F61915800549E76 /* BBMEndpointManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMEndpointManager.h; sourceTree = "<group>"; };
+		9C51872B1F61915800549E76 /* BBMEndpointManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMEndpointManager.m; sourceTree = "<group>"; };
 		9CE261C71ED8A5340043A4BC /* LocationMessageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationMessageLoader.h; sourceTree = "<group>"; };
 		9CE261C81ED8A5340043A4BC /* LocationMessageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationMessageLoader.m; sourceTree = "<group>"; };
 		9CE261CA1ED8AF920043A4BC /* BBMChatMessage+LocationApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BBMChatMessage+LocationApp.h"; sourceTree = "<group>"; };
@@ -89,13 +118,14 @@
 		9CE261CE1ED8B9F10043A4BC /* BBMChat+LocationApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BBMChat+LocationApp.m"; sourceTree = "<group>"; };
 		9CE261D21EDC8E6D0043A4BC /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		9CE261D31EDC8E6D0043A4BC /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		9CEC28CA1ED85D1D00CC4F38 /* LocationSharingApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationSharingApp.h; sourceTree = "<group>"; };
+		9CEC28CB1ED85D1D00CC4F38 /* LocationSharingApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationSharingApp.m; sourceTree = "<group>"; };
 		9CFF7B8B1ED875FA00A28053 /* ChatSubjectViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatSubjectViewCell.h; sourceTree = "<group>"; };
 		9CFF7B8C1ED875FA00A28053 /* ChatSubjectViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatSubjectViewCell.m; sourceTree = "<group>"; };
 		9CFF7B8D1ED875FA00A28053 /* ContactPickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactPickerTableViewController.h; sourceTree = "<group>"; };
 		9CFF7B8E1ED875FA00A28053 /* ContactPickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactPickerTableViewController.m; sourceTree = "<group>"; };
 		9CFF7B911ED875FA00A28053 /* ContactTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactTableViewCell.h; sourceTree = "<group>"; };
 		9CFF7B921ED875FA00A28053 /* ContactTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewCell.m; sourceTree = "<group>"; };
-		AD382EA71E73305D00846056 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		AD382EB11E7ABBCB00846056 /* test.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.gpx; sourceTree = "<group>"; };
 		AD5B7F771E71A4D200150E79 /* LocationSharingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationSharingViewController.h; sourceTree = "<group>"; };
 		AD5B7F781E71A4D200150E79 /* LocationSharingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationSharingViewController.m; sourceTree = "<group>"; };
@@ -112,20 +142,14 @@
 		AD6409A11E705F40001AA785 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AD6409A41E705F40001AA785 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AD6409A61E705F40001AA785 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AD640A2A1E70611D001AA785 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
-		AD640A2C1E706134001AA785 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		AD640A2E1E706163001AA785 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
-		AD640A301E70617C001AA785 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
-		AD640A321E70618C001AA785 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		AD640A4B1E706492001AA785 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "Google/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		AD640A5F1E708E88001AA785 /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
-		AD640A611E708EA7001AA785 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		AD640A631E718DCC001AA785 /* ChatsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatsTableViewController.h; sourceTree = "<group>"; };
 		AD640A641E718DCC001AA785 /* ChatsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatsTableViewController.m; sourceTree = "<group>"; };
 		AD640A681E718E75001AA785 /* ChatListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatListLoader.h; sourceTree = "<group>"; };
 		AD640A691E718E75001AA785 /* ChatListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatListLoader.m; sourceTree = "<group>"; };
 		AD640A6C1E719007001AA785 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatTableViewCell.h; sourceTree = "<group>"; };
 		AD640A6D1E719007001AA785 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatTableViewCell.m; sourceTree = "<group>"; };
+		C2C5431E1F7BD8F300054FE1 /* BBMEnterprise.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BBMEnterprise.framework; path = ../../sdk/BBMEnterprise.framework; sourceTree = "<group>"; };
 		CB50BEAF4A29B83E1FA8BB0F /* libPods-LocationSharing.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LocationSharing.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -134,12 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CB42E7F1F227D2A00877477 /* libresolv.tbd in Frameworks */,
-				9CB42E7E1F227D1B00877477 /* libstdc++.tbd in Frameworks */,
-				9CB42E7D1F227D1300877477 /* libz.tbd in Frameworks */,
-				9CB42E7C1F227CEE00877477 /* VideoToolbox.framework in Frameworks */,
-				9CB42E7B1F227CDF00877477 /* GLKit.framework in Frameworks */,
-				9CB42E6B1F227BF900877477 /* BBMEnterprise.framework in Frameworks */,
+				C2C5431F1F7BD90300054FE1 /* BBMEnterprise.framework in Frameworks */,
 				AD5B7F7B1E71A86E00150E79 /* MapKit.framework in Frameworks */,
 				75FF5F647D5EA22EA9649C7B /* libPods-LocationSharing.a in Frameworks */,
 			);
@@ -148,6 +167,123 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9C415D8B1ED752CE007F8846 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				9C415D8D1ED752CE007F8846 /* Source */,
+			);
+			name = Support;
+			path = ../Support;
+			sourceTree = "<group>";
+		};
+		9C415D8D1ED752CE007F8846 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				9C5187271F61915800549E76 /* Endpoints */,
+				9C415D8E1ED752CE007F8846 /* Auth */,
+				9C415D971ED752CE007F8846 /* BBMDS */,
+				9C415D9E1ED752CE007F8846 /* Protect */,
+				9C415DA91ED752CE007F8846 /* User */,
+				9C415DB31ED752CE007F8846 /* Util */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		9C415D8E1ED752CE007F8846 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				9C415D8F1ED752CE007F8846 /* BBMAuthController.h */,
+				9C415D901ED752CE007F8846 /* BBMAuthController.m */,
+				9C415D911ED752CE007F8846 /* BBMAuthenticatedAccount.h */,
+				9C415D921ED752CE007F8846 /* BBMAuthenticatedAccount.m */,
+				9C415D931ED752CE007F8846 /* BBMAuthenticationDelegate.h */,
+				9C415D941ED752CE007F8846 /* GoogleAuth */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		9C415D941ED752CE007F8846 /* GoogleAuth */ = {
+			isa = PBXGroup;
+			children = (
+				9C415D951ED752CE007F8846 /* BBMGoogleTokenManager.h */,
+				9C415D961ED752CE007F8846 /* BBMGoogleTokenManager.m */,
+			);
+			path = GoogleAuth;
+			sourceTree = "<group>";
+		};
+		9C415D971ED752CE007F8846 /* BBMDS */ = {
+			isa = PBXGroup;
+			children = (
+				9C415D981ED752CE007F8846 /* BBMAccess.h */,
+				9C415D991ED752CE007F8846 /* BBMAccess.m */,
+				9C415D9A1ED752CE007F8846 /* BBMChatCreator.h */,
+				9C415D9B1ED752CE007F8846 /* BBMChatCreator.m */,
+				9C415D9C1ED752CE007F8846 /* BBMChatMessage+Util.h */,
+				9C415D9D1ED752CE007F8846 /* BBMChatMessage+Util.m */,
+			);
+			path = BBMDS;
+			sourceTree = "<group>";
+		};
+		9C415D9E1ED752CE007F8846 /* Protect */ = {
+			isa = PBXGroup;
+			children = (
+				9C415D9F1ED752CE007F8846 /* BBMKeyManager.h */,
+				9C415DA01ED752CE007F8846 /* BBMKeyManager.m */,
+				9C415DA11ED752CE007F8846 /* BBMKeyPair.h */,
+				9C415DA21ED752CE007F8846 /* BBMKeyPair.m */,
+				9C415DA31ED752CE007F8846 /* BBMKeyStorageProvider.h */,
+				9C415DA41ED752CE007F8846 /* BBMProfileKeys.h */,
+				9C415DA51ED752CE007F8846 /* BBMProfileKeys.m */,
+				9C415DA61ED752CE007F8846 /* Providers */,
+			);
+			path = Protect;
+			sourceTree = "<group>";
+		};
+		9C415DA61ED752CE007F8846 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				9C415DA71ED752CE007F8846 /* BBMFirebaseKeyStorageProvider.h */,
+				9C415DA81ED752CE007F8846 /* BBMFirebaseKeyStorageProvider.m */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		9C415DA91ED752CE007F8846 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				9C415DAA1ED752CE007F8846 /* BBMAppUser.h */,
+				9C415DAB1ED752CE007F8846 /* BBMAppUser.m */,
+				9C415DAC1ED752CE007F8846 /* BBMAppUserListener.h */,
+				9C415DAD1ED752CE007F8846 /* BBMAppUserSource.h */,
+				9C415DAE1ED752CE007F8846 /* BBMUserManager.h */,
+				9C415DAF1ED752CE007F8846 /* BBMUserManager.m */,
+				9C415DB01ED752CE007F8846 /* Firebase */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		9C415DB01ED752CE007F8846 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				9C415DB11ED752CE007F8846 /* BBMFirebaseUserManager.h */,
+				9C415DB21ED752CE007F8846 /* BBMFirebaseUserManager.m */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		9C415DB31ED752CE007F8846 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				9C415DB41ED752CE007F8846 /* BBMUtilities.h */,
+				9C415DB51ED752CE007F8846 /* BBMUtilities.m */,
+				9C415DB61ED752CE007F8846 /* NSMutableAttributedString+Util.h */,
+				9C415DB71ED752CE007F8846 /* NSMutableAttributedString+Util.m */,
+				9C415DB81ED752CE007F8846 /* NSString+Base64.h */,
+				9C415DB91ED752CE007F8846 /* NSString+Base64.m */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 		9C415DCE1ED76884007F8846 /* Config */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,73 +292,21 @@
 			name = Config;
 			sourceTree = "<group>";
 		};
-		9CB42E551F22681500877477 /* Core Access */ = {
+		9C5187271F61915800549E76 /* Endpoints */ = {
 			isa = PBXGroup;
 			children = (
-				9CB42E561F22681500877477 /* CoreAccess.h */,
-				9CB42E571F22681500877477 /* CoreAccess.m */,
+				9C5187281F61915800549E76 /* BBMEndpoint.h */,
+				9C5187291F61915800549E76 /* BBMEndpoint.m */,
+				9C51872A1F61915800549E76 /* BBMEndpointManager.h */,
+				9C51872B1F61915800549E76 /* BBMEndpointManager.m */,
 			);
-			path = "Core Access";
-			sourceTree = "<group>";
-		};
-		9CB42E591F226A5700877477 /* Chats */ = {
-			isa = PBXGroup;
-			children = (
-				9CB42E5A1F226A5700877477 /* ChatCreator.h */,
-				9CB42E5B1F226A5700877477 /* ChatCreator.m */,
-			);
-			path = Chats;
-			sourceTree = "<group>";
-		};
-		9CB42E601F226DD800877477 /* KeyManagement */ = {
-			isa = PBXGroup;
-			children = (
-				9CB42E611F226DD800877477 /* KeySync.h */,
-				9CB42E621F226DD800877477 /* KeySync.m */,
-				9CB42E631F226DD800877477 /* LocalUser.h */,
-				9CB42E641F226DD800877477 /* LocalUser.m */,
-				9CB42E651F226DD800877477 /* NSString+Base64.h */,
-				9CB42E661F226DD800877477 /* NSString+Base64.m */,
-			);
-			path = KeyManagement;
-			sourceTree = "<group>";
-		};
-		9CB42E731F227CA600877477 /* sdk */ = {
-			isa = PBXGroup;
-			children = (
-				9CB42E741F227CB000877477 /* Supporting Files */,
-				9CB42E761F227CB000877477 /* Utilities */,
-			);
-			name = sdk;
-			sourceTree = "<group>";
-		};
-		9CB42E741F227CB000877477 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				9CB42E751F227CB000877477 /* ca.pem */,
-			);
-			name = "Supporting Files";
-			path = "../../../sdk/Supporting Files";
-			sourceTree = "<group>";
-		};
-		9CB42E761F227CB000877477 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				9CB42E771F227CB000877477 /* BBMLog.h */,
-				9CB42E781F227CB000877477 /* BBMLog.m */,
-			);
-			name = Utilities;
-			path = ../../../sdk/Utilities;
+			path = Endpoints;
 			sourceTree = "<group>";
 		};
 		9CFF7B8A1ED875FA00A28053 /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
 				9CFF7B8B1ED875FA00A28053 /* ChatSubjectViewCell.h */,
-				9CB42E5D1F226DB500877477 /* ContactManager.h */,
-				9CB42E5E1F226DB500877477 /* ContactManager.m */,
-				9CB42E521F22677900877477 /* Contact.h */,
-				9CB42E531F22677900877477 /* Contact.m */,
 				9CFF7B8C1ED875FA00A28053 /* ChatSubjectViewCell.m */,
 				9CFF7B8D1ED875FA00A28053 /* ContactPickerTableViewController.h */,
 				9CFF7B8E1ED875FA00A28053 /* ContactPickerTableViewController.m */,
@@ -235,6 +319,7 @@
 		AD6409861E705F3F001AA785 = {
 			isa = PBXGroup;
 			children = (
+				9C415D8B1ED752CE007F8846 /* Support */,
 				AD640A481E706492001AA785 /* Google Auth Config */,
 				AD6409911E705F3F001AA785 /* LocationSharing */,
 				AD6409901E705F3F001AA785 /* Products */,
@@ -254,20 +339,17 @@
 		AD6409911E705F3F001AA785 /* LocationSharing */ = {
 			isa = PBXGroup;
 			children = (
-				9CB42E731F227CA600877477 /* sdk */,
-				9CB42E601F226DD800877477 /* KeyManagement */,
-				9CB42E591F226A5700877477 /* Chats */,
-				9CB42E551F22681500877477 /* Core Access */,
 				9C415DCE1ED76884007F8846 /* Config */,
 				AD6409951E705F3F001AA785 /* AppDelegate.h */,
 				AD6409961E705F40001AA785 /* AppDelegate.m */,
+				9CEC28CA1ED85D1D00CC4F38 /* LocationSharingApp.h */,
+				9CEC28CB1ED85D1D00CC4F38 /* LocationSharingApp.m */,
 				9CFF7B8A1ED875FA00A28053 /* Contacts */,
 				AD640A341E7063F5001AA785 /* Login */,
 				AD640A5E1E7080CB001AA785 /* LocationChat */,
 				AD64099E1E705F40001AA785 /* Main.storyboard */,
 				AD6409A11E705F40001AA785 /* Assets.xcassets */,
 				AD6409A31E705F40001AA785 /* LaunchScreen.storyboard */,
-				AD6409A61E705F40001AA785 /* Info.plist */,
 				AD382EB11E7ABBCB00846056 /* test.gpx */,
 				AD6409921E705F3F001AA785 /* Supporting Files */,
 			);
@@ -277,6 +359,7 @@
 		AD6409921E705F3F001AA785 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				AD6409A61E705F40001AA785 /* Info.plist */,
 				AD6409931E705F3F001AA785 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -285,16 +368,8 @@
 		AD640A291E70611D001AA785 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9CB42E6A1F227BF900877477 /* BBMEnterprise.framework */,
-				AD382EA71E73305D00846056 /* AudioToolbox.framework */,
+				C2C5431E1F7BD8F300054FE1 /* BBMEnterprise.framework */,
 				AD5B7F7A1E71A86E00150E79 /* MapKit.framework */,
-				AD640A611E708EA7001AA785 /* AVFoundation.framework */,
-				AD640A5F1E708E88001AA785 /* PushKit.framework */,
-				AD640A321E70618C001AA785 /* GLKit.framework */,
-				AD640A301E70617C001AA785 /* libresolv.tbd */,
-				AD640A2E1E706163001AA785 /* VideoToolbox.framework */,
-				AD640A2C1E706134001AA785 /* libz.tbd */,
-				AD640A2A1E70611D001AA785 /* libstdc++.tbd */,
 				CB50BEAF4A29B83E1FA8BB0F /* libPods-LocationSharing.a */,
 			);
 			name = Frameworks;
@@ -414,7 +489,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CB42E791F227CB000877477 /* ca.pem in Resources */,
 				AD6409A51E705F40001AA785 /* LaunchScreen.storyboard in Resources */,
 				AD640A521E706492001AA785 /* GoogleService-Info.plist in Resources */,
 				AD6409A21E705F40001AA785 /* Assets.xcassets in Resources */,
@@ -432,13 +506,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LocationSharing-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		639BE9B721E364430AF2A5C7 /* [CP] Embed Pods Frameworks */ = {
@@ -462,9 +539,13 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-LocationSharing/Pods-LocationSharing-resources.sh",
+				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -478,29 +559,40 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CB42E541F22677900877477 /* Contact.m in Sources */,
+				9C415DC61ED752CE007F8846 /* BBMUserManager.m in Sources */,
 				9CFF7B931ED875FA00A28053 /* ChatSubjectViewCell.m in Sources */,
-				9CB42E7A1F227CB000877477 /* BBMLog.m in Sources */,
-				9CB42E5C1F226A5700877477 /* ChatCreator.m in Sources */,
-				9CB42E681F226DD800877477 /* LocalUser.m in Sources */,
 				9CFF7B961ED875FA00A28053 /* ContactTableViewCell.m in Sources */,
-				9CB42E5F1F226DB500877477 /* ContactManager.m in Sources */,
-				9CB42E691F226DD800877477 /* NSString+Base64.m in Sources */,
+				9CEC28CC1ED85D1D00CC4F38 /* LocationSharingApp.m in Sources */,
+				9C415DC31ED752CE007F8846 /* BBMProfileKeys.m in Sources */,
 				9CE261CF1ED8B9F10043A4BC /* BBMChat+LocationApp.m in Sources */,
+				9C415DC21ED752CE007F8846 /* BBMKeyPair.m in Sources */,
+				9C415DC81ED752CE007F8846 /* BBMUtilities.m in Sources */,
 				9CE261C91ED8A5340043A4BC /* LocationMessageLoader.m in Sources */,
+				9C415DC01ED752CE007F8846 /* BBMChatMessage+Util.m in Sources */,
+				9C415DCA1ED752CE007F8846 /* NSString+Base64.m in Sources */,
 				AD5B7F791E71A4D200150E79 /* LocationSharingViewController.m in Sources */,
+				9C415DC51ED752CE007F8846 /* BBMAppUser.m in Sources */,
 				AD640A651E718DCC001AA785 /* ChatsTableViewController.m in Sources */,
 				AD6409971E705F40001AA785 /* AppDelegate.m in Sources */,
 				AD5B7F7E1E71B04F00150E79 /* LocationManager.m in Sources */,
 				AD640A6B1E718E75001AA785 /* ChatListLoader.m in Sources */,
 				AD640A6E1E719007001AA785 /* ChatTableViewCell.m in Sources */,
 				9CE261CC1ED8AF920043A4BC /* BBMChatMessage+LocationApp.m in Sources */,
-				9CB42E671F226DD800877477 /* KeySync.m in Sources */,
-				9CB42E581F22681500877477 /* CoreAccess.m in Sources */,
 				9CE261D41EDC8E6D0043A4BC /* LoginViewController.m in Sources */,
+				9C415DC41ED752CE007F8846 /* BBMFirebaseKeyStorageProvider.m in Sources */,
 				AD5B7F811E71B11400150E79 /* LocationMapAnnotation.m in Sources */,
+				9C415DBF1ED752CE007F8846 /* BBMChatCreator.m in Sources */,
 				AD6409941E705F3F001AA785 /* main.m in Sources */,
+				9C415DC11ED752CE007F8846 /* BBMKeyManager.m in Sources */,
+				9C415DBB1ED752CE007F8846 /* BBMAuthController.m in Sources */,
 				9CFF7B941ED875FA00A28053 /* ContactPickerTableViewController.m in Sources */,
+				9C415DBE1ED752CE007F8846 /* BBMAccess.m in Sources */,
+				9C51872C1F61915800549E76 /* BBMEndpoint.m in Sources */,
+				9C415DBC1ED752CE007F8846 /* BBMAuthenticatedAccount.m in Sources */,
+				9C415DC71ED752CE007F8846 /* BBMFirebaseUserManager.m in Sources */,
+				9C415DBD1ED752CE007F8846 /* BBMGoogleTokenManager.m in Sources */,
+				9C51872D1F61915800549E76 /* BBMEndpointManager.m in Sources */,
+				9C415DC91ED752CE007F8846 /* NSMutableAttributedString+Util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,6 +663,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Debug;
 		};
@@ -610,9 +703,11 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Release;
 		};
@@ -621,28 +716,25 @@
 			baseConfigurationReference = 87FE9F307A612258DB084533 /* Pods-LocationSharing.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../sdk",
+					"$(SRCROOT)/../../sdk",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = LocationSharing/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				KEEP_PRIVATE_EXTERNS = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../../sdk/lib",
-				);
-				ONLY_ACTIVE_ARCH = NO;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.LocationSharing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"VALID_ARCHS[sdk=iphonesimulator*]" = armv7;
 			};
 			name = Debug;
 		};
@@ -651,25 +743,23 @@
 			baseConfigurationReference = 6130075934D28B90FE764EBE /* Pods-LocationSharing.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../sdk",
+					"$(SRCROOT)/../../sdk",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = LocationSharing/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../../sdk/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.LocationSharing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"VALID_ARCHS[sdk=iphonesimulator*]" = armv7;
 			};
 			name = Release;
 		};

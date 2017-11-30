@@ -23,15 +23,16 @@
 #import "ContactPickerTableViewController.h"
 #import "ChatTableViewCell.h"
 #import "ChatListLoader.h"
-#import "ChatCreator.h"
-#import "CoreAccess.h"
-#import "ContactManager.h"
+#import "BBMChatCreator.h"
+#import "BBMAccess.h"
+#import "BBMAppUser.h"
+#import "LocationSharingApp.h"
 
-@interface ChatsTableViewController () <ChatListListener, ContactsListener>
+@interface ChatsTableViewController () <ChatListListener, BBMAppUserListener>
 
 @property (nonatomic) NSArray *chatList;
 @property (nonatomic) ChatListLoader *chatListLoader;
-@property (nonatomic) ChatCreator *chatCreator;
+@property (nonatomic) BBMChatCreator *chatCreator;
 
 @end
 
@@ -40,23 +41,26 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.navigationItem.hidesBackButton = YES;
+    
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
+                                                                             style:self.navigationItem.backBarButtonItem.style
+                                                                            target:nil
+                                                                            action:nil];
     
     // To hide extra separators at the end of the table
     self.tableView.tableFooterView = [UIView new];
     self.tableView.estimatedRowHeight = 50.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 
-    //This is used to create new chats
-    self.chatCreator = [[ChatCreator alloc] init];
-
     //See ChatListLoader for details on how to get notified of any changes in the list of chats. That
     //class uses observable monitors.
-    [[ChatListLoader sharedInstance] addChangeListener:self];
+    [[LocationSharingApp application].chatListLoader addChangeListener:self];
+    
+    //This is used to create new chats
+    self.chatCreator = [[BBMChatCreator alloc] init];
 
     //When there is change in the users list reload the table
-    [[ContactManager sharedInstance] addContactsListener:self];
+    [[[LocationSharingApp application] userManager] addUserListener:self];
 }
 
 #pragma mark - Table view data source
@@ -93,14 +97,14 @@
     UITableViewRowAction *leaveAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive
                                                                            title:@"Leave"
                                                                          handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                                                                             [weakSelf endChatAtIndexPath:indexPath];
+                                                                             [weakSelf leaveChatAtIndexPath:indexPath];
                                                                          }];
     return @[leaveAction];
 }
 
-- (void)endChatAtIndexPath:(NSIndexPath *)indexPath {
+- (void)leaveChatAtIndexPath:(NSIndexPath *)indexPath {
     BBMChat *chat = self.chatList[indexPath.row];
-    [BBMCore endChat:chat];
+    [BBMAccess leaveChat:chat];
 }
 
 #pragma mark - Navigation
@@ -111,7 +115,7 @@
         return;
     }
     //User chat creator to start a chat with one or multiple contacts
-    [self.chatCreator startConferenceWithRegIds:regIds subject:subject callback:^(NSString *chatId, NSString *failReason) {
+    [self.chatCreator startConferenceWithRegIds:regIds subject:subject callback:^(NSString *chatId, BBMChatStartFailedMessageReason failReason) {
         if(chatId)
         {
             //If a chat with the given regId already exists there is no need to create a new one.
@@ -120,7 +124,7 @@
             [self performSegueWithIdentifier:@"ShowChatSegue" sender:self];
         }
         else {
-            NSLog(@"Chat creation failed failReason = %@", failReason);
+            NSLog(@"Chat creation failed failReason = %d", failReason);
         }
     }];
 }
@@ -141,8 +145,8 @@
         contactPicker.callback = ^(NSArray *contacts, NSString *subject){
             if(contacts.count > 0) {
                 NSMutableArray *regIds = [[NSMutableArray alloc] init];
-                for(Contact *contact in contacts) {
-                    [regIds addObject:@([contact.regId longLongValue])];
+                for(BBMAppUser *contact in contacts) {
+                    [regIds addObject:@(contact.regId)];
                 }
                 [weakSelf startChatWithRegIds:regIds subject:subject];
             }
@@ -160,7 +164,7 @@
 
 #pragma mark - ContactsListener
 
-- (void)contactsChanged:(NSArray*)contacts
+- (void)usersChanged:(NSArray*)contacts
 {
     [self.tableView reloadData];
 }

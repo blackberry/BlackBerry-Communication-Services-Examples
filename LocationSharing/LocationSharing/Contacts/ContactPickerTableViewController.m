@@ -20,14 +20,14 @@
 
 #import "ContactPickerTableViewController.h"
 
+#import "LocationSharingApp.h"
 #import "ChatSubjectViewCell.h"
 #import "ContactTableViewCell.h"
-#import "ContactManager.h"
 
 static NSString *const kContactTableViewCell = @"ContactTableViewCell";
 static NSString *const kChatSubjectCell = @"ChatSubjectViewCell";
 
-@interface ContactPickerTableViewController () <UITextFieldDelegate, UIScrollViewDelegate, ContactsListener>
+@interface ContactPickerTableViewController () <UITextFieldDelegate, UIScrollViewDelegate, BBMAppUserListener>
 
 @property (nonatomic) NSArray *contacts;
 @property (nonatomic) NSString *subject;
@@ -49,14 +49,14 @@ static NSString *const kChatSubjectCell = @"ChatSubjectViewCell";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 
     self.selectedContacts = [[NSMutableDictionary alloc] init];
-    [[ContactManager sharedInstance] addContactsListener:self];
+    [[[LocationSharingApp application] userManager] addUserListener:self];
 
     [self updateNavigationBar];
 }
 
 - (void)dealloc
 {
-    [[ContactManager sharedInstance] removeContactsListener:self];
+    [[[LocationSharingApp application] userManager] removeUserListener:self];
 }
 
 - (IBAction)cancelPressed:(id)sender
@@ -94,7 +94,7 @@ static NSString *const kChatSubjectCell = @"ChatSubjectViewCell";
 
 #pragma mark - ContactsListener
 
-- (void)contactsChanged:(NSArray *)contacts
+- (void)usersChanged:(NSArray*)contacts
 {
     self.contacts = contacts;
     [self.tableView reloadData];
@@ -117,7 +117,7 @@ static NSString *const kChatSubjectCell = @"ChatSubjectViewCell";
         return cell;
     }
     ContactTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kContactTableViewCell forIndexPath:indexPath];
-    Contact *contact = self.contacts[[self adjustedContactRow:indexPath]];
+    BBMAppUser *contact = self.contacts[[self adjustedContactRow:indexPath]];
     [cell setContact:contact];
 
     return cell;
@@ -125,15 +125,15 @@ static NSString *const kChatSubjectCell = @"ChatSubjectViewCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Contact *contact = self.contacts[[self adjustedContactRow:indexPath]];
-    self.selectedContacts[@(contact.regId.longLongValue)] = contact;
+    BBMAppUser *contact = self.contacts[[self adjustedContactRow:indexPath]];
+    self.selectedContacts[@(contact.regId)] = contact;
     [self updateNavigationBar];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Contact *contact = self.contacts[[self adjustedContactRow:indexPath]];
-    self.selectedContacts[@(contact.regId.longLongValue)] = nil;
+    BBMAppUser *contact = self.contacts[[self adjustedContactRow:indexPath]];
+    self.selectedContacts[@(contact.regId)] = nil;
     [self updateNavigationBar];
 }
 

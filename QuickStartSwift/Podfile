@@ -1,0 +1,9 @@
+platform :ios, '9.0'
+
+target 'QuickStartSwift' do
+	use_frameworks!
+
+	# Pods for QuickStart
+	pod 'GoogleSignIn', '= 4.0.2'
+end
+

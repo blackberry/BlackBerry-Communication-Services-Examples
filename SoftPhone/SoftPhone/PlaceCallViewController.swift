@@ -1,0 +1,136 @@
+/* Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+* 
+* Licensed under the Apache License, Version 2.0 (the "License"); 
+* you may not use this file except in compliance with the License. 
+* You may obtain a copy of the License at 
+* 
+* http://www.apache.org/licenses/LICENSE-2.0 
+* 
+* Unless required by applicable law or agreed to in writing, software 
+* distributed under the License is distributed on an "AS IS" BASIS, 
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+* See the License for the specific language governing permissions and 
+* limitations under the License. 
+  
+* This sample code was created by BlackBerry using SDKs from Apple Inc. 
+* and may contain code licensed for use only with Apple products. 
+* Please review your Apple SDK Agreement for additional details. 
+*/ 
+
+import Foundation
+import UIKit
+
+
+class PlaceCallViewController : UIViewController, BBMEMediaDelegate
+{
+    @IBOutlet weak var regIdField: UITextField!
+    @IBOutlet weak var callButton: UIButton!
+    @IBOutlet weak var statusLabel: UILabel!
+
+    let mediaManager = BBMEnterpriseService.shared().mediaManager()!
+
+    override func viewWillAppear(_ animated: Bool) {
+        mediaManager.add(self)
+        resetCallButton()
+    }
+
+    func resetCallButton() {
+        statusLabel.text = ""
+        callButton.isEnabled = true
+        callButton.setTitle("Start Call", for: UIControlState.normal)
+    }
+
+    @IBAction func placeCallPressed(_ sender: Any) {
+        regIdField.resignFirstResponder()
+
+        if mediaManager.currentCallInfo != nil {
+            mediaManager.hangup()
+            return
+        }
+
+        if (false == SoftPhoneApp.app().authController().startedAndAuthenticated) {
+            statusLabel.text = String("Call Failed.  User not authenticated")
+            return;
+        }
+
+        guard let regIdStr = regIdField.text,
+            let regIdInt = CLongLong(regIdStr),
+            regIdStr.characters.count > 10
+            else
+        {
+            statusLabel.text = String("Invalid Registration Id")
+            return;
+        }
+
+        let placeCallAction : MediaPermissionsCallback = {
+            (granted: Bool) -> Void in
+            if(granted == false) {
+                return;
+            }
+
+            let regIdNum = NSNumber(value: regIdInt)
+            self.callButton.setTitle("Cancel Call", for: UIControlState.normal)
+
+            //BBME Calls require encryption which means we must have the user key for the other
+            //party.  Before we place the call, we first read the user key
+            SoftPhoneApp.app().keyManager.readUserKey(regIdNum.stringValue) {
+                (regId, result) -> Void in
+                if(result != kKeySyncResultSuccess) {
+                    self.statusLabel.text = "Unable to load user key"
+                    self.resetCallButton()
+                    return;
+                }
+
+                //We have a user key, now we can attempt to place the call
+                //If you wish to place the call with outgoing vide enabled, change the mediaMode
+                //to kVideo here and the camera will be automatically enabled if possible
+                self.mediaManager.callRegId(regIdNum, mediaMode: kVoice) {
+                    (error) -> Void in
+                    self.callButton.isEnabled = true
+                    if(error != kMediaErrorNoError) {
+                        self.statusLabel.text = "Unable to place call (" + String(error.rawValue) + ")"
+                        self.resetCallButton()
+                        return;
+                    }
+
+                    self.statusLabel.text = String(format: "Calling %@", regIdNum)
+                }
+            }
+        }
+
+        //Before placing a call, we need to request permission to access the microphone.
+        //Camera access request is automatic if the camera is enabled for a call once connected
+        //If placeing a call with video pre-enabled, specify kVideo as the mode here
+        mediaManager.requestMediaPermissions(callback: placeCallAction, mode: kVoice)
+    }
+
+
+    //Tap gesture recognizer callback
+    @IBAction func dismissNumberPad(_ sender: Any) {
+        regIdField.resignFirstResponder()
+    }
+
+
+    //MARK: MediaManager Delegate
+
+    //We're only monitoring the call state to update our UI here.  The CallListener will handle
+    //presenting the various modal UI elements as needed.  
+
+    func callEnded(_ call: BBMECall!) {
+        resetCallButton()
+    }
+
+    func callDidFail(_ call: BBMECall!) {
+        //Handle and display call failures
+        let alert = UIAlertController(title: "Call Failed",
+                                      message: String("Your call failed: " + String(describing: call.failureReason)),
+                                      preferredStyle: UIAlertControllerStyle.alert)
+
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+        alert.addAction(okAction)
+
+        present(alert, animated: true, completion: nil)
+        resetCallButton()
+    }
+
+}

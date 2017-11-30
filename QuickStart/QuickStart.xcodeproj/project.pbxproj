@@ -1,0 +1,676 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		055808EA157DFD22418F3605 /* libPods-QuickStart.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D048AA1E838F81E2DC146706 /* libPods-QuickStart.a */; };
+		9C5187341F619B4400549E76 /* BBMEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5187311F619B4400549E76 /* BBMEndpoint.m */; };
+		9C5187351F619B4400549E76 /* BBMEndpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5187331F619B4400549E76 /* BBMEndpointManager.m */; };
+		C23C18C61ECDF3DF00A0C83F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C23C18C51ECDF3DF00A0C83F /* GoogleService-Info.plist */; };
+		C271C9861ED48A4C00E86CC5 /* BBMAuthController.m in Sources */ = {isa = PBXBuildFile; fileRef = C271C9851ED48A4C00E86CC5 /* BBMAuthController.m */; };
+		C2FBF51F1ECCE03D004D6691 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF51E1ECCE03D004D6691 /* main.m */; };
+		C2FBF5221ECCE03D004D6691 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF5211ECCE03D004D6691 /* AppDelegate.m */; };
+		C2FBF5251ECCE03D004D6691 /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF5241ECCE03D004D6691 /* AccountViewController.m */; };
+		C2FBF5281ECCE03D004D6691 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2FBF5261ECCE03D004D6691 /* Main.storyboard */; };
+		C2FBF52A1ECCE03D004D6691 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2FBF5291ECCE03D004D6691 /* Assets.xcassets */; };
+		C2FBF52D1ECCE03D004D6691 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2FBF52B1ECCE03D004D6691 /* LaunchScreen.storyboard */; };
+		C2FBF5AB1ECCE433004D6691 /* BBMAuthenticatedAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF5821ECCE433004D6691 /* BBMAuthenticatedAccount.m */; };
+		C2FBF5AD1ECCE433004D6691 /* BBMAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF5891ECCE433004D6691 /* BBMAccess.m */; };
+		C2FBF5AE1ECCE433004D6691 /* BBMChatCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF58B1ECCE433004D6691 /* BBMChatCreator.m */; };
+		C2FBF5AF1ECCE433004D6691 /* BBMChatMessage+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF58D1ECCE433004D6691 /* BBMChatMessage+Util.m */; };
+		C2FBF5B01ECCE433004D6691 /* BBMKeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF5901ECCE433004D6691 /* BBMKeyManager.m */; };
+		C2FBF5B11ECCE433004D6691 /* BBMKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF5921ECCE433004D6691 /* BBMKeyPair.m */; };
+		C2FBF5B21ECCE433004D6691 /* BBMProfileKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF5951ECCE433004D6691 /* BBMProfileKeys.m */; };
+		C2FBF5B41ECCE433004D6691 /* BBMAppUser.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF59B1ECCE433004D6691 /* BBMAppUser.m */; };
+		C2FBF5B51ECCE433004D6691 /* BBMUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF59F1ECCE433004D6691 /* BBMUserManager.m */; };
+		C2FBF5B71ECCE433004D6691 /* BBMUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF5A51ECCE433004D6691 /* BBMUtilities.m */; };
+		C2FBF5B81ECCE433004D6691 /* NSMutableAttributedString+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF5A71ECCE433004D6691 /* NSMutableAttributedString+Util.m */; };
+		C2FBF5B91ECCE433004D6691 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF5A91ECCE433004D6691 /* NSString+Base64.m */; };
+		C2FBF5BF1ECCE4F7004D6691 /* BBMEnterprise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2FBF5BD1ECCE4EA004D6691 /* BBMEnterprise.framework */; };
+		C2FBF5C01ECCE4F7004D6691 /* BBMEnterprise.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C2FBF5BD1ECCE4EA004D6691 /* BBMEnterprise.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C2FBF5C51ECCED7D004D6691 /* BBMGoogleTokenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C2FBF5861ECCE433004D6691 /* BBMGoogleTokenManager.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C2FBF5BC1ECCE4AA004D6691 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C2FBF5C01ECCE4F7004D6691 /* BBMEnterprise.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		16C115899AC80CFA65A9EFE0 /* Pods-QuickStart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickStart.release.xcconfig"; path = "Pods/Target Support Files/Pods-QuickStart/Pods-QuickStart.release.xcconfig"; sourceTree = "<group>"; };
+		4DA5C822F94217231F5412C9 /* libPods-QuickStart.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-QuickStart.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C5187301F619B4400549E76 /* BBMEndpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMEndpoint.h; sourceTree = "<group>"; };
+		9C5187311F619B4400549E76 /* BBMEndpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMEndpoint.m; sourceTree = "<group>"; };
+		9C5187321F619B4400549E76 /* BBMEndpointManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMEndpointManager.h; sourceTree = "<group>"; };
+		9C5187331F619B4400549E76 /* BBMEndpointManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMEndpointManager.m; sourceTree = "<group>"; };
+		C20CF6481ECE02230030C774 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C23C18C11ECDDC8600A0C83F /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
+		C23C18C51ECDF3DF00A0C83F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "3rdParty/Google/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C271C9841ED48A4C00E86CC5 /* BBMAuthController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAuthController.h; sourceTree = "<group>"; };
+		C271C9851ED48A4C00E86CC5 /* BBMAuthController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMAuthController.m; sourceTree = "<group>"; };
+		C2FBF51A1ECCE03D004D6691 /* QuickStart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickStart.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2FBF51E1ECCE03D004D6691 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C2FBF5201ECCE03D004D6691 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C2FBF5211ECCE03D004D6691 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C2FBF5231ECCE03D004D6691 /* AccountViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccountViewController.h; sourceTree = "<group>"; };
+		C2FBF5241ECCE03D004D6691 /* AccountViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AccountViewController.m; sourceTree = "<group>"; };
+		C2FBF5271ECCE03D004D6691 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C2FBF5291ECCE03D004D6691 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C2FBF52C1ECCE03D004D6691 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C2FBF52E1ECCE03D004D6691 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C2FBF5811ECCE433004D6691 /* BBMAuthenticatedAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAuthenticatedAccount.h; sourceTree = "<group>"; };
+		C2FBF5821ECCE433004D6691 /* BBMAuthenticatedAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMAuthenticatedAccount.m; sourceTree = "<group>"; };
+		C2FBF5831ECCE433004D6691 /* BBMAuthenticationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAuthenticationDelegate.h; sourceTree = "<group>"; };
+		C2FBF5851ECCE433004D6691 /* BBMGoogleTokenManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMGoogleTokenManager.h; sourceTree = "<group>"; };
+		C2FBF5861ECCE433004D6691 /* BBMGoogleTokenManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMGoogleTokenManager.m; sourceTree = "<group>"; };
+		C2FBF5881ECCE433004D6691 /* BBMAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAccess.h; sourceTree = "<group>"; };
+		C2FBF5891ECCE433004D6691 /* BBMAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMAccess.m; sourceTree = "<group>"; };
+		C2FBF58A1ECCE433004D6691 /* BBMChatCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMChatCreator.h; sourceTree = "<group>"; };
+		C2FBF58B1ECCE433004D6691 /* BBMChatCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMChatCreator.m; sourceTree = "<group>"; };
+		C2FBF58C1ECCE433004D6691 /* BBMChatMessage+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BBMChatMessage+Util.h"; sourceTree = "<group>"; };
+		C2FBF58D1ECCE433004D6691 /* BBMChatMessage+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BBMChatMessage+Util.m"; sourceTree = "<group>"; };
+		C2FBF58F1ECCE433004D6691 /* BBMKeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMKeyManager.h; sourceTree = "<group>"; };
+		C2FBF5901ECCE433004D6691 /* BBMKeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMKeyManager.m; sourceTree = "<group>"; };
+		C2FBF5911ECCE433004D6691 /* BBMKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMKeyPair.h; sourceTree = "<group>"; };
+		C2FBF5921ECCE433004D6691 /* BBMKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMKeyPair.m; sourceTree = "<group>"; };
+		C2FBF5931ECCE433004D6691 /* BBMKeyStorageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMKeyStorageProvider.h; sourceTree = "<group>"; };
+		C2FBF5941ECCE433004D6691 /* BBMProfileKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMProfileKeys.h; sourceTree = "<group>"; };
+		C2FBF5951ECCE433004D6691 /* BBMProfileKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMProfileKeys.m; sourceTree = "<group>"; };
+		C2FBF5971ECCE433004D6691 /* BBMFirebaseKeyStorageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMFirebaseKeyStorageProvider.h; sourceTree = "<group>"; };
+		C2FBF5981ECCE433004D6691 /* BBMFirebaseKeyStorageProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMFirebaseKeyStorageProvider.m; sourceTree = "<group>"; };
+		C2FBF59A1ECCE433004D6691 /* BBMAppUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAppUser.h; sourceTree = "<group>"; };
+		C2FBF59B1ECCE433004D6691 /* BBMAppUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMAppUser.m; sourceTree = "<group>"; };
+		C2FBF59C1ECCE433004D6691 /* BBMAppUserListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAppUserListener.h; sourceTree = "<group>"; };
+		C2FBF59D1ECCE433004D6691 /* BBMAppUserSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMAppUserSource.h; sourceTree = "<group>"; };
+		C2FBF59E1ECCE433004D6691 /* BBMUserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMUserManager.h; sourceTree = "<group>"; };
+		C2FBF59F1ECCE433004D6691 /* BBMUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMUserManager.m; sourceTree = "<group>"; };
+		C2FBF5A11ECCE433004D6691 /* BBMFirebaseUserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMFirebaseUserManager.h; sourceTree = "<group>"; };
+		C2FBF5A21ECCE433004D6691 /* BBMFirebaseUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMFirebaseUserManager.m; sourceTree = "<group>"; };
+		C2FBF5A41ECCE433004D6691 /* BBMUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMUtilities.h; sourceTree = "<group>"; };
+		C2FBF5A51ECCE433004D6691 /* BBMUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMUtilities.m; sourceTree = "<group>"; };
+		C2FBF5A61ECCE433004D6691 /* NSMutableAttributedString+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Util.h"; sourceTree = "<group>"; };
+		C2FBF5A71ECCE433004D6691 /* NSMutableAttributedString+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Util.m"; sourceTree = "<group>"; };
+		C2FBF5A81ECCE433004D6691 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		C2FBF5A91ECCE433004D6691 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
+		C2FBF5BD1ECCE4EA004D6691 /* BBMEnterprise.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BBMEnterprise.framework; path = ../../sdk/BBMEnterprise.framework; sourceTree = "<group>"; };
+		C2FBF5C41ECCED28004D6691 /* ConfigSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigSettings.h; sourceTree = "<group>"; };
+		CCF9F193A282B2FF1785724F /* Pods-QuickStart.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickStart.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QuickStart/Pods-QuickStart.debug.xcconfig"; sourceTree = "<group>"; };
+		D048AA1E838F81E2DC146706 /* libPods-QuickStart.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-QuickStart.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C2FBF5171ECCE03D004D6691 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C2FBF5BF1ECCE4F7004D6691 /* BBMEnterprise.framework in Frameworks */,
+				055808EA157DFD22418F3605 /* libPods-QuickStart.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		249F8C18704B52580CBE2674 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4DA5C822F94217231F5412C9 /* libPods-QuickStart.a */,
+				CCF9F193A282B2FF1785724F /* Pods-QuickStart.debug.xcconfig */,
+				16C115899AC80CFA65A9EFE0 /* Pods-QuickStart.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		75B33905A519CF9B92067EAA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF5BD1ECCE4EA004D6691 /* BBMEnterprise.framework */,
+				D048AA1E838F81E2DC146706 /* libPods-QuickStart.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9C51872F1F619B4400549E76 /* Endpoints */ = {
+			isa = PBXGroup;
+			children = (
+				9C5187301F619B4400549E76 /* BBMEndpoint.h */,
+				9C5187311F619B4400549E76 /* BBMEndpoint.m */,
+				9C5187321F619B4400549E76 /* BBMEndpointManager.h */,
+				9C5187331F619B4400549E76 /* BBMEndpointManager.m */,
+			);
+			path = Endpoints;
+			sourceTree = "<group>";
+		};
+		C23C18C31ECDEC3900A0C83F /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF5C41ECCED28004D6691 /* ConfigSettings.h */,
+			);
+			name = Config;
+			sourceTree = "<group>";
+		};
+		C23C18C41ECDF3CD00A0C83F /* Google Auth Config */ = {
+			isa = PBXGroup;
+			children = (
+				C23C18C51ECDF3DF00A0C83F /* GoogleService-Info.plist */,
+			);
+			name = "Google Auth Config";
+			sourceTree = "<group>";
+		};
+		C2FBF5111ECCE03D004D6691 = {
+			isa = PBXGroup;
+			children = (
+				C20CF6481ECE02230030C774 /* README.md */,
+				C23C18C41ECDF3CD00A0C83F /* Google Auth Config */,
+				C2FBF57D1ECCE433004D6691 /* Support */,
+				C2FBF51C1ECCE03D004D6691 /* QuickStart */,
+				C2FBF51B1ECCE03D004D6691 /* Products */,
+				75B33905A519CF9B92067EAA /* Frameworks */,
+				249F8C18704B52580CBE2674 /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		C2FBF51B1ECCE03D004D6691 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF51A1ECCE03D004D6691 /* QuickStart.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C2FBF51C1ECCE03D004D6691 /* QuickStart */ = {
+			isa = PBXGroup;
+			children = (
+				C23C18C31ECDEC3900A0C83F /* Config */,
+				C2FBF5201ECCE03D004D6691 /* AppDelegate.h */,
+				C2FBF5211ECCE03D004D6691 /* AppDelegate.m */,
+				C2FBF5231ECCE03D004D6691 /* AccountViewController.h */,
+				C2FBF5241ECCE03D004D6691 /* AccountViewController.m */,
+				C2FBF5261ECCE03D004D6691 /* Main.storyboard */,
+				C2FBF5291ECCE03D004D6691 /* Assets.xcassets */,
+				C2FBF52B1ECCE03D004D6691 /* LaunchScreen.storyboard */,
+				C2FBF51D1ECCE03D004D6691 /* Supporting Files */,
+			);
+			path = QuickStart;
+			sourceTree = "<group>";
+		};
+		C2FBF51D1ECCE03D004D6691 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF52E1ECCE03D004D6691 /* Info.plist */,
+				C23C18C11ECDDC8600A0C83F /* Podfile */,
+				C2FBF51E1ECCE03D004D6691 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C2FBF57D1ECCE433004D6691 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF57F1ECCE433004D6691 /* Source */,
+			);
+			name = Support;
+			path = ../Support;
+			sourceTree = "<group>";
+		};
+		C2FBF57F1ECCE433004D6691 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				9C51872F1F619B4400549E76 /* Endpoints */,
+				C2FBF5801ECCE433004D6691 /* Auth */,
+				C2FBF5871ECCE433004D6691 /* BBMDS */,
+				C2FBF58E1ECCE433004D6691 /* Protect */,
+				C2FBF5991ECCE433004D6691 /* User */,
+				C2FBF5A31ECCE433004D6691 /* Util */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		C2FBF5801ECCE433004D6691 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF5811ECCE433004D6691 /* BBMAuthenticatedAccount.h */,
+				C2FBF5821ECCE433004D6691 /* BBMAuthenticatedAccount.m */,
+				C2FBF5831ECCE433004D6691 /* BBMAuthenticationDelegate.h */,
+				C271C9841ED48A4C00E86CC5 /* BBMAuthController.h */,
+				C271C9851ED48A4C00E86CC5 /* BBMAuthController.m */,
+				C2FBF5841ECCE433004D6691 /* GoogleAuth */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		C2FBF5841ECCE433004D6691 /* GoogleAuth */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF5851ECCE433004D6691 /* BBMGoogleTokenManager.h */,
+				C2FBF5861ECCE433004D6691 /* BBMGoogleTokenManager.m */,
+			);
+			path = GoogleAuth;
+			sourceTree = "<group>";
+		};
+		C2FBF5871ECCE433004D6691 /* BBMDS */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF5881ECCE433004D6691 /* BBMAccess.h */,
+				C2FBF5891ECCE433004D6691 /* BBMAccess.m */,
+				C2FBF58A1ECCE433004D6691 /* BBMChatCreator.h */,
+				C2FBF58B1ECCE433004D6691 /* BBMChatCreator.m */,
+				C2FBF58C1ECCE433004D6691 /* BBMChatMessage+Util.h */,
+				C2FBF58D1ECCE433004D6691 /* BBMChatMessage+Util.m */,
+			);
+			path = BBMDS;
+			sourceTree = "<group>";
+		};
+		C2FBF58E1ECCE433004D6691 /* Protect */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF58F1ECCE433004D6691 /* BBMKeyManager.h */,
+				C2FBF5901ECCE433004D6691 /* BBMKeyManager.m */,
+				C2FBF5911ECCE433004D6691 /* BBMKeyPair.h */,
+				C2FBF5921ECCE433004D6691 /* BBMKeyPair.m */,
+				C2FBF5931ECCE433004D6691 /* BBMKeyStorageProvider.h */,
+				C2FBF5941ECCE433004D6691 /* BBMProfileKeys.h */,
+				C2FBF5951ECCE433004D6691 /* BBMProfileKeys.m */,
+				C2FBF5961ECCE433004D6691 /* Providers */,
+			);
+			path = Protect;
+			sourceTree = "<group>";
+		};
+		C2FBF5961ECCE433004D6691 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF5971ECCE433004D6691 /* BBMFirebaseKeyStorageProvider.h */,
+				C2FBF5981ECCE433004D6691 /* BBMFirebaseKeyStorageProvider.m */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		C2FBF5991ECCE433004D6691 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF59A1ECCE433004D6691 /* BBMAppUser.h */,
+				C2FBF59B1ECCE433004D6691 /* BBMAppUser.m */,
+				C2FBF59C1ECCE433004D6691 /* BBMAppUserListener.h */,
+				C2FBF59D1ECCE433004D6691 /* BBMAppUserSource.h */,
+				C2FBF59E1ECCE433004D6691 /* BBMUserManager.h */,
+				C2FBF59F1ECCE433004D6691 /* BBMUserManager.m */,
+				C2FBF5A01ECCE433004D6691 /* Firebase */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		C2FBF5A01ECCE433004D6691 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF5A11ECCE433004D6691 /* BBMFirebaseUserManager.h */,
+				C2FBF5A21ECCE433004D6691 /* BBMFirebaseUserManager.m */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		C2FBF5A31ECCE433004D6691 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				C2FBF5A41ECCE433004D6691 /* BBMUtilities.h */,
+				C2FBF5A51ECCE433004D6691 /* BBMUtilities.m */,
+				C2FBF5A61ECCE433004D6691 /* NSMutableAttributedString+Util.h */,
+				C2FBF5A71ECCE433004D6691 /* NSMutableAttributedString+Util.m */,
+				C2FBF5A81ECCE433004D6691 /* NSString+Base64.h */,
+				C2FBF5A91ECCE433004D6691 /* NSString+Base64.m */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C2FBF5191ECCE03D004D6691 /* QuickStart */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C2FBF5311ECCE03D004D6691 /* Build configuration list for PBXNativeTarget "QuickStart" */;
+			buildPhases = (
+				866E918743BAB1C32505BB2E /* [CP] Check Pods Manifest.lock */,
+				C2FBF5161ECCE03D004D6691 /* Sources */,
+				C2FBF5171ECCE03D004D6691 /* Frameworks */,
+				C2FBF5181ECCE03D004D6691 /* Resources */,
+				C2FBF5BC1ECCE4AA004D6691 /* Embed Frameworks */,
+				0AF162A0CB48AF4C6E2DAAD8 /* [CP] Embed Pods Frameworks */,
+				46FC5FA32B8D0C606D130CB8 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QuickStart;
+			productName = QuickStart;
+			productReference = C2FBF51A1ECCE03D004D6691 /* QuickStart.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C2FBF5121ECCE03D004D6691 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = BlackBerry;
+				TargetAttributes = {
+					C2FBF5191ECCE03D004D6691 = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = C2FBF5151ECCE03D004D6691 /* Build configuration list for PBXProject "QuickStart" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C2FBF5111ECCE03D004D6691;
+			productRefGroup = C2FBF51B1ECCE03D004D6691 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C2FBF5191ECCE03D004D6691 /* QuickStart */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C2FBF5181ECCE03D004D6691 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C2FBF52D1ECCE03D004D6691 /* LaunchScreen.storyboard in Resources */,
+				C23C18C61ECDF3DF00A0C83F /* GoogleService-Info.plist in Resources */,
+				C2FBF52A1ECCE03D004D6691 /* Assets.xcassets in Resources */,
+				C2FBF5281ECCE03D004D6691 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0AF162A0CB48AF4C6E2DAAD8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuickStart/Pods-QuickStart-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		46FC5FA32B8D0C606D130CB8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-QuickStart/Pods-QuickStart-resources.sh",
+				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuickStart/Pods-QuickStart-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		866E918743BAB1C32505BB2E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-QuickStart-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C2FBF5161ECCE03D004D6691 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C2FBF5251ECCE03D004D6691 /* AccountViewController.m in Sources */,
+				C2FBF5AD1ECCE433004D6691 /* BBMAccess.m in Sources */,
+				C271C9861ED48A4C00E86CC5 /* BBMAuthController.m in Sources */,
+				C2FBF5B01ECCE433004D6691 /* BBMKeyManager.m in Sources */,
+				9C5187341F619B4400549E76 /* BBMEndpoint.m in Sources */,
+				C2FBF5AB1ECCE433004D6691 /* BBMAuthenticatedAccount.m in Sources */,
+				C2FBF5B21ECCE433004D6691 /* BBMProfileKeys.m in Sources */,
+				C2FBF5B71ECCE433004D6691 /* BBMUtilities.m in Sources */,
+				C2FBF5C51ECCED7D004D6691 /* BBMGoogleTokenManager.m in Sources */,
+				C2FBF5AE1ECCE433004D6691 /* BBMChatCreator.m in Sources */,
+				C2FBF5221ECCE03D004D6691 /* AppDelegate.m in Sources */,
+				C2FBF5B91ECCE433004D6691 /* NSString+Base64.m in Sources */,
+				C2FBF5B51ECCE433004D6691 /* BBMUserManager.m in Sources */,
+				9C5187351F619B4400549E76 /* BBMEndpointManager.m in Sources */,
+				C2FBF5B11ECCE433004D6691 /* BBMKeyPair.m in Sources */,
+				C2FBF5B81ECCE433004D6691 /* NSMutableAttributedString+Util.m in Sources */,
+				C2FBF51F1ECCE03D004D6691 /* main.m in Sources */,
+				C2FBF5B41ECCE433004D6691 /* BBMAppUser.m in Sources */,
+				C2FBF5AF1ECCE433004D6691 /* BBMChatMessage+Util.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C2FBF5261ECCE03D004D6691 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C2FBF5271ECCE03D004D6691 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C2FBF52B1ECCE03D004D6691 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C2FBF52C1ECCE03D004D6691 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C2FBF52F1ECCE03D004D6691 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../Support/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7";
+			};
+			name = Debug;
+		};
+		C2FBF5301ECCE03D004D6691 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../Support/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7";
+			};
+			name = Release;
+		};
+		C2FBF5321ECCE03D004D6691 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CCF9F193A282B2FF1785724F /* Pods-QuickStart.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../../sdk",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = QuickStart/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.QuickStart;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C2FBF5331ECCE03D004D6691 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 16C115899AC80CFA65A9EFE0 /* Pods-QuickStart.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../../sdk",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = QuickStart/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.QuickStart;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C2FBF5151ECCE03D004D6691 /* Build configuration list for PBXProject "QuickStart" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C2FBF52F1ECCE03D004D6691 /* Debug */,
+				C2FBF5301ECCE03D004D6691 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C2FBF5311ECCE03D004D6691 /* Build configuration list for PBXNativeTarget "QuickStart" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C2FBF5321ECCE03D004D6691 /* Debug */,
+				C2FBF5331ECCE03D004D6691 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C2FBF5121ECCE03D004D6691 /* Project object */;
+}

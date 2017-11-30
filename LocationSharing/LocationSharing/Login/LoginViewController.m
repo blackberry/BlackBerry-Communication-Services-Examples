@@ -19,22 +19,17 @@
 
 #import "LoginViewController.h"
 #import <BBMEnterprise/BBMEnterprise.h>
-#import "CoreAccess.h"
+#import "BBMAccess.h"
 #import <GoogleSignIn/GIDSignInButton.h>
-#import <GoogleSignIn/GoogleSignIn.h>
-#import "LocationManager.h"
-#import "ConfigSettings.h"
-#import "Firebase.h"
-#import "ContactManager.h"
+#import "BBMAuthenticationDelegate.h"
+#import "LocationSharingApp.h"
 
-@interface LoginViewController () <GIDSignInUIDelegate, GIDSignInDelegate>
+@interface LoginViewController () <LocationSharingLoginDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *setupStateLabel;
 @property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, strong) ObservableMonitor *authControllerMonitor;
-@property (assign) BOOL serviceStarted;
-@property (nonatomic, strong) NSString *setupState;
+@property (nonatomic) ObservableMonitor *authControllerMonitor;
 
 @end
 
@@ -46,138 +41,79 @@
 
     self.googleSignInButton.hidden = YES;
 
-    //Start the service by sending the app identifier.
-    [[BBMEnterpriseService service] start:SDK_SERVICE_DOMAIN environment:kBBMConfig_Sandbox completionBlock:^(BOOL success) {
+    //Configure the authentication controller.
+    [[[LocationSharingApp application] authController] setRootController:self];
+    [LocationSharingApp application].loginDelegate = self;
 
-        //User should only be able to sign in if the services are started
-        self.googleSignInButton.enabled = success;
-        self.serviceStarted = success;
-        [self updateUI];
-
-        if(success) {
-            //Automatically sign in if the user has previously signed in and the credentials are still valid.
-            [[GIDSignIn sharedInstance] signInSilently];
-        }
-    }];
-
-    [GIDSignIn sharedInstance].uiDelegate = self;
-    [GIDSignIn sharedInstance].delegate = self;
-
-
-}
-
-- (void)connectWithUserName:(NSString *)username token:(NSString *)token {
-    [[BBMEnterpriseService service] sendAuthToken:token forUserName:username setupStateBlock:^(NSString *authTokenState, NSString *setupState, NSNumber *regId) {
-        self.setupState = setupState;
-        if([setupState isEqualToString:kBBMSetupStateSuccess]){
-            static dispatch_once_t onceToken;
-            dispatch_once(&onceToken, ^{
-                [FIRApp configure];
-            });
-            [self registerLocalUser:regId];
-        }
-        else if([setupState isEqualToString:kBBMSetupStateDeviceSwitch]){
-            [BBMCore sendDeviceSwitch];
-        }
-        else {
-            [[LocationManager sharedInstance] stopMonitoring];
-        }
-
-        [self updateUI];
+    typeof(self) __weak weakSelf = self;
+    self.authControllerMonitor = [ObservableMonitor monitorActivatedWithName:@"authControllerMonitor" block:^{
+        [weakSelf observeServiceStateAndAuthState];
     }];
 }
 
-- (void)updateUI
+- (void)viewDidAppear:(BOOL)animated
 {
-    if (self.serviceStarted && ([self.setupState isEqualToString:kBBMSetupStateNotRequested] ||
-                                self.setupState == nil)) {
+    [super viewDidAppear:animated];
+    //After login, a view controller is pushed to the navigation stack. To sign out the user needs
+    //to push the back button. Sign out happens here.
+    if([[[LocationSharingApp application] authController] startedAndAuthenticated]) {
+        [self signOut];
+    }
+}
+
+- (void)observeServiceStateAndAuthState
+{
+    //Update the UI based on the values for the service state and the auth state.
+    BBMAuthState *authState = [LocationSharingApp application].authController.authState;
+    BOOL serviceStarted = [LocationSharingApp application].authController.serviceStarted;
+    NSString *setupState = authState.setupState;
+
+    if (serviceStarted && ([setupState isEqualToString:kBBMSetupStateNotRequested] ||
+                           setupState == nil)) {
         self.setupStateLabel.text = @"Tap sign in to start.";
         [self.activityIndicator stopAnimating];
         self.googleSignInButton.hidden = NO;
     }
-    else if([self.setupState isEqualToString:kBBMSetupStateOngoing] ||
-       [self.setupState isEqualToString:kBBMSetupStateSuccess]){
+    if([setupState isEqualToString:kBBMSetupStateOngoing] ||
+       [setupState isEqualToString:kBBMSetupStateSuccess]){
         self.setupStateLabel.text = @"";
         [self.activityIndicator startAnimating];
         self.googleSignInButton.hidden = YES;
     }
-    else if(!self.serviceStarted){
+    else if([setupState isEqualToString:kBBMSetupStateFull]) {
+        // If state is full, ask for list of endpoints and remove one so that setup can continue.
+        [[LocationSharingApp application].endpointManager deregisterAnyEndpointAndContinueSetup];
+    }
+    else if(!serviceStarted){
         self.setupStateLabel.text = @"Service not started.";
         [self.activityIndicator stopAnimating];
         self.googleSignInButton.hidden = YES;
     }
 
+    // Send device switch message if needed. This means the user had previously logged in on another
+    // device or reinstalled app.
+    if([setupState isEqualToString:kBBMSetupStateDeviceSwitch]){
+        [BBMAccess sendSetupRetry];
+    }
 }
 
-- (void)registerLocalUser:(NSNumber *)regId
+#pragma mark -
+
+- (IBAction)signOut
 {
-    if(regId == nil) {
-        return;
-    }
-    GIDGoogleUser *user = [GIDSignIn sharedInstance].currentUser;
-    NSURL *avatarUrl = [user.profile imageURLWithDimension:120];
-
-    //One last step. Use Google Sign-In credentials to sign in with Firebase Auth.
-    GIDAuthentication *authentication = user.authentication;
-    FIRAuthCredential *credential = [FIRGoogleAuthProvider credentialWithIDToken:authentication.idToken accessToken:authentication.accessToken];
-    [FIRGoogleAuthProvider credentialWithIDToken:authentication.idToken
-                                     accessToken:authentication.accessToken];
-
-    [[FIRAuth auth] signInWithCredential:credential completion:^(FIRUser * _Nullable firebaseUser, NSError * _Nullable error) {
-        if(error) {
-            NSLog(@"FIRAuth sign-in error: %@",error.localizedDescription);
-        }
-        else {
-            [[ContactManager sharedInstance] registerLocalUser:firebaseUser.uid
-                                                         regId:regId.stringValue
-                                                          name:user.profile.name
-                                                           pin:[BBMCore currentUserPin]
-                                                         email:user.profile.email
-                                                     avatarUrl:avatarUrl.absoluteString];
-            [[LocationManager sharedInstance] startLocationManager];
-            [[LocationManager sharedInstance] startMonitoring];
-            if(self.navigationController.topViewController == self) {
-                [self.activityIndicator stopAnimating];
-                [self performSegueWithIdentifier:@"loginSegue" sender:self];
-            }
-        }
-    }];
+    //Wipe all local BBM data
+    [[BBMEnterpriseService service] resetService];
+    [[[LocationSharingApp application] authController] signOut];
 }
 
-#pragma mark - Google Sign-In methods
+#pragma makr - LocationSharingLoginDelegate
 
-- (void)googleSignInStateChanged
+- (void) loggedIn
 {
-    GIDGoogleUser *user = [GIDSignIn sharedInstance].currentUser;
-    if (user == nil) {
-        NSLog(@"Sign-in error: no user available");
-        self.googleSignInButton.hidden = NO;
-
-        return;
+    if(self.navigationController.topViewController == self) {
+        [self.activityIndicator stopAnimating];
+        [self performSegueWithIdentifier:@"loginSegue" sender:self];
     }
-
-    NSString *userId = user.userID;
-    NSString *accessToken = user.authentication.accessToken;
-    [self connectWithUserName:userId token:accessToken];
-
-    self.googleSignInButton.hidden = YES;
-}
-
-- (void)signIn:(GIDSignIn *)signIn didSignInForUser:(GIDGoogleUser *)user withError:(NSError *)error
-{
-    if (error) {
-        NSLog(@"Google sign-in error: %@", error.localizedDescription);
-    }
-
-    [self googleSignInStateChanged];
-}
-
-- (void)signIn:(GIDSignIn *)signIn didDisconnectWithUser:(GIDGoogleUser *)user withError:(NSError *)error
-{
-    if (error) {
-        NSLog(@"Google sign-in disconnect error: %@", error.localizedDescription);
-    }
-    [self googleSignInStateChanged];
 }
 
 @end

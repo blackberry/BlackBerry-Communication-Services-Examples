@@ -20,7 +20,7 @@
 #import "LocationMapAnnotation.h"
 #import <BBMEnterprise/BBMEnterprise.h>
 #import "LocationManager.h"
-#import "ContactManager.h"
+#import "LocationSharingApp.h"
 
 @implementation LocationMapAnnotation
 
@@ -35,7 +35,7 @@
     }
     
     [self willChangeValueForKey:@"title"];
-    self.user = [[ContactManager sharedInstance] contactForRegId:_message.resolvedSenderUri.regId];
+    self.user = [[LocationSharingApp application].userManager userForRegId:_message.resolvedSenderUri.regId];
     [self didChangeValueForKey:@"title"];
 }
 

@@ -19,7 +19,8 @@
 
 #import <BBMEnterprise/BBMEnterprise.h>
 #import <MapKit/MKAnnotation.h>
-#import "Contact.h"
+#import "BBMAppUser.h"
+
 /*!
  @details
  Represents a user's location on the map. It uses an instance of BBMChatMessage to extract the location
@@ -32,7 +33,7 @@
 @property (nonatomic, readonly, copy) NSString *title;
 @property (nonatomic, readonly, copy) NSString *subtitle;
 
-@property (nonatomic, strong) Contact *user;
+@property (nonatomic, strong) BBMAppUser *user;
 @property (nonatomic, strong) NSDictionary *locationData;
 
 - (void)setMessage:(BBMChatMessage *)message;

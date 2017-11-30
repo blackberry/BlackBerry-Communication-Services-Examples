@@ -35,12 +35,4 @@
     // location data is stored in it.
     return [self.rawData[kLongitudeKey] floatValue];
 }
-
-+ (NSString *)chatIDToURI:(NSString *)chatId
-{
-    if(chatId.length == 0) {
-        return nil;
-    }
-    return [NSString stringWithFormat:@"bbmpim://chat/%@", chatId];
-}
 @end

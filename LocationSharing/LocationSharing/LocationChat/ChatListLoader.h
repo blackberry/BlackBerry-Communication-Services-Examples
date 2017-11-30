@@ -20,13 +20,15 @@
 #import <Foundation/Foundation.h>
 
 @protocol ChatListListener <NSObject>
-- (void)chatListChanged:(NSArray *)chatList;
+- (void)chatListChanged:(NSArray*)chatList;
 @end
 
-//This class loads the list of chats and executes a callback every time there is an update.
+/*!
+ @details
+ Loads the list of chats and informs it's listeners every time there is an update.
+ */
 @interface ChatListLoader : NSObject
 
-+ (ChatListLoader *)sharedInstance;
 - (void)monitorChatList;
 
 /*!

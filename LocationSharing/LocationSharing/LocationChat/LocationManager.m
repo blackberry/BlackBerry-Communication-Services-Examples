@@ -23,7 +23,8 @@
 #import <MapKit/MKMapView.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <BBMEnterprise/BBMEnterprise.h>
-#import "CoreAccess.h"
+#import "BBMAccess.h"
+#import "LocationSharingApp.h"
 
 NSString * const kMessageTag_Location = @"Location";
 NSString * const kLongitudeKey = @"longitude";
@@ -47,24 +48,8 @@ NSString * const kLatitudeKey = @"latitude";
 
 @implementation LocationManager
 
-+ (instancetype)sharedInstance {
-    static LocationManager *sharedInstance;
-
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[LocationManager alloc] _initPrivate];
-    });
-
-    return sharedInstance;
-}
-
-- (instancetype)init {
-    NSLog(@"Use sharedInstance");
-    self = nil;
-    return nil;
-}
-
-- (instancetype)_initPrivate {
+- (instancetype)init
+{
     self = [super init];
     if (self) {
         self.chatIds = [[NSMutableSet alloc] init];
@@ -92,17 +77,17 @@ NSString * const kLatitudeKey = @"latitude";
 
     typeof(self) __weak weakSelf = self;
     self.chatListMonitor = [ObservableMonitor monitorActivatedWithName:@"chatListMonitor"  selfTerminatingBlock:^BOOL{
-        if ([BBMCore model].chat.bbmState != kBBMStateCurrent) {
+        if ([[BBMEnterpriseService service] model].chat.bbmState != kBBMStateCurrent) {
             return NO;
         }
-        NSArray *chats = [BBMCore model].chat.array;
+        NSArray *chats = [[BBMEnterpriseService service] model].chat.array;
         // Send location updates to all existing chats.
         for (BBMChat *chat in chats) {
             [weakSelf startSendingLocationUpdatesForChatId:chat.chatId];
         }
 
         // Listen to the chat lists so we send our location to all chats
-        [[BBMCore model].chat addListener:weakSelf];
+        [[[BBMEnterpriseService service] model].chat addListener:weakSelf];
         // Terminate this monitor once we have all the chats. New chats are tracked using
         // BBMLiveListener methods.
         return YES;
@@ -117,7 +102,7 @@ NSString * const kLatitudeKey = @"latitude";
     for (NSString *chatId in chatIdsCopy) {
         [self stopSendingLocationUpdatesForChatId:chatId];
     }
-    [[BBMCore model].chat removeListener:self];
+    [[[BBMEnterpriseService service] model].chat removeListener:self];
     self.isMonitoring = NO;
 }
 
@@ -146,6 +131,15 @@ NSString * const kLatitudeKey = @"latitude";
     }
 }
 
+#pragma mark - BBMAccess
+
+- (void)sendLocation:(NSDictionary *)locationData toChatId:(NSString *)chatId
+{
+    BBMChatMessageSendMessage *msg = [[BBMChatMessageSendMessage alloc] initWithChatId:chatId tag:kMessageTag_Location];
+    msg.rawData = locationData;
+    [[BBMEnterpriseService service] sendMessageToService:msg];
+}
+
 #pragma mark - Start/Stop sending location
 
 - (void)startSendingLocationUpdatesForChatId:(NSString *)chatId
@@ -164,13 +158,6 @@ NSString * const kLatitudeKey = @"latitude";
             [self.locationManager stopUpdatingLocation];
         }
     }
-}
-
-- (void)sendLocation:(NSDictionary *)locationData toChatId:(NSString *)chatId
-{
-    BBMChatMessageSendMessage *msg = [[BBMChatMessageSendMessage alloc] initWithChatId:chatId tag:kMessageTag_Location];
-    msg.rawData = locationData;
-    [[BBMServiceLayer sharedInstance] sendCoreMessage:msg];
 }
 
 #pragma mark - CLLocationManagerDelegate

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13156.6" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Mq9-pZ-byn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Mq9-pZ-byn">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13137.5"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13165.3"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -80,7 +80,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="9Lu-lP-I3U">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -196,7 +196,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eqq-on-yO2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2437.5999999999999" y="1154.5727136431785"/>
+            <point key="canvasLocation" x="2438" y="1214"/>
         </scene>
         <!--Location Chat-->
         <scene sceneID="aVE-rB-RY6">
@@ -222,7 +222,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="gMK-zr-4kE"/>
                                     <barButtonItem title="View all locations" id="v97-g6-l0g">
                                         <connections>
-                                            <action selector="toggleShowAllLocations:" destination="dLe-yx-aem" id="0Gh-7h-DUU"/>
+                                            <action selector="toggle:" destination="dLe-yx-aem" id="3DG-Ls-PpH"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="sSd-EX-61L"/>
@@ -257,7 +257,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="Nhw-k5-LaT">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -266,7 +266,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="33j-4P-ugH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-183" y="345"/>
+            <point key="canvasLocation" x="-164" y="358"/>
         </scene>
         <!--Sign In-->
         <scene sceneID="KwE-WQ-WuH">
@@ -319,7 +319,9 @@
                             <constraint firstAttribute="trailing" secondItem="AnK-CP-Mie" secondAttribute="trailing" constant="60" id="lc4-xV-eVp"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Sign In" id="et1-9k-891"/>
+                    <navigationItem key="navigationItem" title="Sign In" id="et1-9k-891">
+                        <barButtonItem key="backBarButtonItem" title="Sign Out" id="9nk-6J-2oW"/>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="activityIndicator" destination="aFQ-mL-uak" id="r4t-3M-b7M"/>
@@ -334,7 +336,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="location_chat" width="75" height="75"/>
-        <image name="new_chat" width="40" height="40"/>
+        <image name="location_chat" width="144" height="144"/>
+        <image name="new_chat" width="24" height="24"/>
     </resources>
 </document>
