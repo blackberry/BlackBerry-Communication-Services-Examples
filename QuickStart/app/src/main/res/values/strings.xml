@@ -1,0 +1,37 @@
+<!--
+  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">QuickStart</string>
+
+    <string name="button_stop">Sign out</string>
+
+    <string name="label_service_state">Service State</string>
+    <string name="label_setup_state">SetupState</string>
+    <string name="label_auth_state">AuthTokenState</string>
+    <string name="label_regId">RegId</string>
+    <string name="label_setup_error">SetupError</string>
+    <string name="label_profile_keys">ProfileKeys</string>
+
+    <string name="formatted_profile_keys">Private Encryption Key - %1$s\nPrivate Signing Key - %2$s\Public Encryption Key %3$s\Public Signing Key %4$s</string>
+
+    <string name="google_sign_failed">"Google sign in failed."</string>
+    <string name="google_signed_in_no_acct">"No account information returned"</string>
+    <string name="device_switch_confirmation">Your BBM account is in use on another device/app, switch to this one?</string>
+    <string name="endpoint_update_failed">Unable to register device</string>
+    <string name="endpoint_get_failed">Unable to get registered devices</string>
+    <string name="endpoint_remove_failed">Unable to remove a registered device</string>
+</resources>

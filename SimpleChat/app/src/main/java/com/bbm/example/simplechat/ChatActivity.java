@@ -33,8 +33,8 @@ import com.bbm.sdk.bbmds.Chat;
 import com.bbm.sdk.bbmds.ChatMessage;
 import com.bbm.sdk.bbmds.internal.Existence;
 import com.bbm.sdk.bbmds.internal.lists.IncrementalListObserver;
+import com.bbm.sdk.bbmds.outbound.ChatMessageRead;
 import com.bbm.sdk.bbmds.outbound.ChatMessageSend;
-import com.bbm.sdk.bbmds.outbound.MessageStatus;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.support.reactive.ChatMessageList;
@@ -235,11 +235,10 @@ public class ChatActivity extends AppCompatActivity {
                         return;
                     }
 
-                    String chatUri = "bbmpim://chat/" + mChatId;
                     //Ask the BBM Enterprise SDK to mark the last message in the chat as read.
                     //All messages older then this will be marked as read.
                     BBMEnterprise.getInstance().getBbmdsProtocol().send(
-                            new MessageStatus(chatUri, chat.lastMessage, MessageStatus.Status.Read)
+                            new ChatMessageRead(mChatId, chat.lastMessage)
                     );
                 }
             }

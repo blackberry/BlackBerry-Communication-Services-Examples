@@ -19,6 +19,8 @@ package com.bbm.example.simplechat;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,15 +45,21 @@ import com.bbm.sdk.bbmds.internal.Existence;
 import com.bbm.sdk.bbmds.internal.lists.IncrementalListObserver;
 import com.bbm.sdk.bbmds.internal.lists.ObservableList;
 import com.bbm.sdk.bbmds.outbound.ChatStart;
-import com.bbm.sdk.bbmds.outbound.SetupDeviceSwitch;
+import com.bbm.sdk.bbmds.outbound.SetupRetry;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.service.ProtocolMessage;
 import com.bbm.sdk.service.ProtocolMessageConsumer;
+import com.bbm.sdk.support.identity.auth.google.auth.GoogleAccessTokenUpdater;
 import com.bbm.sdk.support.identity.auth.google.auth.GoogleAuthHelper;
 import com.bbm.sdk.support.identity.user.firebase.FirebaseUserDbSync;
 import com.bbm.sdk.support.util.FirebaseHelper;
 import com.bbm.sdk.support.util.Logger;
+import com.bbm.sdk.support.util.SetupHelper;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.common.collect.Lists;
 
 import org.json.JSONArray;
@@ -68,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
     //The list of chats
     private ObservableList<Chat> mChatList;
     //Keep a hard reference to these observers to prevent them from being gc'd
-    private Observer mDeviceSwitchObserver;
     private Observer mRegistrationIdObserver;
+    private Observer mBbmSetupObserver;
 
     //This observer will be used to notify the adapter when chats have been changed or added.
     private final IncrementalListObserver mChatListObserver = new IncrementalListObserver() {
@@ -94,6 +102,52 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private SetupHelper.GoAwayListener mGoAwayListener = new SetupHelper.GoAwayListener() {
+        @Override
+        public void onGoAway() {
+            // Log the google account out of the app.
+            final GoogleApiClient client = GoogleAuthHelper.getApiClient(getApplicationContext(), GoogleAccessTokenUpdater.getInstance().getClientServerId());
+            client.connect();
+            client.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                @Override
+                public void onConnected(@Nullable Bundle bundle) {
+
+                    // Revoke access from user account to the app.
+                    Auth.GoogleSignInApi.revokeAccess(client).setResultCallback(new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(@NonNull Status status) {
+
+                            // Now sign out
+                            Auth.GoogleSignInApi.signOut(client).setResultCallback(
+                                    new ResultCallback<Status>() {
+                                        @Override
+                                        public void onResult(@NonNull Status status) {
+
+                                            // Stop Firebase.
+                                            FirebaseHelper.stop();
+
+                                            // Stop BBM
+                                            BBMEnterprise.getInstance().stop();
+
+                                            client.disconnect();
+
+                                            Logger.w("Application has been stopped. Exiting app. Good-bye!");
+                                            // Not the best way, but end the app.
+                                            System.exit(0);
+                                        }
+                                    });
+                        }
+                    });
+                }
+
+                @Override
+                public void onConnectionSuspended(int i) {
+                    // ignore.
+                }
+            });
+        }
+    };
+
     //Simple view holder to display a chat
     private class ChatViewHolder extends RecyclerView.ViewHolder {
 
@@ -102,14 +156,14 @@ public class MainActivity extends AppCompatActivity {
 
         ChatViewHolder(View itemView) {
             super(itemView);
-            title = (TextView)itemView.findViewById(R.id.chat_title);
+            title = (TextView) itemView.findViewById(R.id.chat_title);
 
             //when the chat is clicked open the chat in a new activity
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                    intent.putExtra("chat-id",  chat.chatId);
+                    intent.putExtra("chat-id", chat.chatId);
                     startActivity(intent);
                 }
             });
@@ -152,25 +206,48 @@ public class MainActivity extends AppCompatActivity {
         //prompt the user to sign in with their Google account, and pass that data to our user manager when ready
         GoogleAuthHelper.initGoogleSignIn(this, FirebaseUserDbSync.getInstance(), getString(R.string.default_web_client_id));
 
-        //Listen to determine if a device switch is necessary.
+        //Listen to the setup events
         final ObservableValue<GlobalSetupState> globalSetupState = BBMEnterprise.getInstance().getBbmdsProtocol().getGlobalSetupState();
-        mDeviceSwitchObserver = new Observer() {
+        mBbmSetupObserver = new Observer() {
             @Override
             public void changed() {
-                if (globalSetupState.get().state == GlobalSetupState.State.DeviceSwitchRequired) {
-                    //Ask the BBM Enterprise SDK to move the users profile to this device
-                    BBMEnterprise.getInstance().getBbmdsProtocol().send(new SetupDeviceSwitch(""));
+                final ObservableValue<GlobalSetupState> globalSetupState = BBMEnterprise.getInstance().getBbmdsProtocol().getGlobalSetupState();
+
+                if (globalSetupState.get().exists != Existence.YES) {
+                    return;
+                }
+
+                GlobalSetupState currentState = globalSetupState.get();
+
+                switch (currentState.state) {
+                    case NotRequested:
+                        SetupHelper.registerDevice("Simple Chat", "Simple Chat example");
+                        break;
+                    case DeviceSwitchRequired:
+                        //Ask the BBM Enterprise SDK to move the users profile to this device
+                        BBMEnterprise.getInstance().getBbmdsProtocol().send(new SetupRetry());
+                        break;
+                    case Full:
+                        SetupHelper.handleFullState();
+                        break;
+                    case Ongoing:
+                    case Success:
+                    case Unspecified:
+                        break;
                 }
             }
         };
-        //Add deviceSwitchObserver to the globalSetupStateObservable
-        globalSetupState.addObserver(mDeviceSwitchObserver);
+
+        //Add setup observer to the globalSetupStateObservable
+        globalSetupState.addObserver(mBbmSetupObserver);
+
         //Call changed to trigger our observer to run immediately
-        mDeviceSwitchObserver.changed();
+        mBbmSetupObserver.changed();
+        SetupHelper.listenForAndHandleGoAway(mGoAwayListener);
 
         setContentView(R.layout.main);
 
-        final TextView myRegIdTextView = (TextView)findViewById(R.id.my_registration_id);
+        final TextView myRegIdTextView = (TextView) findViewById(R.id.my_registration_id);
         //Observe the local user to get our registration id
         mRegistrationIdObserver = new Observer() {
             @Override
@@ -197,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         mChatList.addIncrementalListObserver(mChatListObserver);
 
         //Set the adapter in the recyclerview
-        final RecyclerView chatsRecyclerView = (RecyclerView)findViewById(R.id.chats_list);
+        final RecyclerView chatsRecyclerView = (RecyclerView) findViewById(R.id.chats_list);
         chatsRecyclerView.setAdapter(mAdapter);
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
@@ -231,8 +308,8 @@ public class MainActivity extends AppCompatActivity {
             View contents = LayoutInflater.from(MainActivity.this).inflate(R.layout.chat_start_dialog, null);
             dialogBuilder.setView(contents);
 
-            final EditText regIdEdit = (EditText)contents.findViewById(R.id.reg_id);
-            final EditText subjectEdit = (EditText)contents.findViewById(R.id.subject);
+            final EditText regIdEdit = (EditText) contents.findViewById(R.id.reg_id);
+            final EditText subjectEdit = (EditText) contents.findViewById(R.id.subject);
             dialogBuilder.setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -272,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
                 Logger.d("onMessage: " + message);
                 //If the cookie in the incoming message matches the cookie we provided
                 //we know this message is the response to our chatStart request.
-                if (cookie.equals(json.optString("cookie",""))) {
+                if (cookie.equals(json.optString("cookie", ""))) {
                     //this is for us, stop listening
                     BBMEnterprise.getInstance().getBbmdsProtocolConnector().removeMessageConsumer(this);
 

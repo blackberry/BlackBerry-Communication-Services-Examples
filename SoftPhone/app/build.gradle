@@ -1,0 +1,100 @@
+/*
+ * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'com.android.application'
+
+repositories {
+    flatDir {
+        //point to shared dir with AAR file in it
+        dirs '../../../sdk'
+    }
+}
+
+// Create a variable called appPropertiesFile, and initialize it to your
+// app.properties file, in the rootProject folder.
+def appPropertiesFile = rootProject.file("app.properties")
+def appProperties = new Properties()
+appProperties.load(new FileInputStream(appPropertiesFile))
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+    defaultConfig {
+        applicationId "com.bbm.example.softphone"
+        minSdkVersion 19
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // The Server Client ID is a Web OAuth 2.0 Client ID obtained from https://console.developers.google.com/.
+        // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
+        buildConfigField "String", "CLIENT_SERVER_ID", appProperties['client_server_id']
+
+        // The Firebase Cloud Messaging Sender ID is obtained from https://console.firebase.google.com/.
+        // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
+        buildConfigField "String", "CLOUD_MESSAGING_SENDER_ID", appProperties['cloud_messaging_sender_id']
+
+        // The BBM Enterprise User Domain that is assigned to you.
+        // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
+        resValue "string", "USER_DOMAIN", appProperties['user_domain']
+    }
+
+    signingConfigs {
+        common {
+            keyAlias appProperties['keyAlias']
+            keyPassword appProperties['keyPassword']
+            storeFile file(appProperties['storeFile'])
+            storePassword appProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            signingConfig signingConfigs.common
+        }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.common
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    // BBM SDK Dependencies
+    compile(name: 'bbm_sdk-release', ext: 'aar')
+    compile project(path: ':BbmSdkSupport')
+    // Other UI dependencies
+    // Firebase Cloud Messaging dependencies
+    // Include Google play services auth module to use Open ID.
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:cardview-v7:24.2.1'
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
+    compile 'com.google.firebase:firebase-database:10.0.1'
+}
+// By applying the plugin below this will ensure the project will not compile
+// if google-services.json is missing. When setting up this example please
+// ensure you follow https://developers.google.com/identity/sign-in/android/start
+// and download the resulting google-services.json file.
+
+apply plugin: 'com.google.gms.google-services'
