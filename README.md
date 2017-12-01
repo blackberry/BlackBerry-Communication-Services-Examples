@@ -19,6 +19,15 @@ These samples require the BBM Enterprise SDK which you can find along with relat
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/reference/ios/index.html)
 
+<p align="center">
+ <b>Getting Started Video</b>
+</p>
+<p align="center">
+    <a href="http://www.youtube.com/watch?feature=player_embedded&v=9A5fbfFTEo0"
+      target="_blank"><img src="http://img.youtube.com/vi/9A5fbfFTEo0/0.jpg" 
+      alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
+</p>
+
 # License
 
 These samples are released as Open Source and licensed under [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).  
