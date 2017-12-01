@@ -20,6 +20,15 @@ These samples require the BBM Enterprise SDK which you can find along with relat
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/reference/android/index.html)
 
+<p align="center">
+ <b>Getting Started Video</b>
+</p>
+<p align="center">
+    <a href="http://www.youtube.com/watch?feature=player_embedded&v=ByKqCtcLMZ0"
+      target="_blank"><img src="http://img.youtube.com/vi/ByKqCtcLMZ0/0.jpg" 
+      alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
+</p>
+
 # License
 
 These samples are released as Open Source and licensed under [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).  The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the [reative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
