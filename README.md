@@ -13,9 +13,9 @@ This repository contains code for JavaScript example applications that you can u
 
 These samples require the BBM Enterprise SDK which you can find along with related resources at the location below.
     
-* Getting stated with the [BBM Enterprise SDK](http://community.blackberry.com/bbm-enterprise)
+* Getting stated with the [BBM Enterprise SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
-* [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/reference/javascript/index.html)
+* [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
 # License
 
