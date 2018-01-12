@@ -16,9 +16,9 @@ This repository contains code for Android example applications that you can use 
 
 These samples require the BBM Enterprise SDK which you can find along with related resources at the location below.
     
-* Getting stated with the [BBM Enterprise SDK](http://community.blackberry.com/bbm-enterprise)
+* Getting stated with the [BBM Enterprise SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
-* [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/reference/android/index.html)
+* [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 
 <p align="center">
  <b>Getting Started Video</b>
