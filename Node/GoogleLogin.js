@@ -115,10 +115,12 @@ module.exports = {
                       }
                     });
                   },
-                  getKeyProvider: (regId, accessToken) => {
-                    return FirebaseKeyProvider.factory.createInstance(regId,
-                       config.firebaseConfig, accessToken);
-                  },
+                  getKeyProvider: (regId, accessToken) => 
+                    FirebaseKeyProvider.factory.createInstance(
+                      regId,
+                      config.firebaseConfig,
+                      accessToken,
+                      setupNeededMsg => console.warn(setupNeededMsg)),
                   description: 'node ' + process.version
                 });
                 bbmsdk.on('registrationChanged', function(registrationInfo) {

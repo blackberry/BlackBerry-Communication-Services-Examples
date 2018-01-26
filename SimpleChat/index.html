@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<!--
+  Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Simple Chat</title>
+
+  <link rel="import" href="node_modules/@npm-polymer/iron-flex-layout/iron-flex-layout.html">
+  <link rel="import" href="node_modules/@npm-polymer/iron-scroll-threshold/iron-scroll-threshold.html">
+
+
+  <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+  <script src="../support/protect/firebase/FirebaseKeyProvider.js"></script>
+  <script src="../support/protect/firebase/config.js"></script>
+  <script src="../support/auth/GenericAuthHelper.js"></script>
+  <script src="../support/identity/FirebaseUserManager.js"></script>
+  <script src="../../sdk/bbm_sdk_web.js"></script>
+  <script src="js/simpleChat.js"></script>
+  <script src="js/config.js"></script>
+
+
+  <link rel="import" href="node_modules/@npm-polymer/iron-flex-layout/iron-flex-layout-classes.html">
+  <link rel="import" href="node_modules/@npm-polymer/iron-icons/iron-icons.html">
+  <link rel="import" href="node_modules/@npm-polymer/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="node_modules/@npm-polymer/iron-ajax/iron-ajax.html">
+  <link rel="import" href="node_modules/@npm-polymer/app-layout/app-scroll-effects/app-scroll-effects.html">
+  <link rel="import" href="node_modules/@npm-polymer/app-layout/app-header/app-header.html">
+  <link rel="import" href="node_modules/@npm-polymer/app-layout/app-toolbar/app-toolbar.html">
+  <link rel="import" href="node_modules/@npm-polymer/app-layout/app-drawer-layout/app-drawer-layout.html">
+  <link rel="import" href="node_modules/@npm-polymer/app-layout/app-drawer/app-drawer.html">
+  <link rel="import" href="node_modules/@npm-polymer/app-layout/app-header-layout/app-header-layout.html">
+  <link rel="import" href="node_modules/bbmChatInput/bbmChatInput.html">
+  <link rel="import" href="node_modules/bbmChatList/bbmChatList.html">
+  <link rel="import" href="node_modules/bbmChatMessageList/bbmChatMessageList.html">
+
+  <style>
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    app-header {
+      background-color: #0b8043;
+      width: 100%;
+      color: white;
+
+      --app-header-background-front-layer: {
+        background-color: #4285f4;
+      };
+    }
+
+    app-header paper-icon-button {
+      --paper-icon-button-ink-color: white;
+    }
+
+    iron-list {
+      background-color: var(--paper-grey-200, #eee);
+      @apply --layout-flex;
+    }
+
+    .item {
+      @apply --layout-horizontal;
+
+      margin: 16px 16px 0 16px;
+
+      border-radius: 8px;
+      background-color: white;
+      border: 1px solid #ddd;
+    }
+
+    .mainHeader [main-title] {
+      font-weight: 400;
+      margin: 0 0 0 50px;
+    }
+
+    .mainHeader [condensed-title] {
+      font-weight: 400;
+      margin-left: 30px;
+    }
+
+    .mainHeader [condensed-title] i {
+      font-style: normal;
+      font-weight: 100;
+    }
+
+    app-toolbar.tall {
+      height: 148px;
+    }
+  </style>
+</head>
+<body>
+  <app-header-layout has-scrolling-region>
+    <!-- Main header. It includes a back button which is only visible when in a chat. -->
+    <app-header class="mainHeader" condenses fixed effects="resize-title blend-background waterfall" slot="header">
+      <app-toolbar>
+        <paper-icon-button id="leaveButton" icon="arrow-back" onClick="leaveChat()" style="display: none"></paper-icon-button>
+        <h4 condensed-title>Simple Chat</h4>
+      </app-toolbar>
+      <app-toolbar class="tall">
+        <h1 id="title" main-title>Simple Chat</h1>
+      </app-toolbar>
+    </app-header>
+
+    <!-- The list of chats. Visible initially, and can be returned to by clicking the back button. -->
+    <div id="chatListDiv">
+      <div id="status">Status: </div>
+      <div style="font-weight:bold">Chats</div>
+      <bbm-chat-list id="chatList" style="height:100%">
+        <template>
+          <button id="[[chat.chatId]]" onclick="enterChat(this)">[[getChatName(chat)]]</button>
+        </template>
+      </bbm-chat-list>
+    </div>
+
+    <!-- The message list. Hidden when we are not in a chat -->
+    <bbm-chat-message-list id="chatMessageList" style="display: none; height:100%">
+      <template id="bubbleTemplate">
+        <div style="text-align:[[getMessageAlignment(message)]]">[[getMessageStatus(message)]][[getMessageContent(message)]]</div>
+      </template>
+    </bbm-chat-message-list>
+  </app-header-layout>
+
+  <!-- The chat input. This is outside of the app-header-layout, in order to appear at the bottom. -->
+  <bbm-chat-input id="chatInput" style="display: none"></bbm-chat-input>
+</body>
+</html>
