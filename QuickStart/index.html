@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+
+<!--
+  Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>QuickStart</title>
+
+    <script src="../../sdk/bbm_sdk_web.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="../support/auth/GenericAuthHelper.js"></script>
+
+    <!-- Import the local configuration -->
+    <script src="config.js"></script>
+    <style>
+      #signInButton {
+        margin:0px auto;
+        display: block;
+      }
+      table, td {
+        border: 2px;
+      }
+      table {
+        border-style: groove;
+      }
+      td {
+        border-style: inset;
+      }
+      td:nth-child(2) {
+        text-align:right;
+        width: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>QuickStart</h1>
+    <button id="signInButton">Sign in</button>
+    <table>
+      <tr>
+        <td>SetupState</td>
+        <td id="setupState"></td>
+      </tr>
+      <tr>
+        <td>AuthTokenStateState</td>
+        <td id="authTokenState"></td>
+      </tr>
+      <tr>
+        <td>RegId</td>
+        <td id="regId"></td>
+      </tr>
+      <tr>
+        <td>UserId</td>
+        <td id="userId"></td>
+      </tr>
+      <tr>
+        <td>Name</td>
+        <td id="displayName"></td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td id="email"></td>
+      </tr>
+      <tr>
+        <td>Domain</td>
+        <td id="domain"></td>
+      </tr>
+      <tr>
+        <td>environment</td>
+        <td id="environment"></td>
+      </tr>
+    </table>
+    <script>
+      // Validate that the browser is supported.
+      try {
+        BBMEnterprise.validateBrowser()
+        .catch(reportBrowserError)
+        .then(function() {
+          // Handle clicking the 'Sign in' button.
+          $('#signInButton').click(LogIn);
+        });
+      } catch(error) {
+        reportBrowserError(error);
+      }
+
+      // Report an error if browser validation fails.
+      function reportBrowserError(error) {
+        $('#setupState').text(error.toString());
+
+        // Rethrow to skip the rest of the Promise chain.
+        throw error;
+      }
+
+      // Display the domain and environment or an error if undefined.
+      try {
+        $('#domain').text(ID_PROVIDER_DOMAIN);
+        $('#environment').text(ID_PROVIDER_ENVIRONMENT);
+      } catch (error) {
+        console.log("QuickStart: error="+error);
+        $('#authTokenState').text(error);
+      }
+
+      // Perform login if the user clicks on the Sign In button.
+      function LogIn() {
+        try {
+          // Obtain an object which performs generic oAuth authentication.
+          var oAuthHelper = new GenericAuthHelper();
+
+          // Hide the sign-in button now that signing in is in progress.
+          $('#signInButton').hide();
+
+          oAuthHelper.authenticate(AUTH_CONFIGURATION)
+          .then(function(userData) {
+            // We have successfully authenticated with the oAuth service
+            // provider.
+            $('#authTokenState').text('Ok');
+            try {
+              $('#userId').text(userData.id);
+              $('#email').text(userData.email);
+              $('#displayName').text(userData.displayName);
+
+              // Construct BBMEnterprise object.
+              var bbmsdk = new BBMEnterprise({
+                domain: ID_PROVIDER_DOMAIN,
+                environment: ID_PROVIDER_ENVIRONMENT,
+                userId: userData.id,
+                // Just resolve the current access token. This means that your
+                // application will be unable to communicate once the access
+                // token expires, which is okay because this application does
+                // not attempt to communicate after setup completes.
+                getToken: () => { return Promise.resolve(userData.access_token); },
+                getKeyProvider: () => {
+                  return Promise.resolve({
+                    // Stub out the key provider setup function. This means that
+                    // your application will unable to communicate with others,
+                    // but this example application does not attempt to
+                    // communicate.
+                    setup: Promise.resolve
+                  });
+                },
+                description: navigator.userAgent
+              });
+            } catch (error) {
+              $('#setupState').text('Failed to create BBMEnterprise: ' + error);
+            }
+
+            // Listen for the event indicating that registration has completed.
+            bbmsdk.on('registrationChanged', function(registrationEvent) {
+              // Setup has succeeded or failed, put the result in the page.
+              $('#setupState').text(registrationEvent.state);
+              $('#regId').text(registrationEvent.regId || "?");
+            });
+
+            // Initialize BBM Web SDK and start setup.
+            bbmsdk.setup();
+          }).catch(function(error) {
+              console.log("QuickStart: Failed to start BBM SDK error="+error);
+            $('#authTokenState').text(error);
+          });
+        } catch(error) {
+          console.log("QuickStart: Failed to authenticate and start BBM SDK error="+error);
+          $('#authTokenState').text(error);
+        };
+      }
+    </script>
+  </body>
+</html>
