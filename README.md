@@ -7,11 +7,10 @@ This repository contains code for JavaScript example applications that you can u
 
 | Example Application                      | Description                              |
 | ---------------------------------------- | ---------------------------------------- |
-|
-[QuickStart](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/QuickStart/README.html)|Integrate Google Open ID with the app you built using the BBM Enterprise SDK |
-[SimpleChat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/SimpleChat/README.html)|Build a basic chat app using the BBM Enterprise SDK|
-[ClickToChat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/ClickToChat/README.html)|Integrate chat into your website using the BBM Enterprise SDK|
-[BBM Bot](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/Node/README.html) | The BBMBot provides an example of how to write a bot in Node.js which can send messages to, and receive messages from, other BBM Enterprise SDK clients.|
+|[QuickStart](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/QuickStart/README.html)|Integrate Google Open ID with the app you built using the BBM Enterprise SDK |
+|[SimpleChat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/SimpleChat/README.html)|Build a basic chat app using the BBM Enterprise SDK|
+|[ClickToChat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/ClickToChat/README.html)|Integrate chat into your website using the BBM Enterprise SDK|
+|[BBM Bot](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/Node/README.html) | The BBMBot provides an example of how to write a bot in Node.js which can send messages to, and receive messages from, other BBM Enterprise SDK clients.|
 
 # Getting Started
 
