@@ -2,12 +2,13 @@
 
 # BBM Enterprise SDK iOS Samples
 
-This repository contains code for Android example applications that you can use to help build your messaging solution with the BBM Enterprise SDK.
+This repository contains code for iOS example applications that you can use to help build your messaging solution with the BBM Enterprise SDK.
 
 | Example Application                      | Description                              |
 | ---------------------------------------- | ---------------------------------------- |
 | [Quick Start](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/QuickStart/README.html)      | Build a basic objective C app to initialize and authenticate with the BBM Enterprise SDK using Google Open ID |
 | [Quick Start Swift](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/QuickStartSwift/README.html)     | Build a basic swift app to initialize and authenticate with the BBM Enterprise SDK using Google Open ID |
+| [Simple Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/SimpleChat/README.html) | Build a basic chat app using the BBM Enterprise SDK |
 | [Location Sharing](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/LocationSharing/README.html) | Shows how to build an app to share the user's location with other users |
 | [Soft Phone](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/SoftPhone/README.html) | 	Build an app with voice and video calling using the BBM Enterprise SDK|
 
