@@ -1,4 +1,4 @@
-![BBM Enterprise](http://help.blackberry.com/resources/images/products/enterprise-bbm-sdk.png)
+![BBM Enterprise SDK](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # BBM Enterprise SDK iOS Location Sharing Sample
 
@@ -13,13 +13,15 @@ includes the latitude and longitude coordinates of the user's location. The
 application marks all of the the user's locations on a map with pins.
 
 <p align="center">
- <b>Demo video: Integrate Location Sharing into your Apps</b>
-</p>
-<p align="center">
+<br>
     <a href="http://www.youtube.com/watch?feature=player_embedded&v=39-vppZwHpA"
-      target="_blank"><img src="http://img.youtube.com/vi/39-vppZwHpA/0.jpg" 
+      target="_blank"><img src="../images/bbme-sdk-ios-locationsharing.jpg" 
       alt=Integrate Location Sharing into your Apps" width="486" height="" border="364"/></a>
 </p>
+<p align="center">
+ <b>Demo video: Integrate location sharing into your Apps</b>
+</p>
+
 
 ## BBM Enterprise SDK Guide 
 For more details see the 
@@ -34,21 +36,25 @@ These samples requires the BBM Enterprise SDK which you can find along with rela
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
 <p align="center">
- <b>Getting Started Video</b>
-</p>
-<p align="center">
     <a href="http://www.youtube.com/watch?feature=player_embedded&v=9A5fbfFTEo0"
-      target="_blank"><img src="http://img.youtube.com/vi/9A5fbfFTEo0/0.jpg" 
+      target="_blank"><img src="../images/bbme-sdk-ios-getting-started.jpg" 
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>
+<p align="center">
+ <b>Getting started video</b>
+</p>
+
 
 # License
 
-These samples are released as Open Source and licensed under
+These samples are released as Open Source and licensed under the
 [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html). 
+
 These samples were created using SDKs from Apple Inc. and may contain code
 licensed for use only with Apple products. Please review your Apple SDK
 Agreement for additional details.
+
+This page includes icons from: https://material.io/icons/ used under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 # Reporting Issues and Feature Requests
 
