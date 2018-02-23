@@ -8,8 +8,6 @@ SDK chat. This example builds on the [Quick Start](../QuickStart/README.md) exam
 introduces authentication using [Google Sign-in](https://developers.google.com/identity/).
  
 <p align="center">
-<br>
-
     <a href="http://www.youtube.com/watch?feature=player_embedded&v=9lAj5_EdQkk"
       target="_blank"><img src="../images/bbme-sdk-android-whiteboard.jpg"
       alt=Integrate Whiteboard and Data Sharing into your Apps" width="486" height="" border="364"/></a>
