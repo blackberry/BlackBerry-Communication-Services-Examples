@@ -36,7 +36,7 @@ These samples require the BBM Enterprise SDK which you can find along with relat
 
 <p align="center">
     <a href="http://www.youtube.com/watch?feature=player_embedded&v=9A5fbfFTEo0"
-      target="_blank"><img src="../images/bbme-sdk-ios-getting-started.jpg" 
+      target="_blank"><img src="images/bbme-sdk-ios-getting-started.jpg" 
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>
 <p align="center">
