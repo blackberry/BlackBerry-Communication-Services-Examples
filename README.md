@@ -22,6 +22,7 @@ This repository contains code for JavaScript example applications that you can u
 |[SimpleChat](SimpleChat/README.md)|Build a basic chat app using the BBM Enterprise SDK|
 |[ClickToChat](ClickToChat/README.md)|Integrate chat into your website using the BBM Enterprise SDK|
 |[BBM Bot](Node/README.md) | The BBMBot provides an example of how to write a bot in Node.js which can send messages to, and receive messages from, other BBM Enterprise SDK clients.|
+| [Rasberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) |  Build an iOS app that securely communicates with an IoT device (LED controlled by a Rapberry Pi)|
 
 For more details on all the BBM Enterprise SDK Examples see the online [BBM
 Enterprise SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).

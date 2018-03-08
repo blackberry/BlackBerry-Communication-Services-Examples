@@ -23,7 +23,7 @@ For more details see the
 These instructions will help you get this project up and running on your Rasberry Pi and iOS device. **Note that this project was built using the BBM-E SDK version 1.0.0-rc48 for Node.js**
 
 ### Prerequisites
-**Important Note:** This project requires you have [this iOS sample](https://github.com/blackberry/bbme-sdk-ios-samples/colourpicker) running on an iOS device.
+**Important Note:** This project requires you have [this iOS sample](https://github.com/blackberry/bbme-sdk-ios-samples/RaspberryPi_IoTSample) running on an iOS device.
 This project also requires that you have the following:
 - Raspberry Pi 3 running Raspbian OS
 - GPIO breakout board or equivilant jumper wires
