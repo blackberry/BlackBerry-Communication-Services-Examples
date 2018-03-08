@@ -1,4 +1,4 @@
-[![image_alt_preview25](screenShots/bnr-bbm-enterprise-sdk-title.png)](screenShots/bnr-bbm-enterprise-sdk-title.png)
+![BBM Enterprise SDK](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 # **BBM Colour Picker**
 
 The BBM Colour Picker provides an example of how to interface with a hardware peripheral device using the Node.js BBM Enterprise SDK. This sample reads the colour selected on a mobile application and displays it on an RGB LED connected to a Raspberry Pi.
