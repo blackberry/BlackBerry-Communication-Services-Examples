@@ -18,7 +18,7 @@ introduces authentication using [Google Sign-in](https://developers.google.com/i
 
 ## BBM Enterprise SDK Guide 
 For more details see the 
-[SofPhone page in the BBM Enterprise SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/SoftPhone/README.html).
+[SoftPhone page in the BBM Enterprise SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/SoftPhone/README.html).
 In particular, to use this example you must complete the steps in the
 [prerequisites](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/SoftPhone/README.html#prereq) section.
 
