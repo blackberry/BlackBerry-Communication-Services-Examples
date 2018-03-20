@@ -36,51 +36,55 @@ HTMLImports.whenReady(function() {
 
   // Perform authentication.
   try {
-    var authHelper = new GenericAuthHelper();
-    authHelper.authenticate(AUTH_CONFIGURATION)
-    .then(function(userInfo) {
+    var authManager = createAuthManager();
+    authManager.authenticate()
+    .then(userInfo => {
       try {
         // Construct BBMEnterprise.Messenger which provides higher level
         // functionality used to manipulate and annotate chats.
         var bbmsdk = new BBMEnterprise({
           domain: ID_PROVIDER_DOMAIN,
           environment: ID_PROVIDER_ENVIRONMENT,
-          userId: userInfo.id,
-          getToken: () => authHelper.getOAuthAccessToken(AUTH_CONFIGURATION),
-          getKeyProvider: (regId, accessToken) => 
-            FirebaseKeyProvider.factory.createInstance(
-              regId,
-              firebaseConfig,
-              accessToken,
-              setupNeededMsg => console.warn(setupNeededMsg)),
+          userId: userInfo.userId,
+          getToken: () => authManager.getBbmSdkToken(),
+          getKeyProvider: (regId, accessToken) =>
+            createUserManager(regId, authManager).then(userManager =>
+              Promise.all([
+                createKeyProtect(regId),
+                userManager.initialize().then(() => userManager.getUid(regId))
+              ]).then(results =>
+                  createKeyProvider(results[1],
+                    accessToken,
+                    authManager,
+                    userManager.getUid,
+                    () => Promise.resolve('GenerateNewKeys'),
+                    results[0]))),
           description: navigator.userAgent,
           messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher
         });
 
         // Notify the user that we are working on signing in.
-        status.innerHTML = 'signing in';
+        status.innerHTML = 'Signing in';
       } catch (error) {
-        showError('Failed to create BBMEnterprise: ' + error);
+        showError(`Failed to create BBMEnterprise: ${error}`);
         return;
       }
 
       // Initialize BBM Enterprise SDK for Javascript and start the setup.
       bbmsdk.setup()
-      .then(function(chatInterfaces) {
-
+      .then(chatInterfaces => {
+        var registrationId = bbmsdk.getRegistrationInfo().regId;
         var messenger = chatInterfaces.messenger;
-
-        // Initialize the components once they are ready.
 
         // Initialize the chat input.
         window.customElements.whenDefined(chatInput.localName)
-        .then(function() {
+        .then(() => {
           chatInput.setBbmMessenger(messenger);
         });
 
         // Initialize the message list.
         window.customElements.whenDefined(chatMessageList.localName)
-        .then(function() {
+        .then(() => {
           chatMessageList.setBbmMessenger(messenger);
           chatMessageList.setContext({
             /**
@@ -92,24 +96,18 @@ HTMLImports.whenReady(function() {
              *   (R) for read messages, (D) for delivered messages, nothing
              *   otherwise.
              */
-            getMessageStatus: function(message) {
-              if(message.isIncoming) {
+
+            getMessageStatus: message => {
+              if (message.isIncoming) {
                 return '';
               }
-
-              switch(message.state.value) {
-                case 'Sending':
-                  return '(...)';
-                case 'Sent':
-                  return '(S)';
-                case 'Delivered':
-                  return '(D)';
-                case 'Read':
-                  return '(R)';
-                case 'Failed':
-                  return '(F)';
-                default:
-                  return '(?)';
+              switch (message.state.value) {
+                case 'Sending': return '(...)';
+                case 'Sent': return '(S)';
+                case 'Delivered': return '(D)';
+                case 'Read': return '(R)';
+                case 'Failed': return '(F)';
+                default: return '(?)';
               }
             },
 
@@ -122,13 +120,8 @@ HTMLImports.whenReady(function() {
              *   The content for a Text message, and other appropriate values
              *   for other types of messages.
              */
-            getMessageContent: function(message) {
-              if(message.tag === 'Text') {
-                return message.content;
-              } else {
-                return message.tag;
-              }
-            },
+            getMessageContent: message => message.tag === 'Text'
+              ? message.content : message.tag,
 
             /**
              * A function to retrieve the alignment to use for a message.
@@ -138,28 +131,24 @@ HTMLImports.whenReady(function() {
              * @returns {string}
              *   The alignment for the message.
              */
-            getMessageAlignment: function(message) {
-              return message.isIncoming ? 'right' : 'left';
-            }
+            getMessageAlignment: message => message.isIncoming
+              ? 'right' : 'left'
           });
         });
 
         // Initialize the chat list.
         window.customElements.whenDefined(chatList.localName)
-        .then(function() {
+        .then(() => {
           chatList.setBbmMessenger(messenger);
           chatList.setContext({
             // Get the name to use for the chat. This is the other participant's
             // registration ID for a 1:1 chat, otherwise it is the chat's
             // subject.
-            getChatName: function(chat) {
+            getChatName: chat => {
               if(chat.isOneToOne) {
-                if(chat.participants[0].regId ===
-                   bbmsdk.getRegistrationInfo().regId) {
-                  return chat.participants[1].regId.toString();
-                } else {
-                  return chat.participants[0].regId.toString();
-                }
+                return (chat.participants[0].regId === registrationId)
+                  ? chat.participants[1].regId.toString()
+                  : chat.participants[0].regId.toString();
               } else {
                 return chat.subject;
               }
@@ -171,17 +160,16 @@ HTMLImports.whenReady(function() {
         // store.
 
         // Report the status to the user.
-        status.innerHTML = 'Registration Id: ' +
-                           bbmsdk.getRegistrationInfo().regId;
+        status.innerHTML = `Registration Id: ${registrationId}`;
       })
-      .catch(function(error) {
-        showError("BBM SDK setup error: " + error);
+      .catch(error => {
+        showError(`BBM SDK setup error: ${error}`);
       });
-    }).catch(function(error) {
-      showError("Failed to complete setup: " + error);
+    }).catch(error => {
+      showError(`Failed to complete setup. Error: ${error}`);
     });
   } catch(error) {
-    showError("Failed to authenticate and start BBM SDK error="+error);
+    showError(`Failed to authenticate and start BBM SDK. Error: ${error}`);
   }
 });
 
@@ -202,12 +190,13 @@ function enterChat(element) {
   // Initialize the component.
   chatMessageList.chatId = chatId;
   chatInput.setChatId(chatId);
+  chatInput.set('isPriorityEnabled', false);
 
   // Make the right things visible.
-  chatListDiv.style.display = "none";
-  chatMessageList.style.display = "block";
-  chatInput.style.display = "block";
-  leaveButton.style.display = "block";
+  chatListDiv.style.display = 'none';
+  chatMessageList.style.display = 'block';
+  chatInput.style.display = 'block';
+  leaveButton.style.display = 'block';
 
   // Set the title
   title.innerHTML = element.innerHTML;
@@ -221,10 +210,10 @@ function leaveChat() {
   chatMessageList.chatId = undefined;
 
   // Make the right things visible.
-  chatListDiv.style.display = "block";
-  chatMessageList.style.display = "none";
-  chatInput.style.display = "none";
-  leaveButton.style.display = "none";
+  chatListDiv.style.display = 'block';
+  chatMessageList.style.display = 'none';
+  chatInput.style.display = 'none';
+  leaveButton.style.display = 'none';
 
   // Set the title
   title.innerHTML = 'Simple Chat';

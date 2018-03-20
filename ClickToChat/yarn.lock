@@ -72,7 +72,7 @@
   version "1.0.22"
   resolved "https://registry.yarnpkg.com/@webcomponents/webcomponentsjs/-/webcomponentsjs-1.0.22.tgz#a9fed9f346d81dab738b0c3e04614ee6303a24b6"
 
-bbmChat@../support/ui/widgets/bbmChat:
+"bbmChat@file:../support/ui/widgets/bbmChat":
   version "1.0.0"
   dependencies:
     "@npm-polymer" "https://github.com/Polymer/polymer.git#2.2.0"
@@ -130,3 +130,7 @@ bbmChat@../support/ui/widgets/bbmChat:
     "@webcomponents/webcomponentsjs" "^1.0.20"
     bbmChatMessageList "file:../../../../.cache/yarn/v1/bbmChatMessageList"
     bbmChatMessageStateList "file:../../../../.cache/yarn/v1/bbmChatMessageStateList"
+    util "file:../../../../.cache/util"
+
+"util@file:../support/util":
+  version "1.0.0"

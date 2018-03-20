@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,21 +27,26 @@ const bot = require('./botlibre')(config.botLibre.application,
 const firebase = require('firebase');
 
 // Create an SDK instance.
-login.login()
-.then(function(bbmsdk) {
-  var messenger;
-  function reply(chatId, message) {
+login.login(config)
+.then(bbmsdk => {
+  // Cache the messenger for simplicity.
+  const messenger = bbmsdk.messenger;
+
+  // A helper function to say what to do with a message. We will send it off
+  // to the bot web service, and then post a message in reply with either the
+  // answer, or the error if we couldn't get an answer.
+  const reply = (chatId, message) => {
     try {
       // Then send the message to a chatbot service.
       bot(message)
-      .then(function(response) {
+      .then(response => {
         // And post a message with the response.
         messenger.chatMessageSend(chatId, {
           tag: 'Text',
           content: response
         });
       })
-      .catch(function(error) {
+      .catch(error => {
         messenger.chatMessageSend(chatId, {
           tag: 'Text',
           content: error.toString()
@@ -56,12 +61,15 @@ login.login()
   }
 
   // Look at messages.
-  bbmsdk.messenger.on('chatMessageAdded', function(addedEvent) {
+  bbmsdk.messenger.on('chatMessageAdded', addedEvent => {
     const message = addedEvent.message;
 
     // Only respond if the message is incoming.
     if(message.isIncoming) {
-      function sendResponse() {
+      // A function to respond to an incoming message. Mark the message as read,
+      // then reply to the message if necessary. Reply to all messages in a 1:1
+      // chat, and to those prefixed with @bbmbot in a multiparty chat.
+      const sendResponse = () => {
         // Mark the message as read.
         messenger.chatMessageRead(message.chatId, message.messageId);
 
@@ -77,6 +85,7 @@ login.login()
           }
         }
       }
+
       // If the chat is not Ready, then fetch no messages with NoSync, to lie
       // to the recipient and say we have read all of their messages even
       // though we may not have. The bot only responds to online messages.
@@ -97,8 +106,5 @@ login.login()
   });
 
   // Set up the sdk.
-  bbmsdk.setup()
-  .then(function(chatInterfaces) {
-    messenger = chatInterfaces.messenger;
-  });
+  bbmsdk.setup();
 });

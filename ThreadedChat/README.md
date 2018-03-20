@@ -1,20 +1,17 @@
 ![BBM Enterprise SDK](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
-# BBM Enterprise SDK JavaScript Simple Chat Sample
+# BBM Enterprise SDK JavaScript Threaded Chat Sample
 
-This directory contains sample code for a Simple Chat app that
-demonstrates how you can build a simple chat application using the BBM
-Enterprise SDK for JavaScript.  This app demonstrates how easily messaging can
-be integrated into your application.  For a more rich chat app experience please see the
+This directory contains sample code for a Threaded Chat app that
+demonstrates how to use message references to build a threaded
+conversation using the BBM Enterprise SDK for JavaScript.  For a more rich chat app experience please see the
 [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/RichChat/README.html)
 app provided with the SDK.
-This example builds on the [Quick Start](../QuickStart/README.md) example that
-demonstrates how you can authenticate with the BBM Enterprise SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
-of your application.
+
 
 ## BBM Enterprise SDK Guide 
 For more details see the 
-[Simple Chat page in the BBM Enterprise SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/SimpleChat/README.html).
+[Threaded Chat page in the BBM Enterprise SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/ThreadedChat/README.html).
 
 # Getting Started
 

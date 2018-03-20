@@ -1,6 +1,6 @@
 {
-  "name": "simple-chat",
-  "description": "Displays a single BBM conversation",
+  "name": "threaded-chat",
+  "description": "Displays a single BBM conversation which demonstrates the full power of Chat Message References",
   "license": "Apache-2.0",
   "keywords": [],
   "version": "1.1.0-rc12",

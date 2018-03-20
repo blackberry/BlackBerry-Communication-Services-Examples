@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,23 +21,24 @@
 //
 
 const repl = require('repl');
+const config = require('./config');
 const login = require('./GoogleLogin');
 
 // Create an SDK instance in the loop.
-login.login()
-.then(function(bbmsdk) {
+login.login(config)
+.then(bbmsdk => {
   console.log('Completed google authentication. Performing BBM login');
 
   // Set up the sdk.
   bbmsdk.setup(true)
-  .then(function() {
+  .then(() => {
     console.log('setup completed');
 
     // Start up a node repl loop.
-    var loop = repl.start('> ');
+    const loop = repl.start('> ');
 
     loop.context.bbmsdk = bbmsdk;
-  }).catch(function(error) {
+  }).catch(error => {
     console.log('setup failed: ' + JSON.stringify(error));
   });
 });

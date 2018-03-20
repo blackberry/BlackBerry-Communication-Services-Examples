@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,15 @@
 //
 
 // Include some needed modules.
-const open = require('open');
-const config = require('./config.js');
-const FirebaseKeyProvider = require(
-  'bbm-enterprise/examples/support/protect/firebase/FirebaseKeyProvider.js');
 const FirebaseUserManager = require(
   'bbm-enterprise/examples/support/identity/FirebaseUserManager.js');
-const querystring = require("querystring");
+const FirebaseKeyProvider = require(
+  'bbm-enterprise/examples/support/protect/firebase/FirebaseKeyProvider.js');
+const KeyProtect = require(
+  'bbm-enterprise/examples/support/protect/encryption/KeyProtect.js');
 const google = require('googleapis');
-const OAuth2 = google.auth.OAuth2;
 const oauth2 = google.oauth2('v2');
+const {JWT} = require('google-auth-library');
 
 // These two modules are a little bit special - the FirebaseKeyProvider expects
 // some symbols to be available globally, so import these two as global
@@ -41,116 +40,90 @@ global.BBMEnterprise = require('bbm-enterprise')
 
 global.firebase = require('firebase');
 
-// The Google authentication scope for the auth token.
-const scope='https://www.googleapis.com/auth/userinfo.profile';
-
-// The google login needs to issue a redirect to provide the authentication
-// token. A local server will run at this address to capture it.
-const redirectPort = 8080;
-const redirectUri = "http://localhost:" + redirectPort;
-
-// Construct an oauth client to do token retrieval.
-var oauth2Client = new OAuth2(config.client_id, config.client_secret,
-                              redirectUri);
-
 module.exports = {
-  login: function() {
-    return new Promise(function(resolve, reject) {
-      // Start up a web server to listen for the redirect from Google
-      // authentication.
-      var server = require("http").createServer(function(req, response) {
-        // As soon as the response is received, stop the server.
-        server.close();
-        response.end("ok");
+  login: function(config) {
+    function GoogleAuthManager(config) {
+      // Construct an authentication client to do token retrieval.
+      this.client = new JWT(
+        config.googleConfig.client_email, null, config.googleConfig.private_key,
+        ['https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/firebase']);
 
-        // Post to Google to get an access token.
-        var code = querystring.parse(req.url.split("?")[1]).code;
-
-        // Google should redirect to this server with a query string containing
-        // the authentication code. However a browser may also request other
-        // things on the redirect, such as favicon.ico, without the code.
-        // Ignore these requests.
-        if(code) {
-          oauth2Client.getToken(code, function(error, tokens) {
-            if (error != null) {
-              console.error('Failed to obtain access token: ' + error);
-            } else {
-              // Record the credentials. Most importantly, this records the
-              // refresh token so that an access token can be retrieved later.
-              oauth2Client.setCredentials(tokens);
-
-              // Remember the initial access token.
-              var accessToken = tokens.access_token;
-
-              // Remember the id token. It is needed to log into firebase.
-              const idToken = tokens.id_token;
-
-              // Retrieve the User ID.
-              oauth2.userinfo.get({access_token: tokens.access_token},
-                                  function(error, result) {
-                if(error) {
-                  reject(error);
-                }
-                // Create an SDK instance.
-                var bbmsdk = new BBMEnterprise({
-                  domain: config.id_provider_domain,
-                  environment: 'Sandbox',
-                  userId: result.id,
-                  getToken: function() {
-                    return new Promise(function(resolve, reject) {
-                      // The first time through, return the initial acces token.
-                      // After that, retrieve the token using the refresh token.
-                      if(accessToken) {
-                        resolve(accessToken);
-                        accessToken = null;
-                      } else {
-                        oauth2Client.refreshAccessToken(function(error, credentials, response) {
-                          if (error != null) {
-                            console.error('Failed to obtain access token: ' + error);
-                            reject(error);
-                          } else {
-                            resolve(credentials.access_token);
-                          }
-                        });
-                      }
-                    });
-                  },
-                  getKeyProvider: (regId, accessToken) => 
-                    FirebaseKeyProvider.factory.createInstance(
-                      regId,
-                      config.firebaseConfig,
-                      accessToken,
-                      setupNeededMsg => console.warn(setupNeededMsg)),
-                  description: 'node ' + process.version
-                });
-                bbmsdk.on('registrationChanged', function(registrationInfo) {
-                  if(registrationInfo.state === "Failure") {
-                    console.error('BBM Login failed');
-                    return;
-                  } else if (registrationInfo.state === "Success") {
-                    console.log('BBM Login complete with regid: ' + registrationInfo.regId);
-                  }
-
-                  new FirebaseUserManager({
-                    userRegId: registrationInfo.regId,
-                    userEmail: '',
-                    userImageURL: result.picture,
-                    userName: result.name });
-                });
-                resolve(bbmsdk);
-              });
-            }
+      this.authenticate = function() {
+        return this.client.authorize()
+        .then(result => {
+          // Retrieve the User ID.
+          return new Promise((resolve, reject) => {
+            oauth2.userinfo.get({access_token: result.access_token},
+                                (error, result) => {
+              if(error) {
+                reject(error);
+              } else {
+                // Cache the picture, to return later.
+                this.picture = result.picture;
+                resolve(result);
+              }
+            });
           });
-        }
-      }).listen(redirectPort);
+        });
+      };
 
-      // Open the the google auth token endpoint in a browser.
-      var url = oauth2Client.generateAuthUrl({
-        access_type: 'offline',
-        prompt: 'consent',
-        scope: scope
+      this.getLocalUserInfo = () => {
+        return {
+          displayName: 'BBMBot',
+          email: '',
+          avatarUrl: this.picture
+        };
+      }
+
+      this.getBbmSdkToken = () => {
+        return this.client.authorize()
+        .then(result => result.access_token);
+      };
+
+      this.getUserManagerToken = () => {
+        return this.getBbmSdkToken();
+      };
+    };
+
+    const authManager = new GoogleAuthManager(config);
+
+    return authManager.authenticate()
+    .then(result => {
+      // Create an SDK instance.
+      const bbmsdk = new BBMEnterprise({
+        domain: config.id_provider_domain,
+        environment: config.id_provider_environment,
+        userId: result.id,
+        getToken: () => authManager.getBbmSdkToken(),
+        getKeyProvider: (regId, accessToken) =>
+          FirebaseUserManager.factory.createInstance(
+            config.firebaseConfig, regId, authManager,
+            require('bbm-enterprise/examples/support/identity/GenericUserInfo.js'))
+          .then(contactsManager =>
+            KeyProtect.factory.createInstance(
+              () => Promise.resolve(config.password),
+              regId,
+              'BBME SDK Pre-KMS DRK')
+            .then(keyProtect =>
+              FirebaseKeyProvider.factory.createInstance(
+                config.firebaseConfig,
+                accessToken,
+                contactsManager.getUid,
+                () => Promise.resolve('GenerateNewKeys'),
+                keyProtect))),
+        description: 'node ' + process.version
       });
-      open(url);
+      bbmsdk.on('registrationChanged', registrationInfo => {
+        if(registrationInfo.state === "Failure") {
+          console.error('BBM Login failed');
+          return;
+        } else if (registrationInfo.state === "Success") {
+          console.log('BBM Login complete with regid: ' + registrationInfo.regId);
+        }
+      });
+      return bbmsdk;
     });
   }
 }

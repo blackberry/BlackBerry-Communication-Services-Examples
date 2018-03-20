@@ -24,6 +24,8 @@
     <script src="../../sdk/bbm_sdk_web.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="../support/auth/GenericAuthHelper.js"></script>
+    <script src="../support/auth/GoogleAuthManager.js"></script>
+    <script src="../support/identity/GenericUserInfo.js"></script>
 
     <!-- Import the local configuration -->
     <script src="config.js"></script>
@@ -117,19 +119,19 @@
       // Perform login if the user clicks on the Sign In button.
       function LogIn() {
         try {
-          // Obtain an object which performs generic oAuth authentication.
-          var oAuthHelper = new GenericAuthHelper();
+          // Create the auth manager for the configured auth service.
+          var authManager = createAuthManager();
 
           // Hide the sign-in button now that signing in is in progress.
           $('#signInButton').hide();
 
-          oAuthHelper.authenticate(AUTH_CONFIGURATION)
+          authManager.authenticate()
           .then(function(userData) {
             // We have successfully authenticated with the oAuth service
             // provider.
             $('#authTokenState').text('Ok');
             try {
-              $('#userId').text(userData.id);
+              $('#userId').text(userData.userId);
               $('#email').text(userData.email);
               $('#displayName').text(userData.displayName);
 
@@ -137,21 +139,28 @@
               var bbmsdk = new BBMEnterprise({
                 domain: ID_PROVIDER_DOMAIN,
                 environment: ID_PROVIDER_ENVIRONMENT,
-                userId: userData.id,
-                // Just resolve the current access token. This means that your
-                // application will be unable to communicate once the access
-                // token expires, which is okay because this application does
-                // not attempt to communicate after setup completes.
-                getToken: () => { return Promise.resolve(userData.access_token); },
-                getKeyProvider: () => {
-                  return Promise.resolve({
-                    // Stub out the key provider setup function. This means that
-                    // your application will unable to communicate with others,
-                    // but this example application does not attempt to
-                    // communicate.
-                    setup: Promise.resolve
-                  });
-                },
+                userId: userData.userId,
+                getToken: () => authManager.getBbmSdkToken(),
+                getKeyProvider: () => Promise.resolve({
+                  // Stub out the key provider setup function.  We allow new
+                  // keys to be generated, but we don't save them anywhere.
+                  // This means that your application will unable to
+                  // communicate with others, but this example application
+                  // does not attempt to communicate.
+                  getProfileKeys: () => {},
+                  profileKeysImportFailed: () =>
+                    Promise.resolve(BBMEnterprise
+                                     .KeyProviderInterface
+                                     .FailureChoice
+                                     .GenerateNewKeys),
+                  saveProfileKeys: () => Promise.resolve(),
+                  getChatKeys: () => Promise.resolve({}),
+                  getChatKey: () =>
+                    Promise.reject(new Error("No chat key here!")),
+                  removeChatKey: () => undefined,
+                  getPublicKeys: () =>
+                    Promise.reject(new Error("No public keys here!"))
+                }),
                 description: navigator.userAgent
               });
             } catch (error) {

@@ -30,6 +30,8 @@
 
 var bbmMessenger;
 var bbmChat;
+var bbmSdk;
+var contactsManager = null;
 
 var CHAT_DETAILS = {
   invitees: [CONTACT_REG_ID],
@@ -74,9 +76,11 @@ function startChat () {
   else {
     initBbme().then(data => {
       bbmMessenger = data.chatInterfaces.messenger;
-      bbmChat.setBbmMessenger(data.chatInterfaces.messenger);
+      bbmChat.setBbmSdk(bbmSdk);
       bbmChat.setContactManager(data.contactsManager);
       bbmChat.setTimeRangeFormatter(data.timeRangeFormatter);
+      bbmChat.setMessageFormatter(data.messageFormatter);
+      bbmChat.getChatHeader().set('mediaEnabled', false);
       startChat();
     }).catch(error => {
       console.warn("Failed to initialize BBM Enterprise SDK for JavaScript: "
@@ -93,47 +97,46 @@ function startChat () {
 // - contactsManager: instance of FirebaseUserManager
 function initBbme() {
   return new Promise((resolve, reject) => {
-    var oAuthHelper = new GenericAuthHelper();
-    oAuthHelper.getOAuthAccessToken(OAUTH_CONFIGURATION)
-    .then(access_token => {
-      oAuthHelper.getOAuthUserInfo(access_token,
-      OAUTH_CONFIGURATION.userInfoService).then(userInfo => {
-        var bbmSdk;
-        try {
-          bbmSdk = new BBMEnterprise({
-            domain: ID_PROVIDER_DOMAIN,
-            environment: 'Sandbox',
-            userId: userInfo.id,
-            getToken: () => oAuthHelper.getOAuthAccessToken(OAUTH_CONFIGURATION),
-            getKeyProvider: (regId, accessToken) =>
-              FirebaseKeyProvider.factory.createInstance(
-              regId,
-              firebaseConfig,
-              accessToken,
-              setupNeededMsg => console.warn(setupNeededMsg)),
-            description: navigator.userAgent,
-            messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher
-          });
-        } catch (error) {
-          reject(error);
-        }
+    var authManager = createAuthManager();
+    authManager.authenticate()
+    .then(userInfo => {
+      try {
+        bbmSdk = new BBMEnterprise({
+          domain: ID_PROVIDER_DOMAIN,
+          environment: 'Sandbox',
+          userId: userInfo.userId,
+          getToken: () => authManager.getBbmSdkToken(),
+          getKeyProvider: (regId, accessToken) =>
+            createUserManager(regId, authManager).then(userManager => {
+              contactsManager = userManager;
+              return Promise.all([
+                createKeyProtect(regId),
+                userManager.initialize().then(() => userManager.getUid(regId))
+              ]).then(results =>
+                  createKeyProvider(results[1],
+                    accessToken,
+                    authManager,
+                    userManager.getUid,
+                    () => Promise.resolve('GenerateNewKeys'),
+                    results[0]));
+            }),
+          description: navigator.userAgent,
+          messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher
+        });
+      } catch (error) {
+        reject(error);
+      }
 
-        // Initialize BBM Enterprise SDK for JavaScript and start the setup
-        bbmSdk.setup().then(chatInterfaces => {
-          var registrationInfo = bbmSdk.getRegistrationInfo();
-          var contactsManager = new FirebaseUserManager({ 
-            userRegId: registrationInfo.regId,
-            userEmail: userInfo.emails[0].value,
-            userImageURL: userInfo.image.url,
-            userName: userInfo.displayName});
-          var timeRangeFormatter = new TimeRangeFormatter();
-          resolve({
-            chatInterfaces: chatInterfaces,
-            contactsManager: contactsManager,
-            timeRangeFormatter: timeRangeFormatter
-          });
-        }).catch(error => reject(error));
-      });
+      // Initialize BBM Enterprise SDK for JavaScript and start the setup
+      bbmSdk.setup().then(chatInterfaces => {
+        var registrationInfo = bbmSdk.getRegistrationInfo();
+        resolve({
+          chatInterfaces: chatInterfaces,
+          contactsManager: contactsManager,
+          timeRangeFormatter: new TimeRangeFormatter(),
+          messageFormatter: new MessageFormatter(contactsManager)
+        });
+      }).catch(error => reject(error));
     });
   });
 }

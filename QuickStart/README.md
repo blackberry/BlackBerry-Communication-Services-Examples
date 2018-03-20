@@ -3,10 +3,7 @@
 # BBM Enterprise SDK JavaScript Quick Start Sample
 
 This directory contains sample code for a Quick Start application that 
-demonstrates how you can authenticate with the BBM Enterprise SDK using 
-[Google Sign-in](https://developers.google.com/identity/sign-in/web/).
-In this example, [Google Sign-in](https://developers.google.com/identity/) 
-is the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
+demonstrates how you can authenticate with the BBM Enterprise SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
 of your application. We demonstrate how you can obtain the user ID and token of your user's account 
 and pass them to the BBM Enterprise SDK to complete setup. 
 

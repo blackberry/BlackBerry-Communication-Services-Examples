@@ -21,8 +21,10 @@ This repository contains code for JavaScript example applications that you can u
 |[QuickStart](QuickStart/README.md)|Integrate Google Open ID with the app you built using the BBM Enterprise SDK |
 |[SimpleChat](SimpleChat/README.md)|Build a basic chat app using the BBM Enterprise SDK|
 |[ClickToChat](ClickToChat/README.md)|Integrate chat into your website using the BBM Enterprise SDK|
-|[BBM Bot](Node/README.md) | The BBMBot provides an example of how to write a bot in Node.js which can send messages to, and receive messages from, other BBM Enterprise SDK clients.|
-| [Rasberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) |  Build an iOS app that securely communicates with an IoT device (LED controlled by a Rapberry Pi)|
+|[BBM Bot](Node/README.md) | The BBMBot provides an example of how to write a bot in Node.js which can send messages to, and receive messages from, other BBM Enterprise SDK clients|
+|[ThreadedChat](ThreadedChat/README.md) | Use message references to build a threaded conversation using the BBM Enterprise SDK|
+|[KeyProviderServer](KeyProviderServer/README.md) | Build a server that exposes a REST API that enforces access control to profile keys stored in Azure Cosmos DB|
+|[Rasberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) | Build an iOS app that securely communicates with an IoT device (LED controlled by a Rapberry Pi)|
 
 For more details on all the BBM Enterprise SDK Examples see the online [BBM
 Enterprise SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).
