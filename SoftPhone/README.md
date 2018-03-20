@@ -5,7 +5,8 @@
 This directory contains sample code for a SoftPhone app that
 demonstrates how voice and video calling can be integrated into your
 application using the BBM Enterprise SDK. This example builds on the [Quick Start](../QuickStart/README.md) example that
-introduces authentication using [Google Sign-in](https://developers.google.com/identity/).
+demonstrates how you can authenticate with the BBM Enterprise SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
+of your application.
 
 <p align="center">
     <a href="http://www.youtube.com/watch?feature=player_embedded&v=92nv9vBE-mY"

@@ -141,7 +141,7 @@ public class AppUserRecyclerViewAdapter extends RecyclerView.Adapter<AppUserRecy
                 if (holder.mItem.get().getExists() == Existence.YES) {
                     AppUser user = holder.mItem.get();
                     holder.mAppUserNameView.setText(user.getName());
-                    holder.mAppUserInfoView.setText(user.getEmail() + ", " + user.getPin());
+                    holder.mAppUserInfoView.setText(user.getEmail());
 
                     boolean selected = mSelectedValues.contains(user);
                     //the background used by contacts list item has color defined for when in activated state

@@ -8,7 +8,8 @@ Enterprise SDK.  This app demonstrates how easily messaging can be integrated
 into your application.  For a more rich chat app experience please see the
 [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/RichChat/README.html)
 app provided with the SDK. This example builds on the [Quick Start](../QuickStart/README.md) example that
-introduces authentication using [Google Sign-in](https://developers.google.com/identity/).
+demonstrates how you can authenticate with the BBM Enterprise SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
+of your application.
 
 ## BBM Enterprise SDK Guide 
 For more details see the 

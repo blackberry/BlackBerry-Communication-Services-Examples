@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bbm.example.datatransfer">
+
+    <!-- File Sharing -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:name=".DataTransferApplication">
+
+        <!-- Update this with the value provided by the BBM Enterprise Team -->
+        <meta-data android:name="com.bbm.sdk.UserDomain" android:value="@string/USER_DOMAIN"/>
+
+        <!--This is used to point the SDK to the Sandbox environment. If you want to use the Production environment
+        remove the value below from your manifest-->
+        <meta-data android:name="com.bbm.sdk.environment.sandbox" android:value="true"/>
+
+        <!--Set this to false to disable logging to files, this will allow the logs to be shown in logcat. The SDK does not
+        attempt to log to both files and logcat-->
+        <meta-data android:name="com.bbm.sdk.LogToFiles" android:value="true" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".IncomingDataConnectionActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleInstance"
+            android:taskAffinity="com.bbm.datatransfer.incomingdataconnection"
+            android:excludeFromRecents="true">
+        </activity>
+
+        <!-- [Start] Firebase Cloud Messaging -->
+        <!-- Listener for push notifications-->
+        <service
+            android:name=".DataTransferFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <!-- Listener for push tokens -->
+        <service
+            android:name=".DataTransferFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <!-- [END] Firebase Cloud Messaging -->
+
+    </application>
+
+</manifest>

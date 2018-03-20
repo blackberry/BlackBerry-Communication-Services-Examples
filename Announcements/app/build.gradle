@@ -1,0 +1,120 @@
+/*
+ * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'com.android.application'
+
+repositories {
+    flatDir {
+        //point to shared dir with AAR file in it
+        dirs '../../../sdk'
+    }
+    google()
+}
+
+// Create a variable called appPropertiesFile, and initialize it to your
+// app.properties file, in the rootProject folder.
+def appPropertiesFile = rootProject.file("app.properties")
+def appProperties = new Properties()
+appProperties.load(new FileInputStream(appPropertiesFile))
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
+    defaultConfig {
+        applicationId "com.bbm.example.announcements"
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        // The Server Client ID is a Web OAuth 2.0 Client ID obtained from https://console.developers.google.com/.
+        // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
+        buildConfigField "String", "CLIENT_SERVER_ID", appProperties['client_server_id']
+
+        // The BBM Enterprise User Domain that is assigned to you.
+        // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
+        resValue "string", "USER_DOMAIN", appProperties['user_domain']
+    }
+
+    flavorDimensions "authProvider"
+
+    productFlavors {
+        //Use google for authentication, identity and firebase for key storage.
+        google {
+            dimension "authProvider"
+        }
+        //Use Azure AD for authentication and identity
+        azure {
+            dimension "authProvider"
+            //Force multiDexEnabled to true when using the MSGraph SDK
+            multiDexEnabled true
+            //Microsoft authentication library requires sdk v21
+            minSdkVersion 21
+            resValue "string", "AZURE_APPLICATION_ID", appProperties.getProperty('client_server_id', "\"azure_app_id\"")
+            resValue "string", "MSAL_PREFIX", "msal" + appProperties.getProperty('client_server_id', "\"azure_app_id\"")
+            buildConfigField("String", "AZURE_AD_TENANT_ID", appProperties.getProperty('azure_ad_tenant_id', "\"azure_tenant_id\""))
+            buildConfigField("String", "BBME_AUTH_SCOPE", appProperties.getProperty('bbme_auth_scope', "\"auth_scope\""))
+            buildConfigField("String", "KMS_URL", appProperties.getProperty('azure_kms_url', "\"kms_url\""))
+            buildConfigField("String", "AZURE_LOGIN_AUTHORITY", appProperties.getProperty('azure_login_authority', "\"https://login_authority_here\""))
+        }
+    }
+
+    signingConfigs {
+        common {
+            keyAlias appProperties['keyAlias']
+            keyPassword appProperties['keyPassword']
+            storeFile file(appProperties['storeFile'])
+            storePassword appProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            signingConfig signingConfigs.common
+        }
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.common
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    // BBM SDK Dependencies
+    api(name: 'bbm_sdk-release', ext: 'aar')
+    // BBM UI Utilities and helpers
+    api project(':Support')
+    // Other UI dependencies
+    // Include Google play services auth module to use Open ID.
+    //needed for firebase DB to store user management
+    //needed for firebase DB rules checking auth to work
+    api 'com.google.guava:guava:22.0-android'
+    implementation 'com.android.support:appcompat-v7:26.0.2'
+    implementation 'com.android.support:design:26.0.2'
+    implementation 'com.android.support:support-v4:26.0.2'
+    implementation 'com.android.support:recyclerview-v7:26.0.2'
+    implementation 'com.google.android.gms:play-services-auth:11.4.2'
+    implementation 'com.google.firebase:firebase-database:11.4.2'
+    implementation 'com.google.firebase:firebase-auth:11.4.2'
+}
+// By applying the plugin below this will ensure the project will not compile
+// if google-services.json is missing. When setting up this example please
+// ensure you follow https://developers.google.com/identity/sign-in/android/start
+// and download the resulting google-services.json file.
+
+apply plugin: 'com.google.gms.google-services'

@@ -4,6 +4,8 @@ repositories {
     flatDir {
         dirs '../../../sdk' //location of bbm_sdk aar file
     }
+    google()
+    jcenter()
 }
 
 /*
@@ -30,12 +32,12 @@ appProperties.load(new FileInputStream(appPropertiesFile))
 
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.bbm.example.quickstart"
         minSdkVersion 19
-        targetSdkVersion 24
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -72,16 +74,16 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.2.1'
+    implementation 'com.android.support:appcompat-v7:26.0.2'
 
     // Include Google play services auth module to use Open ID.
-    compile 'com.google.android.gms:play-services-auth:10.0.1'
+    implementation 'com.google.android.gms:play-services-auth:11.4.2'
 
     // BBM Enterprise SDK used Guva and is required.
-    compile 'com.google.guava:guava:18.0'
+    implementation 'com.google.guava:guava:22.0-android'
 
     // Include the dependency on the BBM Enterprise SDK
-    compile (name:'bbm_sdk-release', ext:'aar')
+    implementation (name:'bbm_sdk-release', ext:'aar')
 }
 
 // By applying the plugin below this will ensure the project will not

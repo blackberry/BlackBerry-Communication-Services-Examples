@@ -35,7 +35,7 @@
         <!-- Update this with the value provided by the BBM Enterprise Team -->
         <meta-data
             android:name="com.bbm.sdk.UserDomain"
-            android:value="deadc0de-ed6d-11e6-a754-f8cab8543814" />
+            android:value="@string/USER_DOMAIN" />
 
         <!--
         This is used to point the SDK to the Sandbox environment. If you want to use the Production environment

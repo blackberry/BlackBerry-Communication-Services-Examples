@@ -22,6 +22,8 @@ This repository contains code for Android example applications that you can use 
 | [Simple Chat](SimpleChat/README.md)      | Build a basic chat app using the BBM Enterprise SDK |
 | [Soft Phone](SoftPhone/README.md) |	Build an app with voice and video calling using the BBM Enterprise SDK|
 | [Whiteboard](Whiteboard/README.md) |	Build a shared white board app with the BBM Enterprise SDK | 
+| [Data Transfer](DataTransfer/README.md) | Build an app to send files over a secure peer-to-peer connection using the BBM Enterprise SDK |
+| [Announcements](Announcements/README.md) | Build an app that allows users to send, view, and edit announcements in a chat with the BBM Enterprise SDK |
 
 For more details on all the BBM Enterprise SDK Examples see the online [BBM
 Enterprise SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).

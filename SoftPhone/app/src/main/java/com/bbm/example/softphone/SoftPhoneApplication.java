@@ -18,10 +18,8 @@ package com.bbm.example.softphone;
 
 import android.app.Application;
 
+import com.bbm.example.softphone.utils.AuthProvider;
 import com.bbm.sdk.BBMEnterprise;
-import com.bbm.sdk.support.identity.auth.google.auth.GoogleAuthHelper;
-import com.bbm.sdk.support.identity.user.firebase.FirebaseUserDbSync;
-import com.bbm.sdk.support.util.FirebaseHelper;
 
 
 public class SoftPhoneApplication extends Application {
@@ -40,8 +38,8 @@ public class SoftPhoneApplication extends Application {
 
         mApp = this;
 
-        //sync our local user with firebase, retrieve all remote users, and start protected lite
-        FirebaseHelper.initUserDbSyncAndProtected(true);
+        //Init the auth provider (get authentication token, start protected manager, sync users)
+        AuthProvider.initAuthProvider(getApplicationContext());
 
         // Initialize BBMEnterprise SDK then start it
         BBMEnterprise.getInstance().initialize(this);
@@ -50,10 +48,6 @@ public class SoftPhoneApplication extends Application {
         //Add incoming call observer
         mCallObserver = new IncomingCallObserver(SoftPhoneApplication.this);
         BBMEnterprise.getInstance().getMediaManager().addIncomingCallObserver(mCallObserver);
-
-        //sign in with their Google account, and pass that data to our user manager when ready
-        //Note that we must call GoogleAuthHelper.setActivity() from the main activity in case google needs to prompt the user to sign in
-        GoogleAuthHelper.initGoogleSignIn(getApplicationContext(), FirebaseUserDbSync.getInstance(), getString(R.string.default_web_client_id));
     }
 
     public final IncomingCallObserver getCallObserver() {

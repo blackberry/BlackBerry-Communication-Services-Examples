@@ -1,0 +1,44 @@
+<!--
+  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">DataTransfer</string>
+    <string name="connection_status">Connection Status: %1$s</string>
+    <string name="connection_error">Connection Error: %1$s</string>
+
+    <string name="my_registration_id">My RegId: %1$d</string>
+
+    <string name="error_creating_connection">Unable creating data connection, %1$s</string>
+    <string name="invalid_regid">Invalid Registration ID, must be a number</string>
+    <string name="start_data_connection">Start Data Connection</string>
+    <string name="start">Start</string>
+    <string name="reg_id_to_call">RegId To Connect:</string>
+    <string name="incoming_data_connection_request">%1$s would like to start a data connection with you.</string>
+    <string name="incoming_data_connection_description">Description: %1$s</string>
+
+    <string name="rationale_write_external_storage">DataTransfer requires access to your device storage to save files.</string>
+    <string name="rationale_write_external_storage_denied">You can\'t use the DataSharing application without providing access to the device storage.</string>
+    <string name="button_send_log_files">Send Logs</string>
+
+    <string name="create_connection">Create Connection</string>
+    <string name="disconnect">Disconnect</string>
+
+    <string name="decline_connection">Decline Connection</string>
+    <string name="accept_connection">Accept Connection</string>
+    <string name="transfer_size">(%1$d/%2$d)KB</string>
+    <string name="meta_data_hint">Enter a description</string>
+    <string name="enter_a_regid">Enter a reg id</string>
+</resources>

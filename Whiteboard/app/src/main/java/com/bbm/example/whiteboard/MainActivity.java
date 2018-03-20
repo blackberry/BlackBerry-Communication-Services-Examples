@@ -19,7 +19,6 @@ package com.bbm.example.whiteboard;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,18 +35,12 @@ import com.bbm.sdk.bbmds.internal.Existence;
 import com.bbm.sdk.bbmds.outbound.SetupRetry;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
-import com.bbm.sdk.support.identity.auth.google.auth.GoogleAccessTokenUpdater;
-import com.bbm.sdk.support.identity.auth.google.auth.GoogleAuthHelper;
 import com.bbm.sdk.support.identity.user.AppUser;
-import com.bbm.sdk.support.identity.user.firebase.FirebaseUserDbSync;
+import com.bbm.sdk.support.protect.SimplePasswordProvider;
+import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.ChatStartHelper;
-import com.bbm.sdk.support.util.FirebaseHelper;
 import com.bbm.sdk.support.util.Logger;
 import com.bbm.sdk.support.util.SetupHelper;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
 import java.util.Collection;
 
@@ -94,46 +87,8 @@ public class MainActivity extends AppCompatActivity {
     private SetupHelper.GoAwayListener mGoAwayListener = new SetupHelper.GoAwayListener() {
         @Override
         public void onGoAway() {
-            // Log the google account out of the app.
-            final GoogleApiClient client = GoogleAuthHelper.getApiClient(getApplicationContext(), GoogleAccessTokenUpdater.getInstance().getClientServerId());
-            client.connect();
-            client.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                @Override
-                public void onConnected(@Nullable Bundle bundle) {
-
-                    // Revoke access from user account to the app.
-                    Auth.GoogleSignInApi.revokeAccess(client).setResultCallback(new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(@NonNull Status status) {
-
-                            // Now sign out
-                            Auth.GoogleSignInApi.signOut(client).setResultCallback(
-                                    new ResultCallback<Status>() {
-                                        @Override
-                                        public void onResult(@NonNull Status status) {
-
-                                            // Stop Firebase.
-                                            FirebaseHelper.stop();
-
-                                            // Stop BBM
-                                            BBMEnterprise.getInstance().stop();
-
-                                            client.disconnect();
-
-                                            Logger.w("Application has been stopped. Exiting app. Good-bye!");
-                                            // Not the best way, but end the app.
-                                            System.exit(0);
-                                        }
-                                    });
-                        }
-                    });
-                }
-
-                @Override
-                public void onConnectionSuspended(int i) {
-                    // ignore.
-                }
-            });
+            //Handle any required work (ex sign-out) from the auth service
+            AuthIdentityHelper.handleGoAway(MainActivity.this);
         }
     };
 
@@ -155,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
 
         SetupHelper.listenForAndHandleGoAway(mGoAwayListener);
 
-        GoogleAuthHelper.setActivity(this);
+        AuthIdentityHelper.setActivity(this);
+        SimplePasswordProvider.getInstance().setActivity(this);
 
         //create the list of chats
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.chats_recycler_view);
@@ -169,9 +125,9 @@ public class MainActivity extends AppCompatActivity {
 
         Logger.d("onActivityResult: requestCode="+requestCode+" resultCode="+resultCode+" data="+data);
 
-        //handle response from Google sign in
-        if (requestCode == GoogleAuthHelper.RC_GOOGLE_SIGN_IN_ACTIVITY) {
-            GoogleAuthHelper.handleOnActivityResult(this, FirebaseUserDbSync.getInstance(), requestCode, resultCode, data);
+        if (requestCode == AuthIdentityHelper.TOKEN_REQUEST_CODE) {
+            //Handle an authentication result
+            AuthIdentityHelper.handleAuthenticationResult(this, requestCode, resultCode, data);
         }
     }
 

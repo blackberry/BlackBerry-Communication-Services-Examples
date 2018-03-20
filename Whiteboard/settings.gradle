@@ -11,5 +11,5 @@
 
 include ':app'
 
-include ':BbmSdkSupport'
-project(':BbmSdkSupport').projectDir = new File(settingsDir, "../BbmSdkSupport/BbmSdkSupport")
+include ':Support'
+project(':Support').projectDir = new File(settingsDir, "../Support/Support")

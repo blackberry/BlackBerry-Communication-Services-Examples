@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <color name="colorPrimary">#91B496</color>
+    <color name="colorPrimaryDark">#1E824C</color>
+    <color name="colorAccent">#ceddd1</color>
+    <color name="colorPrimaryText">#6C7A89</color>
+    <color name="colorBackground">#EEEEEE</color>
+    <color name="colorBackground2">#ECECEC</color>
+
+    <color name="chat_bubble_outgoing">@color/colorPrimary</color>
+    <color name="chat_bubble_incoming">@color/colorAccent</color>
+    <color name="chat_bubble_text_incoming">@color/colorPrimaryText</color>
+    <color name="chat_bubble_text_outgoing">@color/colorPrimaryText</color>
+    <color name="chat_bubble_highlight_outgoing">#D2D7D3</color>
+    <color name="chat_bubble_status_outgoing">#F27935</color>
+    <color name="chat_bubble_error_outgoing">#F27935</color>
+    <color name="chat_bubble_alert_text_outgoing">#F9BF3B</color>
+
+    <color name="chat_bubble_background_outgoing_highlight">@color/colorAccent</color>
+
+    <color name="announcement_background">#F4D03F</color>
+    <color name="announcement_edit_background">#D2D7D3</color>
+</resources>

@@ -19,8 +19,6 @@ package com.bbm.example.simplechat;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +32,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bbm.example.simplechat.utils.AuthProvider;
 import com.bbm.sdk.BBMEnterprise;
 import com.bbm.sdk.bbmds.BbmdsProtocol;
 import com.bbm.sdk.bbmds.Chat;
@@ -48,18 +47,13 @@ import com.bbm.sdk.bbmds.outbound.ChatStart;
 import com.bbm.sdk.bbmds.outbound.SetupRetry;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
+import com.bbm.sdk.service.BBMEnterpriseState;
 import com.bbm.sdk.service.ProtocolMessage;
 import com.bbm.sdk.service.ProtocolMessageConsumer;
-import com.bbm.sdk.support.identity.auth.google.auth.GoogleAccessTokenUpdater;
-import com.bbm.sdk.support.identity.auth.google.auth.GoogleAuthHelper;
-import com.bbm.sdk.support.identity.user.firebase.FirebaseUserDbSync;
-import com.bbm.sdk.support.util.FirebaseHelper;
+import com.bbm.sdk.support.protect.SimplePasswordProvider;
+import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.Logger;
 import com.bbm.sdk.support.util.SetupHelper;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.common.collect.Lists;
 
 import org.json.JSONArray;
@@ -105,46 +99,8 @@ public class MainActivity extends AppCompatActivity {
     private SetupHelper.GoAwayListener mGoAwayListener = new SetupHelper.GoAwayListener() {
         @Override
         public void onGoAway() {
-            // Log the google account out of the app.
-            final GoogleApiClient client = GoogleAuthHelper.getApiClient(getApplicationContext(), GoogleAccessTokenUpdater.getInstance().getClientServerId());
-            client.connect();
-            client.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                @Override
-                public void onConnected(@Nullable Bundle bundle) {
-
-                    // Revoke access from user account to the app.
-                    Auth.GoogleSignInApi.revokeAccess(client).setResultCallback(new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(@NonNull Status status) {
-
-                            // Now sign out
-                            Auth.GoogleSignInApi.signOut(client).setResultCallback(
-                                    new ResultCallback<Status>() {
-                                        @Override
-                                        public void onResult(@NonNull Status status) {
-
-                                            // Stop Firebase.
-                                            FirebaseHelper.stop();
-
-                                            // Stop BBM
-                                            BBMEnterprise.getInstance().stop();
-
-                                            client.disconnect();
-
-                                            Logger.w("Application has been stopped. Exiting app. Good-bye!");
-                                            // Not the best way, but end the app.
-                                            System.exit(0);
-                                        }
-                                    });
-                        }
-                    });
-                }
-
-                @Override
-                public void onConnectionSuspended(int i) {
-                    // ignore.
-                }
-            });
+            //Handle any required work (ex sign-out) from the auth service
+            AuthIdentityHelper.handleGoAway(MainActivity.this);
         }
     };
 
@@ -196,15 +152,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize BBMEnterprise SDK then start it
-        BBMEnterprise.getInstance().initialize(this);
-        BBMEnterprise.getInstance().start();
+        BBMEnterprise.getInstance().initialize(MainActivity.this);
+        //Create an observer to start BBM Enterprise SDK.
+        Observer bbmeStateObserver = new Observer() {
+            @Override
+            public void changed() {
+                //Only start the SDK if its stopped
+                if (BBMEnterprise.getInstance().getState().get() == BBMEnterpriseState.STOPPED) {
+                    // Initialize BBMEnterprise SDK then start it
+                    BBMEnterprise.getInstance().start();
+                }
+            }
+        };
+        BBMEnterprise.getInstance().getState().addObserver(bbmeStateObserver);
+        //Trigger our observer to run once
+        bbmeStateObserver.changed();
 
         //Initialize our FirebaseHelper to sync the Protect chat and user keys
-        FirebaseHelper.initUserDbSyncAndProtected();
+        SimplePasswordProvider.getInstance().setActivity(this);
 
-        //prompt the user to sign in with their Google account, and pass that data to our user manager when ready
-        GoogleAuthHelper.initGoogleSignIn(this, FirebaseUserDbSync.getInstance(), getString(R.string.default_web_client_id));
+        //Init the auth provider (get authentication token, start protected manager, sync users)
+        AuthProvider.initAuthProvider(getApplicationContext());
+        AuthIdentityHelper.setActivity(this);
 
         //Listen to the setup events
         final ObservableValue<GlobalSetupState> globalSetupState = BBMEnterprise.getInstance().getBbmdsProtocol().getGlobalSetupState();
@@ -280,13 +249,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * The google sign in will send the results to this activity, this just passes to the helper to pass auth info to BBM SDK
+     * The authentication provider in will send the results to this activity, this just passes to the helper to pass auth info to BBM SDK
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GoogleAuthHelper.RC_GOOGLE_SIGN_IN_ACTIVITY) {
-            GoogleAuthHelper.handleOnActivityResult(this, FirebaseUserDbSync.getInstance(), requestCode, resultCode, data);
+        if (requestCode == AuthIdentityHelper.TOKEN_REQUEST_CODE) {
+            //Handle an authentication result
+            AuthIdentityHelper.handleAuthenticationResult(this, requestCode, resultCode, data);
         }
     }
 

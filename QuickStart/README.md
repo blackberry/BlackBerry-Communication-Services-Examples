@@ -4,12 +4,10 @@
 
 This directory contains sample code for a Quick Start application that 
 demonstrates how you can authenticate with the BBM Enterprise SDK using 
-[Google Sign-in](https://developers.google.com/identity/sign-in/android/). 
-In this example, [Google Sign-in](https://developers.google.com/identity/) 
-is the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
-of your application. We demonstrate how you can obtain the user ID and token of your user's account 
+the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
+of your application.
+We demonstrate how you can obtain the user ID and token of your user's account 
 and pass them to the BBM Enterprise SDK to complete setup. 
-The QuickStart example uses the simple [auto-managed mode](https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient.OnConnectionFailedListener) of the Google API.
 
 ## BBM Enterprise SDK Guide 
 For more details see the 
