@@ -150,7 +150,7 @@ class CallListener : NSObject, BBMEMediaDelegate
         //exchanged between the users or they will fail with a KeyError
         let regId = call.peerRegId
         var handled = false;
-        SoftPhoneApp.app().keyManager.readUserKey(regId) {
+        SoftPhoneApp.app().authController().keyManager.readUserKey(regId) {
             (regId,result) -> Void in
             if handled { return; } else { handled = true; }
 

@@ -31,9 +31,4 @@
 // Controller for handling authentication via GoogleSignIn
 - (BBMAuthController *)authController;
 
-// Manager for syncronizing keys via Firebase
-- (BBMKeyManager *)keyManager;
-
-- (BBMEndpointManager *)endpointManager;
-
 @end

@@ -2,10 +2,7 @@
 
 # BBM Enterprise SDK iOS Quick Start Sample
 
-This directory contains the objective-c implementation of a Quick Start sample application. This application demonstrates how you can authenticate 
-with the BBM Enterprise SDK using
-[Google Sign-in](https://developers.google.com/identity/). In this example, [Google Sign-in](https://developers.google.com/identity/) 
-is the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
+This directory contains the objective-c implementation of a Quick Start sample application. This application demonstrates how you can authenticate with the BBM Enterprise SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
 of your application. We demonstrate how you can obtain the user ID and token of your user's account 
 and pass them to the BBM Enterprise SDK to complete setup. 
 

@@ -112,7 +112,7 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
         switchDeviceButton.isEnabled = (setupState == kBBMSetupStateDeviceSwitch)
 
         if (authState.setupState != nil && authState.setupState == kBBMSetupStateFull) {
-            SoftPhoneApp.app().endpointManager().deregisterAnyEndpointAndContinueSetup()
+            SoftPhoneApp.app().authController().endpointManager.deregisterAnyEndpointAndContinueSetup()
         }
 
         tableView.reloadData();

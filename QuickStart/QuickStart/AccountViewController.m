@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+/* Copyright (c) 2018 BlackBerry.  All Rights Reserved.
 * 
 * Licensed under the Apache License, Version 2.0 (the "License"); 
 * you may not use this file except in compliance with the License. 
@@ -21,14 +21,25 @@
 #import "ConfigSettings.h"
 
 #import "BBMAccess.h"
-#import "BBMGoogleTokenManager.h"
 #import "BBMAuthController.h"
 #import "BBMAuthenticatedAccount.h"
 #import "BBMEndpointManager.h"
+#import "BBMAppUserListener.h"
+#import "BBMUserManager.h"
 
 #import <BBMEnterprise/BBMEnterprise.h>
-#import <GoogleSignIn/GIDSignInButton.h>
 
+
+
+#if USE_GOOGLEID
+#import "BBMGoogleTokenManager.h"
+#import <GoogleSignIn/GIDSignInButton.h>
+#endif
+
+#if USE_AZUREAD
+#import "BBMAzureTokenManager.h"
+#import "BBMAzureUserManager.h"
+#endif
 
 @interface AccountViewController () <BBMConnectivityListener, BBMAuthControllerDelegate>
 
@@ -40,15 +51,25 @@
 @property (weak, nonatomic) IBOutlet UILabel *userEmailLabel;
 @property (weak, nonatomic) IBOutlet UILabel *serviceConnectivityLabel;
 @property (weak, nonatomic) IBOutlet UIButton *switchDeviceButton;
-@property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
+@property (weak, nonatomic) IBOutlet UIView   *signInButton;
 @property (weak, nonatomic) IBOutlet UIButton *signOutButton;
 
 @property (nonatomic, strong) BBMAuthController *authController;
-@property (nonatomic, strong) BBMEndpointManager *endpointManager;
-
 @property (nonatomic, strong) ObservableMonitor *serviceMonitor;
 
 @end
+
+//USE_GOOGLEID/USE_AZUREAD are set in the project target additional compiler flags setting.
+//The "QuickStart" target will use GoogleID automatically.  The QuickStartAzure target will
+//use Azure Active Directory automatically.  User management for GoogleId is implemented via
+//Firebase and is not demonstrated in this app.  User management for Azure AD is implemented
+//via the Microsoft Graph API and is implemented below for registering the BBM registration ID
+//for the local user with their active directory user entry.
+#if USE_GOOGLEID
+  #define TokenManagerClass BBMGoogleTokenManager
+#elif USE_AZUREAD
+  #define TokenManagerClass BBMAzureTokenManager
+#endif
 
 @implementation AccountViewController
 
@@ -56,19 +77,38 @@
 {
     [super viewDidLoad];
 
+#if USE_AZUREAD
+    //Configuration for Azure active directory authentication.  These values are pulled from
+    //ConfigSettings.h.
+    [BBMAzureTokenManager setClientId:AZURE_CLIENT_ID
+                             tenantId:AZURE_TENANT_ID
+                             bbmScope:AZURE_BBMCLIENT_SCOPE];
+    NSString *domain = SDK_SERVICE_DOMAIN_AZURE;
+#elif USE_GOOGLEID
+    //GoogleID will be configured automatically using the GoogleServicesInfo.plist file
+    NSString *domain = SDK_SERVICE_DOMAIN;
+#endif
+
     //Configure our buttons and labels
-    self.googleSignInButton.hidden = YES;
+    self.signInButton.hidden = YES;
     self.switchDeviceButton.enabled = NO;
     self.signOutButton.hidden = YES;
-    self.domainLabel.text = SDK_SERVICE_DOMAIN;
+    self.domainLabel.text = domain;
 
     //Listen for connectivity changes to the BBM Enterprise Service
     [[BBMEnterpriseService service] addConnectivityListener:self];
 
+
+
     //Create an AuthController instance.  This view controller will act as the delegate and the
     //root controller for any modally presented auth UI.  We will use the BBMGoogleTokenManager
     //(a wrapper around the GoolgeSignIn API) to fetch tokens
-    self.authController = [[BBMAuthController alloc] initWithTokenManager:[BBMGoogleTokenManager class]];
+    self.authController = [[BBMAuthController alloc] initWithTokenManager:[TokenManagerClass class]
+                                                               userSource:nil
+                                                       keyStorageProvider:nil
+                                                                   domain:domain
+                                                              environment:SDK_ENVIRONMENT];
+
     self.authController.rootController = self;
 
     //Auth controller using delegation
@@ -108,14 +148,14 @@
     self.regIdLabel.text = authState.regId.integerValue ? authState.regId.stringValue : @"";
     self.userEmailLabel.text = authState.account.email;
 
-    self.googleSignInButton.hidden = self.authController.startedAndAuthenticated;
+    self.signInButton.hidden = self.authController.startedAndAuthenticated;
     self.signOutButton.hidden = !self.authController.startedAndAuthenticated;
 
     //Whenever a user switches devices, a device switch should occur. This button gets
     //enabled whenever a device switch is required.
     self.switchDeviceButton.enabled = [authState.setupState isEqualToString:kBBMSetupStateDeviceSwitch];
 
-    //In order to complete the setup process, we must syncronize the profile keys.  For the sake of
+    //In order to complete the setup process, we must synchronize the profile keys.  For the sake of
     //brevity, we will simply set the key state to synced.  See the other BBM Enterprise samples
     //and/or BBMKeyManager in /examples/support for details on how to export/import profile keys
     if([authState.setupState isEqualToString:kBBMSetupStateOngoing] &&
@@ -126,10 +166,21 @@
         [[BBMEnterpriseService service] sendMessageToService:syncProfileKey];
     }
 
+    //Our token has been rejected
+    if([authState.authTokenState isEqualToString:kBBMAuthStateRejected]) {
+        self.signOutButton.hidden = NO;
+        self.signInButton.hidden = YES;
+    }
+
+    //We're logged in but setup of BBM hasn't completed yet
+    if([authState.setupState isEqualToString:kBBMSetupStateOngoing]) {
+        self.signInButton.hidden = YES;
+        self.signOutButton.hidden = NO;
+    }
+
     // If state is full, ask for list of endpoints and remove one so that setup can continue.
     if([authState.setupState isEqualToString:kBBMSetupStateFull]) {
-        self.endpointManager = [[BBMEndpointManager alloc] init];
-        [self.endpointManager deregisterAnyEndpointAndContinueSetup];
+        [self.authController.endpointManager deregisterAnyEndpointAndContinueSetup];
     }
 
     [self.tableView reloadData];
@@ -162,6 +213,16 @@
     [[BBMEnterpriseService service] resetService];
     [self.authController signOut];
 }
+
+//This is unneeded for GoogleSignIn.  The GIDSignInButton implements this internally and presents
+//the auth web view automatically.
+#if USE_AZUREAD
+- (IBAction)signInPressed:(id)sender
+{
+    [(BBMAzureTokenManager *)self.authController.tokenManager signIn];
+}
+#endif
+
 
 
 @end

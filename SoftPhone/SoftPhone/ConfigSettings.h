@@ -36,11 +36,5 @@
  */
 #define GOOGLE_SIGNIN_CLIENTID @"YOUR_CLIENT_ID"
 
-/*
- Change this value (either kBBMConfig_Sandbox or kBBMConfigProduction) to change the
- environment
- */
-#define SDK_ENVIROMENT kBBMConfig_Sandbox
-
 #endif /* ConfigSettings_h */
 

@@ -35,7 +35,7 @@
     }
     
     [self willChangeValueForKey:@"title"];
-    self.user = [[LocationSharingApp application].userManager userForRegId:_message.resolvedSenderUri.regId];
+    self.user = [[LocationSharingApp application].authController.userManager userForRegId:_message.resolvedSenderUri.regId];
     [self didChangeValueForKey:@"title"];
 }
 

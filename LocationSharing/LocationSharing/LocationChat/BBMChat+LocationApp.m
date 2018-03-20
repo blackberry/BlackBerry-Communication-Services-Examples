@@ -50,7 +50,7 @@
         if(user.bbmState == kBBMStatePending) {
             return @"";
         }
-        BBMAppUser *contact = [[[LocationSharingApp application] userManager] userForRegId:user.regId];
+        BBMAppUser *contact = [[LocationSharingApp application].authController.userManager userForRegId:user.regId];
         NSString *name = contact.name;
         if (name != nil) {
             [displayNames addObject:name];

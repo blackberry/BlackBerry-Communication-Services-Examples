@@ -20,7 +20,7 @@
 #import "LocationMessageLoader.h"
 
 #import <BBMEnterprise/BBMEnterprise.h>
-#import "BBMChatMessage+Util.h"
+#import "BBMChatMessage+Extensions.h"
 #import "BBMAccess.h"
 #import "BBMUtilities.h"
 #import "LocationManager.h"

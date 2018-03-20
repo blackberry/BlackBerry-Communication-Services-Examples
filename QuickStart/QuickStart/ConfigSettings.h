@@ -1,21 +1,21 @@
-/* Copyright (c) 2017 BlackBerry.  All Rights Reserved.
-* 
-* Licensed under the Apache License, Version 2.0 (the "License"); 
-* you may not use this file except in compliance with the License. 
-* You may obtain a copy of the License at 
-* 
-* http://www.apache.org/licenses/LICENSE-2.0 
-* 
-* Unless required by applicable law or agreed to in writing, software 
-* distributed under the License is distributed on an "AS IS" BASIS, 
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-* See the License for the specific language governing permissions and 
-* limitations under the License. 
-  
-* This sample code was created by BlackBerry using SDKs from Apple Inc. 
-* and may contain code licensed for use only with Apple products. 
-* Please review your Apple SDK Agreement for additional details. 
-*/ 
+/* Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+
+ * This sample code was created by BlackBerry using SDKs from Apple Inc.
+ * and may contain code licensed for use only with Apple products.
+ * Please review your Apple SDK Agreement for additional details.
+ */
 
 #ifndef ConfigSettings_h
 #define ConfigSettings_h
@@ -25,7 +25,7 @@
  SDK_SERVICE_DOMAIN must be changed to match the domain identifier provided by
  BlackBerry for your app.
  */
-#define SDK_SERVICE_DOMAIN @"deadc0de-ed6d-11e6-a754-f8cab8543814"
+#define SDK_SERVICE_DOMAIN @"YOUR_USER_DOMAIN"
 
 /*
  The value for GOOGLE_SIGNIN_CLIENTID must match the CLIENT_ID value found in
@@ -34,12 +34,38 @@
  https://developers.google.com/identity/sign-in/ios/start-integrating
  To use Google Sign-In in another app, a new configuration file must be generated.
  */
-#define GOOGLE_SIGNIN_CLIENTID @"260205205111-5qeh17hh2e3agns2qk38tkcd8qef6it5.apps.googleusercontent.com"
+#define GOOGLE_SIGNIN_CLIENTID @"YOUR_CLIENT_ID"
 
 /*
- Change this value (either kBBMConfig_Sandbox or kBBMConfigProduction) to change the 
+ The value for AZURE_CLIENT_ID must match the client id for your primary Azure applciation
+ You will also have created a secondary applciation registration which can be used to fetch primary
+ token which will include the AZURE_BBMCLIENT_SCOPE.  This token may then be exchanged for a token
+ givin access to other application or microsoft APIs (see getMSGraphToken in BBMAzureTokenManager).
+
+ The GUID in the AZURE_BBMCLIENT_SCOPE is the application ID of your secondary application.  The
+ name of the scope is arbitrary, but your primary application must delegate permission to use this
+ scope to the secondary app.
+
+ You must register the the correct URL callback scheme.  This will be in the format
+ msal<AZURE_CLIENT_ID> - ie: msal22ae09da-0000-0000-0000-123455667
+ This must be included under URLTypes/URLScheme in the info.plist file.
+
+ The tenantID is the directory ID for your Azure active directory
+
+ Note that the MSAL Library requires a minimum deployment target of iOS 10.0
+ */
+#define AZURE_CLIENT_ID @"YOUR_AZURE_CLIENT_ID"
+#define AZURE_TENANT_ID @"YOUR_AZURE_TENANT_ID"
+#define AZURE_BBMCLIENT_SCOPE @"YOUR_AZURE_BBM_CLIENT_SCOPE"
+
+#define AZURE_KMS_PATH @"YOUR_AZURE_BBM_CLIENT_SCOPE"
+#define SDK_SERVICE_DOMAIN_AZURE @"YOUR_AZURE_SDK_SERVICE_DOMAIN"
+
+
+/*
+ Change this value (either kBBMConfig_Sandbox or kBBMConfigProduction) to change the
  environment
  */
-#define SDK_ENVIROMENT kBBMConfig_Sandbox
+#define SDK_ENVIRONMENT kBBMConfig_Sandbox
 
 #endif /* ConfigSettings_h */

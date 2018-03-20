@@ -19,7 +19,6 @@
 
 import Foundation
 
-let _endpointManager : BBMEndpointManager = BBMEndpointManager()
 
 /*!
  Our main application class.  .app() will give you the shared application instance from which you
@@ -27,7 +26,12 @@ let _endpointManager : BBMEndpointManager = BBMEndpointManager()
  */
 class QuickStartApp
 {
-    private let _authController : BBMAuthController = BBMAuthController(tokenManager:BBMGoogleTokenManager.self)
+    private let _authController : BBMAuthController = BBMAuthController(tokenManager:BBMGoogleTokenManager.self,
+                                                                          userSource:nil,
+                                                                  keyStorageProvider:nil,
+                                                                              domain: SDK_SERVICE_DOMAIN,
+                                                                         environment: kBBMConfig_Sandbox)
+    lazy private var _endpointManager : BBMEndpointManager = BBMEndpointManager()
 
     private static let appInstance : QuickStartApp = {
         let instance = QuickStartApp()

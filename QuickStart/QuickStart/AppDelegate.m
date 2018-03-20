@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+/* Copyright (c) 2018 BlackBerry.  All Rights Reserved.
 * 
 * Licensed under the Apache License, Version 2.0 (the "License"); 
 * you may not use this file except in compliance with the License. 
@@ -20,8 +20,12 @@
 #import "AppDelegate.h"
 
 #import <BBMEnterprise/BBMEnterprise.h>
-#import <GoogleSignIn/GoogleSignIn.h>
 
+#if USE_GOOGLEID
+#import <GoogleSignIn/GoogleSignIn.h>
+#elif USE_AZUREAD
+#import <MSAL/MSAL.h>
+#endif
 
 @implementation AppDelegate
 
@@ -36,9 +40,15 @@
             openURL:(NSURL *)url
             options:(NSDictionary *)options
 {
+#if USE_GOOGLEID
     return [[GIDSignIn sharedInstance] handleURL:url
                                sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
                                       annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+#elif USE_AZUREAD
+    return [MSALPublicClientApplication handleMSALResponse:url];
+#else
+    return NO;
+#endif
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -46,10 +56,15 @@
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
+#if USE_GOOGLEID
     return [[GIDSignIn sharedInstance] handleURL:url
                                sourceApplication:sourceApplication
                                       annotation:annotation];
+#else
+    return NO;
+#endif
 }
+
 
 
 @end

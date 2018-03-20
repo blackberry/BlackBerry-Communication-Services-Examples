@@ -40,7 +40,7 @@
  Change this value (either kBBMConfig_Sandbox or kBBMConfigProduction) to change the
  environment
  */
-#define SDK_ENVIROMENT kBBMConfig_Sandbox
+#define SDK_ENVIRONMENT kBBMConfig_Sandbox
 
 #endif /* ConfigSettings_h */
 

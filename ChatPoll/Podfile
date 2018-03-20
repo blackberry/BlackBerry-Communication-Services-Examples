@@ -1,0 +1,9 @@
+platform :ios, '9.0'
+
+target 'ChatPoll' do
+	# Pods for SimpleChat
+	pod 'GoogleSignIn', '= 4.0.2'
+	pod 'Firebase/Database', '= 3.16.0'
+	pod 'Firebase/Auth', '= 3.16.0'
+end
+

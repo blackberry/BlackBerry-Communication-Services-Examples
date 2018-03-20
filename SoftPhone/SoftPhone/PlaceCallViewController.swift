@@ -55,7 +55,7 @@ class PlaceCallViewController : UIViewController, BBMEMediaDelegate
 
         guard let regIdStr = regIdField.text,
             let regIdInt = CLongLong(regIdStr),
-            regIdStr.characters.count > 10
+            regIdStr.lengthOfBytes(using: .utf8) > 10
             else
         {
             statusLabel.text = String("Invalid Registration Id")
@@ -73,7 +73,7 @@ class PlaceCallViewController : UIViewController, BBMEMediaDelegate
 
             //BBME Calls require encryption which means we must have the user key for the other
             //party.  Before we place the call, we first read the user key
-            SoftPhoneApp.app().keyManager.readUserKey(regIdNum.stringValue) {
+            SoftPhoneApp.app().authController().keyManager.readUserKey(regIdNum.stringValue) {
                 (regId, result) -> Void in
                 if(result != kKeySyncResultSuccess) {
                     self.statusLabel.text = "Unable to load user key"

@@ -40,12 +40,6 @@
 
 #pragma mark - Application Controllers
 
-// Manager for syncronizing keys via Firebase
-- (BBMKeyManager *)keyManager;
-
-// Provides list of users
-- (BBMUserManager *)userManager;
-
 // Starts the BBM Enterprise service and authenticates
 - (BBMAuthController *)authController;
 
@@ -55,7 +49,5 @@
 // Loads the list of chats the local user is a participant in
 - (ChatListLoader *)chatListLoader;
 
-// Provides list of endpoints, deregisters endpoints, among other things
-- (BBMEndpointManager *)endpointManager;
 
 @end

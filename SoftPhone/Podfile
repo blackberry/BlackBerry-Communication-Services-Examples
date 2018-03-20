@@ -5,8 +5,8 @@ target 'SoftPhone' do
 	use_frameworks!
 
 	pod 'GoogleSignIn', '= 4.0.2'
-	pod 'Firebase/Database', '= 3.14.0'
-	pod 'Firebase/Auth', '= 3.14.0'
+	pod 'Firebase/Database', '= 3.16.0'
+	pod 'Firebase/Auth', '= 3.16.0'
 end
 
 

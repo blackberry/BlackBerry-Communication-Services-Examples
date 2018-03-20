@@ -5,5 +5,10 @@ target 'QuickStartSwift' do
 
 	# Pods for QuickStart
 	pod 'GoogleSignIn', '= 4.0.2'
+
+	# These are not strictly required, but we include Firebase in the common
+	# bridging header in support
+	pod 'Firebase/Database', '= 3.16.0'
+	pod 'Firebase/Auth', '= 3.16.0'
 end
 

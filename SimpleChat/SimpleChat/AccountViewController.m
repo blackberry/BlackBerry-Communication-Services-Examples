@@ -104,7 +104,7 @@
     // If state is full, ask for list of endpoints and remove one so that setup can continue.
     if([authState.setupState isEqualToString:kBBMSetupStateFull]) {
         // If state is full, ask for list of endpoints and remove one so that setup can continue.
-        [[[SimpleChatApp sharedApp] endpointManager] deregisterAnyEndpointAndContinueSetup];
+        [[SimpleChatApp sharedApp].authController.endpointManager deregisterAnyEndpointAndContinueSetup];
     }
 
 }

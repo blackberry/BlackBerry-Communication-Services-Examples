@@ -82,7 +82,7 @@
     }
     else if([setupState isEqualToString:kBBMSetupStateFull]) {
         // If state is full, ask for list of endpoints and remove one so that setup can continue.
-        [[LocationSharingApp application].endpointManager deregisterAnyEndpointAndContinueSetup];
+        [[LocationSharingApp application].authController.endpointManager deregisterAnyEndpointAndContinueSetup];
     }
     else if(!serviceStarted){
         self.setupStateLabel.text = @"Service not started.";

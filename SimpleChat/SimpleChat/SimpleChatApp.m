@@ -30,13 +30,15 @@
 #import "Firebase.h"
 #import "BBMFirebaseKeyStorageProvider.h"
 #import "BBMKeyManager.h"
+#import "BBMFirebaseUserManager.h"
+#import "BBMUserManager.h"
 #import "BBMEndpointManager.h"
 
 #import "BBMAccess.h"
+#import "ConfigSettings.h"
 
 @interface SimpleChatApp () {
     BBMAuthController *_authController;
-    BBMKeyManager *_keyManager;
     BBMEndpointManager *_endpointManager;
 }
 
@@ -66,8 +68,6 @@
     if(self) {
         //Echo all BBME SDK logs to the console
         [[BBMEnterpriseService service] setLoggingMode:kBBMLogModeFileAndConsole];
-        [self startServiceMonitor];
-        [self startAuthMonitor];
     }
     return self;
 }
@@ -76,8 +76,13 @@
 {
     static dispatch_once_t acToken;
     dispatch_once(&acToken, ^{
+        [FIRApp configure];
         //Create our authController using BBMGoogleTokenManager to manage tokens
-        _authController = [[BBMAuthController alloc] initWithTokenManager:[BBMGoogleTokenManager class]];
+        _authController = [[BBMAuthController alloc] initWithTokenManager:[BBMGoogleTokenManager class]
+                                                               userSource:[BBMFirebaseUserManager class]
+                                                       keyStorageProvider:[BBMFirebaseKeyStorageProvider class]
+                                                                   domain:SDK_SERVICE_DOMAIN
+                                                              environment:SDK_ENVIRONMENT];
 
         //Start the BBM Enterprise service.
         [_authController startBBMEnterpriseService];
@@ -88,16 +93,6 @@
     return _authController;
 }
 
-- (BBMKeyManager *)keyManager
-{
-    static dispatch_once_t kmToken;
-    dispatch_once(&kmToken, ^{
-        BBMFirebaseKeyStorageProvider *storageProvider = [[BBMFirebaseKeyStorageProvider alloc] init];
-        BBMKeyManager *protectedMgr = [[BBMKeyManager alloc] initWithKeyStorageProvider:storageProvider];
-        _keyManager = protectedMgr;
-    });
-    return _keyManager;
-}
 
 - (BBMEndpointManager *)endpointManager
 {
@@ -111,63 +106,6 @@
 }
 
 
-#pragma mark - Monitors
 
-//Monitor the main BBMEnterprise Service.  Once it has started, we should start firebase if it
-//has not already been started.  This monitor only needs to run until firebase is started so
-//we use a self-terminating monitor
-- (void)startServiceMonitor
-{
-    typeof(self) __weak weakSelf = self;
-    self.serviceMonitor = [ObservableMonitor monitorActivatedWithName:@"service Monitor" selfTerminatingBlock:^BOOL{
-        if(weakSelf.authController.serviceStarted) {
-            [FIRApp configure];
-            return YES;
-        }
-        return NO;
-    }];
-}
-
-//Monitor the user credentials and login/out of firebase as neccesary.  The BBMAuthController
-//instance handles login/logout of the BBMEnterprise Service.  Once logged into firebase, we
-//will syncronize our own profile keys (either download or upload them as neccesary).  See
-//BBMKeyManager
-- (void)startAuthMonitor
-{
-    typeof(self) __weak weakSelf = self;
-    self.authMonitor = [ObservableMonitor monitorActivatedWithName:@"AppAuthMonitor" block:^{
-        //Monitor the authState from the authController.
-        BBMAuthState *authState = weakSelf.authController.authState;
-
-        //We have not auth state, account or regId... We should log out of firebase if we're logged
-        //in already...
-        if(authState == nil || authState.account == nil || authState.regId == nil) {
-            if([FIRAuth auth].currentUser) {
-                [[weakSelf keyManager] stopAutomaticKeySync];
-                [[FIRAuth auth] signOut:nil];
-            }
-            return;
-        }
-
-        //We are authenticated.  Log into firebase.  See BBMKeyManager.
-        FIRAuthCredential *credential = [FIRGoogleAuthProvider credentialWithIDToken:authState.account.idToken
-                                                                         accessToken:authState.account.accessToken];
-
-
-        //Start Firebase with the GoogleSignIn credentials
-        [[FIRAuth auth] signInWithCredential:credential completion:^(FIRUser * _Nullable firebaseUser, NSError * _Nullable error) {
-            if(error) {
-                NSLog(@"FIRAuth sign-in error: %@",error.localizedDescription);
-            }
-            else {
-                //Once we are logged into firebase, we need to syncronize the profile keys.  This will
-                //either upload or download the keys as required.  At this point, we should also start
-                //monitoring chats so we can syncronize any chat keys as required.
-                [[weakSelf keyManager] syncProfileKeysForLocalUser:firebaseUser.uid regId:authState.regId.stringValue];
-                [[weakSelf keyManager] startAutomaticKeySync];
-            }
-        }];
-    }];
-}
 
 @end

@@ -22,7 +22,11 @@ This repository contains code for iOS example applications that you can use to h
 | [Simple Chat](SimpleChat/README.md) | Build a basic chat app using the BBM Enterprise SDK |
 | [Location Sharing](LocationSharing/README.md) | Shows how to build an app to share the user's location with other users |
 | [Soft Phone](SoftPhone/README.md) | 	Build an app with voice and video calling using the BBM Enterprise SDK|
-| [Rasberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) |  Build an iOS app that securely communicates with an IoT device (LED controlled by a Rapberry Pi)|
+| [Data Transfer](DataTransfer/README.md) | Build an app to send files over a secure peer-to-peer connection using the BBM Enterprise SDK |
+| [Chat Poll](ChatPoll/README.md) | Build an app that allows users to post polls within custom chat messages using the BBM Enterprise SDK |
+| [Rasberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) |Build an iOS app that securely communicates with an IoT device (LED controlled by a Rapberry Pi |
+
+
 
 For more details on all the BBM Enterprise SDK Examples see the online [BBM
 Enterprise SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).

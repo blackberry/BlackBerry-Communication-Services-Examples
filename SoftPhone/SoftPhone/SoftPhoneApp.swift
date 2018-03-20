@@ -33,20 +33,25 @@ public let kIncomingRingtone        = "incoming_call_ringtone.caf"
 public let kOutgoingRingtone        = "outgoing_call_ringtone.caf"
 public let kEndCallRingtone         = "endTone.caf"
 
-let _endpointManager : BBMEndpointManager = BBMEndpointManager()
-
 //Our main application instance.
 //This handles logging into firebase, configuring the media manager and monitoring and 
 //synchronizing chats and their associated keys via BBMKeyManager
 class SoftPhoneApp
 {
-    private let _authController : BBMAuthController = BBMAuthController(tokenManager:BBMGoogleTokenManager.self)
+    private let _authController : BBMAuthController! = {
+        FIRApp.configure();
+        let instance = BBMAuthController(tokenManager:BBMGoogleTokenManager.self,
+                                           userSource:BBMFirebaseUserManager.self,
+                                   keyStorageProvider:BBMFirebaseKeyStorageProvider.self,
+                                               domain:SDK_SERVICE_DOMAIN,
+                                          environment:kBBMConfig_Sandbox)
+        return instance;
+    }();
 
     var authMonitor: ObservableMonitor?
     var keyMonitor: ObservableMonitor?
     var serviceMonitor : ObservableMonitor?
 
-    var keyManager : BBMKeyManager!
     var callListener : CallListener!
 
     private static let appInstance : SoftPhoneApp = {
@@ -56,10 +61,7 @@ class SoftPhoneApp
         BBMEnterpriseService.shared().setLoggingMode(kBBMLogModeFileAndConsole)
 
         instance.authController().startBBMEnterpriseService()
-
-        instance.startAuthMonitor()
         instance.startServiceMonitor()
-
         instance.authController().signInSilently()
 
         return instance
@@ -72,11 +74,6 @@ class SoftPhoneApp
     //Get the shared authentication controller
     func authController() -> BBMAuthController {
         return _authController
-    }
-
-    //Get the shared endpoint manager
-    func endpointManager() -> BBMEndpointManager {
-        return _endpointManager
     }
 
     //iOS CallKit is only available on iOS 10 and up.
@@ -113,58 +110,12 @@ class SoftPhoneApp
         serviceMonitor = ObservableMonitor(activatedWithName: "ServiceMonitor") {
             [weak self] () -> Bool in
             if(self?.authController().serviceStarted == true) {
-                FIRApp.configure()
-
-                //We need to wait until all of the services are started before 
-                //initializing the keyManager, mediaManager and callListeners
-                self?.keyManager = BBMKeyManager(keyStorageProvider: BBMFirebaseKeyStorageProvider())
-
                 self?.startMediaManager()
-                
                 self?.callListener = CallListener()
-
                 return true
             }
             return false
         }
     }
 
-    private func startAuthMonitor() {
-        authMonitor = ObservableMonitor(activatedWithName: "AppAuthMonitor") {
-            [weak self] () -> Void in
-
-            let logoutHandler : ()->Void = { 
-                if (FIRAuth.auth()?.currentUser != nil) {
-                    do {
-                        self?.keyManager.stopAutomaticKeySync()
-                        try FIRAuth.auth()?.signOut()
-                    }catch {
-                        NSLog("Sign out failed")
-                        self?.keyManager.startAutomaticKeySync()
-                    }
-                }
-            }
-
-            //No auth state?  Logout
-            guard let authState = self?.authController().authState,
-                      authState.account != nil,
-                      authState.regId != nil else
-            {
-                logoutHandler()
-                return
-            }
-
-            //We are authenticated.  Pass the credentials to Firebase and syncronize our
-            //profile keys
-            let credentials = FIRGoogleAuthProvider.credential(withIDToken: authState.account.idToken,
-                                                               accessToken: authState.account.accessToken)
-            FIRAuth.auth()?.signIn(with: credentials) { (user, error) -> Void in
-                if let error = error {
-                    NSLog("FIRAuth sign-in error %@", error.localizedDescription)
-                }else{
-                    self?.keyManager.syncProfileKeys(forLocalUser: user?.uid, regId: authState.regId.stringValue)
-                }
-            }
-        }
-    }
 }

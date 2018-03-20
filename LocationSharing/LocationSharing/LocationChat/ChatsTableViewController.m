@@ -60,7 +60,7 @@
     self.chatCreator = [[BBMChatCreator alloc] init];
 
     //When there is change in the users list reload the table
-    [[[LocationSharingApp application] userManager] addUserListener:self];
+    [[LocationSharingApp application].authController.userManager addUserListener:self];
 }
 
 #pragma mark - Table view data source

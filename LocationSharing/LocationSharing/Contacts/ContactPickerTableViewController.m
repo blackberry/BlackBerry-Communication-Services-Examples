@@ -49,14 +49,14 @@ static NSString *const kChatSubjectCell = @"ChatSubjectViewCell";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 
     self.selectedContacts = [[NSMutableDictionary alloc] init];
-    [[[LocationSharingApp application] userManager] addUserListener:self];
+    [[LocationSharingApp application].authController.userManager addUserListener:self];
 
     [self updateNavigationBar];
 }
 
 - (void)dealloc
 {
-    [[[LocationSharingApp application] userManager] removeUserListener:self];
+    [[LocationSharingApp application].authController.userManager removeUserListener:self];
 }
 
 - (IBAction)cancelPressed:(id)sender
