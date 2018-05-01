@@ -95,7 +95,7 @@ login.login(config)
           message.chatId,
           {
             minFetchCount: 0,
-            minStatus: BBMEnterprise.Messenger.NoSync
+            syncMode: BBMEnterprise.Messenger.NoSync
           })
         .then(sendResponse);
       } else {

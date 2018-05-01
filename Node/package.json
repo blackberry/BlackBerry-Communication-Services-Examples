@@ -1,6 +1,6 @@
 {
   "name": "Node",
-  "version": "1.1.0-rc12",
+  "version": "1.0.1",
   "description": "A set of example applications for using the BBM Enterprise sdk",
   "main": "Repl",
   "keywords": [],
