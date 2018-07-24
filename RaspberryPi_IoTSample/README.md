@@ -1,20 +1,20 @@
 ![BBM Enterprise SDK](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
-# **BBM Colour Picker**
+# **BlackBerry Spark Colour Picker**
 
-The BBM Colour Picker provides an example of how to interface with a hardware peripheral device using the Node.js BBM Enterprise SDK. This sample reads the colour selected on a mobile application and displays it on an RGB LED connected to a Raspberry Pi.
+The BlackBerry Spark Colour Picker provides an example of how to interface with a hardware peripheral device using the Node.js version of the BlackBerry Spark SDK. This sample reads the colour selected on a mobile application and displays it on an RGB LED connected to a Raspberry Pi.
 
 If you would like to learn more about BlackBerry's CPaaS, be sure to head over to our [website](https://us.blackberry.com/enterprise/bbm-enterprise-sdk).
 
-### BBM Enterprise SDK Guide
+### BlackBerry Spark SDK Guide
 For more details see the
-[Quick Start Swift page in the BBM Enterprise SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/QuickStartSwift/README.html).
+[Quick Start Swift page in the BlackBerry Spark SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/QuickStartSwift/README.html).
 
 
 ### Screenshots
 [![image_alt_preview25](screenShots/screen-shots.png)](screenShots/screen-shots.png)
 
 ### Features
-- **Send and receive secure data** - using the BBM Enterprise SDK to communicate between the mobile app and hardware peripheral device.
+- **Send and receive secure data** - using the BlackBerry Spark SDK to communicate between the mobile app and hardware peripheral device.
 - **Build on** - using this sample, which can be used as a skeleton for more complex secure data transfer in your enterprise use case.
 
 
@@ -33,14 +33,14 @@ This project also requires that you have the following:
 ### Installation
 Make sure that Node and npm are successfully installed on your Raspberry Pi. **The project was built using Node version 9.5.0 and npm version 5.6.0.**
 
-You will also need to [download the latest version of the BBM-E SDK for Node.js](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html) on your Raspberry Pi.
+You will also need to [download the latest version of the BlackBerry Spark SDK for Node.js](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html) on your Raspberry Pi.
 
 To begin installing the required node libraries for this project, open your Terminal and cd into your project directory, containing the contents of this repository. Run the following command to begin package installation:
 ```
 $ npm install
 ```
 
-Once all of the packages are finished installing, you will need to install the BBM-E SDK in your project. Begin by unzipping the downloaded SDK file and renaming it 'bbm-enterprise'. Next, copy the unzipped SDK and paste it under <PROJECT_DIRECTORY_PATH>/node_modules. Finally, install the BBM Enterprise SDK by running the following command in your project directory:
+Once all of the packages are finished installing, you will need to install the BlackBerry Spark SDK in your project. Begin by unzipping the downloaded SDK file and renaming it 'bbm-enterprise'. Next, copy the unzipped SDK and paste it under <PROJECT_DIRECTORY_PATH>/node_modules. Finally, install the BlackBerry Spark SDK by running the following command in your project directory:
 ```
 $ npm install <PATH_TO_YOUR_UNZIPPED_SDK_INSTANCE> --production
 ```
