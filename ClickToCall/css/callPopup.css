@@ -1,0 +1,38 @@
+html, body {
+  overflow: hidden;
+  background-size: cover;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAADCAYAAABfwxXFAAAASklEQVQYVxXByxFAQBBF0fv0+KSnRGJvLwBWUpCgMtpTztG6nZbNEIEbkX5pHjCJpuWw8iUSLozD9DXoBBrn3VVGd3LJ/IZSaEN89FAejEb4oe4AAAAASUVORK5CYII=");
+}
+
+#hourglass {
+  position: absolute;
+  /* Size of image is 30 x 30 px */
+  left: calc(50% - 15px);
+  left: -webkit-calc(50% - 15px);
+  top: calc(50% - 15px);
+  top: -webkit-calc(50% - 15px);
+  width: 30px;
+  height: 30px;
+  animation: rotation 3s linear infinite;
+  -webkit-animation: rotation 3s linear infinite;
+}
+
+@keyframes rotation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(359deg); }
+}
+
+@-webkit-keyframes rotation {
+  from { -webkit-transform: rotate(0deg); }
+  to { -webkit-transform: rotate(359deg); }
+}
+
+#connecting-label {
+  font-family: system-ui;
+  font-size: 10px;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 70%;
+  color: antiquewhite;
+}

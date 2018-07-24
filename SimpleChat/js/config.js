@@ -18,18 +18,21 @@
 
 // This domain is a string known to the BBM Enterprise server, which is
 // generally a GUID.
-var ID_PROVIDER_DOMAIN = 'your_idp_domain';
+const ID_PROVIDER_DOMAIN = 'your_idp_domain';
 
 // The environment of your BBM Enterprise server. Must be either 'Sandbox' or
 // 'Production'.
-var ID_PROVIDER_ENVIRONMENT = 'Sandbox';
+const ID_PROVIDER_ENVIRONMENT = 'Sandbox';
 
 // This secret is used to protect user keys. Must be individual for each user.
-var USER_SECRET = 'user_secret';
+const USER_SECRET = 'user_secret';
+
+// The URL or relative path of the Argon2 WASM file.
+const KMS_ARGON_WASM_URL = '../../sdk/argon2.wasm';
 
 // This configuration contains service endpoints and information for OAuth2
 // authentication.
-var AUTH_CONFIGURATION = {
+const AUTH_CONFIGURATION = {
   // The type of authentication. Must be either 'OAuth' or 'JWT'.
   type: 'OAuth',
 
@@ -50,7 +53,7 @@ var AUTH_CONFIGURATION = {
 
   // Scopes of OAuth 2.0 access token (which resources it can access)
   // If google OAuth service is used, put following scopes:
-  // 'profile https://www.googleapis.com/auth/firebase https://www.googleapis.com/auth/userinfo.email'
+  // 'https://www.googleapis.com/auth/firebase https://www.googleapis.com/auth/userinfo.email'
   scope : 'your_scope_oauth',
 
   // The client ID of application registered on OAuth 2.0 server.
@@ -60,10 +63,10 @@ var AUTH_CONFIGURATION = {
   // server to redirect.
   // application after issuing an access token.
   redirectUri : 'your_redirect_url'
-}
+};
 
 // Firebase config info.
-var FIREBASE_CONFIG = {
+const FIREBASE_CONFIG = {
     apiKey: 'your_api_key',
     authDomain: 'your_auth_domain',
     databaseURL: 'your_database_url',
@@ -72,26 +75,11 @@ var FIREBASE_CONFIG = {
     messagingSenderId: 'your_messaging_sender_id'
 };
 
-// Create the auth manager for the Rich Chat app.
-var createAuthManager = () => new GoogleAuthManager(AUTH_CONFIGURATION);
+// Create the auth manager for the Simple Chat app.
+const createAuthManager = () => new GoogleAuthManager(AUTH_CONFIGURATION);
 
-// Create the user manager for the Rich Chat app.
-var createUserManager = (userRegId, authManager) =>
+// Create the user manager for the Simple Chat app.
+const createUserManager = (userRegId, authManager, getIdentity,
+                           getIdentities) =>
   FirebaseUserManager.factory.createInstance(FIREBASE_CONFIG,
-    userRegId, authManager, GenericUserInfo);
-
-// Create the key provider required by the BBM SDK. See the BBM Enterprise SDK
-// for JavaScript API reference documentation for details.
-var createKeyProvider = (uid, accessToken, authManager,
-  getUid, importFailedCallback, keyProtect) =>
-    FirebaseKeyProvider.factory.createInstance(
-      FIREBASE_CONFIG,
-      accessToken,
-      getUid,
-      importFailedCallback, keyProtect);
-
-// Create the key protector required by the BBM SDK. See the BBM Enterprise SDK
-// for JavaScript API reference documentation for details.
-var createKeyProtect = (regId, getSecretCallback) =>
-  KeyProtect.factory.createInstance(getSecretCallback,
-    regId, 'BBME SDK Pre-KMS DRK');
+    userRegId, authManager, GenericUserInfo, getIdentity, getIdentities);

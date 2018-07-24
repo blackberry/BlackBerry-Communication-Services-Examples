@@ -2,7 +2,7 @@
   "name": "click-to-chat",
   "description": "Shows you how to integrate a chat experience into your website with the BBM Enterprise SDK for JavaScript.",
   "version": "1.0.1",
-  "main": "index.html",
+  "main": "clickToChat.html",
   "dependencies": {
     "bbmChat": "file:../support/ui/widgets/bbmChat"
   }

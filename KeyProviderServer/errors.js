@@ -25,7 +25,7 @@ module.exports = {
     this.name = 'TokenExpiredError';
     this.message = (message || '');
   },
-  // Failed to get Open Id Configuration for the provided JWT
+  // Failed to get OpenID Configuration for the provided JWT
   TokenOpenIdError: function(message) {
     this.name = 'TokenOpenIdError';
     this.message = (message || '');
@@ -49,6 +49,13 @@ module.exports = {
   DataAccessError: function(message, code) {
     this.name = 'DataAccessError';
     this.message = (message || '');
-    this.code = code
-  },
+    this.code = code;
+  }
+};
+
+// Make sure that our errors are all derived from Error.
+for (const key in module.exports) {
+  const error = module.exports[key];
+  error.prototype = Object.create(Error.prototype);
+  error.prototype.constructor = error;
 }

@@ -1,0 +1,9 @@
+{
+  "name": "click-to-chat",
+  "description": "Shows you how to integrate a video call functionality into your website with the BBM Enterprise SDK for JavaScript.",
+  "version": "1.0.0",
+  "main": "index.html",
+  "dependencies": {
+    "bbmCall": "file:../support/ui/widgets/bbmCall"
+  }
+}

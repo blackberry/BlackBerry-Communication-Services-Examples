@@ -1,0 +1,46 @@
+{
+  // Disable the node environment since this module doesn't support it.  This
+  // will inhibit the node plugin's rules from running and will remove the
+  // node environments global variables from the global scope.
+  "env":
+  {
+    "node": false
+  },
+  
+  // Ignore unknown variables that will be available at runtime.
+  "globals":
+  {
+    "createAuthManager": false,
+    "BBMEnterprise": false,
+    "ID_PROVIDER_DOMAIN": false,
+    "ID_PROVIDER_ENVIRONMENT": false,
+    "createUserManager": false,
+    "createKeyProtect": false,
+    "createKeyProvider": false,
+    "GoogleAuthManager": false,
+    "FirebaseUserManager": false,
+    "GenericUserInfo": false,
+    "FirebaseKeyProvider": false,
+    "KeyProtect": false,
+    "HTMLImports": false,
+    "MessageFormatter": false,
+    "TimeRangeFormatter": false,
+    "Polymer": false,
+    "Observer": false,
+    "onUserChanged": false,
+    "USER_SECRET": false,
+    "KMS_ARGON_WASM_URL": false
+  },
+
+  "rules":
+  {
+    // Ignore certain unused identifiers.
+    "no-unused-vars":
+    [
+      "error",
+      {
+        "varsIgnorePattern": "ID_PROVIDER_DOMAIN|KMS_ARGON_WASM_URL|ID_PROVIDER_ENVIRONMENT|USER_SECRET|createAuthManager|createUserManager|createKeyProvider|createKeyProtect|USER_SECRET|enterChat|leaveChat"
+      }
+    ]
+  }
+}

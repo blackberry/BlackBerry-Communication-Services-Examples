@@ -16,6 +16,13 @@
 
 'use strict';
 
+// Declare local variables used by the HTML functions below.
+let title;
+let chatInput;
+let chatMessageList;
+let chatListDiv;
+let leaveButton;
+
 /**
  * A threaded chat program.
  *
@@ -32,77 +39,142 @@
   const REFERENCE_COMMENT_FIELD_TEXT = "Commenting on: ";
   const REFERENCE_MESSAGE_STRING_COMMENT = " commented on: ";
 
-
   const IMG_CHEVRON = "img/bubble_menu.png";
-
 
   var widgetURI = (document._currentScript || document.currentScript).src;
   var m_basePath = widgetURI.substring(0, widgetURI.lastIndexOf("/js") + 1);
 
-  //The observable object used by Observer class from SDK to monitor a message
-  var MessageObservable 
-    = function Observable(messenger, chatId, messageId) {
+  // The observable object used by Observer class from SDK to monitor a message
+  var MessageObservable = function Observable(messenger, chatId, messageId) {
     return {
       then: (callback) => {
         this.callback = callback;
-        messenger
-          .chatMessageWatch(chatId, messageId, callback);
+        messenger.chatMessageWatch(chatId, messageId, callback);
       },
       unwatch: () => {
-        messenger
-          .chatMessageUnwatch(chatId, messageId, this.callback);
+        messenger.chatMessageUnwatch(chatId, messageId, this.callback);
       }
-    }
-  }
+    };
+  };
 
   HTMLImports.whenReady(function() {
     // Find the necessary HTMLElements and cache them.
-    var title = document.getElementById('title');
-    var status = document.getElementById('status');
-    var chatInput = document.getElementById('chatInput');
-    var chatMessageList = document.getElementById('chatMessageList');
-    var chatList = document.getElementById('chatList');
-    var chatListDiv = document.getElementById('chatListDiv');
-    var leaveButton = document.getElementById('leaveButton');
-    var bubbleTemplate = document.getElementById('bubbleTemplate');
+    title = document.getElementById('title');
+    const status = document.getElementById('status');
+    chatInput = document.getElementById('chatInput');
+    chatMessageList = document.getElementById('chatMessageList');
+    const chatList = document.getElementById('chatList');
+    chatListDiv = document.getElementById('chatListDiv');
+    leaveButton = document.getElementById('leaveButton');
+
+    let bbmeSdk;
 
     // Show the information field for message reference.
-    chatMessageList.addEventListener('messageReference', (event) => {
-      chatInput.showRefField(event);
-    });
-
-    var contactsManager;
+    chatMessageList.addEventListener('messageReference', chatInput.showRefField);
 
     // Perform authentication.
     try {
-      var authManager = createAuthManager();
+      let isSyncStarted = false;
+      const authManager = createAuthManager();
       authManager.authenticate()
-      .then(userInfo => {
+      .then(authUserInfo => {
         try {
           // Construct BBMEnterprise.Messenger which provides higher level
           // functionality used to manipulate and annotate chats.
-          var bbmsdk = new BBMEnterprise({
+          bbmeSdk = new BBMEnterprise({
             domain: ID_PROVIDER_DOMAIN,
             environment: ID_PROVIDER_ENVIRONMENT,
-            userId: userInfo.userId,
-            getToken: () => authManager.getBbmSdkToken(),
-            getKeyProvider: (regId, accessToken) =>
-              createUserManager(regId, authManager).then(userManager => {
-                contactsManager = userManager;
-                return Promise.all([
-                  createKeyProtect(regId),
-                  userManager.initialize().then(() => userManager.getUid(regId))
-                ]).then(results =>
-                  createKeyProvider(results[1],
-                    accessToken,
-                    authManager,
-                    userManager.getUid,
-                    () => Promise.resolve('GenerateNewKeys'),
-                    results[0]));
-              }),
+            userId: authUserInfo.userId,
+            getToken: authManager.getBbmSdkToken,
             description: navigator.userAgent,
-            messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher
+            messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher,
+            kmsArgonWasmUrl: KMS_ARGON_WASM_URL
           });
+
+          // Handle changes of BBM Enterprise setup state.
+          bbmeSdk.on('setupState', state => {
+            console.log(`BBMEnterprise setup state: ${state.value}`);
+            switch (state.value) {
+              case BBMEnterprise.SetupState.Success:
+              {
+                // Setup was successful. Create user manager and initiate call.
+                const userRegId = bbmeSdk.getRegistrationInfo().regId;
+                const messenger = bbmeSdk.messenger;
+
+                // Initialize the chat input.
+                window.customElements.whenDefined(chatInput.localName)
+                .then(() => {
+                  chatInput.setBbmMessenger(messenger);
+                });
+
+                // Initialize the message list.
+                window.customElements.whenDefined(chatMessageList.localName)
+                .then(() => 
+                  createUserManager(userRegId, authManager,
+                    bbmeSdk.getIdentitiesFromAppUserId,
+                    bbmeSdk.getIdentitiesFromAppUserIds)
+                  .then(userManager =>
+                    userManager.initialize()
+                    .then(() => {
+                      chatMessageList.setBbmMessenger(messenger);
+                      const messageFormatter = new MessageFormatter(userManager);
+                      chatMessageList.setMessageFormatter(messageFormatter);
+                      chatMessageList.setTimeRangeFormatter(new TimeRangeFormatter());
+                    })
+                  )
+                );
+
+                // Initialize the chat list.
+                window.customElements.whenDefined(chatList.localName)
+                .then(() => {
+                  chatList.setBbmMessenger(messenger);
+                  chatList.setContext({
+                    // Get the name to use for the chat. This is the other
+                    // participant's registration ID for a 1:1 chat, otherwise
+                    // it is the chat's subject.
+                    getChatName: chat => {
+                      if(chat.isOneToOne) {
+                        return (chat.participants[0].regId === userRegId)
+                          ? chat.participants[1].regId.toString()
+                          : chat.participants[0].regId.toString();
+                      } else {
+                        return chat.subject;
+                      }
+                    }
+                  });
+                });
+
+                // Report the status to the user.
+                status.innerHTML = `Registration Id: ${userRegId}`;
+              }
+              break;
+
+              case BBMEnterprise.SetupState.SyncRequired: {
+                if (isSyncStarted) {
+                  showError('Failed to get user keys using provided USER_SECRET');
+                  return;
+                }
+                const isNew =
+                  bbmeSdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New;
+                const syncAction = isNew
+                  ? BBMEnterprise.SyncStartAction.New
+                  : BBMEnterprise.SyncStartAction.Existing;
+                bbmeSdk.syncStart(USER_SECRET, syncAction);
+              }
+              break;
+              case BBMEnterprise.SetupState.SyncStarted:
+                isSyncStarted = true;
+              break;
+            }
+          });
+
+          // Handle setup error.
+          bbmeSdk.on('setupError', error => {
+            showError(`Failed to create BBMEnterprise: ${error.value}`);
+          });
+
+          // Start BBM Enterprise setup.
+          bbmeSdk.setupStart();
 
           // Notify the user that we are working on signing in.
           status.innerHTML = 'Signing in';
@@ -110,56 +182,6 @@
           showError(`Failed to create BBMEnterprise: ${error}`);
           return;
         }
-
-        // Initialize BBM Enterprise SDK for Javascript and start the setup.
-        bbmsdk.setup()
-        .then(chatInterfaces => {
-          var registrationId = bbmsdk.getRegistrationInfo().regId;
-          var messenger = chatInterfaces.messenger;
-
-          // Initialize the chat input.
-          window.customElements.whenDefined(chatInput.localName)
-          .then(() => {
-            chatInput.setBbmMessenger(messenger);
-          });
-
-          // Initialize the message list.
-          window.customElements.whenDefined(chatMessageList.localName)
-          .then(() => {
-            chatMessageList.setBbmMessenger(messenger);
-            chatMessageList.setMessageFormatter(new MessageFormatter(contactsManager));
-            chatMessageList.setTimeRangeFormatter(new TimeRangeFormatter());
-          });
-
-          // Initialize the chat list.
-          window.customElements.whenDefined(chatList.localName)
-          .then(() => {
-            chatList.setBbmMessenger(messenger);
-            chatList.setContext({
-              // Get the name to use for the chat. This is the other participant's
-              // registration ID for a 1:1 chat, otherwise it is the chat's
-              // subject.
-              getChatName: chat => {
-                if(chat.isOneToOne) {
-                  return (chat.participants[0].regId === registrationId)
-                    ? chat.participants[1].regId.toString()
-                    : chat.participants[0].regId.toString();
-                } else {
-                  return chat.subject;
-                }
-              }
-            });
-          });
-
-          // The message list needs to know about changes to the message
-          // store.
-
-          // Report the status to the user.
-          status.innerHTML = `Registration Id: ${registrationId}`;
-        })
-        .catch(error => {
-          showError(`BBM SDK setup error: ${error}`);
-        });
       }).catch(error => {
         showError(`Failed to complete setup. Error: ${error}`);
       });
@@ -191,10 +213,10 @@
       ready() {
         super.ready();
 
-        window.customElements.whenDefined('bbm-chat-message-list').then(() => {          
+        window.customElements.whenDefined('bbm-chat-message-list').then(() => {
           this.$.list.setMappingFunction(this.render.bind(this),
             this.clear.bind(this));
-        })
+        });
       }
 
       // Defined list of properties of custom control
@@ -206,7 +228,7 @@
             readOnly: false,
             notify: true
           }
-        }
+        };
       }
 
       /**
@@ -301,7 +323,7 @@
         var windowClickHandler = () => {
           this.closeDropdowns();
           window.removeEventListener('click', windowClickHandler);
-        }
+        };
 
         window.addEventListener('click', windowClickHandler);
       }
@@ -345,11 +367,8 @@
 
       /**
        * Dispatch an event of quoting the selected message.
-       *
-       * @param {Event} event
-       *   The mouse event which triggers the deletion.
        */
-      commentMessage(event) {
+      commentMessage() {
         this.dispatchEvent(new CustomEvent('messageReference', 
           {'detail': { targetMessageId:  this.selectedMessage.message.messageId, 
             refTag: REFERENCE_TAG_THREADED,
@@ -369,6 +388,11 @@
       // Get the timestamp for a message in string form, using the time range
       // formatter registered with this widget.
       getTimestamp(message) {
+        let ret =
+          {
+            formattedTime: ''
+          };
+
         if (this.timeRangeFormatter) {
           var now = new Date();
           var formattedMessage = this.timeRangeFormatter.format(
@@ -377,9 +401,7 @@
             now);
 
           // Construct a return value. It definitely has a time.
-          var ret = {
-            formattedTime: formattedMessage.formattedTime
-          };
+          ret.formattedTime = formattedMessage.formattedTime;
 
           // It may also have a timeout, after which the time should be updated.
           if (formattedMessage.expiresIn) {
@@ -388,8 +410,9 @@
               formattedMessage.expiresIn.getTime() - now.getTime()
             );
           }
-          return ret;
         }
+
+        return ret;
       }
 
       /**
@@ -415,7 +438,7 @@
         );
 
         if (index >= 0) {
-          var formattedMessage = this.$.list.$.list.items[index];
+          formattedMessage = this.$.list.$.list.items[index];
 
           // Rerender based on the appData, which is assumed to have been
           // updated already by whatever triggered the refresh.
@@ -472,7 +495,7 @@
             || (!message.isIncoming && message.isRecalled)
             ? 'none': 'block',
           alignment: message.isIncoming ? 'left' : 'right'
-        }
+        };
 
         //For message references
         if(message.ref) {
@@ -489,7 +512,7 @@
             if(message.refBy[i].tag === REFERENCE_TAG_THREADED
               && message.refBy[i].messageIds.length > 0) {
               for(var j=0; j < message.refBy[i].messageIds.length; j++) {
-                this.formatCommentMessage(message.refBy[i].messageIds[j], ret)
+                this.formatCommentMessage(message.refBy[i].messageIds[j], ret);
               }
               break;              
             }
@@ -505,8 +528,6 @@
       // @param {Object} ret
       //  the wrapper of the data to display the comment system message
       formatCommentSystemMessage(messageId, ret) {
-        var formatter = this.messageFormatter;
-
         var targetMessage;
 
         if(ret.appData.commentSystemMessageTracker) {
@@ -535,7 +556,6 @@
       // @param {Object} ret
       //  The wrapper of the data to display the comment message
       formatCommentMessage(messageId, ret) {
-        var formatter = this.messageFormatter;
 
         if(ret.appData.commentMessageTracker) {
           ret.appData.commentMessageTracker.clear();
@@ -549,7 +569,7 @@
               this.chatId, messageId);
 
           //observe the message.
-          getter.observe(messageObservable, (getter, message) => {            
+          getter.observe(messageObservable, (getter, message) => {
             refMessage = message;
             var refMessageId = refMessage.messageId.toString();
             var isMessageFound = false;
@@ -615,7 +635,8 @@
           // hide it.
           chevron.needsToHide = true;
         }
-      }    }
+      }
+    }
 
     window.customElements.define(ThreadedChatMessageList.is,
                                    ThreadedChatMessageList);
@@ -623,61 +644,61 @@
 })(window, document);
 
 //============================================================================
-  // :: HTML functions
-  //
-  // The remaining functions are called from the HTML code
+// :: HTML functions
+//
+// The remaining functions are called from the HTML code
 
-  /**
-   * Enter the message list for a chat.
-   *
-   * @param {HTMLElement} element
-   *   The list element of the chat to enter.
-   */
-  function enterChat(element) {
-    var chatId = element.id;
+/**
+ * Enter the message list for a chat.
+ *
+ * @param {HTMLElement} element
+ *   The list element of the chat to enter.
+ */
+function enterChat(element) {
+  var chatId = element.id;
 
-    // Initialize the component.
-    chatMessageList.setChatId(chatId);
-    chatInput.setChatId(chatId);
-    chatInput.set('isPriorityEnabled', false);
+  // Initialize the component.
+  chatMessageList.setChatId(chatId);
+  chatInput.setChatId(chatId);
+  chatInput.set('isPriorityEnabled', false);
 
-    // Make the right things visible.
-    chatListDiv.style.display = "none";
-    chatMessageList.style.display = "block";
-    chatInput.style.display = "block";
-    leaveButton.style.display = "block";
+  // Make the right things visible.
+  chatListDiv.style.display = "none";
+  chatMessageList.style.display = "block";
+  chatInput.style.display = "block";
+  leaveButton.style.display = "block";
 
-    // Set the title
-    title.innerHTML = 'Threaded Chat: ' + element.innerHTML;
-  }
+  // Set the title
+  title.innerHTML = 'Threaded Chat: ' + element.innerHTML;
+}
 
-  /**
-   * Leave the active chat. This takes us back to the chat list.
-   */
-  function leaveChat() {
-    // Uninitialize the components.
-    chatMessageList.setChatId(undefined);
+/**
+ * Leave the active chat. This takes us back to the chat list.
+ */
+function leaveChat() {
+  // Uninitialize the components.
+  chatMessageList.setChatId(undefined);
 
-    // Make the right things visible.
-    chatListDiv.style.display = "block";
-    chatMessageList.style.display = "none";
-    chatInput.style.display = "none";
-    leaveButton.style.display = "none";
+  // Make the right things visible.
+  chatListDiv.style.display = "block";
+  chatMessageList.style.display = "none";
+  chatInput.style.display = "none";
+  leaveButton.style.display = "none";
 
-    // Set the title
-    title.innerHTML = 'Threaded Chat';
-  }
+  // Set the title
+  title.innerHTML = 'Threaded Chat';
+}
 
-  /**
-   * Display an error message in the status area.
-   *
-   * @param {string} message
-   *   The error message to display.
-   */
-  function showError(message) {
-    console.log(message);
-    // GOTCHA: This renders unsanitized text as html. In a real application, use
-    // your framework's method, or some other method, to sanitize the text prior
-    // to displaying it.
-    document.getElementById('status').innerHTML = message;
-  }
+/**
+ * Display an error message in the status area.
+ *
+ * @param {string} message
+ *   The error message to display.
+ */
+function showError(message) {
+  console.log(message);
+  // GOTCHA: This renders unsanitized text as html. In a real application, use
+  // your framework's method, or some other method, to sanitize the text prior
+  // to displaying it.
+  document.getElementById('status').innerHTML = message;
+}

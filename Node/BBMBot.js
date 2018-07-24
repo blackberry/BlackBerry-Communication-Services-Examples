@@ -24,7 +24,7 @@ const login = require('./GoogleLogin');
 const config = require('./config');
 const bot = require('./botlibre')(config.botLibre.application,
                                   config.botLibre.instance);
-const firebase = require('firebase');
+require('firebase');
 
 // Create an SDK instance.
 login.login(config)
@@ -58,7 +58,7 @@ login.login(config)
         content: error.toString()
       });
     }
-  }
+  };
 
   // Look at messages.
   bbmsdk.messenger.on('chatMessageAdded', addedEvent => {
@@ -84,7 +84,7 @@ login.login(config)
             reply(message.chatId, match[1]);
           }
         }
-      }
+      };
 
       // If the chat is not Ready, then fetch no messages with NoSync, to lie
       // to the recipient and say we have read all of their messages even
@@ -104,7 +104,4 @@ login.login(config)
       }
     }
   });
-
-  // Set up the sdk.
-  bbmsdk.setup();
 });
