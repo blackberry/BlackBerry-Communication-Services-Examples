@@ -126,14 +126,14 @@ static NSString *const kChatSubjectCell = @"ChatSubjectViewCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BBMAppUser *contact = self.contacts[[self adjustedContactRow:indexPath]];
-    self.selectedContacts[@(contact.regId)] = contact;
+    self.selectedContacts[contact.regId] = contact;
     [self updateNavigationBar];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BBMAppUser *contact = self.contacts[[self adjustedContactRow:indexPath]];
-    self.selectedContacts[@(contact.regId)] = nil;
+    self.selectedContacts[contact.regId] = nil;
     [self updateNavigationBar];
 }
 

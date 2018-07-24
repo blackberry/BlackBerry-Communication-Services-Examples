@@ -112,7 +112,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextFieldDe
     //MARK: IB Actions
 
     @IBAction func sendPressed(_ sender: Any) {
-        if(self.messageField.text == nil || self.messageField.text?.characters.count == 0) {
+        if(self.messageField.text == nil || self.messageField.text?.count == 0) {
             return
         }
 

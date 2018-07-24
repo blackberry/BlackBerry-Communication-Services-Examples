@@ -139,12 +139,12 @@ class MediaViewController : UIViewController, BBMEMediaDelegate, BBMMediaVideoPr
         outgoingVideoContainerView.isHidden = true;
     }
 
-    func incomingVideoReady(_ view: UIView!) {
-        incomingVideoView = view
+    func incomingVideoReady(_ view: (UIView & BBMVideoView)!) {
+        incomingVideoView = view;
         incomingVideoContainerView.isHidden = false
     }
 
-    func outgoingVideoReady(_ view: UIView!) {
+    func outgoingVideoReady(_ view: (UIView & BBMVideoView)!) {
         outgoingVideoView = view;
         outgoingVideoContainerView.isHidden = false
     }
@@ -157,7 +157,7 @@ class MediaViewController : UIViewController, BBMEMediaDelegate, BBMMediaVideoPr
     //For rotation, you may need to cache the sizes of the feeds and update the frames
     //on a rotation event.
 
-    func videoView(_ view: UIView!, didChangeVideoSize size: CGSize) {
+    func videoView(_ view: (BBMVideoView & UIView)!, didChangeVideoSize size: CGSize) {
         updateAspectRatioForView(view, size: size)
     }
 

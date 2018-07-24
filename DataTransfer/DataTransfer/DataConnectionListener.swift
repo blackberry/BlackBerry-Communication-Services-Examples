@@ -79,19 +79,8 @@ class DataConnectionListener : NSObject, BBMEMediaDelegate
             BBMEnterpriseService.shared().mediaManager().end(connection)
             return
         }
-
-        //Like calls, data transfers are encrypted and first require us to load the public
-        //keys for the other party.  The call will fail if dataConnectionSetupComplete is
-        //called and the keys have not yet been loaded
-        DataTransferApp.app().authController().keyManager.readUserKey(connection.peerRegId) {
-            (regId,result) -> Void in
-            if(result == kKeySyncResultSuccess) {
-                self.activeDataConnection = connection
-                self.mediaManager.dataConnectionSetupComplete(connection)
-            }else{
-                BBMEnterpriseService.shared().mediaManager().end(connection)
-            }
-        }
+        self.activeDataConnection = connection;
+        self.mediaManager.dataConnectionSetupComplete(connection)
     }
 
     func incomingDataConnectionAvailable(_ connection: BBMDataConnection!) {

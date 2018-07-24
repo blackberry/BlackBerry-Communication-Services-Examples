@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pkD-Ah-heF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pkD-Ah-heF">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -327,92 +327,102 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Registration ID" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="az5-Hm-H9h">
-                                <rect key="frame" x="109.5" y="74" width="156.5" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
-                                <connections>
-                                    <outlet property="delegate" destination="gMo-3T-t0I" id="KXi-Ox-n6x"/>
-                                </connections>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AUd-P0-li7">
-                                <rect key="frame" x="102" y="114" width="171" height="36"/>
-                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="20"/>
-                                <state key="normal" title="Open Connection"/>
-                                <connections>
-                                    <action selector="openConnectionPressed:" destination="gMo-3T-t0I" eventType="touchUpInside" id="i9d-kr-fwj"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NbT-z4-Qf0">
-                                <rect key="frame" x="16" y="165" width="343" height="25"/>
-                                <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="shadowOffset" width="0.0" height="1"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="brQ-oz-icb">
-                                <rect key="frame" x="141.5" y="210" width="92" height="39"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
-                                <state key="normal" title="Send File"/>
-                                <connections>
-                                    <action selector="sendFilePressed:" destination="gMo-3T-t0I" eventType="touchUpInside" id="TkW-I4-UHd"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JBk-Vc-sVK">
-                                <rect key="frame" x="135" y="257" width="104" height="39"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
-                                <state key="normal" title="Send Data"/>
-                                <connections>
-                                    <action selector="sendDataPressed:" destination="gMo-3T-t0I" eventType="touchUpInside" id="1Dk-y6-6cU"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FBl-nL-x69">
-                                <rect key="frame" x="86.5" y="304" width="201" height="39"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
-                                <state key="normal" title="Send Streamed Text"/>
-                                <connections>
-                                    <action selector="sendTextPessed:" destination="gMo-3T-t0I" eventType="touchUpInside" id="P3I-8a-0Zd"/>
-                                </connections>
-                            </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DFU-4y-uH8">
-                                <rect key="frame" x="16" y="395" width="343" height="215"/>
+                                <rect key="frame" x="16" y="352.5" width="343" height="257.5"/>
                                 <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Incoming Streamed Text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="41p-pv-luz">
-                                <rect key="frame" x="16" y="373" width="183" height="21"/>
+                                <rect key="frame" x="16" y="331" width="183" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xXy-z2-uAL">
+                                <rect key="frame" x="26" y="74" width="323" height="247"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Registration ID" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="az5-Hm-H9h">
+                                        <rect key="frame" x="10" y="0.0" width="303" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="gMo-3T-t0I" id="KXi-Ox-n6x"/>
+                                        </connections>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AUd-P0-li7">
+                                        <rect key="frame" x="76" y="30" width="171" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="20"/>
+                                        <state key="normal" title="Open Connection"/>
+                                        <connections>
+                                            <action selector="openConnectionPressed:" destination="gMo-3T-t0I" eventType="touchUpInside" id="i9d-kr-fwj"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NbT-z4-Qf0">
+                                        <rect key="frame" x="0.0" y="66" width="323" height="25"/>
+                                        <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="shadowOffset" width="0.0" height="1"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="brQ-oz-icb">
+                                        <rect key="frame" x="115.5" y="91" width="92" height="39"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
+                                        <state key="normal" title="Send File"/>
+                                        <connections>
+                                            <action selector="sendFilePressed:" destination="gMo-3T-t0I" eventType="touchUpInside" id="TkW-I4-UHd"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qg5-xn-qm0">
+                                        <rect key="frame" x="102.5" y="130" width="118" height="39"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
+                                        <state key="normal" title="Send String"/>
+                                        <connections>
+                                            <action selector="sendStringPressed:" destination="gMo-3T-t0I" eventType="touchUpInside" id="a7Z-xM-OvQ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JBk-Vc-sVK">
+                                        <rect key="frame" x="109.5" y="169" width="104" height="39"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
+                                        <state key="normal" title="Send Data"/>
+                                        <connections>
+                                            <action selector="sendDataPressed:" destination="gMo-3T-t0I" eventType="touchUpInside" id="1Dk-y6-6cU"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FBl-nL-x69">
+                                        <rect key="frame" x="61" y="208" width="201" height="39"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
+                                        <state key="normal" title="Send Streamed Text"/>
+                                        <connections>
+                                            <action selector="sendTextPessed:" destination="gMo-3T-t0I" eventType="touchUpInside" id="P3I-8a-0Zd"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="az5-Hm-H9h" firstAttribute="leading" secondItem="xXy-z2-uAL" secondAttribute="leading" constant="10" id="gdz-A1-uzG"/>
+                                    <constraint firstItem="NbT-z4-Qf0" firstAttribute="leading" secondItem="xXy-z2-uAL" secondAttribute="leading" id="h4I-E8-tbx"/>
+                                    <constraint firstAttribute="trailing" secondItem="az5-Hm-H9h" secondAttribute="trailing" constant="10" id="ipp-O3-T7Q"/>
+                                    <constraint firstAttribute="trailing" secondItem="NbT-z4-Qf0" secondAttribute="trailing" id="joa-ae-97i"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="NbT-z4-Qf0" firstAttribute="leading" secondItem="B7z-oT-7GH" secondAttribute="leadingMargin" id="09Q-ru-Sky"/>
                             <constraint firstItem="DFU-4y-uH8" firstAttribute="top" secondItem="41p-pv-luz" secondAttribute="bottom" constant="1" id="5PW-7F-p23"/>
-                            <constraint firstItem="FBl-nL-x69" firstAttribute="centerX" secondItem="B7z-oT-7GH" secondAttribute="centerX" id="93p-8g-Y9L"/>
-                            <constraint firstItem="NbT-z4-Qf0" firstAttribute="top" secondItem="AUd-P0-li7" secondAttribute="bottom" constant="15" id="A5k-DJ-aLE"/>
-                            <constraint firstItem="AUd-P0-li7" firstAttribute="centerX" secondItem="B7z-oT-7GH" secondAttribute="centerX" id="Jsn-0c-ghG"/>
-                            <constraint firstItem="JBk-Vc-sVK" firstAttribute="top" secondItem="brQ-oz-icb" secondAttribute="bottom" constant="8" id="Poe-vy-Sj2"/>
-                            <constraint firstItem="FBl-nL-x69" firstAttribute="top" secondItem="JBk-Vc-sVK" secondAttribute="bottom" constant="8" id="SCw-WQ-S6v"/>
+                            <constraint firstItem="41p-pv-luz" firstAttribute="top" secondItem="xXy-z2-uAL" secondAttribute="bottom" constant="10" id="8Mm-CW-9d6"/>
+                            <constraint firstItem="xXy-z2-uAL" firstAttribute="top" secondItem="XKt-i3-CXd" secondAttribute="bottom" constant="10" id="INb-NW-H9r"/>
+                            <constraint firstItem="xXy-z2-uAL" firstAttribute="leading" secondItem="B7z-oT-7GH" secondAttribute="leadingMargin" constant="10" id="ULB-sJ-ev4"/>
                             <constraint firstItem="DFU-4y-uH8" firstAttribute="leading" secondItem="B7z-oT-7GH" secondAttribute="leadingMargin" id="Xe2-OO-UnW"/>
-                            <constraint firstItem="az5-Hm-H9h" firstAttribute="top" secondItem="XKt-i3-CXd" secondAttribute="bottom" constant="10" id="Z3E-py-TX2"/>
-                            <constraint firstItem="AUd-P0-li7" firstAttribute="top" secondItem="az5-Hm-H9h" secondAttribute="bottom" constant="10" id="bZb-g4-iCE"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="41p-pv-luz" secondAttribute="trailing" constant="20" symbolic="YES" id="das-7T-9bV"/>
-                            <constraint firstItem="41p-pv-luz" firstAttribute="top" secondItem="FBl-nL-x69" secondAttribute="bottom" constant="30" id="eAf-3H-DhW"/>
                             <constraint firstItem="DFU-4y-uH8" firstAttribute="leading" secondItem="41p-pv-luz" secondAttribute="leading" id="gl3-bd-QTv"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="NbT-z4-Qf0" secondAttribute="trailing" id="hUY-uK-FkA"/>
                             <constraint firstItem="DFU-4y-uH8" firstAttribute="trailing" secondItem="B7z-oT-7GH" secondAttribute="trailingMargin" id="nlc-pr-Jc3"/>
-                            <constraint firstItem="az5-Hm-H9h" firstAttribute="centerX" secondItem="B7z-oT-7GH" secondAttribute="centerX" id="qPz-q4-dJi"/>
-                            <constraint firstItem="brQ-oz-icb" firstAttribute="centerX" secondItem="B7z-oT-7GH" secondAttribute="centerX" id="sRh-Mu-YUr"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="xXy-z2-uAL" secondAttribute="trailing" constant="10" id="tdV-Nr-bRd"/>
+                            <constraint firstItem="xXy-z2-uAL" firstAttribute="centerX" secondItem="B7z-oT-7GH" secondAttribute="centerX" id="u29-Qn-v6h"/>
                             <constraint firstItem="ZJa-Os-HQ2" firstAttribute="top" secondItem="DFU-4y-uH8" secondAttribute="bottom" constant="8" id="uiw-iw-c42"/>
-                            <constraint firstItem="JBk-Vc-sVK" firstAttribute="centerX" secondItem="B7z-oT-7GH" secondAttribute="centerX" id="yWR-6M-0JA"/>
-                            <constraint firstItem="brQ-oz-icb" firstAttribute="top" secondItem="NbT-z4-Qf0" secondAttribute="bottom" constant="20" id="zzA-8d-5JV"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Data Transfer" image="ic_file" id="lQz-Df-K14"/>
@@ -424,6 +434,7 @@
                         <outletCollection property="actionButtons" destination="brQ-oz-icb" collectionClass="NSMutableArray" id="cfe-L0-VeK"/>
                         <outletCollection property="actionButtons" destination="JBk-Vc-sVK" collectionClass="NSMutableArray" id="4ps-fv-KMc"/>
                         <outletCollection property="actionButtons" destination="FBl-nL-x69" collectionClass="NSMutableArray" id="4oN-YE-y9n"/>
+                        <outletCollection property="actionButtons" destination="qg5-xn-qm0" collectionClass="NSMutableArray" id="kVz-xi-rg1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6qt-QM-wSz" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -33,8 +33,12 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
     @IBOutlet weak var serviceConnectivityLabel : UILabel!
 
     @IBOutlet weak var switchDeviceButton : UIButton!
-    @IBOutlet weak var googleSignInButton : GIDSignInButton!
+    @IBOutlet weak var signInButton: UIView!
     @IBOutlet weak var signOutButton : UIButton!
+
+    var googleSignInButton : GIDSignInButton!
+    var azureSignInButton : UIButton!
+
 
     var serviceMonitor : ObservableMonitor!
     
@@ -70,12 +74,30 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
 
     //MARK: View Lifecycle
 
+    override func viewDidLoad() {
+        if BBMConfigManager.default().type == kGoogleSignIn {
+            googleSignInButton = GIDSignInButton.init(frame: signInButton.bounds)
+            signInButton.addSubviewAndContraints(withSameFrame: googleSignInButton)
+        }else if BBMConfigManager.default().type == kAzureAD {
+            azureSignInButton = UIButton.init()
+            azureSignInButton.setTitle("Azure AD Sign In", for: .normal)
+            signInButton.addSubviewAndContraints(withSameFrame: azureSignInButton)
+            azureSignInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
+            self.view.layoutIfNeeded()
+            signInButton.backgroundColor = UIColor.blue;
+
+        }
+
+
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        googleSignInButton.isHidden = true
+        signInButton.isHidden = true
         switchDeviceButton.isEnabled = true
         signOutButton.isHidden = true
-        domainLabel.text = SDK_SERVICE_DOMAIN
+        domainLabel.text = BBMConfigManager.default().sdkServiceDomain;
+
 
         //This will activate and run our serviceMonitor which will update all of the UI elements
         //via authStateChanged and serviceStateChanged
@@ -105,7 +127,7 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
         let email = authState.account != nil ? authState.account.email : ""
         userEmailLabel.text = email
 
-        googleSignInButton.isHidden = SoftPhoneApp.app().authController().startedAndAuthenticated;
+        signInButton.isHidden = SoftPhoneApp.app().authController().startedAndAuthenticated;
         signOutButton.isHidden = !SoftPhoneApp.app().authController().startedAndAuthenticated;
 
         let setupState = authState.setupState != nil ? authState.setupState : ""
@@ -135,6 +157,11 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
     @IBAction func signOut(sender: UIButton?) {
         BBMEnterpriseService.shared().resetService()
         SoftPhoneApp.app().authController().signOut()
+    }
+
+    @objc
+    func signIn() {
+        SoftPhoneApp.app().authController().tokenManager.signIn!()
     }
 
 }

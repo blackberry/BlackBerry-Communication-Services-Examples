@@ -54,7 +54,7 @@ class PlaceCallViewController : UIViewController, BBMEMediaDelegate
         }
 
         guard let regIdStr = regIdField.text,
-            let regIdInt = CLongLong(regIdStr),
+            let regIdLL = CUnsignedLongLong(regIdStr),
             regIdStr.lengthOfBytes(using: .utf8) > 10
             else
         {
@@ -68,33 +68,18 @@ class PlaceCallViewController : UIViewController, BBMEMediaDelegate
                 return;
             }
 
-            let regIdNum = NSNumber(value: regIdInt)
+            let regIdNum = NSNumber(value: regIdLL)
             self.callButton.setTitle("Cancel Call", for: UIControlState.normal)
-
-            //BBME Calls require encryption which means we must have the user key for the other
-            //party.  Before we place the call, we first read the user key
-            SoftPhoneApp.app().authController().keyManager.readUserKey(regIdNum.stringValue) {
-                (regId, result) -> Void in
-                if(result != kKeySyncResultSuccess) {
-                    self.statusLabel.text = "Unable to load user key"
+            self.mediaManager.callRegId(regIdNum, mediaMode: kVoice) {
+                (error) -> Void in
+                self.callButton.isEnabled = true
+                if(error != kMediaErrorNoError) {
+                    self.statusLabel.text = "Unable to place call (" + String(error.rawValue) + ")"
                     self.resetCallButton()
                     return;
                 }
 
-                //We have a user key, now we can attempt to place the call
-                //If you wish to place the call with outgoing vide enabled, change the mediaMode
-                //to kVideo here and the camera will be automatically enabled if possible
-                self.mediaManager.callRegId(regIdNum, mediaMode: kVoice) {
-                    (error) -> Void in
-                    self.callButton.isEnabled = true
-                    if(error != kMediaErrorNoError) {
-                        self.statusLabel.text = "Unable to place call (" + String(error.rawValue) + ")"
-                        self.resetCallButton()
-                        return;
-                    }
-
-                    self.statusLabel.text = String(format: "Calling %@", regIdNum)
-                }
+                self.statusLabel.text = String(format: "Calling %@", regIdNum)
             }
         }
 

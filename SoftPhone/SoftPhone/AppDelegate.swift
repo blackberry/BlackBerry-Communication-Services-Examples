@@ -20,6 +20,7 @@
 
 import UIKit
 import GoogleSignIn
+import MSAL
 
 @UIApplicationMain
 
@@ -37,10 +38,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             open url: URL,
                             options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool
     {
-
-        return GIDSignIn.sharedInstance().handle(url,
-                                                 sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
-                                                 annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+        if BBMConfigManager.default().type == kGoogleSignIn {
+            return GIDSignIn.sharedInstance().handle(url,
+                                                     sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
+                                                     annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+        }
+        if BBMConfigManager.default().type == kAzureAD {
+            return MSALPublicRTApplication.handleMSALResponse(url)
+        }
+        return false;
     }
 
     func application(_ application: UIApplication,
@@ -48,9 +54,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      sourceApplication: String?,
                      annotation: Any) -> Bool
     {
-        return GIDSignIn.sharedInstance().handle(url,
-                                                 sourceApplication: sourceApplication,
-                                                 annotation: annotation)
+        if BBMConfigManager.default().type == kGoogleSignIn {
+            return GIDSignIn.sharedInstance().handle(url,
+                                                     sourceApplication: sourceApplication,
+                                                     annotation: annotation)
+        }
+        return false;
     }
 
 }

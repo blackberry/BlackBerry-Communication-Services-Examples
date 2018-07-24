@@ -8,10 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		6D2213008E9D8CF01CA4FD38 /* Pods_QuickStartSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA02D0FEFA0597420EACE9ED /* Pods_QuickStartSwift.framework */; };
+		9C5D0A1B208912AE0009AF3C /* ConfigSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C5D0A1A208912AE0009AF3C /* ConfigSettings.plist */; };
 		C219F06A1ED8721A00454709 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C219F0691ED8721A00454709 /* GoogleService-Info.plist */; };
 		C219F06C1ED8A45700454709 /* QuickStartApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C219F06B1ED8A45700454709 /* QuickStartApp.swift */; };
 		C256C7D82020BC3100F042C7 /* BBMSecUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = C256C7D72020BC3000F042C7 /* BBMSecUtil.m */; };
-		C256C7DC2020BC4800F042C7 /* BBMUserPasswordManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C256C7DB2020BC4800F042C7 /* BBMUserPasswordManager.m */; };
+		C256C7DC2020BC4800F042C7 /* BBMUserPasscodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C256C7DB2020BC4800F042C7 /* BBMUserPasscodeManager.m */; };
 		C26555FC1ED77A3500BCA061 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26555FB1ED77A3500BCA061 /* AppDelegate.swift */; };
 		C26555FE1ED77A3500BCA061 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26555FD1ED77A3500BCA061 /* AccountViewController.swift */; };
 		C26556011ED77A3500BCA061 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C26555FF1ED77A3500BCA061 /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 		C26556061ED77A3500BCA061 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C26556041ED77A3500BCA061 /* LaunchScreen.storyboard */; };
 		C265560E1ED77A7D00BCA061 /* BBMEnterprise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C265560D1ED77A7D00BCA061 /* BBMEnterprise.framework */; };
 		C265560F1ED77A7D00BCA061 /* BBMEnterprise.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C265560D1ED77A7D00BCA061 /* BBMEnterprise.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C28D804E2060097100021882 /* BBMConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C28D804D2060097100021882 /* BBMConfigManager.m */; };
 		C2A590AD1FBB57F1008C9C7E /* BBMAuthController.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A5903A1FBB57D1008C9C7E /* BBMAuthController.m */; };
 		C2A590AE1FBB57F1008C9C7E /* BBMAuthenticatedAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A5903C1FBB57D1008C9C7E /* BBMAuthenticatedAccount.m */; };
 		C2A590AF1FBB57F1008C9C7E /* BBMGoogleTokenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A590401FBB57D1008C9C7E /* BBMGoogleTokenManager.m */; };
@@ -59,6 +61,7 @@
 		C2A590D21FBB57F1008C9C7E /* BBMUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A590A61FBB57D1008C9C7E /* BBMUtilities.m */; };
 		C2C065101FD9D5A600CAF911 /* BBMChatParticipantDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C2C0650D1FD9D5A500CAF911 /* BBMChatParticipantDetailCell.m */; };
 		C2C065111FD9D5A600CAF911 /* BBMChatParticipantsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C2C0650F1FD9D5A500CAF911 /* BBMChatParticipantsViewController.m */; };
+		C2D8BAE720753DFE00FA2E45 /* BBMKMSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C2D8BAE620753DFE00FA2E45 /* BBMKMSManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -76,14 +79,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9C5D0A1A208912AE0009AF3C /* ConfigSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ConfigSettings.plist; sourceTree = "<group>"; };
 		BA02D0FEFA0597420EACE9ED /* Pods_QuickStartSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuickStartSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C219F0661ED8643400454709 /* ConfigSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigSettings.h; sourceTree = "<group>"; };
 		C219F0691ED8721A00454709 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C219F06B1ED8A45700454709 /* QuickStartApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickStartApp.swift; sourceTree = "<group>"; };
 		C256C7D62020BC3000F042C7 /* BBMSecUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMSecUtil.h; sourceTree = "<group>"; };
 		C256C7D72020BC3000F042C7 /* BBMSecUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMSecUtil.m; sourceTree = "<group>"; };
-		C256C7DA2020BC4800F042C7 /* BBMUserPasswordManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMUserPasswordManager.h; sourceTree = "<group>"; };
-		C256C7DB2020BC4800F042C7 /* BBMUserPasswordManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMUserPasswordManager.m; sourceTree = "<group>"; };
+		C256C7DA2020BC4800F042C7 /* BBMUserPasscodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMUserPasscodeManager.h; sourceTree = "<group>"; };
+		C256C7DB2020BC4800F042C7 /* BBMUserPasscodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMUserPasscodeManager.m; sourceTree = "<group>"; };
 		C26555F81ED77A3500BCA061 /* QuickStartSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickStartSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C26555FB1ED77A3500BCA061 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C26555FD1ED77A3500BCA061 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
@@ -92,6 +96,8 @@
 		C26556051ED77A3500BCA061 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C26556071ED77A3500BCA061 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C265560D1ED77A7D00BCA061 /* BBMEnterprise.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BBMEnterprise.framework; path = ../../sdk/BBMEnterprise.framework; sourceTree = "<group>"; };
+		C28D804C2060097100021882 /* BBMConfigManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMConfigManager.h; sourceTree = "<group>"; };
+		C28D804D2060097100021882 /* BBMConfigManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMConfigManager.m; sourceTree = "<group>"; };
 		C2A590361FBB57D1008C9C7E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C2A590391FBB57D1008C9C7E /* BBMAuthController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMAuthController.h; sourceTree = "<group>"; };
 		C2A5903A1FBB57D1008C9C7E /* BBMAuthController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BBMAuthController.m; sourceTree = "<group>"; };
@@ -191,10 +197,14 @@
 		C2A590AA1FBB57D1008C9C7E /* NSString+Base64.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		C2A590AB1FBB57D1008C9C7E /* NSURL+Archiving.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSURL+Archiving.h"; sourceTree = "<group>"; };
 		C2A590AC1FBB57D1008C9C7E /* NSURL+Archiving.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Archiving.m"; sourceTree = "<group>"; };
+		C2A9F244207BB81F0027B726 /* BBMPasscodeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMPasscodeManager.h; sourceTree = "<group>"; };
 		C2C0650C1FD9D5A500CAF911 /* BBMChatParticipantDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMChatParticipantDetailCell.h; sourceTree = "<group>"; };
 		C2C0650D1FD9D5A500CAF911 /* BBMChatParticipantDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMChatParticipantDetailCell.m; sourceTree = "<group>"; };
 		C2C0650E1FD9D5A500CAF911 /* BBMChatParticipantsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMChatParticipantsViewController.h; sourceTree = "<group>"; };
 		C2C0650F1FD9D5A500CAF911 /* BBMChatParticipantsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMChatParticipantsViewController.m; sourceTree = "<group>"; };
+		C2D8BAE320753DF800FA2E45 /* BBMPasscodeChangeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMPasscodeChangeDelegate.h; sourceTree = "<group>"; };
+		C2D8BAE520753DFE00FA2E45 /* BBMKMSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMKMSManager.h; sourceTree = "<group>"; };
+		C2D8BAE620753DFE00FA2E45 /* BBMKMSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMKMSManager.m; sourceTree = "<group>"; };
 		CB40DC20DC8C0F153AFACC9C /* Pods-QuickStartSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickStartSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-QuickStartSwift/Pods-QuickStartSwift.release.xcconfig"; sourceTree = "<group>"; };
 		E24F5C80B08BA36B23C11F77 /* Pods-QuickStartSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickStartSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QuickStartSwift/Pods-QuickStartSwift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -258,8 +268,9 @@
 		C256C7D92020BC4800F042C7 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				C256C7DA2020BC4800F042C7 /* BBMUserPasswordManager.h */,
-				C256C7DB2020BC4800F042C7 /* BBMUserPasswordManager.m */,
+				C2A9F244207BB81F0027B726 /* BBMPasscodeManager.h */,
+				C256C7DA2020BC4800F042C7 /* BBMUserPasscodeManager.h */,
+				C256C7DB2020BC4800F042C7 /* BBMUserPasscodeManager.m */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -288,6 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				C219F0661ED8643400454709 /* ConfigSettings.h */,
+				9C5D0A1A208912AE0009AF3C /* ConfigSettings.plist */,
 				C219F06B1ED8A45700454709 /* QuickStartApp.swift */,
 				C26555FB1ED77A3500BCA061 /* AppDelegate.swift */,
 				C26555FD1ED77A3500BCA061 /* AccountViewController.swift */,
@@ -373,6 +385,7 @@
 		C2A5904E1FBB57D1008C9C7E /* Protect */ = {
 			isa = PBXGroup;
 			children = (
+				C2D8BAE420753DFE00FA2E45 /* BlackBerry KMS */,
 				C256C7D52020BC3000F042C7 /* Security */,
 				C2A5904F1FBB57D1008C9C7E /* BBMKeyManager.h */,
 				C2A590501FBB57D1008C9C7E /* BBMKeyManager.m */,
@@ -381,6 +394,7 @@
 				C2A590531FBB57D1008C9C7E /* BBMKeyStorageProvider.h */,
 				C2A590541FBB57D1008C9C7E /* BBMProfileKeys.h */,
 				C2A590551FBB57D1008C9C7E /* BBMProfileKeys.m */,
+				C2D8BAE320753DF800FA2E45 /* BBMPasscodeChangeDelegate.h */,
 				C2A590561FBB57D1008C9C7E /* Providers */,
 			);
 			path = Protect;
@@ -552,6 +566,8 @@
 		C2A5909F1FBB57D1008C9C7E /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				C28D804C2060097100021882 /* BBMConfigManager.h */,
+				C28D804D2060097100021882 /* BBMConfigManager.m */,
 				C2A590A01FBB57D1008C9C7E /* BBMImageLoader.h */,
 				C2A590A11FBB57D1008C9C7E /* BBMImageLoader.m */,
 				C2A590A21FBB57D1008C9C7E /* BBMImageProvider.h */,
@@ -578,6 +594,15 @@
 				C2C0650F1FD9D5A500CAF911 /* BBMChatParticipantsViewController.m */,
 			);
 			path = ChatDetails;
+			sourceTree = "<group>";
+		};
+		C2D8BAE420753DFE00FA2E45 /* BlackBerry KMS */ = {
+			isa = PBXGroup;
+			children = (
+				C2D8BAE520753DFE00FA2E45 /* BBMKMSManager.h */,
+				C2D8BAE620753DFE00FA2E45 /* BBMKMSManager.m */,
+			);
+			path = "BlackBerry KMS";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -611,11 +636,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = BlackBerry;
 				TargetAttributes = {
 					C26555F71ED77A3500BCA061 = {
 						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -643,6 +669,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C5D0A1B208912AE0009AF3C /* ConfigSettings.plist in Resources */,
 				C26556061ED77A3500BCA061 /* LaunchScreen.storyboard in Resources */,
 				C219F06A1ED8721A00454709 /* GoogleService-Info.plist in Resources */,
 				C26556031ED77A3500BCA061 /* Assets.xcassets in Resources */,
@@ -682,7 +709,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -734,7 +761,8 @@
 				C2A590B01FBB57F1008C9C7E /* BBMAccess.m in Sources */,
 				C2A590CD1FBB57F1008C9C7E /* BBMAppUser.m in Sources */,
 				C2A590CE1FBB57F1008C9C7E /* BBMUserManager.m in Sources */,
-				C256C7DC2020BC4800F042C7 /* BBMUserPasswordManager.m in Sources */,
+				C2D8BAE720753DFE00FA2E45 /* BBMKMSManager.m in Sources */,
+				C256C7DC2020BC4800F042C7 /* BBMUserPasscodeManager.m in Sources */,
 				C2A590AE1FBB57F1008C9C7E /* BBMAuthenticatedAccount.m in Sources */,
 				C2A590C81FBB57F1008C9C7E /* BBMGroupChatMessageDetailView.m in Sources */,
 				C2A590BC1FBB57F1008C9C7E /* BBMChatMessageDataSource.m in Sources */,
@@ -753,6 +781,7 @@
 				C2A590C11FBB57F1008C9C7E /* BBMQuotedMessageCell.m in Sources */,
 				C2C065101FD9D5A600CAF911 /* BBMChatParticipantDetailCell.m in Sources */,
 				C26555FC1ED77A3500BCA061 /* AppDelegate.swift in Sources */,
+				C28D804E2060097100021882 /* BBMConfigManager.m in Sources */,
 				C2A590CB1FBB57F1008C9C7E /* BBMLocalNotificationManager.m in Sources */,
 				C2A590B31FBB57F1008C9C7E /* BBMEndpoint.m in Sources */,
 				C2A590CF1FBB57F1008C9C7E /* BBMFirebaseUserManager.m in Sources */,
@@ -797,7 +826,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
@@ -805,7 +836,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -849,7 +884,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
@@ -857,7 +894,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -899,7 +940,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.QuickStartSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -917,7 +959,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.QuickStartSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

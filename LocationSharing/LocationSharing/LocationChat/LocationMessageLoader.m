@@ -66,13 +66,8 @@
 
     self.filteredLocationChatMessages = [[[BBMEnterpriseService service] model] chatMessageWithCriteria:chatMessageCriteria];
     typeof(self) __weak weakSelf = self;
-    __block NSUInteger messageCount = 0;
     self.messageMonitor = [ObservableMonitor monitorActivatedWithName:@"messageMonitor" block:^{
-        //If the number of messages in the list changes, the monitor will trigger.
-        if(messageCount != weakSelf .filteredLocationChatMessages.count) {
-            [weakSelf sortMessagesByRegId];
-            messageCount = weakSelf.filteredLocationChatMessages.count;
-        }
+        [weakSelf sortMessagesByRegId];
      }];
 }
 
@@ -86,6 +81,9 @@
     for(BBMChatMessage *message in self.filteredLocationChatMessages ) {
         //Timed message that have expired are marked as deleted so they are still displayed as expired messages.
         if([message.tag isEqualToString:kMessageTag_Location]) {
+            if(message.resolvedSenderUri.bbmState == kBBMStatePending) {
+                return;
+            }
             NSNumber *regId = message.resolvedSenderUri.regId;
             NSMutableArray *locationMessagesForRegid = locationMessagesByRegId[regId];
             if(!locationMessagesForRegid) {
@@ -93,7 +91,9 @@
             }
             //Add message to array
             [locationMessagesForRegid addObject:message];
-            locationMessagesByRegId[regId] = locationMessagesForRegid;
+            if(regId) {
+                locationMessagesByRegId[regId] = locationMessagesForRegid;
+            }
         }
     }
     if(self.callback) {

@@ -38,26 +38,6 @@ class CallListener : NSObject, BBMEMediaDelegate
     override init() {
         super.init()
         mediaManager.add(self)
-
-        //For iOS 9, we need to use CoreTelephony to handle incoming cell calls.  For iOS 10,
-        //this is handled automatically by CallKit
-       if nil == self.callKitManager {
-            configureCellCallHandler()
-        }
-    }
-
-    @available(iOS, deprecated: 10.0)
-    private func configureCellCallHandler() {
-        //This handles incoming cell calls by hanging up the BBME call if a cell call is answered
-        //by the user.  If using CallKit, the incoming call UI will automatically terminate the BBME
-        //call via the CallKit callbacks
-        mediaManager.incomingExternalCallCallback = {
-            [weak mediaManager] (call: CTCall?) -> Void in
-            //Disconnect the BBME call if a cell call is connected
-            if call?.callState == CTCallStateConnected {
-                mediaManager?.hangup()
-            }
-        }
     }
 
     //MARK: Incoming Call Alert
@@ -144,35 +124,18 @@ class CallListener : NSObject, BBMEMediaDelegate
 
     //A new incoming call has arrived.  Accept it to start the ringers and show our incoming call UI
     func incomingCallDidArrive(_ call: BBMECall!) {
-        //At this point we can either accept the call or silently decline it.  In order to accept the
-        //call, we must first read the user key from the KeyManager which will in turn apply it to
-        //import it for the caller if neccesary.  All BBM Enterprise calls require that keys be
-        //exchanged between the users or they will fail with a KeyError
-        let regId = call.peerRegId
-        var handled = false;
-        SoftPhoneApp.app().authController().keyManager.readUserKey(regId) {
-            (regId,result) -> Void in
-            if handled { return; } else { handled = true; }
+        self.mediaManager.acceptCall()
 
-            if(result == kKeySyncResultSuccess) {
-                self.mediaManager.acceptCall()
-
-                //Use the native call UI if it's available
-                if let callKitManager = self.callKitManager {
-                    callKitManager.showIncomingCall(call: call) {
-                        (error: Error?) -> Void in
-                        NSLog("Showing native call UI")
-                    }
-                }else{
-                    self.notifyOfIncomingCall(call)
-                    NSLog("Showing in-app call UI")
-                }
-
-            }else{
-                self.mediaManager.decline()
+        //Use the native call UI if it's available
+        if let callKitManager = self.callKitManager {
+            callKitManager.showIncomingCall(call: call) {
+                (error: Error?) -> Void in
+                NSLog("Showing native call UI")
             }
+        }else{
+            self.notifyOfIncomingCall(call)
+            NSLog("Showing in-app call UI")
         }
-
     }
     
 

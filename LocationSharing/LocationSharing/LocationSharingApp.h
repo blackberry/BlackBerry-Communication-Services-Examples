@@ -25,15 +25,7 @@
 #import "ChatListLoader.h"
 #import "BBMEndpointManager.h"
 
-// Protocol to inform delegate when login has been succesful
-@protocol LocationSharingLoginDelegate <NSObject>
-
-- (void)loggedIn;
-
-@end
-
 @interface LocationSharingApp : NSObject
-@property (nonatomic, weak) NSObject<LocationSharingLoginDelegate> *loginDelegate;
 
 // Shared application instance
 + (instancetype)application;

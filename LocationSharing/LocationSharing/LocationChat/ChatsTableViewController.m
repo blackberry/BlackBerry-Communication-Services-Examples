@@ -146,7 +146,7 @@
             if(contacts.count > 0) {
                 NSMutableArray *regIds = [[NSMutableArray alloc] init];
                 for(BBMAppUser *contact in contacts) {
-                    [regIds addObject:@(contact.regId)];
+                    [regIds addObject:contact.regId];
                 }
                 [weakSelf startChatWithRegIds:regIds subject:subject];
             }

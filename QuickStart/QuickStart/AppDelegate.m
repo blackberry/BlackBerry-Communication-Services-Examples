@@ -21,34 +21,43 @@
 
 #import <BBMEnterprise/BBMEnterprise.h>
 
-#if USE_GOOGLEID
 #import <GoogleSignIn/GoogleSignIn.h>
-#elif USE_AZUREAD
 #import <MSAL/MSAL.h>
-#endif
+#import "BBMConfigManager.h"
+#import "BBMAzureTokenManager.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+    if([BBMConfigManager defaultManager].type == kAzureAD) {
+        //Configuration for Azure active directory authentication.  These values are pulled from
+        //ConfigSettings.h.
+        [BBMAzureTokenManager setClientId:[BBMConfigManager defaultManager].clientId
+                                 tenantId:[BBMConfigManager defaultManager].tenantId
+                                 bbmScope:[BBMConfigManager defaultManager].clientOauthScope];
+    }
+    else if([BBMConfigManager defaultManager].type == kGoogleSignIn) {
+        NSString *cid = [BBMConfigManager defaultManager].clientId;
+        [GIDSignIn sharedInstance].clientID = cid;
+    }
+
     return YES;
 }
-
-
-#pragma mark - GoogleSignIn
 
 - (BOOL)application:(UIApplication *)app
             openURL:(NSURL *)url
             options:(NSDictionary *)options
 {
-#if USE_GOOGLEID
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
-#elif USE_AZUREAD
-    return [MSALPublicClientApplication handleMSALResponse:url];
-#else
+    if([BBMConfigManager defaultManager].type == kGoogleSignIn) {
+        return [[GIDSignIn sharedInstance] handleURL:url
+                                   sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                          annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+    }else if([BBMConfigManager defaultManager].type == kAzureAD) {
+        return [MSALPublicClientApplication handleMSALResponse:url];
+    }
     return NO;
-#endif
+#
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -56,13 +65,12 @@
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
-#if USE_GOOGLEID
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:sourceApplication
-                                      annotation:annotation];
-#else
+    if([BBMConfigManager defaultManager].type == kGoogleSignIn) {
+        return [[GIDSignIn sharedInstance] handleURL:url
+                                   sourceApplication:sourceApplication
+                                          annotation:annotation];
+    }
     return NO;
-#endif
 }
 
 

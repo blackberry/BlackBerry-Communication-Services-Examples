@@ -24,7 +24,7 @@
 #import "Firebase.h"
 #import "BBMAuthenticatedAccount.h"
 #import "BBMAccess.h"
-#import "ConfigSettings.h"
+#import "BBMConfigManager.h"
 
 @interface LocationSharingApp ()
 
@@ -65,13 +65,7 @@
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [FIRApp configure];
-        _authController = [[BBMAuthController alloc] initWithTokenManager:[BBMGoogleTokenManager class]
-                                                               userSource:[BBMFirebaseUserManager class]
-                                                       keyStorageProvider:[BBMFirebaseKeyStorageProvider class]
-                                                                   domain:SDK_SERVICE_DOMAIN
-                                                              environment:SDK_ENVIRONMENT];
-
+        _authController = [BBMAuthController authControllerFromConfigFile];
     });
     return _authController;
 }

@@ -20,8 +20,10 @@
 #import "AppDelegate.h"
 
 #import <BBMEnterprise/BBMEnterprise.h>
-#import <GoogleSignIn/GoogleSignIn.h>
+#import "BBMConfigManager.h"
 
+#import <GoogleSignIn/GoogleSignIn.h>
+#import <MSAL/MSAL.h>
 
 @implementation AppDelegate
 
@@ -30,15 +32,19 @@
 }
 
 
-#pragma mark - GoogleSignIn
-
 - (BOOL)application:(UIApplication *)app
             openURL:(NSURL *)url
             options:(NSDictionary *)options
 {
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+    if([BBMConfigManager defaultManager].type == kGoogleSignIn) {
+        return [[GIDSignIn sharedInstance] handleURL:url
+                                   sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                          annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+    }else if([BBMConfigManager defaultManager].type == kAzureAD) {
+        return [MSALPublicClientApplication handleMSALResponse:url];
+    }
+    return NO;
+#
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -46,9 +52,12 @@
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:sourceApplication
-                                      annotation:annotation];
+    if([BBMConfigManager defaultManager].type == kGoogleSignIn) {
+        return [[GIDSignIn sharedInstance] handleURL:url
+                                   sourceApplication:sourceApplication
+                                          annotation:annotation];
+    }
+    return NO;
 }
 
 

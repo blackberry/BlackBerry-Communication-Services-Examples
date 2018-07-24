@@ -24,7 +24,7 @@
 #import "BBMAuthenticationDelegate.h"
 #import "LocationSharingApp.h"
 
-@interface LoginViewController () <LocationSharingLoginDelegate>
+@interface LoginViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *setupStateLabel;
 @property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
@@ -43,7 +43,6 @@
 
     //Configure the authentication controller.
     [[[LocationSharingApp application] authController] setRootController:self];
-    [LocationSharingApp application].loginDelegate = self;
 
     typeof(self) __weak weakSelf = self;
     self.authControllerMonitor = [ObservableMonitor monitorActivatedWithName:@"authControllerMonitor" block:^{
@@ -95,6 +94,10 @@
     if([setupState isEqualToString:kBBMSetupStateDeviceSwitch]){
         [BBMAccess sendSetupRetry];
     }
+
+    if([authState.setupState isEqualToString:kBBMSetupStateSuccess]) {
+         [self loggedIn];
+     }
 }
 
 #pragma mark -
@@ -105,8 +108,6 @@
     [[BBMEnterpriseService service] resetService];
     [[[LocationSharingApp application] authController] signOut];
 }
-
-#pragma makr - LocationSharingLoginDelegate
 
 - (void) loggedIn
 {

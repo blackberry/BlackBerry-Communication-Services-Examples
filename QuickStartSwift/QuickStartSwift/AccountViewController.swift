@@ -80,7 +80,7 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
         googleSignInButton.isHidden = true
         switchDeviceButton.isEnabled = true
         signOutButton.isHidden = true
-        domainLabel.text = SDK_SERVICE_DOMAIN
+        domainLabel.text = BBMConfigManager.default().sdkServiceDomain
 
         //This will activate and run our serviceMonitor which will update all of the UI elements
         //via authStateChanged and serviceStateChanged

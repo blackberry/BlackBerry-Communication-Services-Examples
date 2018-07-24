@@ -18,15 +18,16 @@
 */ 
 
 #import "AccountViewController.h"
-#import "ConfigSettings.h"
 
 #import "SimpleChatApp.h"
+#import "BBMConfigManager.h"
 
 #import "BBMAccess.h"
 #import "BBMGoogleTokenManager.h"
 #import "BBMAuthController.h"
 #import "BBMAuthenticatedAccount.h"
 #import "BBMEndpointManager.h"
+#import "UIView+Extra.h"
 
 #import <BBMEnterprise/BBMEnterprise.h>
 #import <GoogleSignIn/GIDSignInButton.h>
@@ -42,10 +43,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *userEmailLabel;
 @property (weak, nonatomic) IBOutlet UILabel *serviceConnectivityLabel;
 @property (weak, nonatomic) IBOutlet UIButton *switchDeviceButton;
-@property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
+
 @property (weak, nonatomic) IBOutlet UIButton *signOutButton;
+@property (weak, nonatomic) IBOutlet UIView   *signInButton;
 
 @property (nonatomic, strong) ObservableMonitor *serviceMonitor;
+
+@property (nonatomic, strong) GIDSignInButton *googleSignInButton;
+@property (nonatomic, strong) UIButton *azureSignInButton;
 
 @end
 
@@ -55,11 +60,24 @@
 {
     [super viewDidLoad];
 
-    //Configure our buttons and labels
-    self.googleSignInButton.hidden = YES;
+    if([BBMConfigManager defaultManager].type == kGoogleSignIn) {
+        self.googleSignInButton = [[GIDSignInButton alloc] initWithFrame:self.signInButton.bounds];
+        [self.signInButton addSubviewAndContraintsWithSameFrame:self.googleSignInButton];
+    }
+    else if([BBMConfigManager defaultManager].type == kAzureAD) {
+        self.azureSignInButton = [[UIButton alloc] init];
+        [self.azureSignInButton setTitle:@"Azure AD Sign In" forState:UIControlStateNormal];
+        [self.signInButton addSubviewAndContraintsWithSameFrame:self.azureSignInButton];
+        [self.azureSignInButton addTarget:self
+                                   action:@selector(signIn:)
+                         forControlEvents:UIControlEventTouchUpInside];
+        [self.view layoutIfNeeded];
+        self.signInButton.backgroundColor = [UIColor blueColor];
+    }
+
     self.switchDeviceButton.enabled = NO;
     self.signOutButton.hidden = YES;
-    self.domainLabel.text = SDK_SERVICE_DOMAIN;
+    self.domainLabel.text = [BBMConfigManager defaultManager].sdkServiceDomain;
 
     //Listen for connectivity changes to the BBM Enterprise Service
     [[BBMEnterpriseService service] addConnectivityListener:self];
@@ -94,7 +112,7 @@
     self.regIdLabel.text = authState.regId.integerValue ? authState.regId.stringValue : @"";
     self.userEmailLabel.text = authState.account.email;
 
-    self.googleSignInButton.hidden = [SimpleChatApp sharedApp].authController.startedAndAuthenticated;
+    self.signInButton.hidden = [SimpleChatApp sharedApp].authController.startedAndAuthenticated;
     self.signOutButton.hidden = ![SimpleChatApp sharedApp].authController.startedAndAuthenticated;
 
     //Whenever a user switches devices, a device switch should occur. This button gets
@@ -134,6 +152,11 @@
     //Wipe all local BBM data
     [[BBMEnterpriseService service] resetService];
     [[SimpleChatApp sharedApp].authController signOut];
+}
+
+- (void)signIn:(id)sender
+{
+    [[SimpleChatApp sharedApp].authController.tokenManager signIn];
 }
 
 
