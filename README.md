@@ -37,7 +37,7 @@ These samples require the Spark SDK which you can find along with related resour
 
 <p align="center">
     <a href="http://www.youtube.com/watch?feature=player_embedded&v=ByKqCtcLMZ0"
-      target="_blank"><img src="../QuickStart/screenShots/bbme-sdk-android-getting-started.jpg" 
+      target="_blank"><img src="QuickStart/screenShots/bbme-sdk-android-getting-started.jpg" 
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>
 <p align="center">
