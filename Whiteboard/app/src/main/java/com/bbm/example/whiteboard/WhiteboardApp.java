@@ -21,7 +21,11 @@ import android.util.Log;
 
 import com.bbm.example.whiteboard.utils.AuthProvider;
 import com.bbm.sdk.BBMEnterprise;
+import com.bbm.sdk.reactive.SingleshotMonitor;
+import com.bbm.sdk.service.BBMEnterpriseState;
+import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.Logger;
+import com.bbm.sdk.support.util.SetupHelper;
 
 public class WhiteboardApp extends Application {
 
@@ -54,5 +58,29 @@ public class WhiteboardApp extends Application {
         //Initialize BBMEnterprise SDK then start it
         BBMEnterprise.getInstance().initialize(this);
         BBMEnterprise.getInstance().start();
+
+
+        // Add a listener for "EndpointDeregistered". When this is received, it generally means the user has switched to another device.
+        SetupHelper.listenForAndHandleDeregistered(new SetupHelper.EndpointDeregisteredListener() {
+            @Override
+            public void onEndpointDeregistered() {
+                //Handle any required work (ex sign-out) from the auth service and wipe BBME
+                AuthIdentityHelper.handleEndpointDeregistered(getApplicationContext());
+
+                SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
+                    private BBMEnterpriseState prevState;
+                    @Override
+                    public boolean run() {
+                        BBMEnterpriseState state = BBMEnterprise.getInstance().getState().get();
+                        if (prevState != null && prevState != BBMEnterpriseState.STARTED && state == BBMEnterpriseState.STARTED) {
+                            AuthProvider.initAuthProvider(getApplicationContext());
+                            return true;
+                        }
+                        prevState = state;
+                        return false;
+                    }
+                });
+            }
+        });
     }
 }

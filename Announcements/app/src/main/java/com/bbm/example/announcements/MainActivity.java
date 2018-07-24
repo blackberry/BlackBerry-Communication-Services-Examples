@@ -47,7 +47,6 @@ import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.support.identity.user.AppUser;
 import com.bbm.sdk.support.identity.user.UserManager;
-import com.bbm.sdk.support.protect.SimplePasswordProvider;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.ChatStartHelper;
 import com.bbm.sdk.support.util.Logger;
@@ -169,17 +168,6 @@ public final class MainActivity extends AppCompatActivity {
         }
     };
 
-    /**
-     * Helper to handle the go away message listener.
-     */
-    private final SetupHelper.GoAwayListener mGoAwayListener = new SetupHelper.GoAwayListener() {
-        @Override
-        public void onGoAway() {
-            //Handle any required work (ex sign-out) from the auth service
-            AuthIdentityHelper.handleGoAway(MainActivity.this);
-        }
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -226,12 +214,9 @@ public final class MainActivity extends AppCompatActivity {
 
         // Call changed to trigger our observer to run immediately
         mBbmSetupObserver.changed();
-        SetupHelper.listenForAndHandleGoAway(mGoAwayListener);
 
         // Set this activity in case it is needed to prompt the user to sign in with their Google account
         AuthIdentityHelper.setActivity(this);
-        // Set this activity in case it is needed to prompt the user to provide their application password
-        SimplePasswordProvider.getInstance().setActivity(this);
 
         // Get the local users registration Id.
         BBMEnterprise.getInstance().getBbmdsProtocol().getGlobalLocalUri().addObserver(mRegistrationIdObserver);

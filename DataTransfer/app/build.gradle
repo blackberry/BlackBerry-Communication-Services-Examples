@@ -53,6 +53,14 @@ android {
         // The BBM Enterprise User Domain that is assigned to you.
         // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
         resValue "string", "USER_DOMAIN", appProperties['user_domain']
+
+        //Default to using BlackBerry KMS, to use Cloud key storage (ex Firebase Database) change this value to true
+        buildConfigField("boolean", "USE_CLOUD_KEY", 'false')
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     flavorDimensions "authProvider"
@@ -73,7 +81,7 @@ android {
             resValue "string", "MSAL_PREFIX", "msal" + appProperties.getProperty('client_server_id', "\"azure_app_id\"")
             buildConfigField("String", "AZURE_AD_TENANT_ID", appProperties.getProperty('azure_ad_tenant_id', "\"azure_tenant_id\""))
             buildConfigField("String", "BBME_AUTH_SCOPE", appProperties.getProperty('bbme_auth_scope', "\"auth_scope\""))
-            buildConfigField("String", "KMS_URL", appProperties.getProperty('azure_kms_url', "\"kms_url\""))
+            buildConfigField("String", "KEY_PROVIDER_SERVER_URL", appProperties.getProperty('azure_kps_url', "\"kps_url\""))
             buildConfigField("String", "AZURE_LOGIN_AUTHORITY", appProperties.getProperty('azure_login_authority', "\"https://login_authority_here\""))
         }
     }

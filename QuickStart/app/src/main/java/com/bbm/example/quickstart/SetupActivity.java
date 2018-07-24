@@ -34,21 +34,20 @@ import com.bbm.sdk.BBMEnterprise;
 import com.bbm.sdk.bbmds.BbmdsProtocol;
 import com.bbm.sdk.bbmds.GlobalAuthTokenState;
 import com.bbm.sdk.bbmds.GlobalLocalUri;
-import com.bbm.sdk.bbmds.GlobalProfileKeysState;
 import com.bbm.sdk.bbmds.GlobalSetupState;
+import com.bbm.sdk.bbmds.GlobalSyncPasscodeState;
 import com.bbm.sdk.bbmds.User;
 import com.bbm.sdk.bbmds.inbound.EndpointDeregisterResult;
 import com.bbm.sdk.bbmds.inbound.EndpointUpdateResult;
 import com.bbm.sdk.bbmds.inbound.Endpoints;
-import com.bbm.sdk.bbmds.inbound.ProfileKeys;
 import com.bbm.sdk.bbmds.inbound.SetupError;
 import com.bbm.sdk.bbmds.internal.Existence;
 import com.bbm.sdk.bbmds.outbound.AuthToken;
 import com.bbm.sdk.bbmds.outbound.EndpointDeregister;
 import com.bbm.sdk.bbmds.outbound.EndpointUpdate;
 import com.bbm.sdk.bbmds.outbound.EndpointsGet;
-import com.bbm.sdk.bbmds.outbound.ProfileKeysExport;
 import com.bbm.sdk.bbmds.outbound.SetupRetry;
+import com.bbm.sdk.bbmds.outbound.SyncStart;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.reactive.SingleshotMonitor;
@@ -87,18 +86,16 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
     //Global values to monitor during setup
     private ObservableValue<GlobalSetupState> mSetupState;
     private ObservableValue<GlobalAuthTokenState> mAuthTokenState;
+    private ObservableValue<GlobalSyncPasscodeState> mSyncPasscodeState;
     private ObservableValue<GlobalLocalUri> mLocalUri;
     private ObservableValue<BBMEnterpriseState> mBbmEnterpriseState;  //overall state of the service
-    private ObservableValue<GlobalProfileKeysState> mProfileKeysState;
     private InboundMessageObservable<SetupError> mSetupErrorObservable;
-    private InboundMessageObservable<ProfileKeys> mInboundProfileKeys;
 
     //UI elements
     private TextView mEnterpriseStateView;
     private TextView mSetupStateView;
     private TextView mAuthTokenStateView;
     private TextView mLocalRegIdView;
-    private TextView mProfileKeysView;
 
     private TextView mSetupErrorView;
     private Button mServiceStopButton;
@@ -179,10 +176,42 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
                     //Ongoing has additional information in the progressMessage
                     mSetupStateView.setText(setupState.state.toString() + ":" + setupState.progressMessage.toString());
                     break;
+                case SyncRequired:
+                    //SyncRequired state is processed by the syncPasscodeStateObserver
                 case Success:
                     break;
                 case Unspecified:
                     break;
+            }
+        }
+    };
+
+    //Observes the GlobalSetupState and the GlobalSyncPasscodeState.
+    //When the required a passcode is sent to complete setup using the 'SyncStart' message.
+    private Observer mSyncPasscodeStateObserver = new Observer() {
+        @Override
+        public void changed() {
+            GlobalSetupState setupState = mSetupState.get();
+            //When the GlobalSetupState is 'SyncRequired' then send the passcode to the SDK to continue setup
+            if (setupState.state == GlobalSetupState.State.SyncRequired) {
+                GlobalSyncPasscodeState syncPasscodeState = mSyncPasscodeState.get();
+                //For simplicity, this example hard codes a passcode.
+                //A passcode obtained from a user is a more secure solution.
+                SyncStart syncStart = new SyncStart("user-passcode");
+                switch (syncPasscodeState.value) {
+                    case New:
+                        //No existing keys were found, so send the SyncStart with action 'New'
+                        syncStart.action(SyncStart.Action.New);
+                        BBMEnterprise.getInstance().getBbmdsProtocol().send(syncStart);
+                        break;
+                    case Existing:
+                        //Existing keys stored in KMS were found, so send the SyncStart with action 'Existing'
+                        syncStart.action(SyncStart.Action.Existing);
+                        BBMEnterprise.getInstance().getBbmdsProtocol().send(syncStart);
+                        break;
+                    default:
+                        //No action
+                }
             }
         }
     };
@@ -240,32 +269,6 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
             SetupError setupError = mSetupErrorObservable.get();
             mSetupErrorContainer.setVisibility(View.VISIBLE);
             mSetupErrorView.setText(setupError.error.toString());
-        }
-    };
-
-    //Create an observer to monitor the GlobalProfileKeysState
-    private final Observer mProfileKeysObserver = new Observer() {
-        @Override
-        public void changed() {
-            mProfileKeysView.setText(mProfileKeysState.get().value.name());
-            if (mProfileKeysState.get().getExists() == Existence.YES && mProfileKeysState.get().value == GlobalProfileKeysState.State.NotSynced) {
-                //In your application you should import existing keys if they are available in your Cloud Key Storage.
-                //Export profile keys from the BBM Enterprise SDK
-                BBMEnterprise.getInstance().getBbmdsProtocol().send(new ProfileKeysExport());
-            }
-        }
-    };
-
-    private final Observer mInboundProfileKeysObserver = new Observer() {
-        @Override
-        public void changed() {
-            if (mInboundProfileKeys.get().exists == Existence.YES) {
-                //In your application you should save the keys to your cloud storage as described in the Cloud Key Storage guide.
-                //Now that the keys have been exported successfully we can change the key state to synced.
-                GlobalProfileKeysState.AttributesBuilder stateChange = new GlobalProfileKeysState.AttributesBuilder();
-                stateChange.value(GlobalProfileKeysState.State.Synced);
-                BBMEnterprise.getInstance().getBbmdsProtocol().send(mProfileKeysState.get().requestListChange(stateChange));
-            }
         }
     };
 
@@ -333,8 +336,6 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-        mProfileKeysView = (TextView)findViewById(R.id.profile_keys);
-
         // initialize the view
         updateServiceButtonState(true);
     }
@@ -347,7 +348,6 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
         mSetupStateObserver.changed();
         mAuthTokenStateObserver.changed();
         mLocalRegIdObserver.changed();
-        mProfileKeysObserver.changed();
     }
 
     private void initializeBBMEnterprise() {
@@ -373,17 +373,13 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
         mAuthTokenState = protocol.getGlobalAuthTokenState();
         mAuthTokenState.addObserver(mAuthTokenStateObserver);
 
+        mSyncPasscodeState = protocol.getGlobalSyncPasscodeState();
+        //The passcode state observer needs to monitor the GlobalSetupState and the GlobalSyncPasscodeState
+        mSyncPasscodeState.addObserver(mSyncPasscodeStateObserver);
+        mSetupState.addObserver(mSyncPasscodeStateObserver);
+
         mLocalUri = protocol.getGlobalLocalUri();
         mLocalUri.addObserver(mLocalRegIdObserver);
-
-        mProfileKeysState = protocol.getGlobalProfileKeysState();
-        mProfileKeysState.addObserver(mProfileKeysObserver);
-
-        mInboundProfileKeys = new InboundMessageObservable<>(
-                new ProfileKeys(),
-                mBbmEnterprise.getBbmdsProtocolConnector()
-        );
-        mInboundProfileKeys.addObserver(mInboundProfileKeysObserver);
     }
 
     private void startBBMEnterpriseService() {

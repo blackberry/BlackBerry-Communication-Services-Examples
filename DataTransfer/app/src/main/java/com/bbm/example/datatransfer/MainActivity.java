@@ -43,9 +43,7 @@ import android.widget.Toast;
 import com.bbm.sdk.BBMEnterprise;
 import com.bbm.sdk.bbmds.GlobalLocalUri;
 import com.bbm.sdk.bbmds.GlobalSetupState;
-import com.bbm.sdk.bbmds.RegIdUserCriteria;
 import com.bbm.sdk.bbmds.User;
-import com.bbm.sdk.bbmds.inbound.UserKeysImportFailure;
 import com.bbm.sdk.bbmds.internal.Existence;
 import com.bbm.sdk.bbmds.outbound.SetupRetry;
 import com.bbm.sdk.media.BBMEDataChannelCreatedObserver;
@@ -57,10 +55,6 @@ import com.bbm.sdk.media.BBMEMediaManager;
 import com.bbm.sdk.reactive.ObservableMonitor;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
-import com.bbm.sdk.reactive.SingleshotMonitor;
-import com.bbm.sdk.service.InboundMessageObservable;
-import com.bbm.sdk.support.protect.ProtectedManager;
-import com.bbm.sdk.support.protect.SimplePasswordProvider;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.BbmUtils;
 import com.bbm.sdk.support.util.IOUtils;
@@ -166,14 +160,6 @@ public class MainActivity extends AppCompatActivity implements BBMEDataChannelCr
         }
     };
 
-    private SetupHelper.GoAwayListener mGoAwayListener = new SetupHelper.GoAwayListener() {
-        @Override
-        public void onGoAway() {
-            //Handle any required work (ex sign-out) from the auth service
-            AuthIdentityHelper.handleGoAway(MainActivity.this);
-        }
-    };
-
     /**
      * Track our registration id to display it.
      */
@@ -206,11 +192,8 @@ public class MainActivity extends AppCompatActivity implements BBMEDataChannelCr
         //Call changed to trigger our observer to run immediately
         mBbmSetupObserver.changed();
 
-        SetupHelper.listenForAndHandleGoAway(mGoAwayListener);
-
         //set this activity in case it is needed to prompt the user to sign in with their Google account
         AuthIdentityHelper.setActivity(this);
-        SimplePasswordProvider.getInstance().setActivity(this);
 
         mConnectionStatusTextView = (TextView)findViewById(R.id.connection_status);
         mConnectionErrorTextView = (TextView)findViewById(R.id.connection_error);
@@ -361,62 +344,20 @@ public class MainActivity extends AppCompatActivity implements BBMEDataChannelCr
 
     /**
      * Starts a data connection with the provided regid.
-     * If the {@link User} matching the regId has {@link com.bbm.sdk.bbmds.User.KeyState#Import} or does not exist keys will be imported via the ProtectedManager.
      */
     public void startDataConnection(final long regId, final String metaData) {
-
-        //Create a monitor to look for the user matching the regId and import keys if necessary.
-        SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
-            ObservableValue<Integer> keyOperationState;
-            InboundMessageObservable<UserKeysImportFailure> mKeyImportFailureObservable;
-            boolean hasImportedKeys = false;
+        //Ask the media service to start a connection with the specified regId and include an observer to be notified of the result
+        BBMEnterprise.getInstance().getMediaManager().startDataConnection(regId, metaData, new BBMEDataConnectionCreatedObserver() {
             @Override
-            public boolean run() {
-                //First check to see if the BBM Enterprise SDK knows about the user we want to create a connection with
-                User user = BBMEnterprise.getInstance().getBbmdsProtocol().getUser(new RegIdUserCriteria().regId(regId)).get();
+            public void onConnectionCreationSuccess(int connectionId) {
+                mDataConnectionId = connectionId;
+                mConnectionMonitor.activate();
+            }
 
-                if (user.getExists() == Existence.MAYBE) {
-                    return false;
-                }
-
-                //If the BBM Enterprise SDK doesn't know about the user, or the user is in keyState Import we need to ensure we add the keys
-                if (user.getExists() == Existence.NO || user.keyState == User.KeyState.Import) {
-                    if (!hasImportedKeys) {
-                        hasImportedKeys = true;
-                        //Tell the protected manager to find and import keys for this regId
-                        keyOperationState = ProtectedManager.getInstance().importUserKeys(regId);
-                        mKeyImportFailureObservable = new InboundMessageObservable<>(
-                                new UserKeysImportFailure(),
-                                BBMEnterprise.getInstance().getBbmdsProtocolConnector()
-                        );
-                    }
-
-                    //If the keys could not be found, or the key import failed inform the user we cannot start a connection
-                    if (keyOperationState.get() == ProtectedManager.NO_KEYS || mKeyImportFailureObservable.get().regIds.contains(Long.toString(regId))) {
-                        Toast.makeText(MainActivity.this, getString(R.string.error_creating_connection, "KEY_IMPORT_ERROR"), Toast.LENGTH_LONG).show();
-                        return true;
-                    }
-
-                    return false;
-                } else {
-                    //The user exists and has keyState=Synced, we can start the connection
-                    //Ask the media service to start a connection with the specified regId and include an observer to be notified of the result
-                    BBMEnterprise.getInstance().getMediaManager().startDataConnection(regId, metaData, new BBMEDataConnectionCreatedObserver() {
-                        @Override
-                        public void onConnectionCreationSuccess(int connectionId) {
-                            mDataConnectionId = connectionId;
-                            mConnectionMonitor.activate();
-                        }
-
-                        @Override
-                        public void onConnectionCreationFailure(@NonNull BBMEMediaManager.Error error) {
-                            //The connection wasn't created. Display an error
-                            Toast.makeText(MainActivity.this, getString(R.string.error_creating_connection, error.name()), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-
-                return true;
+            @Override
+            public void onConnectionCreationFailure(@NonNull BBMEMediaManager.Error error) {
+                //The connection wasn't created. Display an error
+                Toast.makeText(MainActivity.this, getString(R.string.error_creating_connection, error.name()), Toast.LENGTH_LONG).show();
             }
         });
     }
