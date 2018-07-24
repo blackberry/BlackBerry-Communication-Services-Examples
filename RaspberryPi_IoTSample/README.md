@@ -1,26 +1,26 @@
 [![image_alt_preview25](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 # **Raspberry Pi IoT Sample**
 
-The Raspberry Pi IoT Sample provides an example of how to interface with a hardware peripheral device that is running the Node.js BBM Enterprise SDK. This sample reads the colour selected on a mobile application and displays it on an RGB LED connected to a Raspberry Pi.
+The Raspberry Pi IoT Sample provides an example of how to interface with a hardware peripheral device that is running the Node.js BlackBerry Spark SDK. This sample reads the colour selected on a mobile application and displays it on an RGB LED connected to a Raspberry Pi.
 
-If you would like to learn more about BlackBerry's CPaaS, be sure to head over to our [website](https://us.blackberry.com/enterprise/bbm-enterprise-sdk).
+If you would like to learn more about the BlackBerry Spark Commmunication Platform, be sure to head over to our [website](https://us.blackberry.com/enterprise/bbm-enterprise-sdk).
 
-### BBM Enterprise SDK Guide
+### BlackBerry Spark SDK Guide
 For more details see the
-[Quick Start Swift page in the BBM Enterprise SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/QuickStartSwift/README.html).
+[Quick Start Swift page in the BlackBerry Spark SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/QuickStartSwift/README.html).
 
 
 ### Screenshots
 [![image_alt_preview25](screenShots/screen-shots.png)](screenShots/screen-shots.png)
 
 ### Features
-- **Send and receive secure data** - using the BBM Enterprise SDK to communicate between the mobile app and hardware peripheral device.
+- **Send and receive secure data** - using the BlackBerry Spark SDK to communicate between the mobile app and hardware peripheral device.
 - **Build on** - using this sample, which can be used as a skeleton for more complex secure data transfer in your enterprise use case.
 
 
 ## Getting Started
 
-These instructions will help you get this project up and running on your Rasberry Pi and iOS device. **Note that this project was built using the BBM-E SDK version 1.1.0.18 for iOS**
+These instructions will help you get this project up and running on your Rasberry Pi and iOS device. **Note that this project was built using the BlackBerry Spark SDK version 1.1.0.18 for iOS**
 
 ### Prerequisites
 **Important Note:** This project requires you have [this Node.js sample](https://github.com/blackberry/bbme-sdk-javascript-samples/raspberryPi_IoTSample) running on a Raspberry Pi 3. Refer to the Node.js sample [README.md](https://github.com/blackberry/bbme-sdk-javascript-samples/raspberryPi_IoTSample) for instructions on setting up the Raspberry Pi.
@@ -38,7 +38,7 @@ pod install
 ```
 This will install the required Google and Firebase pods for your app to authenticate. This will also install the required MSColorPicker pod to allow your app to select a new colour.
 
-In order for you to run this project, you will need to include BBM Enterprise SDK and the classes in the support group from one of the examples in BBM Enterprise SDK bundle. Follow the instructions provided [here](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html) to download the bundle.
+In order for you to run this project, you will need to include BlackBerry Spark SDK and the classes in the support group from one of the examples in BlackBerry Spark SDK bundle. Follow the instructions provided [here](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html) to download the bundle.
 
 ### Configure
 Your project must be configured with a BlackBerry BBME Domain, database and an IDP. For this sample, we will use Google Sign In.
