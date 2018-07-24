@@ -29,12 +29,7 @@ import GoogleSignIn
 class DataTransferApp
 {
     private let _authController : BBMAuthController! = {
-        FIRApp.configure();
-        let instance = BBMAuthController(tokenManager:BBMGoogleTokenManager.self,
-                                         userSource:BBMFirebaseUserManager.self,
-                                         keyStorageProvider:BBMFirebaseKeyStorageProvider.self,
-                                         domain:SDK_SERVICE_DOMAIN,
-                                         environment:kBBMConfig_Sandbox)
+        let instance = BBMAuthController.fromConfigFile();
         return instance;
     }();
 

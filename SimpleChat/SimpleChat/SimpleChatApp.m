@@ -20,34 +20,28 @@
 #import <BBMEnterprise/BBMEnterprise.h>
 
 #import "SimpleChatApp.h"
+#import "BBMConfigManager.h"
 
-//Authentication via GoogleSignIn from Support classes
 #import "BBMAuthController.h"
 #import "BBMAuthenticatedAccount.h"
-#import "BBMGoogleTokenManager.h"
 
-//Key Storage via Firebase from Support classes
-#import "Firebase.h"
+#import <GoogleSignIn/GoogleSignIn.h>
 #import "BBMFirebaseKeyStorageProvider.h"
-#import "BBMKeyManager.h"
 #import "BBMFirebaseUserManager.h"
-#import "BBMUserManager.h"
-#import "BBMEndpointManager.h"
+#import "BBMGoogleTokenManager.h"
+#import "Firebase.h"
+#import "BBMAzureTokenManager.h"
+#import "BBMAzureCosmosKeyStorageProvider.h"
+#import "BBMAzureUserManager.h"
 
 #import "BBMAccess.h"
-#import "ConfigSettings.h"
+#import "BBMEndpointManager.h"
 
 @interface SimpleChatApp () {
     BBMAuthController *_authController;
     BBMEndpointManager *_endpointManager;
 }
-
-@property (nonatomic, strong) ObservableMonitor *serviceMonitor;
-@property (nonatomic, strong) ObservableMonitor *authMonitor;
-
 @end
-
-
 
 
 @implementation SimpleChatApp
@@ -76,13 +70,7 @@
 {
     static dispatch_once_t acToken;
     dispatch_once(&acToken, ^{
-        [FIRApp configure];
-        //Create our authController using BBMGoogleTokenManager to manage tokens
-        _authController = [[BBMAuthController alloc] initWithTokenManager:[BBMGoogleTokenManager class]
-                                                               userSource:[BBMFirebaseUserManager class]
-                                                       keyStorageProvider:[BBMFirebaseKeyStorageProvider class]
-                                                                   domain:SDK_SERVICE_DOMAIN
-                                                              environment:SDK_ENVIRONMENT];
+        _authController = [BBMAuthController authControllerFromConfigFile];
 
         //Start the BBM Enterprise service.
         [_authController startBBMEnterpriseService];

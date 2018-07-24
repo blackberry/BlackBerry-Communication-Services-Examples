@@ -21,25 +21,17 @@ import Foundation
 import Firebase
 
 class ChatPollApp {
-    private let _authController : BBMAuthController = {
-        let controller = BBMAuthController(tokenManager:BBMGoogleTokenManager.self,
-                          userSource:BBMFirebaseUserManager.self,
-                          keyStorageProvider:BBMFirebaseKeyStorageProvider.self,
-                          domain:SDK_SERVICE_DOMAIN,
-                          environment:kBBMConfig_Sandbox)
-        return controller!
+    private let _authController : BBMAuthController! = {
+        let controller = BBMAuthController.fromConfigFile()
+        return controller
     }()
 
     private static let appInstance : ChatPollApp = {
-        FIRApp.configure()
         let instance = ChatPollApp()
-        instance.authController().startBBMEnterpriseService()
         BBMEnterpriseService.shared().setLoggingMode(kBBMLogModeFileAndConsole)
         BBMEnterpriseService.shared().setLogLevel(kLogLevelVerbose)
-
-
+        instance.authController().startBBMEnterpriseService()
         instance.authController().signInSilently()
-
         return instance
     }()
 

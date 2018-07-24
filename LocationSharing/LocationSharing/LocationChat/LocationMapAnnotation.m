@@ -22,6 +22,10 @@
 #import "LocationManager.h"
 #import "LocationSharingApp.h"
 
+@interface LocationMapAnnotation ()
+@property (nonatomic, assign) unsigned long long timestamp;
+@end
+
 @implementation LocationMapAnnotation
 
 - (void)setMessage:(BBMChatMessage *)message
@@ -37,6 +41,8 @@
     [self willChangeValueForKey:@"title"];
     self.user = [[LocationSharingApp application].authController.userManager userForRegId:_message.resolvedSenderUri.regId];
     [self didChangeValueForKey:@"title"];
+
+    self.timestamp = message.timestamp;
 }
 
 - (CLLocationCoordinate2D)coordinate
@@ -61,7 +67,7 @@
         [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
         [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
     });
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)self.message.timestamp];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)self.timestamp];
     return [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:date]];
 }
 

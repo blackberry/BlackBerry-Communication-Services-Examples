@@ -20,7 +20,7 @@
 import Foundation
 import Firebase
 import GoogleSignIn
-
+import MSAL
 
 //Call Log Event Tag and Properties
 public let kCallEventTag            = "Call_Event"
@@ -39,13 +39,8 @@ public let kEndCallRingtone         = "endTone.caf"
 class SoftPhoneApp
 {
     private let _authController : BBMAuthController! = {
-        FIRApp.configure();
-        let instance = BBMAuthController(tokenManager:BBMGoogleTokenManager.self,
-                                           userSource:BBMFirebaseUserManager.self,
-                                   keyStorageProvider:BBMFirebaseKeyStorageProvider.self,
-                                               domain:SDK_SERVICE_DOMAIN,
-                                          environment:kBBMConfig_Sandbox)
-        return instance;
+        let instance = BBMAuthController.fromConfigFile();
+        return instance;    
     }();
 
     var authMonitor: ObservableMonitor?
@@ -76,10 +71,12 @@ class SoftPhoneApp
         return _authController
     }
 
-    //iOS CallKit is only available on iOS 10 and up.
+    //iOS CallKit is only available on iOS 10 and up on actual hardware.
     public let callKitManager : CallKitManager? = {
         if #available(iOS 10.0, *) {
-            return CallKitManager.init()
+            if(TARGET_OS_SIMULATOR == 0) {
+                return CallKitManager.init()
+            }
         }
         return nil
     }()

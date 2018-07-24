@@ -55,22 +55,13 @@ class DataSendViewController : UIViewController,
     }
 
     func openDataConnection(_ regId: NSNumber, metaData: String!) {
-        DataTransferApp.app().authController().keyManager.readUserKey(regId.stringValue) {
-            (regIdNum, result) -> Void in
-            if(result != kKeySyncResultSuccess) {
-                self.statusField.text = "No Keys Available"
+        self.mediaManager.startDataConnection(regId, metaData: metaData) {
+            connection, error in
+            if(error != kMediaErrorNoError) {
+                self.statusField.text = "Connection Error"
                 self.statusField.backgroundColor = UIColor.red
                 self.openConnectionButton.isEnabled = true
                 return
-            }
-            self.mediaManager.startDataConnection(regId, metaData: metaData) {
-                connection, error in
-                if(error != kMediaErrorNoError) {
-                    self.statusField.text = "Connection Error"
-                    self.statusField.backgroundColor = UIColor.red
-                    self.openConnectionButton.isEnabled = true
-                    return
-                }
             }
         }
     }
@@ -169,6 +160,26 @@ class DataSendViewController : UIViewController,
         }
     }
 
+    //Send a string.  Here we send a small test string
+    @IBAction func sendStringPressed(_ sender: Any) {
+        let stringToSend = "**********  TEST STRING  ************"
+
+        _ = self.connection?.send(stringToSend, description: nil){
+            progress, done, error in
+            var status = ""
+            self.statusField.backgroundColor = UIColor.green
+            if error != nil {
+                status = "String Send Error"
+                self.statusField.backgroundColor = UIColor.red
+            }else if done {
+                status = "String Sent"
+            }else { //No error, not done
+                status = String(format: "Sending String: %.0f", progress * 100)
+            }
+            self.statusField.text = status
+        }
+    }
+
     //MARK: - MediaDelegate
 
     func incomingDataConnectionAvailable(_ connection: BBMDataConnection!) {
@@ -218,13 +229,18 @@ class DataSendViewController : UIViewController,
 
             var status : String!
             self.statusField.backgroundColor = UIColor.green
-            if(channelData.type == kDataChannelData) {
+            if(channelData.type == kDataChannelData || channelData.type == kDataChannelString) {
                 if error != nil {
                     status = "Data Receive Error"
                     self.statusField.backgroundColor = UIColor.red
                 }else if(channelData.transferComplete) {
-                    status = "Data Received"
-                    self.saveTransfer(channelData)
+                    if(channelData.type == kDataChannelData) {
+                        status = "Data Received"
+                        self.saveTransfer(channelData)
+                    }else if(channelData.type == kDataChannelString) {
+                        status = "String Received"
+                        self.showStringTransfer(channelData)
+                    }
                 }else {
                     //Note that the incoming default packet size is 128Kb so progress reported in
                     //~128Kb intervals
@@ -263,6 +279,23 @@ class DataSendViewController : UIViewController,
                 status = "Recieving file: \(channelData?.progress ?? 0)"
             }
             self.statusField.text = status
+        }
+    }
+
+    func showStringTransfer(_ data: BBMChannelData?) {
+        guard let channelData = data?.data else {
+            NSLog("No transfer to save...")
+            return
+        }
+
+        if let stringToRender = String(data: channelData, encoding: String.Encoding.utf8) {
+            let stringAlert = UIAlertController(title: "String Received",
+                                                      message: stringToRender,
+                                                      preferredStyle: UIAlertControllerStyle.alert)
+            let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.default, handler: nil)
+            stringAlert.addAction(closeAction)
+
+            self.present(stringAlert, animated: true, completion: nil)
         }
     }
 

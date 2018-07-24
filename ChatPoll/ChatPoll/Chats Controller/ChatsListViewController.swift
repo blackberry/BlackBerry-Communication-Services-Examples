@@ -95,7 +95,7 @@ class ChatCell : UITableViewCell {
                 }
                 if(user.regId != nil) {
                     if let displayName = BBMUIUtilities.displayName(for: user) {
-                        let name : String = displayName.characters.count > 0 ? displayName : user.regId.stringValue
+                        let name : String = displayName.count > 0 ? displayName : user.regId.stringValue
                         weakSelf.participantLabel.text = name
                     }
                 }

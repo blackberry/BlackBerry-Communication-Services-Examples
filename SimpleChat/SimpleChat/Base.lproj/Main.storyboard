@@ -223,7 +223,7 @@
                                                     <rect key="frame" x="3" y="2" width="369" height="86"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XvV-B9-KFc" customClass="GIDSignInButton">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XvV-B9-KFc">
                                                     <rect key="frame" x="76" y="23" width="223" height="45"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -265,11 +265,11 @@
                     <connections>
                         <outlet property="authTokenStateLabel" destination="4GD-U5-l7w" id="hw1-Pf-zR8"/>
                         <outlet property="domainLabel" destination="rHp-Pl-dar" id="c1D-vW-8HO"/>
-                        <outlet property="googleSignInButton" destination="XvV-B9-KFc" id="Rgh-ya-O1R"/>
                         <outlet property="regIdLabel" destination="JjE-gp-Ko9" id="Hpm-In-Gi9"/>
                         <outlet property="serviceConnectivityLabel" destination="css-UV-kQR" id="TnQ-XT-CkT"/>
                         <outlet property="serviceStateLabel" destination="eGO-p8-TAY" id="rJg-FB-TPY"/>
                         <outlet property="setupStateLabel" destination="VrV-mj-LoX" id="Jpu-ek-EDe"/>
+                        <outlet property="signInButton" destination="XvV-B9-KFc" id="ZNz-fr-o5l"/>
                         <outlet property="signOutButton" destination="d5M-q2-zu0" id="1b6-aL-JS4"/>
                         <outlet property="switchDeviceButton" destination="AUx-uV-m9x" id="bqN-I5-sfA"/>
                         <outlet property="userEmailLabel" destination="nOu-cS-fQF" id="353-4m-HDC"/>

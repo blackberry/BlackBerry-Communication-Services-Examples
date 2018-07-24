@@ -18,9 +18,9 @@
 */ 
 
 #import "AppDelegate.h"
-#import "ConfigSettings.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "LocationSharingApp.h"
+#import "BBMConfigManager.h"
 
 @interface AppDelegate ()
 
@@ -30,7 +30,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [GIDSignIn sharedInstance].clientID = GOOGLE_SIGNIN_CLIENTID;
+    [GIDSignIn sharedInstance].clientID = [BBMConfigManager defaultManager].clientId;
     return YES;
 }
 

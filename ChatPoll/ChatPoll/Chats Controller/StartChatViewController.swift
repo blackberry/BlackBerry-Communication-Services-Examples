@@ -35,12 +35,12 @@ class StartChatViewController : UIViewController {
     }
 
     func validateFields () -> Bool {
-        if((self.subjectField.text?.characters.count)! < 1) {
+        if((self.subjectField.text?.count)! < 1) {
             self.subjectField.resignFirstResponder()
             return false
         }
 
-        if((self.regIdField.text?.characters.count)! < 1) {
+        if((self.regIdField.text?.count)! < 1) {
             self.regIdField.resignFirstResponder()
             return false
         }

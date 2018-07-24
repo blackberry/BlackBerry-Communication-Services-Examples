@@ -20,7 +20,6 @@
 		9CAF1AD2202CEB0F0089829F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF1AD0202CEB0F0089829F /* GoogleService-Info.plist */; };
 		9CAF1AD3202CEB0F0089829F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF1AD1202CEB0F0089829F /* README.md */; };
 		9CAF1B8A20338F550089829F /* StartChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAF1B8920338F550089829F /* StartChatViewController.swift */; };
-		9CD26CDC2045A371007D61DE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9CD26C4D2045A371007D61DE /* README.md */; };
 		9CD26CDD2045A371007D61DE /* BBMAnalyticsReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C512045A371007D61DE /* BBMAnalyticsReporter.m */; };
 		9CD26CE02045A371007D61DE /* BBMAuthController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C592045A371007D61DE /* BBMAuthController.m */; };
 		9CD26CE12045A371007D61DE /* BBMAuthenticatedAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C5B2045A371007D61DE /* BBMAuthenticatedAccount.m */; };
@@ -35,7 +34,7 @@
 		9CD26CEA2045A371007D61DE /* BBMProfileKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C742045A371007D61DE /* BBMProfileKeys.m */; };
 		9CD26CEC2045A371007D61DE /* BBMFirebaseKeyStorageProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C792045A371007D61DE /* BBMFirebaseKeyStorageProvider.m */; };
 		9CD26CED2045A371007D61DE /* BBMSecUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C7C2045A371007D61DE /* BBMSecUtil.m */; };
-		9CD26CEE2045A371007D61DE /* BBMUserPasswordManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C802045A371007D61DE /* BBMUserPasswordManager.m */; };
+		9CD26CEE2045A371007D61DE /* BBMUserPasscodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C802045A371007D61DE /* BBMUserPasscodeManager.m */; };
 		9CD26CEF2045A371007D61DE /* BBMUIUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C832045A371007D61DE /* BBMUIUtilities.m */; };
 		9CD26CF02045A371007D61DE /* BBMMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C892045A371007D61DE /* BBMMessageInputView.m */; };
 		9CD26CF12045A371007D61DE /* BBMTimedMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C8B2045A371007D61DE /* BBMTimedMessageViewController.m */; };
@@ -73,6 +72,9 @@
 		9CD26D122045A372007D61DE /* NSMutableAttributedString+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26CD72045A371007D61DE /* NSMutableAttributedString+Util.m */; };
 		9CD26D132045A372007D61DE /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26CD92045A371007D61DE /* NSString+Base64.m */; };
 		9CD26D142045A372007D61DE /* NSURL+Archiving.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26CDB2045A371007D61DE /* NSURL+Archiving.m */; };
+		C28D8068206017B900021882 /* ConfigSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = C28D8067206017B900021882 /* ConfigSettings.plist */; };
+		C28D806B206017C500021882 /* BBMConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C28D806A206017C500021882 /* BBMConfigManager.m */; };
+		C2D8BAD1207525E900FA2E45 /* BBMKMSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C2D8BAD0207525E900FA2E45 /* BBMKMSManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -139,8 +141,8 @@
 		9CD26C792045A371007D61DE /* BBMFirebaseKeyStorageProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMFirebaseKeyStorageProvider.m; sourceTree = "<group>"; };
 		9CD26C7B2045A371007D61DE /* BBMSecUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMSecUtil.h; sourceTree = "<group>"; };
 		9CD26C7C2045A371007D61DE /* BBMSecUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMSecUtil.m; sourceTree = "<group>"; };
-		9CD26C7F2045A371007D61DE /* BBMUserPasswordManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMUserPasswordManager.h; sourceTree = "<group>"; };
-		9CD26C802045A371007D61DE /* BBMUserPasswordManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMUserPasswordManager.m; sourceTree = "<group>"; };
+		9CD26C7F2045A371007D61DE /* BBMUserPasscodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMUserPasscodeManager.h; sourceTree = "<group>"; };
+		9CD26C802045A371007D61DE /* BBMUserPasscodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMUserPasscodeManager.m; sourceTree = "<group>"; };
 		9CD26C812045A371007D61DE /* BBMMessageTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMMessageTypes.h; sourceTree = "<group>"; };
 		9CD26C822045A371007D61DE /* BBMUIUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMUIUtilities.h; sourceTree = "<group>"; };
 		9CD26C832045A371007D61DE /* BBMUIUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMUIUtilities.m; sourceTree = "<group>"; };
@@ -216,6 +218,13 @@
 		9CD26CD92045A371007D61DE /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		9CD26CDA2045A371007D61DE /* NSURL+Archiving.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+Archiving.h"; sourceTree = "<group>"; };
 		9CD26CDB2045A371007D61DE /* NSURL+Archiving.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Archiving.m"; sourceTree = "<group>"; };
+		C28D8067206017B900021882 /* ConfigSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ConfigSettings.plist; sourceTree = "<group>"; };
+		C28D8069206017C400021882 /* BBMConfigManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMConfigManager.h; sourceTree = "<group>"; };
+		C28D806A206017C500021882 /* BBMConfigManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMConfigManager.m; sourceTree = "<group>"; };
+		C2A9F247207BB8F20027B726 /* BBMPasscodeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMPasscodeManager.h; sourceTree = "<group>"; };
+		C2D8BACF207525E900FA2E45 /* BBMKMSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMKMSManager.h; sourceTree = "<group>"; };
+		C2D8BAD0207525E900FA2E45 /* BBMKMSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMKMSManager.m; sourceTree = "<group>"; };
+		C2D8BAD2207525F000FA2E45 /* BBMPasscodeChangeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMPasscodeChangeDelegate.h; sourceTree = "<group>"; };
 		D3230161DA2D9ADB43A8DB8B /* libPods-ChatPoll.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatPoll.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -259,6 +268,7 @@
 				9C7AE43320362FC5008CF9CC /* Chat Controller */,
 				9C2492A9202CA327001A008F /* Chats Controller */,
 				9C2492A6202B9679001A008F /* ConfigSettings.h */,
+				C28D8067206017B900021882 /* ConfigSettings.plist */,
 				9C2491F4202B9386001A008F /* ChatPollApp.swift */,
 				9C2491E6202B8B36001A008F /* Main.storyboard */,
 				9C2491E9202B8B36001A008F /* Assets.xcassets */,
@@ -393,6 +403,8 @@
 				9CD26C722045A371007D61DE /* BBMKeyStorageProvider.h */,
 				9CD26C732045A371007D61DE /* BBMProfileKeys.h */,
 				9CD26C742045A371007D61DE /* BBMProfileKeys.m */,
+				C2D8BAD2207525F000FA2E45 /* BBMPasscodeChangeDelegate.h */,
+				C2D8BACE207525E900FA2E45 /* BlackBerry KMS */,
 				9CD26C752045A371007D61DE /* Providers */,
 				9CD26C7A2045A371007D61DE /* Security */,
 			);
@@ -437,8 +449,9 @@
 		9CD26C7E2045A371007D61DE /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				9CD26C7F2045A371007D61DE /* BBMUserPasswordManager.h */,
-				9CD26C802045A371007D61DE /* BBMUserPasswordManager.m */,
+				C2A9F247207BB8F20027B726 /* BBMPasscodeManager.h */,
+				9CD26C7F2045A371007D61DE /* BBMUserPasscodeManager.h */,
+				9CD26C802045A371007D61DE /* BBMUserPasscodeManager.m */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -594,6 +607,8 @@
 		9CD26CCE2045A371007D61DE /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				C28D8069206017C400021882 /* BBMConfigManager.h */,
+				C28D806A206017C500021882 /* BBMConfigManager.m */,
 				9CD26CCF2045A371007D61DE /* BBMImageCache.h */,
 				9CD26CD02045A371007D61DE /* BBMImageCache.m */,
 				9CD26CD12045A371007D61DE /* BBMImageLoader.h */,
@@ -609,6 +624,15 @@
 				9CD26CDB2045A371007D61DE /* NSURL+Archiving.m */,
 			);
 			path = Util;
+			sourceTree = "<group>";
+		};
+		C2D8BACE207525E900FA2E45 /* BlackBerry KMS */ = {
+			isa = PBXGroup;
+			children = (
+				C2D8BACF207525E900FA2E45 /* BBMKMSManager.h */,
+				C2D8BAD0207525E900FA2E45 /* BBMKMSManager.m */,
+			);
+			path = "BlackBerry KMS";
 			sourceTree = "<group>";
 		};
 		D6FCCC61BDD6C76223587F9E /* Pods */ = {
@@ -665,6 +689,7 @@
 				TargetAttributes = {
 					9C2491DC202B8B36001A008F = {
 						CreatedOnToolsVersion = 9.1;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -694,10 +719,10 @@
 			files = (
 				9CD26D022045A371007D61DE /* BBMGroupChatMessageDetailCell.xib in Resources */,
 				9CD26D042045A371007D61DE /* BBMMessageInputView.xib in Resources */,
-				9CD26CDC2045A371007D61DE /* README.md in Resources */,
 				9CD26D032045A371007D61DE /* BBMGroupChatMessageDetailView.xib in Resources */,
 				9CD26D052045A371007D61DE /* BBMMessageNotificationView.xib in Resources */,
 				9C2491ED202B8B36001A008F /* LaunchScreen.storyboard in Resources */,
+				C28D8068206017B900021882 /* ConfigSettings.plist in Resources */,
 				9CD26D012045A371007D61DE /* BBMChatView.storyboard in Resources */,
 				9CAF1AD3202CEB0F0089829F /* README.md in Resources */,
 				9CAF1AD2202CEB0F0089829F /* GoogleService-Info.plist in Resources */,
@@ -715,9 +740,14 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ChatPoll/Pods-ChatPoll-resources.sh",
+				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GTMOAuth2ViewTouch.nib",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -745,13 +775,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChatPoll-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -762,7 +795,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CD26CE22045A371007D61DE /* BBMGoogleTokenManager.m in Sources */,
-				9CD26CEE2045A371007D61DE /* BBMUserPasswordManager.m in Sources */,
+				9CD26CEE2045A371007D61DE /* BBMUserPasscodeManager.m in Sources */,
 				9CD26D082045A371007D61DE /* BBMLocalNotificationManager.m in Sources */,
 				9CD26CFB2045A371007D61DE /* BBMMediaCallHelper.m in Sources */,
 				9CD26D0D2045A371007D61DE /* BBMUserManager.m in Sources */,
@@ -800,6 +833,7 @@
 				9CD26D072045A371007D61DE /* BBMUser+Extensions.m in Sources */,
 				9CD26D122045A372007D61DE /* NSMutableAttributedString+Util.m in Sources */,
 				9CAF1B8A20338F550089829F /* StartChatViewController.swift in Sources */,
+				C2D8BAD1207525E900FA2E45 /* BBMKMSManager.m in Sources */,
 				9CD26D002045A371007D61DE /* BBMGroupChatMessageDetailView.m in Sources */,
 				9CD26CF42045A371007D61DE /* BBMChatParticipantDetailCell.m in Sources */,
 				9CD26CF02045A371007D61DE /* BBMMessageInputView.m in Sources */,
@@ -810,6 +844,7 @@
 				9CD26D062045A371007D61DE /* BBMChatMessage+Extensions.m in Sources */,
 				9C2491E1202B8B36001A008F /* AppDelegate.swift in Sources */,
 				9CD26CF12045A371007D61DE /* BBMTimedMessageViewController.m in Sources */,
+				C28D806B206017C500021882 /* BBMConfigManager.m in Sources */,
 				9CD26CEA2045A371007D61DE /* BBMProfileKeys.m in Sources */,
 				9CD26CE72045A371007D61DE /* BBMEndpointManager.m in Sources */,
 				9CD26CE52045A371007D61DE /* BBMChatMessageListener.m in Sources */,
@@ -973,7 +1008,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.ChatPoll;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1003,7 +1039,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.ChatPoll;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

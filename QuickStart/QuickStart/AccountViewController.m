@@ -18,7 +18,7 @@
 */ 
 
 #import "AccountViewController.h"
-#import "ConfigSettings.h"
+#import "BBMConfigManager.h"
 
 #import "BBMAccess.h"
 #import "BBMAuthController.h"
@@ -26,20 +26,15 @@
 #import "BBMEndpointManager.h"
 #import "BBMAppUserListener.h"
 #import "BBMUserManager.h"
+#import "UIView+Extra.h"
 
 #import <BBMEnterprise/BBMEnterprise.h>
 
-
-
-#if USE_GOOGLEID
 #import "BBMGoogleTokenManager.h"
+#import <GoogleSignIn/GoogleSignIn.h>
 #import <GoogleSignIn/GIDSignInButton.h>
-#endif
-
-#if USE_AZUREAD
 #import "BBMAzureTokenManager.h"
 #import "BBMAzureUserManager.h"
-#endif
 
 @interface AccountViewController () <BBMConnectivityListener, BBMAuthControllerDelegate>
 
@@ -51,25 +46,17 @@
 @property (weak, nonatomic) IBOutlet UILabel *userEmailLabel;
 @property (weak, nonatomic) IBOutlet UILabel *serviceConnectivityLabel;
 @property (weak, nonatomic) IBOutlet UIButton *switchDeviceButton;
+
 @property (weak, nonatomic) IBOutlet UIView   *signInButton;
 @property (weak, nonatomic) IBOutlet UIButton *signOutButton;
+
+@property (nonatomic, strong) GIDSignInButton *googleSignInButton;
+@property (nonatomic, strong) UIButton *azureSignInButton;
 
 @property (nonatomic, strong) BBMAuthController *authController;
 @property (nonatomic, strong) ObservableMonitor *serviceMonitor;
 
 @end
-
-//USE_GOOGLEID/USE_AZUREAD are set in the project target additional compiler flags setting.
-//The "QuickStart" target will use GoogleID automatically.  The QuickStartAzure target will
-//use Azure Active Directory automatically.  User management for GoogleId is implemented via
-//Firebase and is not demonstrated in this app.  User management for Azure AD is implemented
-//via the Microsoft Graph API and is implemented below for registering the BBM registration ID
-//for the local user with their active directory user entry.
-#if USE_GOOGLEID
-  #define TokenManagerClass BBMGoogleTokenManager
-#elif USE_AZUREAD
-  #define TokenManagerClass BBMAzureTokenManager
-#endif
 
 @implementation AccountViewController
 
@@ -77,23 +64,33 @@
 {
     [super viewDidLoad];
 
-#if USE_AZUREAD
-    //Configuration for Azure active directory authentication.  These values are pulled from
-    //ConfigSettings.h.
-    [BBMAzureTokenManager setClientId:AZURE_CLIENT_ID
-                             tenantId:AZURE_TENANT_ID
-                             bbmScope:AZURE_BBMCLIENT_SCOPE];
-    NSString *domain = SDK_SERVICE_DOMAIN_AZURE;
-#elif USE_GOOGLEID
-    //GoogleID will be configured automatically using the GoogleServicesInfo.plist file
-    NSString *domain = SDK_SERVICE_DOMAIN;
-#endif
+    Class tokenManager;
+    if([BBMConfigManager defaultManager].type == kGoogleSignIn)
+    {
+        self.googleSignInButton = [[GIDSignInButton alloc] initWithFrame:self.signInButton.bounds];
+        [self.signInButton addSubviewAndContraintsWithSameFrame:self.googleSignInButton];
+        tokenManager = [BBMGoogleTokenManager class];
+    }
+    else if([BBMConfigManager defaultManager].type == kAzureAD)
+    {
+        self.azureSignInButton = [[UIButton alloc] init];
+        [self.azureSignInButton setTitle:@"Azure AD Sign In" forState:UIControlStateNormal];
+        [self.signInButton addSubviewAndContraintsWithSameFrame:self.azureSignInButton];
+        [self.azureSignInButton addTarget:self
+                                   action:@selector(signIn:)
+                         forControlEvents:UIControlEventTouchUpInside];
+        [self.view layoutIfNeeded];
+        self.signInButton.backgroundColor = [UIColor blueColor];
+        tokenManager = [BBMAzureTokenManager class];
+    }else{
+        NSAssert(NO,@"RichChat is only set up to user Google SignIn or AzureAD.");
+    }
 
     //Configure our buttons and labels
     self.signInButton.hidden = YES;
     self.switchDeviceButton.enabled = NO;
     self.signOutButton.hidden = YES;
-    self.domainLabel.text = domain;
+    self.domainLabel.text = [BBMConfigManager defaultManager].sdkServiceDomain;
 
     //Listen for connectivity changes to the BBM Enterprise Service
     [[BBMEnterpriseService service] addConnectivityListener:self];
@@ -103,11 +100,11 @@
     //Create an AuthController instance.  This view controller will act as the delegate and the
     //root controller for any modally presented auth UI.  We will use the BBMGoogleTokenManager
     //(a wrapper around the GoolgeSignIn API) to fetch tokens
-    self.authController = [[BBMAuthController alloc] initWithTokenManager:[TokenManagerClass class]
+    self.authController = [[BBMAuthController alloc] initWithTokenManager:tokenManager
                                                                userSource:nil
                                                        keyStorageProvider:nil
-                                                                   domain:domain
-                                                              environment:SDK_ENVIRONMENT];
+                                                                   domain:[BBMConfigManager defaultManager].sdkServiceDomain
+                                                              environment:[BBMConfigManager defaultManager].environment];
 
     self.authController.rootController = self;
 
@@ -216,12 +213,10 @@
 
 //This is unneeded for GoogleSignIn.  The GIDSignInButton implements this internally and presents
 //the auth web view automatically.
-#if USE_AZUREAD
-- (IBAction)signInPressed:(id)sender
+- (IBAction)signIn:(id)sender
 {
     [(BBMAzureTokenManager *)self.authController.tokenManager signIn];
 }
-#endif
 
 
 

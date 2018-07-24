@@ -60,8 +60,9 @@ class CallLogViewController : UITableViewController {
 
             //Sort the call events by timestamp
             allCallEvents.sort() { (a,b) -> Bool in
-                let aTime = Double(a.rawData[kCallEventTimestampKey] as! NSNumber)
-                let bTime = Double(b.rawData[kCallEventTimestampKey] as! NSNumber)
+
+                let aTime = Double(truncating: a.rawData[kCallEventTimestampKey] as! NSNumber)
+                let bTime = Double(truncating: b.rawData[kCallEventTimestampKey] as! NSNumber)
                 return aTime > bTime
             }
 
@@ -125,7 +126,7 @@ class CallEventCell : UITableViewCell {
             self?.titleLabel.text = "Call with: " + regIdStr
 
             if let endTime = event.rawData[kCallEventTimestampKey] as? NSNumber {
-                let date = Date(timeIntervalSince1970: TimeInterval(endTime))
+                let date = Date(timeIntervalSince1970: TimeInterval(truncating: endTime))
                 self?.endTimeLabel.text = "Ended: " + CallEventCell.fmt.string(from: date)
             }
 

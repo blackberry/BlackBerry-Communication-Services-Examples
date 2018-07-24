@@ -20,6 +20,8 @@
 		C25898B11FCC932700137A7F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C25898AD1FCC932700137A7F /* LaunchScreen.storyboard */; };
 		C25898B21FCC932700137A7F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C25898AF1FCC932700137A7F /* Main.storyboard */; };
 		C265560F1ED77A7D00BCA061 /* BBMEnterprise.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C265560D1ED77A7D00BCA061 /* BBMEnterprise.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C28D8063206014F500021882 /* ConfigSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = C28D8062206014F500021882 /* ConfigSettings.plist */; };
+		C28D80662060151E00021882 /* BBMConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C28D80652060151E00021882 /* BBMConfigManager.m */; };
 		C2A58F711FBB56C2008C9C7E /* BBMAuthController.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A58EFE1FBB5695008C9C7E /* BBMAuthController.m */; };
 		C2A58F721FBB56C2008C9C7E /* BBMAuthenticatedAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A58F001FBB5695008C9C7E /* BBMAuthenticatedAccount.m */; };
 		C2A58F731FBB56C2008C9C7E /* BBMGoogleTokenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A58F041FBB5695008C9C7E /* BBMGoogleTokenManager.m */; };
@@ -58,7 +60,8 @@
 		C2A58F941FBB56C2008C9C7E /* BBMImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A58F651FBB5695008C9C7E /* BBMImageLoader.m */; };
 		C2A58F951FBB56C2008C9C7E /* BBMImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A58F681FBB5695008C9C7E /* BBMImageCache.m */; };
 		C2A58F961FBB56C2008C9C7E /* BBMUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A58F6A1FBB5695008C9C7E /* BBMUtilities.m */; };
-		C2E655902020C17C00673202 /* BBMUserPasswordManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C2E6558F2020C17C00673202 /* BBMUserPasswordManager.m */; };
+		C2D8BAC72075217800FA2E45 /* BBMKMSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C2D8BAC62075217800FA2E45 /* BBMKMSManager.m */; };
+		C2E655902020C17C00673202 /* BBMUserPasscodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C2E6558F2020C17C00673202 /* BBMUserPasscodeManager.m */; };
 		C2E655942020C18300673202 /* BBMSecUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = C2E655932020C18200673202 /* BBMSecUtil.m */; };
 		C2E655952020C1E500673202 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A58F6E1FBB5695008C9C7E /* NSString+Base64.m */; };
 		F3B054899B56F5AC1805A918 /* Pods_DataTransfer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B8D8B19DA284142E1B790D /* Pods_DataTransfer.framework */; };
@@ -99,6 +102,9 @@
 		C25898B01FCC932700137A7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = DataTransfer/Base.lproj/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		C26555F81ED77A3500BCA061 /* DataTransfer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DataTransfer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C265560D1ED77A7D00BCA061 /* BBMEnterprise.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BBMEnterprise.framework; path = ../../sdk/BBMEnterprise.framework; sourceTree = "<group>"; };
+		C28D8062206014F500021882 /* ConfigSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = ConfigSettings.plist; path = DataTransfer/ConfigSettings.plist; sourceTree = SOURCE_ROOT; };
+		C28D80642060151E00021882 /* BBMConfigManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMConfigManager.h; sourceTree = "<group>"; };
+		C28D80652060151E00021882 /* BBMConfigManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMConfigManager.m; sourceTree = "<group>"; };
 		C2A58EFA1FBB5695008C9C7E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C2A58EFD1FBB5695008C9C7E /* BBMAuthController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMAuthController.h; sourceTree = "<group>"; };
 		C2A58EFE1FBB5695008C9C7E /* BBMAuthController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BBMAuthController.m; sourceTree = "<group>"; };
@@ -198,8 +204,12 @@
 		C2A58F6E1FBB5695008C9C7E /* NSString+Base64.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		C2A58F6F1FBB5695008C9C7E /* NSURL+Archiving.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSURL+Archiving.h"; sourceTree = "<group>"; };
 		C2A58F701FBB5695008C9C7E /* NSURL+Archiving.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Archiving.m"; sourceTree = "<group>"; };
-		C2E6558E2020C17C00673202 /* BBMUserPasswordManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMUserPasswordManager.h; sourceTree = "<group>"; };
-		C2E6558F2020C17C00673202 /* BBMUserPasswordManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMUserPasswordManager.m; sourceTree = "<group>"; };
+		C2A9F246207BB8A40027B726 /* BBMPasscodeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMPasscodeManager.h; sourceTree = "<group>"; };
+		C2D8BAC52075217800FA2E45 /* BBMKMSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMKMSManager.h; sourceTree = "<group>"; };
+		C2D8BAC62075217800FA2E45 /* BBMKMSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMKMSManager.m; sourceTree = "<group>"; };
+		C2D8BAC82075222700FA2E45 /* BBMPasscodeChangeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMPasscodeChangeDelegate.h; sourceTree = "<group>"; };
+		C2E6558E2020C17C00673202 /* BBMUserPasscodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMUserPasscodeManager.h; sourceTree = "<group>"; };
+		C2E6558F2020C17C00673202 /* BBMUserPasscodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMUserPasscodeManager.m; sourceTree = "<group>"; };
 		C2E655922020C18200673202 /* BBMSecUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMSecUtil.h; sourceTree = "<group>"; };
 		C2E655932020C18200673202 /* BBMSecUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMSecUtil.m; sourceTree = "<group>"; };
 		D9C4E071CBA421CE5F99FB7F /* Pods-DataTransfer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DataTransfer.release.xcconfig"; path = "Pods/Target Support Files/Pods-DataTransfer/Pods-DataTransfer.release.xcconfig"; sourceTree = "<group>"; };
@@ -289,6 +299,7 @@
 			children = (
 				C25898A61FCC92B300137A7F /* TestData.txt */,
 				C25898AC1FCC92D800137A7F /* ConfigSettings.h */,
+				C28D8062206014F500021882 /* ConfigSettings.plist */,
 				C25898921FCC929E00137A7F /* AccountViewController.swift */,
 				C25898961FCC929E00137A7F /* AppDelegate.swift */,
 				C25898991FCC929F00137A7F /* DataConnectionListener.swift */,
@@ -299,8 +310,7 @@
 				C25898A81FCC92B800137A7F /* Info.plist */,
 				C25898AA1FCC92C000137A7F /* Assets.xcassets */,
 			);
-			name = DataTransfer;
-			path = QuickStartSwift;
+			path = DataTransfer;
 			sourceTree = "<group>";
 		};
 		C2A58EF91FBB5695008C9C7E /* Support */ = {
@@ -377,6 +387,7 @@
 		C2A58F121FBB5695008C9C7E /* Protect */ = {
 			isa = PBXGroup;
 			children = (
+				C2D8BAC42075217800FA2E45 /* BlackBerry KMS */,
 				C2E655912020C18200673202 /* Security */,
 				C2A58F131FBB5695008C9C7E /* BBMKeyManager.h */,
 				C2A58F141FBB5695008C9C7E /* BBMKeyManager.m */,
@@ -385,6 +396,7 @@
 				C2A58F171FBB5695008C9C7E /* BBMKeyStorageProvider.h */,
 				C2A58F181FBB5695008C9C7E /* BBMProfileKeys.h */,
 				C2A58F191FBB5695008C9C7E /* BBMProfileKeys.m */,
+				C2D8BAC82075222700FA2E45 /* BBMPasscodeChangeDelegate.h */,
 				C2A58F1A1FBB5695008C9C7E /* Providers */,
 			);
 			path = Protect;
@@ -556,6 +568,8 @@
 		C2A58F631FBB5695008C9C7E /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				C28D80642060151E00021882 /* BBMConfigManager.h */,
+				C28D80652060151E00021882 /* BBMConfigManager.m */,
 				C2A58F641FBB5695008C9C7E /* BBMImageLoader.h */,
 				C2A58F651FBB5695008C9C7E /* BBMImageLoader.m */,
 				C2A58F661FBB5695008C9C7E /* BBMImageProvider.h */,
@@ -573,11 +587,21 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		C2D8BAC42075217800FA2E45 /* BlackBerry KMS */ = {
+			isa = PBXGroup;
+			children = (
+				C2D8BAC52075217800FA2E45 /* BBMKMSManager.h */,
+				C2D8BAC62075217800FA2E45 /* BBMKMSManager.m */,
+			);
+			path = "BlackBerry KMS";
+			sourceTree = "<group>";
+		};
 		C2E6558D2020C17C00673202 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				C2E6558E2020C17C00673202 /* BBMUserPasswordManager.h */,
-				C2E6558F2020C17C00673202 /* BBMUserPasswordManager.m */,
+				C2A9F246207BB8A40027B726 /* BBMPasscodeManager.h */,
+				C2E6558E2020C17C00673202 /* BBMUserPasscodeManager.h */,
+				C2E6558F2020C17C00673202 /* BBMUserPasscodeManager.m */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -622,13 +646,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = BlackBerry;
 				TargetAttributes = {
 					C26555F71ED77A3500BCA061 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = W3F55987KW;
-						LastSwiftMigration = 0910;
+						LastSwiftMigration = "";
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -666,6 +689,7 @@
 				C25898B21FCC932700137A7F /* Main.storyboard in Resources */,
 				C25898B11FCC932700137A7F /* LaunchScreen.storyboard in Resources */,
 				C25898AB1FCC92C000137A7F /* Assets.xcassets in Resources */,
+				C28D8063206014F500021882 /* ConfigSettings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -701,7 +725,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -766,12 +790,14 @@
 				C2A58F8B1FBB56C2008C9C7E /* BBMGroupChatMessageDetailCell.m in Sources */,
 				C2A58F871FBB56C2008C9C7E /* BBMMediaCallHelper.m in Sources */,
 				C2A58F8F1FBB56C2008C9C7E /* BBMLocalNotificationManager.m in Sources */,
+				C2D8BAC72075217800FA2E45 /* BBMKMSManager.m in Sources */,
 				C25898A01FCC929F00137A7F /* DataTransferApp.swift in Sources */,
 				C2A58F881FBB56C2008C9C7E /* BBMMessageLoader.m in Sources */,
+				C28D80662060151E00021882 /* BBMConfigManager.m in Sources */,
 				C2A58F8D1FBB56C2008C9C7E /* BBMChatMessage+Extensions.m in Sources */,
 				C2A58F781FBB56C2008C9C7E /* BBMEndpointManager.m in Sources */,
 				C2A58F941FBB56C2008C9C7E /* BBMImageLoader.m in Sources */,
-				C2E655902020C17C00673202 /* BBMUserPasswordManager.m in Sources */,
+				C2E655902020C17C00673202 /* BBMUserPasscodeManager.m in Sources */,
 				C2A58F8E1FBB56C2008C9C7E /* BBMUser+Extensions.m in Sources */,
 				C2E655952020C1E500673202 /* NSString+Base64.m in Sources */,
 				C25898A21FCC929F00137A7F /* DataConnectionListener.swift in Sources */,
@@ -819,7 +845,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
@@ -827,7 +855,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -870,7 +902,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
@@ -878,7 +912,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -912,7 +950,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = W3F55987KW;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/../../sdk",
@@ -923,7 +961,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.DataTransfer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Debug;
@@ -934,7 +973,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = W3F55987KW;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/../../sdk",
@@ -944,7 +983,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackberry.DataTransfer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Release;
