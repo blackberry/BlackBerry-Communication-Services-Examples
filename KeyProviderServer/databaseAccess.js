@@ -44,13 +44,13 @@ module.exports = function() {
       throw(error);
     }
     tableService.retrieveEntity(collection, partition, rowId,
-    (error, result, resp) => {
+    (error, result) => {
       if (!error) {
         try {
           var ret = {
             public: JSON.parse(result.public._),
             private: JSON.parse(result.private._)
-          }
+          };
           resolve(ret);
         }
         catch(error) {
@@ -85,14 +85,14 @@ module.exports = function() {
     }
     // Check if entity exists.
     tableService.retrieveEntity(collection, partition, rowId,
-    (error, entity, response) => {
+    (error, entity) => {
       if (!error) {
         // Entity exists - update it with the new values.
         try {
           entity.public = entityGen.String(JSON.stringify(value.public));
           entity.private = entityGen.String(JSON.stringify(value.private));
           tableService.replaceEntity(collection, entity,
-          (error, response) => {
+          (error) => {
             if (!error) {
               // Updated existing entity successfully.
               resolve();
@@ -116,15 +116,15 @@ module.exports = function() {
         if (error.code === 'ResourceNotFound') {
           // Entity doesn't exist, create new one.
           try {
-            var entity = {
+            const newEntity = {
               PartitionKey: entityGen.String(partition),
               RowKey: entityGen.String(rowId),
               public: entityGen.String(JSON.stringify(value.public)),
               private: entityGen.String(JSON.stringify(value.private))
-            }
+            };
             // Insert new entity to the collection.
-            tableService.insertEntity(collection, entity,
-            (error, result, response) => {
+            tableService.insertEntity(collection, newEntity,
+            (error) => {
               if (!error) {
                 // Successfully inserted new entity to the collection.
                 resolve();
@@ -142,7 +142,7 @@ module.exports = function() {
             console.warn(`Failed to insert entity: ${rowId}`
               + ` | Error: ${error.message}`);
             reject(new Errors.DataAccessError(error.message, error.code));
-          };
+          }
         }
         else {
           // There was DB error when tried to check if entity exists.
@@ -176,7 +176,7 @@ module.exports = function() {
     var query = new storage.TableQuery().where(queryString.join(' or '),
       ...rowIds);
     tableService.queryEntities(collection, query, null,
-    (error, result, response) => {
+    (error, result) => {
       if (!error && result) {
         if (result.entries.length === 0) {
           let error = new Errors.DataAccessError('Record does not exist');
@@ -206,4 +206,4 @@ module.exports = function() {
       }
     });
   });
-}
+};

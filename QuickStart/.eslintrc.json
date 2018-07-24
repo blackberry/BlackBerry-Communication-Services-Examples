@@ -1,0 +1,19 @@
+{
+  // Ignore unknown variables that will be available at runtime.
+  "globals":
+  {
+    "GoogleAuthManager": false,
+    "KMS_ARGON_WASM_URL": false
+  },
+  "rules":
+  {
+    // Ignore certain unused identifiers.
+    "no-unused-vars":
+    [
+      "error",
+      {
+        "varsIgnorePattern": "ID_PROVIDER_DOMAIN|KMS_ARGON_WASM_URL|ID_PROVIDER_ENVIRONMENT|USER_SECRET|createAuthManager"
+      }
+    ]
+  }
+}

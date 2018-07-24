@@ -54,23 +54,45 @@ var db = new DbAccess();
 
 //#region API
 
+let requestIdCounter = 0;
+
+// Logs the given message prefixed with the current date and time.
+function log(message) {
+  const timePrefix = (new Date()).toLocaleString();
+  console.log(`${timePrefix} : ${message}`);
+}
+
 // If uid is the caller, returns public and private keys. Otherwise returns
 // public keys of specific uid.
 app.get('/kms/:uid', (req, res) => {
+  const requestId = ++requestIdCounter;
+
   var uid = req.params.uid;
   var jwt = req.get('Authorization');
   if (jwt.startsWith('Bearer ')) {
     jwt = jwt.slice('Bearer '.length);
   }
-  console.log(`\n${getTimeStamp()} : [GET] /kms/${uid}`);
-  console.log(`TOKEN: ${jwt}`);
+
+  const user = { id: '' };
+  const logPrefix = () => {
+    const userId = user.id ? ` u=${user.id}` : '';
+    return `rId=${requestId}${userId} [GET] /kms/${uid}`;
+  };
+  log(logPrefix());
+
   return tokenManager.validateAndParseJwt(jwt)
   .then(decodedToken => {
-    if (uid === decodedToken.oid) {
+    user.id = decodedToken.oid;
+
+    if (user.id === uid) {
       // Get private and public keys.
       return db.getRecord(uid)
-      .then(record => res.status(HTTP_STATUS_SUCCESS).json(record))
+      .then(record => {
+        log(`${logPrefix()}; private and public keys were returned`);
+        res.status(HTTP_STATUS_SUCCESS).json(record);
+      })
       .catch(error => {
+        log(`${logPrefix()}; error=${error}; code=${error.code}`);
         res.status(error.code === 'ResourceNotFound'
           ? HTTP_STATUS_NOT_FOUND
           : HTTP_STATUS_SERVER_ERROR).json({ error: error });
@@ -79,9 +101,12 @@ app.get('/kms/:uid', (req, res) => {
     else {
       // Get public keys only.
       return db.getPublicKeys([uid])
-      .then(records =>
-        res.status(HTTP_STATUS_SUCCESS).json({ public: records[uid] }))
+      .then(records => {
+        log(`${logPrefix()}; public keys were returned`);
+        res.status(HTTP_STATUS_SUCCESS).json({ public: records[uid] });
+      })
       .catch(error => {
+        log(`${logPrefix()}; error=${error}; code=${error.code}`);
         res.status(error.code === 'ResourceNotFound'
           ? HTTP_STATUS_NOT_FOUND
           : HTTP_STATUS_SERVER_ERROR).json({ error: error });
@@ -89,53 +114,71 @@ app.get('/kms/:uid', (req, res) => {
     }
   })
   .catch(error => {
+    log(`${logPrefix()}; error=${error}`);
     res.status(HTTP_STATUS_FORBIDDEN).json({ error: error });
   });
 });
 
 // Stores key information provided in 'keys' parameter for specified uid.
 app.put('/kms/:uid', (req, res) => {
+  const requestId = ++requestIdCounter;
+
   const uid = req.params.uid;
   var jwt = req.get('Authorization');
   if (jwt.startsWith('Bearer ')) {
     jwt = jwt.slice('Bearer '.length);
   }
+
+  const user = { id: '' };
+  const logPrefix = () => {
+    const userId = user.id ? ` u=${user.id}` : '';
+    return `rId=${requestId}${userId} [PUT] /kms/${uid}`;
+  };
+  log(logPrefix());
+
   var keysData = req.body.keys;
   const replace = req.body.replace;
-  console.log(`\n${getTimeStamp()} : [PUT] /kms/${uid}`);
-  console.log(`TOKEN: ${jwt}`);
-  console.log(`BODY: ${JSON.stringify(req.body)}`);
   return tokenManager.validateAndParseJwt(jwt)
   .then(decodedToken => {
-    if (uid !== decodedToken.oid) {
-      const error = new Errors.InvalidUidError(`Not allowed to write to: ${uid}`
-        + ` | User ID: ${decodedToken.oid}`);
+    user.id = decodedToken.oid;
+
+    if (user.id !== uid) {
+      const error = new Errors.InvalidUidError(
+        `Not allowed to write to: ${uid} | User ID: ${user.id}`);
+      log(`${logPrefix()}; error=${error}`);
       res.status(HTTP_STATUS_FORBIDDEN).json({ error: error });
-      return;
+      return undefined;
     }
 
     if (!keysData) {
       const error = new Errors.IncompleteDataError
-        ('Keys data is not provided in the request body');
-        console.log(`Failed to save keys: ${error.message}`);
+        ('Keys data was not provided in the request body');
+      log(`${logPrefix()}; error=${error}`);
       res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error });
-      return;
+      return undefined;
     }
 
     if (replace === true) {
       // Expect new record to have public and private properties.
       if (keysData.public && keysData.private) {
         return db.setRecord(uid, keysData).then(() => {
+          log(`${logPrefix()}; private and public keys were replaced`);
           res.status(HTTP_STATUS_SUCCESS).json(STATUS_OK);
-        }).catch(error => {
+          return undefined;
+        })
+        .catch(error => {
+          log(`${logPrefix()}; error=${error}`);
           res.status(HTTP_STATUS_SERVER_ERROR).json({ error: error });
+          return undefined;
         });
-      } else {
-        const error = new Errors.IncompleteDataError
-          ('Must have public and private keys to replace');
-        res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error });
       }
-      return;
+      else {
+        const error = new Errors.IncompleteDataError
+          ('New data must have public and private keys for replacement');
+        log(`${logPrefix()}; error=${error}`);
+        res.status(HTTP_STATUS_BAD_REQUEST).json({ error: error });
+        return undefined;
+      }
     }
 
     return db.getRecord(uid).then(record => {
@@ -149,25 +192,40 @@ app.put('/kms/:uid', (req, res) => {
       }
       // Write updated record to the database.
       return db.setRecord(uid, record)
-      .then(() => res.status(HTTP_STATUS_SUCCESS).json(STATUS_OK))
+      .then(() => {
+        log(`${logPrefix()}; record was updated`);
+        res.status(HTTP_STATUS_SUCCESS).json(STATUS_OK);
+        return undefined;
+      })
       .catch(error => {
         res.status(HTTP_STATUS_SERVER_ERROR).json({ error: error });
+        return undefined;
       });
-    }).catch(error => {
+    })
+    .catch(error => {
       if (error.code === 'ResourceNotFound') {
         // Save new record.
         return db.setRecord(uid, keysData)
-        .then(() => res.status(HTTP_STATUS_SUCCESS).json(STATUS_OK))
+        .then(() => {
+        log(`${logPrefix()}; new record was inserted`);
+          res.status(HTTP_STATUS_SUCCESS).json(STATUS_OK);
+          return undefined;
+        })
         .catch(error => {
+          log(`${logPrefix()}; error=${error}`);
           res.status(HTTP_STATUS_SERVER_ERROR).json({ error: error });
+          return undefined;
         });
       }
       else {
+        log(`${logPrefix()}; error=${error}`);
         res.status(HTTP_STATUS_SERVER_ERROR).json({ error: error });
+        return undefined;
       }
     });
-  }).catch(error => {
-    console.log(`Failed to save keys: ${error.message}`);
+  })
+  .catch(error => {
+    log(`${logPrefix()}; error=${error}`);
     res.status(HTTP_STATUS_FORBIDDEN).json({ error: error });
   });
 });
@@ -198,10 +256,7 @@ const updateObject = (existingObject, newObject) => {
       }
     }
   });
-}
-
-// Generates current time stamp. Required to log incoming requests.
-const getTimeStamp = () => (new Date()).toLocaleString();
+};
 
 //#endregion Helper functions
 
@@ -214,14 +269,11 @@ if (config.useSsl) {
     passphrase: config.keyPassphrase
   };
   https.createServer(options, app).listen(config.serverPort,
-    () => console.log(`${getTimeStamp()} Started server.`
-      + ` Port: ${config.serverPort}`));
+    () => log(`Started server on port: ${config.serverPort}; TLS/SSL enabled`));
 }
 else {
   app.listen(config.serverPort, () => {
-    console.log(`${getTimeStamp()} Started server.`
-      + ` Port: ${config.serverPort}`);
+    log(`Started server on port: ${config.serverPort}; WARNING TLS/SSL disabled`);
   });
 }
-
 

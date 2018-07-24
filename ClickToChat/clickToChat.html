@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<!--
+  Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>Click To Chat</title>
+    <link rel="icon" type="image/png" href="img/favicon.ico">
+   <script type="text/javascript" src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+   <script type="text/javascript" src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+   <script type="text/javascript" src="../support/auth/GenericAuthHelper.js"></script>
+   <script type="text/javascript" src="../support/auth/GoogleAuthManager.js"></script>
+   <script type="text/javascript" src="../support/identity/GenericUserInfo.js"></script>
+   <script type="text/javascript" src="../support/identity/FirebaseUserManager.js"></script>
+   <script type="text/javascript" src="../support/util/TimeRangeFormatter.js"></script>
+   <script type="text/javascript" src="../support/util/MessageFormatter.js"></script>
+   <script type="text/javascript" src="../../sdk/bbm_sdk_web.js"></script>
+   <script type="text/javascript" src="js/config.js"></script>
+   <script type="text/javascript" src="js/clickToChat.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/clickToChat.css"/>
+    <!-- import bbm-chat into your application -->
+    <link rel="import" href="node_modules/bbmChat/bbmChat.html">
+  </head>
+  <body>
+    <div id="v-card">
+      <img id="contact-avatar" src="img/ic_person_black_48dp_2x.png">
+      <label id="contact-name">PAUL MORLEY</label>
+      <label id="contact-position">SENIOR MORTGAGE BROKER</label>
+      <div id="contact-info-row">
+        <img src="img/ic_email_black_24dp_2x.png">
+        <label>paul.morley@blackhole.sw.rim.net</label>
+      </div>
+      <div id="contact-info-row">
+        <img src="img/ic_phone_black_24dp_2x.png">
+        <label>555-333-444</label>
+      </div>
+      <div id="contact-info-row" style="margin-top:30px;">
+        <img src="img/ic_chat_black_24dp_2x.png">
+        <label onclick="startChat()"style="cursor:pointer">CLICK TO START CHAT</label>
+      </div>
+    </div>
+    <div id="chat-pane">
+      <bbm-chat id="bbm-chat">
+      </bbm-chat>
+    </div>
+  </body>
+</html>

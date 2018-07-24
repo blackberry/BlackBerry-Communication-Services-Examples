@@ -27,18 +27,13 @@ const login = require('./GoogleLogin');
 // Create an SDK instance in the loop.
 login.login(config)
 .then(bbmsdk => {
-  console.log('Completed google authentication. Performing BBM login');
+  console.log('setup completed');
 
-  // Set up the sdk.
-  bbmsdk.setup(true)
-  .then(() => {
-    console.log('setup completed');
+  // Start up a node repl loop.
+  const loop = repl.start('> ');
 
-    // Start up a node repl loop.
-    const loop = repl.start('> ');
-
-    loop.context.bbmsdk = bbmsdk;
-  }).catch(error => {
-    console.log('setup failed: ' + JSON.stringify(error));
-  });
+  loop.context.bbmsdk = bbmsdk;
+})
+.catch(error => {
+  console.log('setup failed: ' + JSON.stringify(error));
 });

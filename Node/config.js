@@ -55,6 +55,6 @@ module.exports = {
     "client_x509_cert_url": "your_client_cert"
   },
 
-  // A password to use to protect keys before storing them on firebase.
+  // A password to use to protect keys.
   password: 'Protect my keys!'
 };

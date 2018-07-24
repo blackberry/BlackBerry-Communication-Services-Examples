@@ -25,10 +25,6 @@
 // Include some needed modules.
 const FirebaseUserManager = require(
   'bbm-enterprise/examples/support/identity/FirebaseUserManager.js');
-const FirebaseKeyProvider = require(
-  'bbm-enterprise/examples/support/protect/firebase/FirebaseKeyProvider.js');
-const KeyProtect = require(
-  'bbm-enterprise/examples/support/protect/encryption/KeyProtect.js');
 const google = require('googleapis');
 const oauth2 = google.oauth2('v2');
 const {JWT} = require('google-auth-library');
@@ -36,8 +32,7 @@ const {JWT} = require('google-auth-library');
 // These two modules are a little bit special - the FirebaseKeyProvider expects
 // some symbols to be available globally, so import these two as global
 // variables.
-global.BBMEnterprise = require('bbm-enterprise')
-
+global.BBMEnterprise = require('bbm-enterprise');
 global.firebase = require('firebase');
 
 module.exports = {
@@ -46,36 +41,39 @@ module.exports = {
       // Construct an authentication client to do token retrieval.
       this.client = new JWT(
         config.googleConfig.client_email, null, config.googleConfig.private_key,
-        ['https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/userinfo.email',
-        'https://www.googleapis.com/auth/firebase']);
+        [
+          'https://www.googleapis.com/auth/userinfo.profile',
+          'https://www.googleapis.com/auth/userinfo.email',
+          'https://www.googleapis.com/auth/firebase'
+        ]);
 
-      this.authenticate = function() {
-        return this.client.authorize()
-        .then(result => {
-          // Retrieve the User ID.
-          return new Promise((resolve, reject) => {
-            oauth2.userinfo.get({access_token: result.access_token},
-                                (error, result) => {
-              if(error) {
-                reject(error);
-              } else {
-                // Cache the picture, to return later.
-                this.picture = result.picture;
-                resolve(result);
-              }
+        this.authenticate = function() {
+          return this.client.authorize()
+          .then(result => {
+            // Retrieve the User ID.
+            return new Promise((resolve, reject) => {
+              oauth2.userinfo.get({access_token: result.access_token},
+                                  (error, result) => {
+                if(error) {
+                  reject(error);
+                } else {
+                  this.picture = result.picture;
+                  this.userId = result.id;
+                  resolve(result);
+                }
+              });
             });
           });
-        });
-      };
-
+        };
+      
       this.getLocalUserInfo = () => {
         return {
           displayName: 'BBMBot',
           email: '',
-          avatarUrl: this.picture
+          avatarUrl: this.picture,
+          userId: this.userId
         };
-      }
+      };
 
       this.getBbmSdkToken = () => {
         return this.client.authorize()
@@ -85,45 +83,77 @@ module.exports = {
       this.getUserManagerToken = () => {
         return this.getBbmSdkToken();
       };
-    };
+    }
 
     const authManager = new GoogleAuthManager(config);
 
-    return authManager.authenticate()
-    .then(result => {
-      // Create an SDK instance.
-      const bbmsdk = new BBMEnterprise({
-        domain: config.id_provider_domain,
-        environment: config.id_provider_environment,
-        userId: result.id,
-        getToken: () => authManager.getBbmSdkToken(),
-        getKeyProvider: (regId, accessToken) =>
-          FirebaseUserManager.factory.createInstance(
-            config.firebaseConfig, regId, authManager,
-            require('bbm-enterprise/examples/support/identity/GenericUserInfo.js'))
-          .then(contactsManager =>
-            KeyProtect.factory.createInstance(
-              () => Promise.resolve(config.password),
-              regId,
-              'BBME SDK Pre-KMS DRK')
-            .then(keyProtect =>
-              FirebaseKeyProvider.factory.createInstance(
-                config.firebaseConfig,
-                accessToken,
-                contactsManager.getUid,
-                () => Promise.resolve('GenerateNewKeys'),
-                keyProtect))),
-        description: 'node ' + process.version
+    return new Promise((resolve, reject) => {
+      let isSyncStarted = false;
+      authManager.authenticate()
+      .then(authUserInfo => {
+        console.log('Completed google authentication. Performing BBM login');
+
+        // Create an SDK instance.
+        const bbmeSdk = new BBMEnterprise({
+          domain: config.id_provider_domain,
+          environment: config.id_provider_environment,
+          userId: authUserInfo.id,
+          getToken: authManager.getBbmSdkToken,
+          description: `node ${process.version}`
+        });
+
+        // Handle changes of BBM Enterprise setup state.
+        bbmeSdk.on('setupState', state => {
+          console.log(`BBMEnterprise setup state: ${state.value}`);
+          switch (state.value) {
+            case BBMEnterprise.SetupState.Success: {
+              const userRegId = bbmeSdk.getRegistrationInfo().regId;
+              console.log(`BBM Login complete with RegId: ${userRegId}`);
+
+              // Use FirebaseUserManager to register BbmBot in the database.
+              FirebaseUserManager.factory.createInstance(
+                config.firebaseConfig, userRegId, authManager,
+                require('bbm-enterprise/examples/support/identity/GenericUserInfo.js'),
+                bbmeSdk.getIdentitiesFromAppUserId,
+                bbmeSdk.getIdentitiesFromAppUserIds,
+                config.appName);
+
+              resolve(bbmeSdk);
+            }
+            return;
+
+            case BBMEnterprise.SetupState.SyncRequired: {
+              if (isSyncStarted) {
+                reject(new Error('Failed to get user keys using provided password'));
+                return;
+              }
+              const isNew =
+                bbmeSdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New;
+              const syncAction = isNew
+                ? BBMEnterprise.SyncStartAction.New
+                : BBMEnterprise.SyncStartAction.Existing;
+              bbmeSdk.syncStart(config.password, syncAction);
+              break;
+            }
+            case BBMEnterprise.SetupState.SyncStarted:
+              isSyncStarted = true;
+            break;
+          }
+        });
+
+        // Handle setup error.
+        bbmeSdk.on('setupError', error => {
+          console.error('BBM Login failed' + error);
+          reject(error.value);
+        });
+
+        bbmeSdk.setupStart();
+      })
+      .catch(error => {
+        // Log and propagate error.
+        console.log(`Failed to authenticate: ${error}`);
+        throw(error);
       });
-      bbmsdk.on('registrationChanged', registrationInfo => {
-        if(registrationInfo.state === "Failure") {
-          console.error('BBM Login failed');
-          return;
-        } else if (registrationInfo.state === "Success") {
-          console.log('BBM Login complete with regid: ' + registrationInfo.regId);
-        }
-      });
-      return bbmsdk;
     });
   }
-}
+};
