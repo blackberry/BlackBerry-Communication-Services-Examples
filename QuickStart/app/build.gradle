@@ -51,6 +51,11 @@ android {
         resValue "string", "USER_DOMAIN", appProperties['user_domain']
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     signingConfigs {
         common {
             keyAlias appProperties['keyAlias']

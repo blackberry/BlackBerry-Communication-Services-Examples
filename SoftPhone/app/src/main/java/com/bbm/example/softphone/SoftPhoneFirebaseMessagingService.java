@@ -16,7 +16,6 @@
 
 package com.bbm.example.softphone;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -30,7 +29,6 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
-import java.util.Set;
 
 public class SoftPhoneFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -44,16 +42,9 @@ public class SoftPhoneFirebaseMessagingService extends FirebaseMessagingService 
     private static Observer sObserver;
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(final RemoteMessage remoteMessage) {
         Logger.d("onMessageReceived: "+remoteMessage);
         if (remoteMessage.getFrom().equals(BuildConfig.CLOUD_MESSAGING_SENDER_ID)) {
-            // We convert the remote message into a bundle to be able to pass it to the SDK
-            final Bundle bundle = new Bundle();
-            final Set<Map.Entry<String, String>> data = remoteMessage.getData().entrySet();
-            for (Map.Entry<String, String> entry : data) {
-                bundle.putString(entry.getKey(), entry.getValue());
-            }
-
             // Handling of push notification must be done of UI thread.
             mMainHandler.post(new Runnable() {
                 @Override
@@ -68,7 +59,7 @@ public class SoftPhoneFirebaseMessagingService extends FirebaseMessagingService 
                         Logger.i("ready to handle push without waiting. BBMEnterpriseState=" + state.get()
                                 + ", AuthTokenState=" + authTokenStateObservableValue.get() + " exists=" + authTokenStateObservableValue.get().exists);
 
-                        handlePushNotification(bundle);
+                        handlePushNotification(remoteMessage.getData());
                     } else {
                         //wait for BBM to start and auth to be ok before passing push to BBM
                         sObserver = new Observer() {
@@ -85,7 +76,7 @@ public class SoftPhoneFirebaseMessagingService extends FirebaseMessagingService 
                                     state.removeObserver(sObserver);
                                     sObserver = null;
 
-                                    handlePushNotification(bundle);
+                                    handlePushNotification(remoteMessage.getData());
                                 }
                             }
                         };
@@ -103,11 +94,11 @@ public class SoftPhoneFirebaseMessagingService extends FirebaseMessagingService 
         }
     }
 
-    private void handlePushNotification(Bundle bundle) {
+    private void handlePushNotification(Map<String,String> data) {
         try {
             //now handle the push
             Logger.d("calling handlePushNotification");
-            BBMEnterprise.getInstance().handlePushNotification(bundle);
+            BBMEnterprise.getInstance().handlePushNotification(data);
             Logger.d("done calling handlePushNotification");
         } catch (Exception e) {
             // Failed to process Push

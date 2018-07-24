@@ -41,7 +41,6 @@ import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.support.identity.user.AppUser;
 import com.bbm.sdk.support.identity.user.UserManager;
-import com.bbm.sdk.support.protect.SimplePasswordProvider;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.BbmUtils;
 import com.bbm.sdk.support.util.Logger;
@@ -82,14 +81,6 @@ public class MainActivity extends AppCompatActivity  {
                 case Unspecified:
                     break;
             }
-        }
-    };
-
-    private SetupHelper.GoAwayListener mGoAwayListener = new SetupHelper.GoAwayListener() {
-        @Override
-        public void onGoAway() {
-            //Handle any required work (ex sign-out) from the auth service
-            AuthIdentityHelper.handleGoAway(MainActivity.this);
         }
     };
 
@@ -144,11 +135,8 @@ public class MainActivity extends AppCompatActivity  {
         //Call changed to trigger our observer to run immediately
         mBbmSetupObserver.changed();
 
-        SetupHelper.listenForAndHandleGoAway(mGoAwayListener);
-
         //set this activity in case it is needed to prompt the user to sign in with their Google account
         AuthIdentityHelper.setActivity(this);
-        SimplePasswordProvider.getInstance().setActivity(this);
 
         //Set the click listener for the start call button
         FloatingActionButton startCallFloatingButton = (FloatingActionButton)findViewById(R.id.start_call_fab);

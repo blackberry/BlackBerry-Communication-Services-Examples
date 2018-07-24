@@ -36,7 +36,6 @@ import com.bbm.sdk.bbmds.outbound.SetupRetry;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.support.identity.user.AppUser;
-import com.bbm.sdk.support.protect.SimplePasswordProvider;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.ChatStartHelper;
 import com.bbm.sdk.support.util.Logger;
@@ -84,14 +83,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private SetupHelper.GoAwayListener mGoAwayListener = new SetupHelper.GoAwayListener() {
-        @Override
-        public void onGoAway() {
-            //Handle any required work (ex sign-out) from the auth service
-            AuthIdentityHelper.handleGoAway(MainActivity.this);
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,11 +98,7 @@ public class MainActivity extends AppCompatActivity {
         //Call changed to trigger our observer to run immediately
         mBbmSetupObserver.changed();
 
-
-        SetupHelper.listenForAndHandleGoAway(mGoAwayListener);
-
         AuthIdentityHelper.setActivity(this);
-        SimplePasswordProvider.getInstance().setActivity(this);
 
         //create the list of chats
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.chats_recycler_view);

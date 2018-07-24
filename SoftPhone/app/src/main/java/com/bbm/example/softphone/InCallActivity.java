@@ -683,6 +683,8 @@ public class InCallActivity extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.call_menu, menu);
             mSwitchCameraItem = menu.findItem(R.id.switch_camera);
             mAudioSelectorItem = menu.findItem(R.id.change_audio_device);
+            //Trigger the audio controls monitor to update the audio device state
+            mControlsActionMonitor.activate();
         }
         return super.onCreateOptionsMenu(menu);
     }

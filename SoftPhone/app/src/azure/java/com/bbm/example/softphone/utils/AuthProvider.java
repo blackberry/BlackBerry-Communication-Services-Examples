@@ -18,16 +18,14 @@ package com.bbm.example.softphone.utils;
 
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.bbm.example.softphone.BuildConfig;
-import com.bbm.sdk.reactive.SingleshotMonitor;
 import com.bbm.sdk.support.identity.auth.AzureAdAuthenticationManager;
-import com.bbm.sdk.support.protect.ProtectedManager;
-import com.bbm.sdk.support.protect.ProtectedManagerErrorHandler;
-import com.bbm.sdk.support.protect.SimplePasswordProvider;
-import com.bbm.sdk.support.protect.providers.AzureKeyStorageProvider;
-import com.bbm.sdk.support.util.IdentityUtils;
+import com.bbm.sdk.support.kms.BlackBerryKMSSource;
+import com.bbm.sdk.support.protect.AzureCloudKeySource;
+import com.bbm.sdk.support.protect.KeySource;
+import com.bbm.sdk.support.protect.UserChallengePasscodeProvider;
+import com.bbm.sdk.support.util.KeySourceManager;
 
 public class AuthProvider {
 
@@ -43,27 +41,16 @@ public class AuthProvider {
                 BuildConfig.BBME_AUTH_SCOPE,
                 BuildConfig.AZURE_LOGIN_AUTHORITY);
 
-        //Start user sync.
-        IdentityUtils.initUserDbSync(context, true);
+        KeySource keySource;
+        //If using cloud key set the key source to Azure, otherwise we will default to using BlackBerry KMS as the key source
+        if (BuildConfig.USE_CLOUD_KEY) {
+            //Initialize an AzureCloudKeySource
+            keySource = new AzureCloudKeySource(context, BuildConfig.KEY_PROVIDER_SERVER_URL, new UserChallengePasscodeProvider(context));
+        } else {
+            keySource = new BlackBerryKMSSource(new UserChallengePasscodeProvider(context));
+        }
 
-        //Start protected manager
-        SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
-            @Override
-            public boolean run() {
-                String uid = AzureAdAuthenticationManager.getInstance().getUserIdentifier().get();
-                if (!TextUtils.isEmpty(uid)) {
-                    //Once we know the UID for the user trigger the protected manager to start syncing their keys
-                    ProtectedManager.getInstance().start(
-                            context,
-                            uid,
-                            new AzureKeyStorageProvider(BuildConfig.KMS_URL),
-                            SimplePasswordProvider.getInstance(),
-                            new ProtectedManagerErrorHandler()
-                    );
-                    return true;
-                }
-                return false;
-            }
-        });
+        KeySourceManager.setKeySource(keySource);
+        keySource.start();
     }
 }

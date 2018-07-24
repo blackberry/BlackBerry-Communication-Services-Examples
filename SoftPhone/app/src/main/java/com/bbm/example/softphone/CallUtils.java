@@ -28,20 +28,12 @@ import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.bbm.sdk.BBMEnterprise;
-import com.bbm.sdk.bbmds.RegIdUserCriteria;
-import com.bbm.sdk.bbmds.User;
 import com.bbm.sdk.bbmds.inbound.ChatStartFailed;
-import com.bbm.sdk.bbmds.inbound.UserKeysImportFailure;
-import com.bbm.sdk.bbmds.internal.Existence;
 import com.bbm.sdk.bbmds.outbound.ChatMessageSend;
 import com.bbm.sdk.media.BBMECall;
 import com.bbm.sdk.media.BBMECallCreationObserver;
 import com.bbm.sdk.media.BBMECallObserver;
 import com.bbm.sdk.media.BBMEMediaManager;
-import com.bbm.sdk.reactive.ObservableValue;
-import com.bbm.sdk.reactive.SingleshotMonitor;
-import com.bbm.sdk.service.InboundMessageObservable;
-import com.bbm.sdk.support.protect.ProtectedManager;
 import com.bbm.sdk.support.util.ChatStartHelper;
 import com.bbm.sdk.support.util.Logger;
 import com.bbm.sdk.support.util.PermissionsUtil;
@@ -217,8 +209,8 @@ public class CallUtils {
 
     /**
      * Starts a call with the registration id provided. If RECORD_AUDIO permission has not be granted it will prompt the user first.
-     * If the {@link User} matching the regId has {@link com.bbm.sdk.bbmds.User.KeyState#Import} or does not exist keys will be imported via the ProtectedManager.
      */
+    @SuppressWarnings("MissingPermission")
     public static void makeCall(final Activity activity, Fragment fragment, final long regId) {
 
         sRegIdToCall = regId;
@@ -228,70 +220,25 @@ public class CallUtils {
                 PermissionsUtil.PERMISSION_RECORD_AUDIO_FOR_VOICE_CALL,
                 R.string.rationale_record_audio, PermissionsUtil.sEmptyOnCancelListener)) {
 
-            //Create a monitor to look for the user matching the regId and import keys if necessary.
-            SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
-                ObservableValue<Integer> keyOperationState;
-                InboundMessageObservable<UserKeysImportFailure> mKeyImportFailureObservable;
-                boolean hasImportedKeys = false;
+            //Ask the media service to start a call with the specified regId and include an observer to be notified of the result
+            BBMEnterprise.getInstance().getMediaManager().startCall(regId, false, new BBMECallCreationObserver() {
                 @Override
-                public boolean run() {
-                    //First check to see if the BBM Enterprise SDK knows about the user we want to call
-                    User user = BBMEnterprise.getInstance().getBbmdsProtocol().getUser(new RegIdUserCriteria().regId(regId)).get();
+                public void onCallCreationSuccess(int callId) {
+                    addObserverToCall(callId);
 
-                    if (user.getExists() == Existence.MAYBE) {
-                        return false;
-                    }
+                    //The call was started successfully. Open our call activity
+                    Intent inCallIntent = new Intent(activity, InCallActivity.class);
+                    inCallIntent.putExtra(InCallActivity.EXTRA_CALL_ID, callId);
+                    activity.startActivity(inCallIntent);
+                }
 
-                    //If the BBM Enterprise SDK doesn't know about the user, or the user is in keyState Import we need to ensure we add the keys
-                    if (user.getExists() == Existence.NO || user.keyState == User.KeyState.Import) {
-                        if (!hasImportedKeys) {
-                            hasImportedKeys = true;
-                            //Tell the protected manager to find and import keys for this regId
-                            keyOperationState = ProtectedManager.getInstance().importUserKeys(regId);
-                            mKeyImportFailureObservable = new InboundMessageObservable<>(
-                                    new UserKeysImportFailure(),
-                                    BBMEnterprise.getInstance().getBbmdsProtocolConnector()
-                            );
-                        }
-
-                        //If the keys could not be found, or the key import failed inform the user we cannot start a call
-                        if (keyOperationState.get() == ProtectedManager.NO_KEYS || mKeyImportFailureObservable.get().regIds.contains(Long.toString(regId))) {
-                            Toast.makeText(activity, activity.getString(R.string.error_starting_call, "KEY_IMPORT_FAILURE"), Toast.LENGTH_LONG).show();
-                            return true;
-                        }
-
-                        return false;
-                    } else {
-                        //The user exists and has keyState=Synced, we can start the call
-                        startCall(activity, regId);
-                    }
-
-                    return true;
+                @Override
+                public void onCallCreationFailure(@NonNull BBMEMediaManager.Error error) {
+                    //The call wasn't able to be started, provide an error to the user
+                    Toast.makeText(activity, activity.getString(R.string.error_starting_call, error.name()), Toast.LENGTH_LONG).show();
                 }
             });
         }
-    }
-
-    @SuppressWarnings("MissingPermission")
-    private static void startCall(final Activity activity, long regId) {
-        //Ask the media service to start a call with the specified regId and include an observer to be notified of the result
-        BBMEnterprise.getInstance().getMediaManager().startCall(regId, false, new BBMECallCreationObserver() {
-            @Override
-            public void onCallCreationSuccess(int callId) {
-                addObserverToCall(callId);
-
-                //The call was started successfully. Open our call activity
-                Intent inCallIntent = new Intent(activity, InCallActivity.class);
-                inCallIntent.putExtra(InCallActivity.EXTRA_CALL_ID, callId);
-                activity.startActivity(inCallIntent);
-            }
-
-            @Override
-            public void onCallCreationFailure(@NonNull BBMEMediaManager.Error error) {
-                //The call wasn't able to be started, provide an error to the user
-                Toast.makeText(activity, activity.getString(R.string.error_starting_call, error.name()), Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     static void addObserverToCall(int callId) {

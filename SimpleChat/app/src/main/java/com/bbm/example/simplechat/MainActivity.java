@@ -47,10 +47,10 @@ import com.bbm.sdk.bbmds.outbound.ChatStart;
 import com.bbm.sdk.bbmds.outbound.SetupRetry;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
+import com.bbm.sdk.reactive.SingleshotMonitor;
 import com.bbm.sdk.service.BBMEnterpriseState;
 import com.bbm.sdk.service.ProtocolMessage;
 import com.bbm.sdk.service.ProtocolMessageConsumer;
-import com.bbm.sdk.support.protect.SimplePasswordProvider;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.Logger;
 import com.bbm.sdk.support.util.SetupHelper;
@@ -96,13 +96,29 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private SetupHelper.GoAwayListener mGoAwayListener = new SetupHelper.GoAwayListener() {
+    private SetupHelper.EndpointDeregisteredListener mEndpointDeregisteredListener =
+            new SetupHelper.EndpointDeregisteredListener() {
         @Override
-        public void onGoAway() {
-            //Handle any required work (ex sign-out) from the auth service
-            AuthIdentityHelper.handleGoAway(MainActivity.this);
+        public void onEndpointDeregistered() {
+            //Handle any required work (ex sign-out) from the auth service and wipe BBME
+            AuthIdentityHelper.handleEndpointDeregistered(getApplicationContext());
+
+            SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
+                private BBMEnterpriseState prevState;
+                @Override
+                public boolean run() {
+                    BBMEnterpriseState state = BBMEnterprise.getInstance().getState().get();
+                    if (prevState != null && prevState != BBMEnterpriseState.STARTED && state == BBMEnterpriseState.STARTED) {
+                        AuthProvider.initAuthProvider(getApplicationContext());
+                        return true;
+                    }
+                    prevState = state;
+                    return false;
+                }
+            });
         }
     };
+
 
     //Simple view holder to display a chat
     private class ChatViewHolder extends RecyclerView.ViewHolder {
@@ -168,9 +184,6 @@ public class MainActivity extends AppCompatActivity {
         //Trigger our observer to run once
         bbmeStateObserver.changed();
 
-        //Initialize our FirebaseHelper to sync the Protect chat and user keys
-        SimplePasswordProvider.getInstance().setActivity(this);
-
         //Init the auth provider (get authentication token, start protected manager, sync users)
         AuthProvider.initAuthProvider(getApplicationContext());
         AuthIdentityHelper.setActivity(this);
@@ -212,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Call changed to trigger our observer to run immediately
         mBbmSetupObserver.changed();
-        SetupHelper.listenForAndHandleGoAway(mGoAwayListener);
+        SetupHelper.listenForAndHandleDeregistered(mEndpointDeregisteredListener);
 
         setContentView(R.layout.main);
 
@@ -323,24 +336,36 @@ public class MainActivity extends AppCompatActivity {
                     //this is for us, stop listening
                     BBMEnterprise.getInstance().getBbmdsProtocolConnector().removeMessageConsumer(this);
 
-
+                    String chatId = null;
                     if ("chatStartFailed".equals(message.getType())) {
-                        //If the message type is chatStartFailed the BBM Enterprise SDK was unable to create the chat
                         ChatStartFailed chatStartFailed = new ChatStartFailed().setAttributes(message.getJSON());
-                        Logger.i("Failed to create chat with " + regId);
-                        Toast.makeText(MainActivity.this, "Failed to create chat for reason " + chatStartFailed.reason.toString(), Toast.LENGTH_LONG).show();
+                        //If the message type is chatStartFailed the BBM Enterprise SDK was unable to create the chat
+                        if (chatStartFailed.reason == ChatStartFailed.Reason.AlreadyExists) {
+                            //If the reason is AlreadyExists we can open the existing chat.
+                            chatId = chatStartFailed.chatId;
+                        } else {
+                            //If the reason wasn't AlreadyExists then display an error toast to the user
+                            Logger.i("Failed to create chat with " + regId);
+                            Toast.makeText(MainActivity.this,
+                                    "Failed to create chat for reason " + chatStartFailed.reason.toString(),
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
                     } else if ("listAdd".equals(message.getType())) {
                         //The chat was created successfully
                         try {
                             final JSONArray elementsArray = json.getJSONArray("elements");
                             Chat chat = new Chat().setAttributes((JSONObject) elementsArray.get(0));
-                            //Start our chat activity
-                            Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                            intent.putExtra("chat-id", chat.chatId);
-                            startActivity(intent);
+                            chatId = chat.chatId;
                         } catch (final JSONException e) {
                             Logger.e(e, "Failed to process start chat message " + message);
                         }
+                    }
+                    if (chatId != null) {
+                        //Start our chat activity
+                        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                        intent.putExtra("chat-id", chatId);
+                        startActivity(intent);
                     }
                 }
             }

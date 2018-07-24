@@ -20,6 +20,10 @@ import android.app.Application;
 
 import com.bbm.example.datatransfer.utils.AuthProvider;
 import com.bbm.sdk.BBMEnterprise;
+import com.bbm.sdk.reactive.SingleshotMonitor;
+import com.bbm.sdk.service.BBMEnterpriseState;
+import com.bbm.sdk.support.util.AuthIdentityHelper;
+import com.bbm.sdk.support.util.SetupHelper;
 
 
 public class DataTransferApplication extends Application {
@@ -48,6 +52,31 @@ public class DataTransferApplication extends Application {
         //Add incoming connection observer
         mConnectionObserver = new IncomingConnectionObserver(DataTransferApplication.this);
         BBMEnterprise.getInstance().getMediaManager().addIncomingDataConnectionObserver(mConnectionObserver);
+
+
+        // Add a listener for "EndpointDeregistered". When this is received, it generally means the user has switched to another device.
+        SetupHelper.listenForAndHandleDeregistered(new SetupHelper.EndpointDeregisteredListener() {
+            @Override
+            public void onEndpointDeregistered() {
+                //Handle any required work (ex sign-out) from the auth service and wipe BBME
+                AuthIdentityHelper.handleEndpointDeregistered(getApplicationContext());
+
+                SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
+                    private BBMEnterpriseState prevState;
+                    @Override
+                    public boolean run() {
+                        BBMEnterpriseState state = BBMEnterprise.getInstance().getState().get();
+                        if (prevState != null && prevState != BBMEnterpriseState.STARTED && state == BBMEnterpriseState.STARTED) {
+                            AuthProvider.initAuthProvider(getApplicationContext());
+                            return true;
+                        }
+                        prevState = state;
+                        return false;
+                    }
+                });
+            }
+        });
+
     }
 
     public final IncomingConnectionObserver getConnectionObserver() {
