@@ -20,7 +20,7 @@ For more details see the
 
 ## Getting Started
 
-These instructions will help you get this project up and running on your Rasberry Pi and iOS device. **Note that this project was built using the BBM-E SDK version 1.0.0-rc48 for Node.js**
+These instructions will help you get this project up and running on your Raspberry Pi and iOS device. **Note that this project was built using the BBM-E SDK version 1.0.0-rc48 for Node.js**
 
 ### Prerequisites
 **Important Note:** This project requires you have [this iOS sample](https://github.com/blackberry/bbme-sdk-ios-samples/RaspberryPi_IoTSample) running on an iOS device.
