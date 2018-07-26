@@ -24,7 +24,7 @@ This repository contains code for iOS example applications that you can use to h
 | [Soft Phone](SoftPhone/README.md) | 	Build an app with voice and video calling with Spark|
 | [Data Transfer](DataTransfer/README.md) | Build an app to send files over a secure peer-to-peer connection with Spark |
 | [Chat Poll](ChatPoll/README.md) | Build an app that allows users to post polls within custom chat messages with Spark |
-| [Rasberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) |Build an iOS app with Spark that securely communicates with an IoT device (LED controlled by a Rapberry Pi |
+| [Raspberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) |Build an iOS app with Spark that securely communicates with an IoT device (LED controlled by a Raspberry Pi |
 
 For more details on all the Spark examples see the online [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).
 
