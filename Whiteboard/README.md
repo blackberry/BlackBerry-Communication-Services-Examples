@@ -1,7 +1,7 @@
-![BlackBerry Secure Spark SDK](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 # Whiteboard for Android
 
-The Whiteboard app demonstrations how you can share arbitrary data in a BlackBerry Secure Spark SDK chat. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
+The Whiteboard app demonstrations how you can share arbitrary data in a BlackBerry Spark Communications Platform chat. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
 
 <br>
 
@@ -32,7 +32,7 @@ The Whiteboard sample app allows the user to do the following:
 
 This example requires the Spark SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [BlackBerry Secure Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 

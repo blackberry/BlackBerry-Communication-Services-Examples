@@ -1,11 +1,11 @@
-![BlackBerry Secure Spark SDK](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Announcements for Android
 
 The Announcements app demonstrates how a user can post **announcements** as custom messages in a chat.
 We also demonstrate how the [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/references.html)
-feature of the BlackBerry Secure Spark SDK can be used to edit an announcement and view the edit history.
-This example builds on the [SimpleChat](../SimpleChat/README.md) and utilizes the [Spark Support Libarary for Android](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html) library to quickly create a basic chat application.
+feature of the BlackBerry Spark Communications Platform can be used to edit an announcement and view the edit history.
+This example builds on the [SimpleChat](../SimpleChat/README.md) and utilizes the [Spark Support Library for Android](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html) library to quickly create a basic chat application.
 This example also uses the Android [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview.html).
 
 ### Features
@@ -28,7 +28,7 @@ This example also uses the Android [RecyclerView](https://developer.android.com/
 
 This example requires the Spark SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [BlackBerry Secure Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 

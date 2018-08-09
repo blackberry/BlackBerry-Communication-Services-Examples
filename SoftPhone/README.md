@@ -1,8 +1,8 @@
-![BlackBerry Secure Spark SDK](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Soft Phone for Android
 
-The SoftPhone app demonstrates how voice and video calling can be integrated into your application using the BlackBerry Secure Spark SDK. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
+The SoftPhone app demonstrates how voice and video calling can be integrated into your application using the BlackBerry Spark Communications Platform. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
 
 <br>
 
@@ -35,7 +35,7 @@ The SoftPhone sample app allows the user to do the following:
 
 This example requires the Spark SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [BlackBerry Secure Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 

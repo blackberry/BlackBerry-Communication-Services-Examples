@@ -1,8 +1,8 @@
-![BlackBerry Secure Spark SDK](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Data Transfer for Android
 
-The Data Transfer application demonstrates how to use the peer-to-peer data connection capability of the BlackBerry Secure Spark SDK. The data connection API allows arbitrary data to be sent securely through a familiar stream interface. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
+The Data Transfer application demonstrates how to use the peer-to-peer data connection feature of the BlackBerry Spark Communications Platform. The data connection API allows arbitrary data to be sent securely through a familiar stream interface. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
 
 ### Features
 
@@ -23,7 +23,7 @@ The sample application allows the user to do the following:
 
 This example requires the Spark SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [BlackBerry Secure Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 

@@ -1,7 +1,7 @@
-![BlackBerry Secure Spark SDK](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 # SimpleChat for Android
 
-The Simple Chat app demonstrates how you can build a simple chat application using the BlackBerry Secure Spark SDK.  This app demonstrates how easily messaging can be integrated into your application.  For a more rich chat app experience please see the [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/RichChat/README.html) app provided with the Spark SDK. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
+The Simple Chat app demonstrates how you can build a simple chat application using the BlackBerry Spark Communications Platform.  This app demonstrates how easily messaging can be integrated into your application.  For a more rich chat app experience please see the [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/RichChat/README.html) app provided with the Spark SDK. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
 
 ### Features
 
@@ -24,7 +24,7 @@ It allows the user to do the following:
 
 This example requires the Spark SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [BlackBerry Secure Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 
@@ -61,7 +61,7 @@ Follow this guide for a walkthrough showing how the Spark SDK is used to demonst
 
 ### <a name="sdkSetup"></a>Spark SDK Initialization
 
-To use the BlackBerry Secure Spark SDK in our application we need to initialize and start the sdk.
+To use the BlackBerry Spark Communications Platform SDK in our application we need to initialize and start the sdk.
 
 ```java
 // Initialize BBMEnterprise SDK then start it

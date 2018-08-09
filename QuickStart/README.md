@@ -1,8 +1,8 @@
-![BlackBerry Secure Spark SDK](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Quick Start for Android
 
-The Quick Start application demonstrates how you can authenticate with the BlackBerry Secure Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.  This example shows how you can authenticate your user with the Spark SDK using [Google Sign-in](https://developers.google.com/identity/sign-in/android/) and complete setup. This example uses the simple <a href="https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient.Builder#enableAutoManage(android.support.v4.app.FragmentActivity, com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener)">auto-managed mode</a> of the Google API.
+The Quick Start application demonstrates how you can authenticate with the BlackBerry Spark Communications Platform using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.  This example shows how you can authenticate your user with the Spark SDK using [Google Sign-in](https://developers.google.com/identity/sign-in/android/) and complete setup. This example uses the simple <a href="https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient.Builder#enableAutoManage(android.support.v4.app.FragmentActivity, com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener)">auto-managed mode</a> of the Google API.
 
 <br>
 
@@ -15,7 +15,7 @@ The Quick Start application demonstrates how you can authenticate with the Black
 
 This samples requires the Spark SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [BlackBerry Secure Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 
