@@ -1,9 +1,9 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Click To Call Sample for JavaScript
 
 The Click to Call sample app demonstrates how to integrate a video call
-experience into your website with the BlackBerry Secure Spark SDK for JavaScript. This app allows a user to click a button on a webpage to start a secure video call with a predefined user or agent. The bbmChat widget handles the rendering of messages within the chat, and allows the user to send text, picture, and file messages.
+experience into your website with the Spark SDK for JavaScript. This app allows a user to click a button on a webpage to start a secure video call with a predefined user or agent. The bbmChat widget handles the rendering of messages within the chat, and allows the user to send text, picture, and file messages.
 
 ### Features
 
@@ -24,6 +24,15 @@ This sample requires the Spark SDK, which you can find along with related resour
 * Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
+
+<p align="center">
+    <a href="https://www.youtube.com/watch?v=LAbxok2EQtI"
+      target="_blank"><img src="../QuickStart/screenShots/bb-spark-web-sdk-getting-started.jpg"
+      alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
+</p>
+<p align="center">
+ <b>Getting started video</b>
+</p>
 
 ### Prerequisites
 

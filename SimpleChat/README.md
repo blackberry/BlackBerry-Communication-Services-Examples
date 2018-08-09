@@ -1,9 +1,9 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Simple Chat for JavaScript
 
 The Simple Chat app demonstrates how you can build a simple chat application 
-using the BlackBerry Secure Spark SDK for JavaScript.  This app demonstrates how easily messaging can be integrated into your application.  For a more rich chat app experience please see the [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/RichChat/README.html) app provided with the SDK. This example builds on the 
+using the Spark SDK for JavaScript.  This app demonstrates how easily messaging can be integrated into your application.  For a more rich chat app experience please see the [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/RichChat/README.html) app provided with the SDK. This example builds on the 
 [Quick Start](../QuickStart/README.md) example that demonstrates how you can 
 authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
 
@@ -30,6 +30,15 @@ This samples requires the Spark SDK, which you can find along with related resou
 * Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
+
+<p align="center">
+    <a href="https://www.youtube.com/watch?v=LAbxok2EQtI"
+      target="_blank"><img src="../QuickStart/screenShots/bb-spark-web-sdk-getting-started.jpg"
+      alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
+</p>
+<p align="center">
+ <b>Getting started video</b>
+</p>
 
 ### Prerequisites
 

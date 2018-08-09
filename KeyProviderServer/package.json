@@ -8,6 +8,7 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
+    "asn1": "^0.2.3",
     "asn1.js": "^4.10.1",
     "azure-storage": "^2.8.2",
     "body-parser": "^1.18.2",

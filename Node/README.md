@@ -1,10 +1,9 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # BBMBot Sample for JavaScript
 
-The BBMBot sample app demonstrates how to build a chat bot
-in Node.js with the BlackBerry Secure Spark SDK.  The BBMbot uses the
-[www.botlibre.com](www.botlibre.com) 
+The BBMBot sample app demonstrates how to build a chat bot in Node.js with the
+Spark SDK.  The BBMbot uses the [www.botlibre.com](www.botlibre.com)
 webservice as an example of how to generate responses.
 
 <p align="center">
@@ -38,6 +37,15 @@ This sample requires the Spark SDK, which you can find along with related resour
 * Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
+
+<p align="center">
+    <a href="https://www.youtube.com/watch?v=LAbxok2EQtI"
+      target="_blank"><img src="../QuickStart/screenShots/bb-spark-web-sdk-getting-started.jpg"
+      alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
+</p>
+<p align="center">
+ <b>Getting started video</b>
+</p>
 
 ### <a name="prereq"></a>Prerequisites
 

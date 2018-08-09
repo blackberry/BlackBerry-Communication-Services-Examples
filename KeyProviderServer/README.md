@@ -1,4 +1,4 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # KeyProviderServer Sample for JavaScript
 
@@ -23,6 +23,16 @@ These samples require the Spark SDK which you can find along with related resour
 * Getting stated with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
+
+<p align="center">
+    <a href="https://www.youtube.com/watch?v=LAbxok2EQtI"
+      target="_blank"><img src="../QuickStart/screenShots/bb-spark-web-sdk-getting-started.jpg"
+      alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
+</p>
+<p align="center">
+ <b>Getting started video</b>
+</p>
+
 # KeyProviderServer
 
 The cryptographic keys used by Spark to protect your communications are stored and distributed in a [cloud storage system](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/cloudKeyStorage.html) that you choose. Some cloud storage solutions like [Firebase](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/firebaseCloudKeyStorage.html) satisfy all the [requirements](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/cloudKeyStorage.html) to securely store and distribute keys to authenticated users. However, you may choose a different cloud storage solution that would require you to enforce access control on your application server.

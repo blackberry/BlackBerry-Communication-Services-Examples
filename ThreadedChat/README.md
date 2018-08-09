@@ -1,15 +1,15 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Threaded Chat Sample for JavaScript
 
 The Threaded Chat sample app demonstrates how a user can post comments on other messages in a chat to create threaded 
-conversations using the [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/references.html) feature of BlackBerry Secure Spark.
+conversations using the [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/references.html) feature of the Spark SDK for JavaScript.
 
 This example utilizes the [Support](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/support/README.html) library to quickly create a basic chat application.
 
 This directory contains sample code for a Threaded Chat app that
 demonstrates how to use message references to build a threaded
-conversation using the Spark SDK for JavaScript.  For a more rich chat app experience please see the
+conversation using the Spark SDK.  For a more rich chat app experience please see the
 [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/RichChat/README.html)
 app provided with the SDK.
 
@@ -35,6 +35,15 @@ These samples require the Spark SDK which you can find along with related resour
 * Getting stated with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
+
+<p align="center">
+    <a href="https://www.youtube.com/watch?v=LAbxok2EQtI"
+      target="_blank"><img src="../QuickStart/screenShots/bb-spark-web-sdk-getting-started.jpg"
+      alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
+</p>
+<p align="center">
+ <b>Getting started video</b>
+</p>
 
 ### Prerequisites
 

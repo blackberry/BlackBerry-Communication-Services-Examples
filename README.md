@@ -1,19 +1,19 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
-# BlackBerry Secure Spark
-BlackBerry Secure Spark is an IP-based cloud communications platform that lets
-you easily create powerful new experiences between your users, machines and IoT
+# BlackBerry Spark Communications Platform
+Spark is an IP-based cloud communications platform that lets
+you easily create powerful new experiences between your users, machines, and IoT
 devices. Its enterprise-grade communication and data sharing functionality can
 be integrated directly into your Android, iOS and web apps.
 With end-to-end encryption, digitally signed messages, and guaranteed data
-delivery, BlackBerry Secure Spark is a secure CPaaS (communications platform as a
+delivery, Spark is a secure CPaaS (communications platform as a
 service) solution that can enable you to build powerful connections
 around the world, while keeping everything safe and secure in a
 “private garden” communication system.
 
-# BlackBerry Secure Spark Examples for JavaScript
+# Spark Examples for JavaScript
 
-This repository contains code for JavaScript example applications that you can use to help build your messaging solution with BlackBerry Secure Spark.
+This repository contains code for JavaScript example applications that you can use to help build your messaging solution with Spark.
 
 | Example Application                      | Description                              |
 | ---------------------------------------- | ---------------------------------------- |
@@ -31,11 +31,21 @@ For more details on all the Spark examples see the online [Developer Guide](http
 
 # Getting Started
 
-These samples require the Spark SDK which you can find along with related resources at the location below.
+These samples require the Spark SDK, which you can find along with related resources at the location below.
     
-* Getting stated with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
+
+<p align="center">
+    <a href="https://www.youtube.com/watch?v=LAbxok2EQtI"
+      target="_blank"><img src="QuickStart/screenShots/bb-spark-web-sdk-getting-started.jpg"
+      alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
+</p>
+<p align="center">
+ <b>Getting started video</b>
+</p>
+
 
 # License
 
