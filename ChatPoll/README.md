@@ -1,4 +1,4 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Chat Poll for iOS
 
@@ -27,8 +27,9 @@ the "Text" tag and other tags related to polls: "Poll", "PollVoteUp" and "PollVo
 
 ## Getting Started
 
-This sample requires BlackBerry Secure Spark, which you can find along with related resources at the location below.
-* Getting started with [BlackBerry Secure Spark](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+This sample requires the Spark SDK, which you can find along with related resources at the location below.
+
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 

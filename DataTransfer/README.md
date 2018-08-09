@@ -1,10 +1,10 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Data Transfer for iOS
 
 The Data Transfer sample application 
 demonstrates how to use the peer-to-peer data connection capability of
-BlackBerry Secure Spark. This example builds on the [Quick Start Swift](../QuickStartSwift/README.md) example that
+Spark. This example builds on the [Quick Start Swift](../QuickStartSwift/README.md) example that
 demonstrates how you can authenticate with Spark using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
 of your application.
 
@@ -32,7 +32,7 @@ and [Quick Start Swift](../QuickStartSwift/README.md) samples so it may utilize 
 
 This sample requires the Spark SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [BlackBerry Secure Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 

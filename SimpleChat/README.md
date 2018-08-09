@@ -1,9 +1,9 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Simple Chat for iOS
 
 The Simple Chat sample demonstrates how you can build a simple chat
-application using BlackBerry Secure Spark and how easily messaging can be integrated
+application using the Spark SDK and how easily messaging can be integrated
 into your application.  For a more rich chat app experience please see the
 [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/RichChat/README.html)
 app provided with the SDK.
@@ -32,9 +32,9 @@ tag to the [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/doc
 
 ## Getting Started
 
-This sample requires BlackBerry Secure Spark, which you can find along with related resources at the location below.
+This sample requires the Spark SDK, which you can find along with related resources at the location below.
     
-* Getting started with the [BlackBerry Secure Spark](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 

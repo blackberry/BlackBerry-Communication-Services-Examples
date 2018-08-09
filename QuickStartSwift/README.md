@@ -1,9 +1,9 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # QuickStartSwift for iOS
 
-The QuickStartSwift sample application demonstrates how you can authenticate with the 
-BlackBerry Secure Spark using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
+The QuickStartSwift sample application demonstrates how you can authenticate with Spark
+using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
 of your application.  We demonstrate how you can obtain the user ID and token of your user's account 
 and pass them to the Spark SDK to complete setup.  For integrating the SDK into an Objective-C based app, see [Quick Start](../QuickStart/README.md)
 
@@ -16,9 +16,9 @@ This sample allows you to do the following:
 
 ## Getting Started
 
-This sample requires BlackBerry Secure Spark, which you can find along with related resources at the location below.
+This sample requires the Spark SDK, which you can find along with related resources at the location below.
     
-* Getting started with the [BlackBerry Secure Spark](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 

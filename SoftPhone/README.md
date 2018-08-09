@@ -1,10 +1,10 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
-# BlackBerry Secure Spark iOS Soft Phone Sample
+# SoftPhone for iOS
 
 This directory contains the Swift implementation of a SoftPhone sample
 applicaiton. The app demonstrates how voice and video calling can be
-integrated into your application using BlackBerry Secure Spark.  This example builds on the [Quick Start Swift](../QuickStartSwift/README.md)
+integrated into your application using the Spark SDK.  This example builds on the [Quick Start Swift](../QuickStartSwift/README.md)
 example that demonstrates how you can authenticate with the SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
 of your application.
 
@@ -40,9 +40,9 @@ This sample can interact with the [Rich Chat](https://developer.blackberry.com/f
 
 ## Getting Started
 
-This samples requires BlackBerry Secure Spark, which you can find along with related resources at the location below.
+This samples requires the Spark SDK, which you can find along with related resources at the location below.
     
-* Getting started with [BlackBerry Secure Spark](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 

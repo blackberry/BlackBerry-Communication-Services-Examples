@@ -1,9 +1,9 @@
-![BlackBerry Secure Spark](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Location Sharing App for iOS
 
 The Location Sharing sample application demonstrates how to share a user's real-time location 
-with others using BlackBerry Secure Spark.
+with others using Spark.
 The application monitors the user's location updates using the iOS
 CoreLocation APIs. The user's locations are then shared with other users in a
 chat using chat messages. The application defines a custom message type that
@@ -42,7 +42,7 @@ The following features are demonstrated:
 
 This sample requires the Spark SDK, which you can find along with related resources at the location below.
     
-* Getting started with [BlackBerry Secure Spark](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
