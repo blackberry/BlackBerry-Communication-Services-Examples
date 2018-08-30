@@ -57,7 +57,14 @@ let leaveButton;
     };
   };
 
-  HTMLImports.whenReady(function() {
+  const waitPageLoaded = () => new Promise(resolve => {
+    window.onload = () => {
+      resolve();
+    };
+  });
+
+  HTMLImports.whenReady(async () => {
+    await waitPageLoaded();
     // Find the necessary HTMLElements and cache them.
     title = document.getElementById('title');
     const status = document.getElementById('status');
@@ -70,7 +77,9 @@ let leaveButton;
     let bbmeSdk;
 
     // Show the information field for message reference.
-    chatMessageList.addEventListener('messageReference', chatInput.showRefField);
+    chatMessageList.addEventListener('messageReference', e => {
+      chatInput.showRefField(e);
+    });
 
     // Perform authentication.
     try {
@@ -78,6 +87,10 @@ let leaveButton;
       const authManager = createAuthManager();
       authManager.authenticate()
       .then(authUserInfo => {
+        if (!authUserInfo) {
+          console.warn('Application will be redirected to the authentication page');
+          return;
+        }
         try {
           // Construct BBMEnterprise.Messenger which provides higher level
           // functionality used to manipulate and annotate chats.
@@ -110,7 +123,7 @@ let leaveButton;
                 // Initialize the message list.
                 window.customElements.whenDefined(chatMessageList.localName)
                 .then(() => 
-                  createUserManager(userRegId, authManager,
+                createUserManager(userRegId, authManager,
                     bbmeSdk.getIdentitiesFromAppUserId,
                     bbmeSdk.getIdentitiesFromAppUserIds)
                   .then(userManager =>
@@ -485,7 +498,7 @@ let leaveButton;
           indent: '10px',
           childIndent: '85px',
           username: message.isIncoming 
-            ? this.messageFormatter.getUserName(message.sender)
+            ? this.messageFormatter.getUserName(message)
             : 'You',
           timestamp: this.getTimestamp(message),
           content: this.messageFormatter.getMessageText(message),
@@ -514,10 +527,10 @@ let leaveButton;
               for(var j=0; j < message.refBy[i].messageIds.length; j++) {
                 this.formatCommentMessage(message.refBy[i].messageIds[j], ret);
               }
-              break;              
+              break;
             }
           }
-        }        
+        }
         return ret;
       }
 

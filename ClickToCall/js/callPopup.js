@@ -19,17 +19,26 @@
  * @memberof Examples
  */
 
-var bbmeSdk = null;
-var contactsManager = null;
-var bbmCallWidget = null;
-var isSyncStarted = false;
+(function() {
 
-window.onload = () => {
-  bbmCallWidget = document.createElement('bbm-call');
-  window.customElements.whenDefined('bbm-call')
-  .then(() => {
-    const authManager = createAuthManager();
-    authManager.authenticate().then(authUserInfo => {
+  let bbmeSdk = null;
+  let contactsManager = null;
+  let bbmCallWidget = null;
+  let isSyncStarted = false;
+
+  window.onload = async () => {
+    try {
+      bbmCallWidget = document.createElement('bbm-call');
+      await window.customElements.whenDefined('bbm-call');
+      await BBMEnterprise.validateBrowser();
+      const authManager = createAuthManager();
+      const authUserInfo = await authManager.authenticate();
+
+      if (!authUserInfo) {
+        console.warn('Popup will be redirected to the authentication page.');
+        return;
+      }
+
       // Instantiate BBMEnterprise.
       bbmeSdk = new BBMEnterprise({
         domain: ID_PROVIDER_DOMAIN,
@@ -37,27 +46,28 @@ window.onload = () => {
         userId: authUserInfo.userId,
         getToken: authManager.getBbmSdkToken,
         description: navigator.userAgent,
-        messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher,
         kmsArgonWasmUrl: KMS_ARGON_WASM_URL
       });
 
       // Handle changes of BBM Enterprise setup state.
-      bbmeSdk.on('setupState', state => {
+      bbmeSdk.on('setupState', async state => {
         console.log(`ClickToCall: BBMEnterprise setup state: ${state.value}`);
         switch (state.value) {
           case BBMEnterprise.SetupState.Success: {
             // Setup was successful. Create user manager and initiate call.
-            const userRegId = bbmeSdk.getRegistrationInfo().regId;
-            createUserManager(userRegId, authManager,
-              bbmeSdk.getIdentitiesFromAppUserId,
-              bbmeSdk.getIdentitiesFromAppUserIds)
-              .then(userManager => {
-                contactsManager = userManager;
-                contactsManager.initialize()
-                .then(() => {
-                  makeCall(CONTACT_REG_ID, true);
-                });
-              });
+            try {
+              const userRegId = bbmeSdk.getRegistrationInfo().regId;
+              contactsManager = await createUserManager(userRegId,
+                authManager,
+                bbmeSdk.getIdentitiesFromAppUserId,
+                bbmeSdk.getIdentitiesFromAppUserIds);
+              await contactsManager.initialize();
+              makeCall(CONTACT_REG_ID, true);
+            }
+            catch(error) {
+              alert(`Failed to start call. Error: ${error}`);
+              window.close();
+            }
           }
           break;
           case BBMEnterprise.SetupState.SyncRequired: {
@@ -79,7 +89,7 @@ window.onload = () => {
           break;
         }
       });
-  
+
       // Handle setup error.
       bbmeSdk.on('setupError', error => {
         alert(`BBM Enterprise registration failed: ${error.value}`);
@@ -87,21 +97,25 @@ window.onload = () => {
 
       // Start BBM Enterprise setup.
       bbmeSdk.setupStart();
+    }
+    catch (error) {
+      alert(`Failed to start call. Error: ${error}`);
+    }
+  };
+  
+  // Function makes call to the specified contact.
+  function makeCall(regId, isVideo) {
+    document.body.appendChild(bbmCallWidget);
+    bbmCallWidget.isFullScreen = true;
+    bbmCallWidget.isResizeAllowed = false;
+    bbmCallWidget.setContactManager(contactsManager);
+    bbmCallWidget.setBbmSdk(bbmeSdk);
+    bbmCallWidget.makeCall(regId, isVideo);
+    bbmCallWidget.addEventListener('CallEnded', () => {
+      document.body.removeChild(bbmCallWidget);
+      bbmCallWidget = null;
+      window.close();
     });
-  });
-};
+  }
 
-// Function makes call to the specified contact.
-function makeCall(regId, isVideo) {
-  document.body.appendChild(bbmCallWidget);
-  bbmCallWidget.isFullScreen = true;
-  bbmCallWidget.isResizeAllowed = false;
-  bbmCallWidget.setContactManager(contactsManager);
-  bbmCallWidget.setBbmSdk(bbmeSdk);
-  bbmCallWidget.makeCall(regId, isVideo);
-  bbmCallWidget.addEventListener('CallEnded', () => {
-    document.body.removeChild(bbmCallWidget);
-    bbmCallWidget = null;
-    window.close();
-  });
-}
+ }());
