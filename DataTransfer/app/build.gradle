@@ -54,8 +54,8 @@ android {
         // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
         resValue "string", "USER_DOMAIN", appProperties['user_domain']
 
-        //Default to using BlackBerry KMS, to use Cloud key storage (ex Firebase Database) change this value to true
-        buildConfigField("boolean", "USE_CLOUD_KEY", 'false')
+        //Default to using BlackBerry KMS, to use Cloud key storage (ex Firebase Database) change this value to false
+        buildConfigField("boolean", "USE_KMS", appProperties.getProperty("use_kms", 'true'))
     }
 
     compileOptions {

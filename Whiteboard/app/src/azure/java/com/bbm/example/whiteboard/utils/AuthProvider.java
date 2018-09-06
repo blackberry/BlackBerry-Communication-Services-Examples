@@ -46,12 +46,12 @@ public class AuthProvider {
         IdentityUtils.initUserDbSync(context, true);
 
         KeySource keySource;
-        //If using cloud key set the key source to Azure, otherwise we will default to using BlackBerry KMS as the key source
-        if (BuildConfig.USE_CLOUD_KEY) {
+        //If using KMS use the BlackBerryKMSSource, otherwise we will create an AzureCloudKeySource.
+        if (BuildConfig.USE_KMS) {
+            keySource = new BlackBerryKMSSource(new UserChallengePasscodeProvider(context));
+        } else {
             //Initialize an AzureCloudKeySource
             keySource = new AzureCloudKeySource(context, BuildConfig.KEY_PROVIDER_SERVER_URL, new UserChallengePasscodeProvider(context));
-        } else {
-            keySource = new BlackBerryKMSSource(new UserChallengePasscodeProvider(context));
         }
 
         KeySourceManager.setKeySource(keySource);
