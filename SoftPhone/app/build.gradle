@@ -54,7 +54,7 @@ android {
         resValue "string", "USER_DOMAIN", appProperties['user_domain']
 
         //Default to using BlackBerry KMS, to use Cloud key storage (ex Firebase Database) change this value to true
-        buildConfigField("boolean", "USE_CLOUD_KEY", 'false')
+        buildConfigField("boolean", "USE_KMS", appProperties.getProperty("use_kms", 'true'))
     }
 
     compileOptions {
