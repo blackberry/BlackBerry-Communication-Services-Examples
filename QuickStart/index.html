@@ -23,7 +23,6 @@
 
     <script type="text/javascript" src="../../sdk/bbm_sdk_web.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script type="text/javascript" src="../support/auth/GenericAuthHelper.js"></script>
     <script type="text/javascript" src="../support/auth/GoogleAuthManager.js"></script>
     <script type="text/javascript" src="../support/identity/GenericUserInfo.js"></script>
 
@@ -116,6 +115,12 @@
         $('#authTokenState').text(error);
       }
 
+      const authManager = createAuthManager();
+      if (authManager.isAuthenticated) {
+        // User is already authenticated.
+        LogIn();
+      }
+
       // Perform login if the user clicks on the Sign In button.
       function LogIn() {
         try {
@@ -124,7 +129,6 @@
           $('#signInButton').hide();
 
           // Create the auth manager for the configured auth service.
-          const authManager = createAuthManager();
           authManager.authenticate()
           .then(userData => {
             // We have successfully authenticated with the oAuth service

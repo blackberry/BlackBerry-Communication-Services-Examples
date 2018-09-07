@@ -22,33 +22,38 @@
  * @memberof Examples
  */
 
-window.onload = () => {
-  const dataTransferElement = document.querySelector('data-transfer-element');
-  window.customElements.whenDefined(dataTransferElement.localName).then(() => {
-    initBbme()
-    .then(bbmeSdk => {
-      dataTransferElement.setBbmSdk(bbmeSdk);
-    })
-    .catch(error => {
-      alert(error);
-    });
-  });
+window.onload = async () => {
+  try {
+    const dataTransferElement = document.querySelector('data-transfer-element');
+    await window.customElements.whenDefined(dataTransferElement.localName);
+    await BBMEnterprise.validateBrowser();
+    const bbmeSdk = await initBbme();
+    dataTransferElement.setBbmSdk(bbmeSdk);
+  }
+  catch(error) {
+    alert(`Failed to start application. Error: ${error}`);
+  }
 };
 
 // Function initializes BBM Enterprise SDK for JavaScript.
 function initBbme() {
-  return new Promise((resolve, reject) => {
-    let isSyncStarted = false;
-    const authManager = createAuthManager();
-    authManager.authenticate()
-    .then(authUserInfo => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let isSyncStarted = false;
+      const authManager = createAuthManager();
+      const authUserInfo = await authManager.authenticate();
+      if (!authUserInfo) {
+        console.warn('Application will be redirected to the '
+          + 'authentication page');
+        return;
+      }
+
       const bbmeSdk = new BBMEnterprise({
         domain: ID_PROVIDER_DOMAIN,
         environment: ID_PROVIDER_ENVIRONMENT,
         userId: authUserInfo.userId,
         getToken: authManager.getBbmSdkToken,
         description: navigator.userAgent,
-        messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher,
         kmsArgonWasmUrl: KMS_ARGON_WASM_URL
       });
 
@@ -61,7 +66,8 @@ function initBbme() {
           return;
           case BBMEnterprise.SetupState.SyncRequired: {
             if (isSyncStarted) {
-              reject(new Error('Failed to get user keys using provided USER_SECRET'));
+              reject(new Error('Failed to get user keys using provided '
+                + 'USER_SECRET'));
               return;
             }
             const isNew =
@@ -84,6 +90,9 @@ function initBbme() {
       });
 
       bbmeSdk.setupStart();
-    });
+    }
+    catch(error) {
+      alert(`Failed to start application. Error: ${error}`);
+    }
   });
 }

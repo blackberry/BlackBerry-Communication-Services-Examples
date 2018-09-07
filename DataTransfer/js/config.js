@@ -16,7 +16,7 @@
 
 'use strict';
 
-// This domain is a string known to the BBM Enterprise server, which is 
+// This domain is a string known to the BBM Enterprise server, which is
 // generally a GUID.
 const ID_PROVIDER_DOMAIN = 'your_idp_domain';
 
@@ -33,7 +33,6 @@ const KMS_ARGON_WASM_URL = '../../sdk/argon2.wasm';
 // This configuration contains service endpoints and information for OAuth2
 // authentication.
 const AUTH_CONFIGURATION = {
-  type: 'OAuth',
   // OAuth 2.0 endpoint for requesting an access token
   // To use google OAuth service, put:
   // 'https://accounts.google.com/o/oauth2/v2/auth'
@@ -55,11 +54,7 @@ const AUTH_CONFIGURATION = {
   scope : 'your_scope_oauth',
 
   // The client ID of application registered on OAuth 2.0 server
-  clientId: 'your_client_id',
-  
-  // Redirect URL same as registered on OAuth 2.0 server. Required by OAuth 2.0
-  // server to redirect application after issuing an access token.
-  redirectUri : 'oAuthCallback.html'
+  clientId: 'your_client_id'
 };
 
 // Create the auth manager for the Data Transfer app.

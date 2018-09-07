@@ -30,7 +30,11 @@
 
 // Function makes call to specified contact.
 function makeCall() {
-  let left = window.innerWidth / 2 - 200;
-  window.open('callPopup.html', 'Call Window',
-    'height=300,width=400,left=' + left + ',top=200');
+  const left = window.innerWidth / 2 - 200;
+  const popup = window.open('callPopup.html', 'Call Window',
+    `height=300,width=400,left=${left},top=200`);
+  if (!popup) {
+    alert('Failed to create popup window. Please check that your browser' +
+      ' allows popups on this page.');
+  }
 }
