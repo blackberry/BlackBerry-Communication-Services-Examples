@@ -4,11 +4,7 @@ target 'SimpleChat' do
 	# Pods for SimpleChat
 	pod 'GoogleSignIn', '= 4.0.2'
 	pod 'Firebase/Database', '= 3.16.0'
-	pod 'Firebase/Auth', '= 3.16.0'
-    
-    # Pods for QuickStartAzure (Using Azure AD)
-    # Note that MSAL is a preview library, but it's the best current option for iOS
-    # The version here is fixed to avoid API compatibility due to changes in the public interface.
-    pod 'MSAL','= 0.2.2'
+	pod 'Firebase/Auth', '= 3.16.0'   
+    pod 'MSAL','= 0.1.4'
 end
 

@@ -231,6 +231,7 @@
 		C2A5900E1FBB5742008C9C7E /* NSURL+Archiving.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Archiving.m"; sourceTree = "<group>"; };
 		C2A9F243207BB7D60027B726 /* BBMPasscodeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMPasscodeManager.h; sourceTree = "<group>"; };
 		C2B89E4820A3542600483326 /* ConfigSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ConfigSettings.plist; sourceTree = "<group>"; };
+		C2D00CD6215938C8005B0145 /* SimpleChat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleChat.entitlements; sourceTree = "<group>"; };
 		C2D8BAE920753E4700FA2E45 /* BBMKMSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMKMSManager.h; sourceTree = "<group>"; };
 		C2D8BAEA20753E4700FA2E45 /* BBMKMSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMKMSManager.m; sourceTree = "<group>"; };
 		C2D8BAEC20753E4D00FA2E45 /* BBMPasscodeChangeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMPasscodeChangeDelegate.h; sourceTree = "<group>"; };
@@ -659,6 +660,7 @@
 		C2FBF51C1ECCE03D004D6691 /* SimpleChat */ = {
 			isa = PBXGroup;
 			children = (
+				C2D00CD6215938C8005B0145 /* SimpleChat.entitlements */,
 				C296F0941EDC5F1A000214A2 /* ConfigSettings.h */,
 				C2B89E4820A3542600483326 /* ConfigSettings.plist */,
 				C296F0A41EDC6B2B000214A2 /* SimpleChatApp.h */,
@@ -725,6 +727,9 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
 								enabled = 1;
 							};
 						};
@@ -1019,6 +1024,7 @@
 			baseConfigurationReference = DA962D62528DEBB0F4BAC6F9 /* Pods-SimpleChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SimpleChat/SimpleChat.entitlements;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1039,6 +1045,7 @@
 			baseConfigurationReference = 84A4A96678E4F057292AECB4 /* Pods-SimpleChat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SimpleChat/SimpleChat.entitlements;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

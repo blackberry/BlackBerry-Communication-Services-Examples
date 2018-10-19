@@ -210,6 +210,7 @@
 		C2CF088B20052589000792FF /* BBMAzureTokenManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMAzureTokenManager.m; sourceTree = "<group>"; };
 		C2CF088F200527D5000792FF /* AccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountViewController.m; sourceTree = "<group>"; };
 		C2CF0890200527D5000792FF /* AccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountViewController.h; sourceTree = "<group>"; };
+		C2D00CD2215915CB005B0145 /* QuickStart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuickStart.entitlements; sourceTree = "<group>"; };
 		C2D8BADA2075358100FA2E45 /* BBMPasscodeChangeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMPasscodeChangeDelegate.h; sourceTree = "<group>"; };
 		C2D8BADC2075358900FA2E45 /* BBMKMSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMKMSManager.h; sourceTree = "<group>"; };
 		C2D8BADD2075358900FA2E45 /* BBMKMSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMKMSManager.m; sourceTree = "<group>"; };
@@ -632,6 +633,7 @@
 		C2FBF51C1ECCE03D004D6691 /* QuickStart */ = {
 			isa = PBXGroup;
 			children = (
+				C2D00CD2215915CB005B0145 /* QuickStart.entitlements */,
 				C2FBF5C41ECCED28004D6691 /* ConfigSettings.h */,
 				C28D805620600E5B00021882 /* ConfigSettings.plist */,
 				C2CF0890200527D5000792FF /* AccountViewController.h */,
@@ -694,6 +696,9 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
 								enabled = 1;
 							};
 						};
@@ -988,6 +993,7 @@
 			baseConfigurationReference = CCF9F193A282B2FF1785724F /* Pods-QuickStart.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = QuickStart/QuickStart.entitlements;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1015,6 +1021,7 @@
 			baseConfigurationReference = 16C115899AC80CFA65A9EFE0 /* Pods-QuickStart.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = QuickStart/QuickStart.entitlements;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
