@@ -3,41 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>authProvider</key>
-	<string>Must be one of googleSignIn, azureAd, or custom to match the keys below</string>
+	<string>testAuth</string>
 	<key>useBlackBerryKMS</key>
 	<true/>
-	<key>googleSignIn</key>
+	<key>testAuth</key>
 	<dict>
-		<key>keyProvider</key>
-		<string>firebase</string>
-		<key>domain</key>
-		<string>service_domain (ie :abde-ed6d-11e6-a754-f8cab45257283)</string>
 		<key>clientId</key>
-		<string>client_id (ie: 485684fd-643d-4612-83c6-71a075f4357f)</string>
-		<key>environment</key>
-		<string>sandbox</string>
-	</dict>
-	<key>azureAD</key>
-	<dict>
-		<key>keyProvider</key>
-		<string>azure</string>
+		<string>not_used</string>
 		<key>domain</key>
-		<string>service_domain (ie :abde-ed6d-11e6-a754-f8cab45257283)</string>
-		<key>clientId</key>
-		<string>client_id (ie: 485684fd-643d-4612-83c6-71a075f4357f)</string>
-		<key>environment</key>
-		<string>sandbox (valid values are &apos;sandbox&apos; or &apos;production&apos;</string>
-		<key>tenantId</key>
-		<string>tenantId  (ie: 45abdeff12-643d-4612-83c6-71a075f4357f)</string>
-		<key>scope</key>
-		<string>scope (ie: api://abde-ed6d-11e6-a754-f8cab45257283/Messaging.All)</string>
-		<key>keyProviderPath</key>
-		<string>URL path for the key provider path (ie: http://10.0.1.10/kms/)</string>
-	</dict>
-	<key>custom</key>
-	<dict>
-		<key>domain</key>
-		<string>your_service_domain</string>
+		<string>YOUR_DOMAIN</string>
 		<key>environment</key>
 		<string>sandbox</string>
 	</dict>

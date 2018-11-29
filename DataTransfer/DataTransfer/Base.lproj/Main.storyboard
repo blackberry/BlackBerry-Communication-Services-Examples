@@ -208,8 +208,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="User Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="N2G-3J-CAX">
-                                                    <rect key="frame" x="16" y="13" width="72" height="18"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="UserId" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="N2G-3J-CAX">
+                                                    <rect key="frame" x="16" y="13" width="44.5" height="18"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                                     <nil key="textColor"/>
@@ -225,30 +225,8 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="HyU-mv-q58">
-                                        <rect key="frame" x="0.0" y="343" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HyU-mv-q58" id="DM7-NQ-hhx">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jzo-Nw-CRc" userLabel="Switch Device">
-                                                    <rect key="frame" x="139" y="6" width="96" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                                                    <state key="normal" title="Switch Device"/>
-                                                    <connections>
-                                                        <action selector="switchDeviceWithSender:" destination="gVI-2C-Zjf" eventType="touchUpInside" id="O8x-Ep-mqp"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="Jzo-Nw-CRc" firstAttribute="centerY" secondItem="DM7-NQ-hhx" secondAttribute="centerY" id="qOn-e5-lMR"/>
-                                                <constraint firstItem="Jzo-Nw-CRc" firstAttribute="centerX" secondItem="DM7-NQ-hhx" secondAttribute="centerX" id="sCI-s9-pP2"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="92" id="q6z-I4-3aN">
-                                        <rect key="frame" x="0.0" y="387" width="375" height="92"/>
+                                        <rect key="frame" x="0.0" y="343" width="375" height="92"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="q6z-I4-3aN" id="pPA-Gj-6pn">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="91.5"/>
@@ -258,32 +236,30 @@
                                                     <rect key="frame" x="3" y="2" width="369" height="86"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hty-2m-M4O" customClass="GIDSignInButton">
-                                                    <rect key="frame" x="76" y="23" width="223" height="45"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="45" id="nEo-ev-bTs"/>
-                                                    </constraints>
-                                                </view>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ect-O3-srq">
-                                                    <rect key="frame" x="157" y="31" width="60" height="30"/>
+                                                    <rect key="frame" x="157.5" y="31" width="60" height="30"/>
                                                     <state key="normal" title="Sign Out"/>
                                                     <connections>
                                                         <action selector="signOutWithSender:" destination="gVI-2C-Zjf" eventType="touchUpInside" id="h6z-Rs-WSK"/>
                                                     </connections>
                                                 </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cBp-hq-euw">
+                                                    <rect key="frame" x="164" y="31" width="47" height="30"/>
+                                                    <state key="normal" title="Sign In"/>
+                                                    <connections>
+                                                        <action selector="signInSender:" destination="gVI-2C-Zjf" eventType="touchUpInside" id="T8x-8g-x3X"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="hty-2m-M4O" firstAttribute="centerY" secondItem="pPA-Gj-6pn" secondAttribute="centerY" id="5Pu-1M-1TQ"/>
                                                 <constraint firstItem="vOa-91-Dqp" firstAttribute="leading" secondItem="pPA-Gj-6pn" secondAttribute="leading" constant="3" id="Pcf-XJ-YRD"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="hty-2m-M4O" secondAttribute="trailing" constant="60" id="Q9G-GK-DBH"/>
                                                 <constraint firstItem="Ect-O3-srq" firstAttribute="centerY" secondItem="pPA-Gj-6pn" secondAttribute="centerY" id="T2x-RN-AOi"/>
-                                                <constraint firstItem="hty-2m-M4O" firstAttribute="leading" secondItem="pPA-Gj-6pn" secondAttribute="leadingMargin" constant="60" id="Ui5-Vf-IUi"/>
                                                 <constraint firstAttribute="trailing" secondItem="vOa-91-Dqp" secondAttribute="trailing" constant="3" id="a2F-nE-SWV"/>
                                                 <constraint firstItem="Ect-O3-srq" firstAttribute="centerX" secondItem="pPA-Gj-6pn" secondAttribute="centerX" id="bVD-nK-mfs"/>
+                                                <constraint firstItem="cBp-hq-euw" firstAttribute="centerX" secondItem="pPA-Gj-6pn" secondAttribute="centerX" id="gLL-Yb-edB"/>
                                                 <constraint firstItem="vOa-91-Dqp" firstAttribute="top" secondItem="pPA-Gj-6pn" secondAttribute="top" constant="2" id="j2A-3b-D4F"/>
                                                 <constraint firstAttribute="bottom" secondItem="vOa-91-Dqp" secondAttribute="bottom" constant="3" id="jnP-iG-P9t"/>
-                                                <constraint firstItem="hty-2m-M4O" firstAttribute="centerX" secondItem="pPA-Gj-6pn" secondAttribute="centerX" id="nna-8f-Xb2"/>
+                                                <constraint firstItem="cBp-hq-euw" firstAttribute="centerY" secondItem="pPA-Gj-6pn" secondAttribute="centerY" id="xzb-E7-MrB"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -301,14 +277,13 @@
                     <connections>
                         <outlet property="authTokenStateLabel" destination="an8-1D-rBD" id="B08-Zy-c3y"/>
                         <outlet property="domainLabel" destination="i65-9c-QkE" id="OSO-L6-TUS"/>
-                        <outlet property="googleSignInButton" destination="hty-2m-M4O" id="1D1-ZM-2lP"/>
                         <outlet property="regIdLabel" destination="O0z-Wj-Klk" id="oEl-yH-jFv"/>
                         <outlet property="serviceConnectivityLabel" destination="vUf-uA-vWa" id="gBB-ek-FUC"/>
                         <outlet property="serviceStateLabel" destination="6dF-0E-fO8" id="1aB-7V-RaL"/>
                         <outlet property="setupStateLabel" destination="iNw-mX-5cL" id="DUp-WK-O7P"/>
+                        <outlet property="signInButton" destination="cBp-hq-euw" id="Vqv-Nm-234"/>
                         <outlet property="signOutButton" destination="Ect-O3-srq" id="F2b-UF-9K7"/>
-                        <outlet property="switchDeviceButton" destination="Jzo-Nw-CRc" id="J5I-GW-ixr"/>
-                        <outlet property="userEmailLabel" destination="BGU-KA-pbs" id="fOB-yW-dLR"/>
+                        <outlet property="userNameLabel" destination="BGU-KA-pbs" id="fOB-yW-dLR"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bcG-dM-DhW" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -342,7 +317,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xXy-z2-uAL">
                                 <rect key="frame" x="26" y="74" width="323" height="247"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Registration ID" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="az5-Hm-H9h">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User Id" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="az5-Hm-H9h">
                                         <rect key="frame" x="10" y="0.0" width="303" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
@@ -428,9 +403,9 @@
                     <tabBarItem key="tabBarItem" title="Data Transfer" image="ic_file" id="lQz-Df-K14"/>
                     <connections>
                         <outlet property="openConnectionButton" destination="AUd-P0-li7" id="bXd-6C-R4e"/>
-                        <outlet property="regIdField" destination="az5-Hm-H9h" id="EkU-oH-NB9"/>
                         <outlet property="statusField" destination="NbT-z4-Qf0" id="GY7-9N-WFj"/>
                         <outlet property="streamConsole" destination="DFU-4y-uH8" id="D9r-Vj-Jqp"/>
+                        <outlet property="userIdField" destination="az5-Hm-H9h" id="EkU-oH-NB9"/>
                         <outletCollection property="actionButtons" destination="brQ-oz-icb" collectionClass="NSMutableArray" id="cfe-L0-VeK"/>
                         <outletCollection property="actionButtons" destination="JBk-Vc-sVK" collectionClass="NSMutableArray" id="4ps-fv-KMc"/>
                         <outletCollection property="actionButtons" destination="FBl-nL-x69" collectionClass="NSMutableArray" id="4oN-YE-y9n"/>

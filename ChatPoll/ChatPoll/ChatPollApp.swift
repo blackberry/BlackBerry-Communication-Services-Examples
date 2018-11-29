@@ -18,7 +18,6 @@
  */
 
 import Foundation
-import Firebase
 
 class ChatPollApp {
     private let _authController : BBMAuthController! = {

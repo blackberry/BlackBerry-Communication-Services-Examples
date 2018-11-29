@@ -49,15 +49,21 @@ static NSString *const kChatSubjectCell = @"ChatSubjectViewCell";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 
     self.selectedContacts = [[NSMutableDictionary alloc] init];
-    [[LocationSharingApp application].authController.userManager addUserListener:self];
 
-    [self updateNavigationBar];
 }
 
 - (void)dealloc
 {
     [[LocationSharingApp application].authController.userManager removeUserListener:self];
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[LocationSharingApp application].authController.userManager addUserListener:self];
+    [self updateNavigationBar];
+}
+
 
 - (IBAction)cancelPressed:(id)sender
 {
@@ -152,6 +158,15 @@ static NSString *const kChatSubjectCell = @"ChatSubjectViewCell";
     if(self.subjectTextField) {
         [self.subjectTextField resignFirstResponder];
     }
+}
+
+#pragma mark - Contact Management
+
+- (IBAction)addContact:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        [[[[LocationSharingApp application] authController] userManager] addUser];
+    }];
 }
 
 @end

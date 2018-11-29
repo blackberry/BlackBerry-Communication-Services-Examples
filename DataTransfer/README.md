@@ -1,11 +1,11 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Data Transfer for iOS
 
 The Data Transfer sample application 
 demonstrates how to use the peer-to-peer data connection capability of
-Spark. This example builds on the [Quick Start Swift](../QuickStartSwift/README.md) example that
-demonstrates how you can authenticate with Spark using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
+Spark Communications. This example builds on the [Quick Start Swift](../QuickStartSwift/README.md) example that
+demonstrates how you can authenticate with Spark Communications using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
 of your application.
 
 ### Features
@@ -24,15 +24,15 @@ and [Quick Start Swift](../QuickStartSwift/README.md) samples so it may utilize 
 
 
 <p align="center">
-<a href="screenShots/DT_OpenConnection.pn"><img src="screenShots/DT_OpenConnection.png" width="25%" height="25%"></a>
+<a href="screenShots/DT_OpenConnection.png"><img src="screenShots/DT_OpenConnection.png" width="25%" height="25%"></a>
 <a href="(screenShots/DT_Transfer.png"><img src="screenShots/DT_Transfer.png" width="25%" height="25%"></a>
 </p>
 
 ## Getting Started
 
-This sample requires the Spark SDK, which you can find along with related resources at the location below.
+This sample requires the Spark Communications SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
@@ -49,7 +49,14 @@ This sample requires the Spark SDK, which you can find along with related resour
 
 ### Configuration
 
-* [Sample application configuration using Google Sign-In and Firebase](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/googleSignInForiOSExamples.html)
+This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service.  This allows you to get up and running quickly with minimal setup.
+
+[Create your application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+
+Once your sandbox domain is configured, edit the ConfigSettings.plist file and enter the domain identifier under "testAuth/domain".  Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.  
+
+Note: This sample cannot be run on a production domain or a sandbox domain configured for a true identity provider without modification.
+
 
 ## Walk-through
 - [DataTransfers & Push](#dataTransferPush)

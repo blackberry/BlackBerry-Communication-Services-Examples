@@ -1,39 +1,39 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
-# BlackBerry Spark Communications Platform
-Spark is an IP-based cloud communications platform that lets
+# BlackBerry Spark Communications Services
+Spark Communications Services is an IP-based cloud communications platform that lets
 you easily create powerful new experiences between your users, machines, and IoT
 devices. Its enterprise-grade communication and data sharing functionality can
 be integrated directly into your Android, iOS and web apps.
 With end-to-end encryption, digitally signed messages, and guaranteed data
-delivery, Spark is a secure CPaaS (communications platform as a
+delivery, Spark Communications is a secure CPaaS (communications platform as a
 service) solution that can enable you to build powerful connections
 around the world, while keeping everything safe and secure in a
 “private garden” communication system.
 
-# Spark Examples for iOS
+# Spark Communications Examples for iOS
 
 This repository contains code for iOS example applications that you can use to
-help build your messaging solution with Spark.
+help build your messaging solution with Spark Communications.
 
 | Example Application                      | Description                              |
 | ---------------------------------------- | ---------------------------------------- |
-| [Quick Start](QuickStart/README.md)      | Build a basic objective C app to initialize and authenticate with Spark|
-| [Quick Start Swift](QuickStartSwift/README.md)     | Build a basic swift app to initialize and authenticate with Spark|
-| [Simple Chat](SimpleChat/README.md) | Build a basic chat app with Spark |
-| [Location Sharing](LocationSharing/README.md) | Build an app to share the user's location with other users with Spark|
-| [Soft Phone](SoftPhone/README.md) | 	Build an app with voice and video calling with Spark|
-| [Data Transfer](DataTransfer/README.md) | Build an app to send files over a secure peer-to-peer connection with Spark |
-| [Chat Poll](ChatPoll/README.md) | Build an app that allows users to post polls within custom chat messages with Spark |
-| [Raspberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) |Build an iOS app with Spark that securely communicates with an IoT device (LED controlled by a Raspberry Pi |
+| [Quick Start](QuickStart/README.md)      | Build a basic objective C app to initialize and authenticate|
+| [Quick Start Swift](QuickStartSwift/README.md)     | Build a basic swift app to initialize and authenticate|
+| [Simple Chat](SimpleChat/README.md) | Build a basic chat app|
+| [Location Sharing](LocationSharing/README.md) | Build an app to share the user's location with other users|
+| [Soft Phone](SoftPhone/README.md) | 	Build an app with voice and video calling|
+| [Data Transfer](DataTransfer/README.md) | Build an app to send files over a secure peer-to-peer connection|
+| [Chat Poll](ChatPoll/README.md) | Build an app that allows users to post polls within custom chat messages|
+| [Raspberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) |Build an iOS app that securely communicates with an IoT device (LED controlled by a Raspberry Pi |
 
-For more details on all the Spark examples see the online [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).
+For more details on all the Spark Communications examples see the online [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).
 
 # Getting Started
 
-These samples require the Spark SDK, which you can find along with related resources at the location below.
+These samples require the Spark Communications SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 

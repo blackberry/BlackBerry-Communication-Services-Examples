@@ -19,8 +19,6 @@
 
 
 import UIKit
-import GoogleSignIn
-import MSAL
 
 @UIApplicationMain
 
@@ -31,35 +29,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         return true
     }
-
-    
-    //URL handling is required to handle the URL based callbacks from Google Sign via Safari
-    public func application(_ app: UIApplication,
-                            open url: URL,
-                            options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool
-    {
-        if BBMConfigManager.default().type == kGoogleSignIn {
-            return GIDSignIn.sharedInstance().handle(url,
-                                                     sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
-                                                     annotation: options[UIApplicationOpenURLOptionsKey.annotation])
-        }
-        if BBMConfigManager.default().type == kAzureAD {
-            return MSALPublicRTApplication.handleMSALResponse(url)
-        }
-        return false;
-    }
-
-    func application(_ application: UIApplication,
-                     open url: URL,
-                     sourceApplication: String?,
-                     annotation: Any) -> Bool
-    {
-        if BBMConfigManager.default().type == kGoogleSignIn {
-            return GIDSignIn.sharedInstance().handle(url,
-                                                     sourceApplication: sourceApplication,
-                                                     annotation: annotation)
-        }
-        return false;
-    }
-
 }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Mq9-pZ-byn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Mq9-pZ-byn">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,7 +15,7 @@
             <objects>
                 <tableViewController id="pSS-py-hFf" customClass="ChatsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="CE7-oQ-QaT">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="599"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -80,7 +81,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="9Lu-lP-I3U">
-                        <rect key="frame" x="0.0" y="20" width="375" height="48"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -179,16 +180,23 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="yFM-hH-FjH">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="shy-3e-eJc">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="shy-3e-eJc">
                             <connections>
                                 <action selector="cancelPressed:" destination="EBQ-fS-cQp" id="pry-cW-sgc"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Share Location" id="d4h-vj-b02">
-                            <connections>
-                                <action selector="startPressed:" destination="EBQ-fS-cQp" id="4S7-Gl-B6l"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="05g-kH-KEg">
+                                <connections>
+                                    <action selector="addContact:" destination="EBQ-fS-cQp" id="dlB-W4-SXX"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="done" id="d4h-vj-b02">
+                                <connections>
+                                    <action selector="startPressed:" destination="EBQ-fS-cQp" id="4S7-Gl-B6l"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="doneButton" destination="d4h-vj-b02" id="5Rs-mV-auh"/>
@@ -207,14 +215,14 @@
                         <viewControllerLayoutGuide type="bottom" id="1kM-RZ-oL1"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="SPl-aa-iLQ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="599"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="yRJ-3R-TKe">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="555"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                             </mapView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eE0-fe-8eq">
-                                <rect key="frame" x="0.0" y="555" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="559" width="375" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="qyc-A4-GiA"/>
                                 </constraints>
@@ -257,7 +265,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="Nhw-k5-LaT">
-                        <rect key="frame" x="0.0" y="20" width="375" height="48"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -277,7 +285,7 @@
                         <viewControllerLayoutGuide type="bottom" id="vdb-d2-QR2"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="jPr-dg-KYW">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="599"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="location_chat" translatesAutoresizingMaskIntoConstraints="NO" id="fp0-p9-GGO">
@@ -293,30 +301,29 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AnK-CP-Mie" customClass="GIDSignInButton">
-                                <rect key="frame" x="60" y="240" width="255" height="45"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="YcM-Ig-iFY"/>
-                                </constraints>
-                            </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="aFQ-mL-uak">
                                 <rect key="frame" x="169" y="191.5" width="37" height="37"/>
                                 <color key="color" red="0.031372549020000001" green="0.43921568630000002" blue="0.58823529409999997" alpha="1" colorSpace="calibratedRGB"/>
                             </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UIX-VS-PKd">
+                                <rect key="frame" x="163.5" y="253" width="47" height="30"/>
+                                <state key="normal" title="Sign In"/>
+                                <connections>
+                                    <action selector="signIn" destination="QNp-9E-jTs" eventType="touchUpInside" id="f21-Ua-cGc"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="fp0-p9-GGO" firstAttribute="top" secondItem="jPr-dg-KYW" secondAttribute="top" constant="30" id="7mV-gA-XA3"/>
-                            <constraint firstItem="AnK-CP-Mie" firstAttribute="leading" secondItem="jPr-dg-KYW" secondAttribute="leading" constant="60" id="89C-uh-bQx"/>
-                            <constraint firstItem="AnK-CP-Mie" firstAttribute="top" secondItem="bgK-vj-BbT" secondAttribute="bottom" constant="30" id="HLV-9n-Pzu"/>
+                            <constraint firstItem="UIX-VS-PKd" firstAttribute="top" secondItem="aFQ-mL-uak" secondAttribute="bottom" constant="24.5" id="CFv-yH-g0B"/>
                             <constraint firstItem="bgK-vj-BbT" firstAttribute="leading" secondItem="jPr-dg-KYW" secondAttribute="leading" constant="5" id="HW3-z5-Ta0"/>
                             <constraint firstItem="aFQ-mL-uak" firstAttribute="centerY" secondItem="bgK-vj-BbT" secondAttribute="centerY" id="QDk-pa-4Ua"/>
                             <constraint firstItem="fp0-p9-GGO" firstAttribute="centerX" secondItem="jPr-dg-KYW" secondAttribute="centerX" id="bI6-0c-iIo"/>
                             <constraint firstItem="bgK-vj-BbT" firstAttribute="top" secondItem="fp0-p9-GGO" secondAttribute="bottom" constant="30" id="dGR-KW-tS4"/>
                             <constraint firstItem="aFQ-mL-uak" firstAttribute="centerX" secondItem="jPr-dg-KYW" secondAttribute="centerX" id="fnl-P2-ovW"/>
                             <constraint firstAttribute="trailing" secondItem="bgK-vj-BbT" secondAttribute="trailing" constant="5" id="kVm-wn-Qyf"/>
-                            <constraint firstAttribute="trailing" secondItem="AnK-CP-Mie" secondAttribute="trailing" constant="60" id="lc4-xV-eVp"/>
+                            <constraint firstItem="UIX-VS-PKd" firstAttribute="centerX" secondItem="jPr-dg-KYW" secondAttribute="centerX" id="oZu-JV-Wl2"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Sign In" id="et1-9k-891">
@@ -325,8 +332,8 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="activityIndicator" destination="aFQ-mL-uak" id="r4t-3M-b7M"/>
-                        <outlet property="googleSignInButton" destination="AnK-CP-Mie" id="cc7-2w-zfO"/>
                         <outlet property="setupStateLabel" destination="bgK-vj-BbT" id="MhL-lx-Zqo"/>
+                        <outlet property="signInButton" destination="UIX-VS-PKd" id="faC-i5-vaw"/>
                         <segue destination="pSS-py-hFf" kind="show" identifier="loginSegue" id="I7e-sk-Cv5"/>
                     </connections>
                 </viewController>

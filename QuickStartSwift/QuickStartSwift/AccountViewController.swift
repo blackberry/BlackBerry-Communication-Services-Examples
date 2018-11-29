@@ -19,7 +19,6 @@
 
 
 import UIKit
-import GoogleSignIn
 import BBMEnterprise
 
 class AccountViewController: UITableViewController, BBMConnectivityListener, BBMAuthControllerDelegate
@@ -29,11 +28,10 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
     @IBOutlet weak var setupStateLabel : UILabel!
     @IBOutlet weak var regIdLabel : UILabel!
     @IBOutlet weak var domainLabel : UILabel!
-    @IBOutlet weak var userEmailLabel : UILabel!
+    @IBOutlet weak var userNameLabel : UILabel!
     @IBOutlet weak var serviceConnectivityLabel : UILabel!
 
-    @IBOutlet weak var switchDeviceButton : UIButton!
-    @IBOutlet weak var googleSignInButton : GIDSignInButton!
+    @IBOutlet weak var signInButton : UIButton!
     @IBOutlet weak var signOutButton : UIButton!
 
     var serviceMonitor : ObservableMonitor!
@@ -77,14 +75,16 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        googleSignInButton.isHidden = true
-        switchDeviceButton.isEnabled = true
+        signInButton.isHidden = true
         signOutButton.isHidden = true
         domainLabel.text = BBMConfigManager.default().sdkServiceDomain
 
         //This will activate and run our serviceMonitor which will update all of the UI elements
         //via authStateChanged and serviceStateChanged
         serviceMonitor.activate()
+
+        assert(BBMConfigManager.default().isUsingBlackBerryKMS(), "QuickStartSwift only support the Spark Communications Key Management Service");
+        assert(BBMConfigManager.default().type == kTestAuth, "QuickStartSwift only supports the TestTokenManager");
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -106,27 +106,12 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
         authTokenStateLabel.text = authState.authTokenState != nil ? authState.authTokenState! : "No Token"
         setupStateLabel.text = authState.setupState != nil ? authState.setupState! : "Setup Not Started"
         regIdLabel.text = authState.regId != nil ? authState.regId.stringValue : ""
-
-        let email : String = authState.account != nil ? authState.account.email : ""
-        userEmailLabel.text = email
-
-        googleSignInButton.isHidden = QuickStartApp.app().authController().startedAndAuthenticated;
-        signOutButton.isHidden = !QuickStartApp.app().authController().startedAndAuthenticated;
-
-        let setupState : String = authState.setupState ??  " "
-        switchDeviceButton.isEnabled = (setupState == kBBMSetupStateDeviceSwitch)
-
-        //In order to complete the setup process, we must syncronize the profile keys.  For the sake of
-        //brevity, we will simply set the key state to synced.  See the other BBM Enterprise samples
-        //and/or BBMKeyManager in /examples/support for details on how to export/import profile keys
-        if  let keyState = BBMEnterpriseService.shared().model().globalProfileKeysState(),
-            setupState == kBBMSetupStateOngoing,
-            keyState == kBBMKeyStateNotSynced
-        {
-            let element = ["name" : "profileKeysState", "value": "Synced"]
-            let syncProfileKey : BBMRequestListChangeMessage = BBMRequestListChangeMessage(elements: [element], type: "global")
-            BBMEnterpriseService.shared().sendMessage(toService: syncProfileKey)
+        if let account = authState.account {
+            userNameLabel.text = account.name;
         }
+
+        signInButton.isHidden = QuickStartApp.app().authController().startedAndAuthenticated;
+        signOutButton.isHidden = !QuickStartApp.app().authController().startedAndAuthenticated;
 
         if (authState.setupState != nil && authState.setupState == kBBMSetupStateFull) {
             QuickStartApp.app().endpointManager().deregisterAnyEndpointAndContinueSetup()
@@ -144,14 +129,13 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
 
     //MARK: IB Actions
 
-    @IBAction func switchDevice(sender: UIButton?) {
-        BBMAccess.sendSetupRetry()
-    }
-
-
     @IBAction func signOut(sender: UIButton?) {
         BBMEnterpriseService.shared().resetService()
         QuickStartApp.app().authController().signOut()
+    }
+
+    @IBAction func signIn(sender: UIButton?) {
+        QuickStartApp.app().authController().tokenManager.signIn!()
     }
 
 }

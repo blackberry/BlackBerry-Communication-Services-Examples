@@ -20,16 +20,16 @@
 #import "LoginViewController.h"
 #import <BBMEnterprise/BBMEnterprise.h>
 #import "BBMAccess.h"
-#import <GoogleSignIn/GIDSignInButton.h>
 #import "BBMAuthenticationDelegate.h"
 #import "LocationSharingApp.h"
 
 @interface LoginViewController ()
 
-@property (weak, nonatomic) IBOutlet UILabel *setupStateLabel;
-@property (weak, nonatomic) IBOutlet GIDSignInButton *googleSignInButton;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic) ObservableMonitor *authControllerMonitor;
+@property (weak,   nonatomic) IBOutlet UILabel *setupStateLabel;
+@property (weak,   nonatomic) IBOutlet UIButton *signInButton;
+@property (weak,   nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
+@property (strong, nonatomic) ObservableMonitor *authControllerMonitor;
 
 @end
 
@@ -39,7 +39,7 @@
 {
     [super viewDidLoad];
 
-    self.googleSignInButton.hidden = YES;
+    self.signInButton.hidden = YES;
 
     //Configure the authentication controller.
     [[[LocationSharingApp application] authController] setRootController:self];
@@ -49,6 +49,7 @@
         [weakSelf observeServiceStateAndAuthState];
     }];
 }
+
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -60,6 +61,7 @@
     }
 }
 
+
 - (void)observeServiceStateAndAuthState
 {
     //Update the UI based on the values for the service state and the auth state.
@@ -67,38 +69,33 @@
     BOOL serviceStarted = [LocationSharingApp application].authController.serviceStarted;
     NSString *setupState = authState.setupState;
 
-    if (serviceStarted && ([setupState isEqualToString:kBBMSetupStateNotRequested] ||
+    if (serviceStarted && (setupState  == kBBMSetupStateNotRequested ||
                            setupState == nil)) {
         self.setupStateLabel.text = @"Tap sign in to start.";
         [self.activityIndicator stopAnimating];
-        self.googleSignInButton.hidden = NO;
+        self.signInButton.hidden = NO;
     }
-    if([setupState isEqualToString:kBBMSetupStateOngoing] ||
-       [setupState isEqualToString:kBBMSetupStateSuccess]){
+    if(setupState == kBBMSetupStateOngoing ||
+       setupState == kBBMSetupStateSuccess){
         self.setupStateLabel.text = @"";
         [self.activityIndicator startAnimating];
-        self.googleSignInButton.hidden = YES;
+        self.signInButton.hidden = YES;
     }
-    else if([setupState isEqualToString:kBBMSetupStateFull]) {
+    else if(setupState == kBBMSetupStateFull) {
         // If state is full, ask for list of endpoints and remove one so that setup can continue.
         [[LocationSharingApp application].authController.endpointManager deregisterAnyEndpointAndContinueSetup];
     }
     else if(!serviceStarted){
         self.setupStateLabel.text = @"Service not started.";
         [self.activityIndicator stopAnimating];
-        self.googleSignInButton.hidden = YES;
+        self.signInButton.hidden = YES;
     }
 
-    // Send device switch message if needed. This means the user had previously logged in on another
-    // device or reinstalled app.
-    if([setupState isEqualToString:kBBMSetupStateDeviceSwitch]){
-        [BBMAccess sendSetupRetry];
-    }
-
-    if([authState.setupState isEqualToString:kBBMSetupStateSuccess]) {
+    if(setupState == kBBMSetupStateSuccess) {
          [self loggedIn];
      }
 }
+
 
 #pragma mark -
 
@@ -108,6 +105,12 @@
     [[BBMEnterpriseService service] resetService];
     [[[LocationSharingApp application] authController] signOut];
 }
+
+- (IBAction)signIn
+{
+    [[[LocationSharingApp application] authController].tokenManager signIn];
+}
+
 
 - (void) loggedIn
 {

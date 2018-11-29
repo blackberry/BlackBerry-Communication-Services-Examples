@@ -28,7 +28,7 @@ class DataSendViewController : UIViewController,
 
     let mediaManager = BBMEnterpriseService.shared().mediaManager()!
 
-    @IBOutlet weak var regIdField: UITextField!
+    @IBOutlet weak var userIdField: UITextField!
     @IBOutlet weak var openConnectionButton: UIButton!
     @IBOutlet weak var statusField: UILabel!
     @IBOutlet weak var streamConsole: UITextView!
@@ -40,7 +40,7 @@ class DataSendViewController : UIViewController,
 
     override func viewDidLoad() {
         BBMEnterpriseService.shared().mediaManager().add(self)
-        regIdField.text = ""
+        userIdField.text = ""
         statusField.text = "Ready"
         statusField.backgroundColor = UIColor.green
         setActionButtonsEnabled(false)
@@ -54,37 +54,41 @@ class DataSendViewController : UIViewController,
         }
     }
 
-    func openDataConnection(_ regId: NSNumber, metaData: String!) {
-        self.mediaManager.startDataConnection(regId, metaData: metaData) {
-            connection, error in
-            if(error != kMediaErrorNoError) {
-                self.statusField.text = "Connection Error"
-                self.statusField.backgroundColor = UIColor.red
+    func openDataConnection(_ userId: String, metaData: String!) {
+        DataTransferApp.app().authController().userManager.getRegId(forUserId: userId) {
+            mapping,success in
+            if(success && mapping?.regId != nil) {
+                self.mediaManager.startDataConnection(mapping?.regId, metaData: metaData) {
+                    connection, error in
+                    if(error != kMediaErrorNoError) {
+                        self.statusField.text = "Connection Error"
+                        self.statusField.backgroundColor = UIColor.red
+                        self.openConnectionButton.isEnabled = true
+                        return
+                    }
+                }
+            }else{
+                self.statusField.text = "Invalid User Id"
                 self.openConnectionButton.isEnabled = true
-                return
             }
         }
     }
 
     @IBAction func openConnectionPressed(_ sender: Any) {
-        self.regIdField.resignFirstResponder()
+        self.userIdField.resignFirstResponder()
 
         if(self.connection != nil) {
             BBMEnterpriseService.shared().mediaManager().end(self.connection)
             return
         }
 
-        guard let regIdStr = regIdField.text,
-            regIdStr.lengthOfBytes(using: .utf8) > 10,
-            let regIdInt = CLongLong(regIdStr) else
-        {
-            statusField.text = "Invalid Reg Id"
-            return
+        guard let userIdStr = userIdField.text else {
+            statusField.text = "Invalid User Id"
+            return;
         }
 
         openConnectionButton.isEnabled = false
-        let regIdNum = NSNumber(value: regIdInt)
-        openDataConnection(regIdNum, metaData: "")
+        openDataConnection(userIdStr, metaData: "")
         statusField.text = "Opening Connection"
         statusField.backgroundColor = self.openConnectionButton.tintColor
     }
@@ -185,7 +189,7 @@ class DataSendViewController : UIViewController,
     func incomingDataConnectionAvailable(_ connection: BBMDataConnection!) {
         statusField.text = "Incoming Connection"
         statusField.backgroundColor = openConnectionButton.tintColor
-        regIdField.text = connection.peerRegId
+        userIdField.text = connection.peerRegId
         openConnectionButton.setTitle("Close Connection", for: .normal)
     }
 
@@ -291,8 +295,8 @@ class DataSendViewController : UIViewController,
         if let stringToRender = String(data: channelData, encoding: String.Encoding.utf8) {
             let stringAlert = UIAlertController(title: "String Received",
                                                       message: stringToRender,
-                                                      preferredStyle: UIAlertControllerStyle.alert)
-            let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.default, handler: nil)
+                                                      preferredStyle: UIAlertController.Style.alert)
+            let closeAction = UIAlertAction(title: "Close", style: UIAlertAction.Style.default, handler: nil)
             stringAlert.addAction(closeAction)
 
             self.present(stringAlert, animated: true, completion: nil)
@@ -350,15 +354,15 @@ class DataSendViewController : UIViewController,
     func notifyOfIncomingTransfer(_ path : URL)  {
         let incomingCallAlert = UIAlertController(title: "Incoming File",
                                                   message: "",
-                                                  preferredStyle: UIAlertControllerStyle.alert)
+                                                  preferredStyle: UIAlertController.Style.alert)
 
 
-        let viewAction = UIAlertAction(title: "View", style: UIAlertActionStyle.default) {
+        let viewAction = UIAlertAction(title: "View", style: UIAlertAction.Style.default) {
             _ in
             self.viewFile(path)
         }
 
-        let declineAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil)
+        let declineAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil)
 
         incomingCallAlert.addAction(viewAction)
         incomingCallAlert.addAction(declineAction)

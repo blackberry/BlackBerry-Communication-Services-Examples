@@ -18,9 +18,7 @@
 */ 
 
 #import "AppDelegate.h"
-#import <GoogleSignIn/GoogleSignIn.h>
 #import "LocationSharingApp.h"
-#import "BBMConfigManager.h"
 
 @interface AppDelegate ()
 
@@ -30,29 +28,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [GIDSignIn sharedInstance].clientID = [BBMConfigManager defaultManager].clientId;
     return YES;
 }
 
-#pragma mark - Google SignIn methods
-
-- (BOOL)application:(UIApplication *)app
-            openURL:(NSURL *)url
-            options:(NSDictionary *)options
-{
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation
-{
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:sourceApplication
-                                      annotation:annotation];
-}
 
 @end

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -217,7 +219,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lbq-HP-a2b" userLabel="Switch Device">
-                                                    <rect key="frame" x="139" y="6" width="96" height="30"/>
+                                                    <rect key="frame" x="139.5" y="6" width="96" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                                     <state key="normal" title="Switch Device"/>
                                                     <connections>
@@ -242,32 +244,30 @@
                                                     <rect key="frame" x="3" y="2" width="369" height="86"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
-                                                <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e15-yj-IuX" customClass="GIDSignInButton">
-                                                    <rect key="frame" x="76" y="23" width="223" height="45"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="45" id="MBX-IT-sU6"/>
-                                                    </constraints>
-                                                </view>
                                                 <button opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FNp-WY-7xy">
-                                                    <rect key="frame" x="157" y="31" width="60" height="30"/>
+                                                    <rect key="frame" x="157.5" y="31" width="60" height="30"/>
                                                     <state key="normal" title="Sign Out"/>
                                                     <connections>
                                                         <action selector="signOutWithSender:" destination="i1w-h2-ItX" eventType="touchUpInside" id="rJz-Wp-tTE"/>
                                                     </connections>
                                                 </button>
+                                                <button opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T1b-Gc-BHl">
+                                                    <rect key="frame" x="164" y="30" width="47" height="30"/>
+                                                    <state key="normal" title="Sign In"/>
+                                                    <connections>
+                                                        <action selector="signInSender:" destination="i1w-h2-ItX" eventType="touchUpInside" id="PAK-YL-zZ0"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="FNp-WY-7xy" firstAttribute="centerY" secondItem="3Zg-CV-Tck" secondAttribute="centerY" id="1ek-A2-RdW"/>
-                                                <constraint firstItem="e15-yj-IuX" firstAttribute="leading" secondItem="3Zg-CV-Tck" secondAttribute="leadingMargin" constant="60" id="4W0-sh-dHL"/>
                                                 <constraint firstItem="DH5-gK-T7f" firstAttribute="top" secondItem="3Zg-CV-Tck" secondAttribute="top" constant="2" id="74M-Py-Kcq"/>
                                                 <constraint firstItem="DH5-gK-T7f" firstAttribute="leading" secondItem="3Zg-CV-Tck" secondAttribute="leading" constant="3" id="9Lx-gS-Mt7"/>
+                                                <constraint firstItem="T1b-Gc-BHl" firstAttribute="centerY" secondItem="3Zg-CV-Tck" secondAttribute="centerY" id="Ext-9e-ZJS"/>
                                                 <constraint firstAttribute="trailing" secondItem="DH5-gK-T7f" secondAttribute="trailing" constant="3" id="V0j-NS-8zN"/>
                                                 <constraint firstItem="FNp-WY-7xy" firstAttribute="centerX" secondItem="3Zg-CV-Tck" secondAttribute="centerX" id="XAI-tr-jxg"/>
-                                                <constraint firstItem="e15-yj-IuX" firstAttribute="centerX" secondItem="3Zg-CV-Tck" secondAttribute="centerX" id="l5V-vq-csi"/>
                                                 <constraint firstAttribute="bottom" secondItem="DH5-gK-T7f" secondAttribute="bottom" constant="3" id="n3r-3Q-W6Z"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="e15-yj-IuX" secondAttribute="trailing" constant="60" id="weB-JY-lQh"/>
-                                                <constraint firstItem="e15-yj-IuX" firstAttribute="centerY" secondItem="3Zg-CV-Tck" secondAttribute="centerY" id="yAw-tn-saR"/>
+                                                <constraint firstItem="T1b-Gc-BHl" firstAttribute="centerX" secondItem="3Zg-CV-Tck" secondAttribute="centerX" id="plK-Co-QMk"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -285,14 +285,14 @@
                     <connections>
                         <outlet property="authTokenStateLabel" destination="o4O-gX-jjI" id="DCV-Cr-sEz"/>
                         <outlet property="domainLabel" destination="fKB-iV-Lg7" id="Khs-rd-GFm"/>
-                        <outlet property="googleSignInButton" destination="e15-yj-IuX" id="rzu-rp-c2A"/>
                         <outlet property="regIdLabel" destination="moX-pw-Dvm" id="sxh-JP-Baj"/>
                         <outlet property="serviceConnectivityLabel" destination="X8U-VC-taz" id="rVC-1E-Rpn"/>
                         <outlet property="serviceStateLabel" destination="rXs-w1-nNZ" id="M9b-6c-DZL"/>
                         <outlet property="setupStateLabel" destination="UHW-3k-zjg" id="zdN-Ux-DSl"/>
+                        <outlet property="signInButton" destination="T1b-Gc-BHl" id="qdg-MD-kmw"/>
                         <outlet property="signOutButton" destination="FNp-WY-7xy" id="UlM-L9-lQ4"/>
                         <outlet property="switchDeviceButton" destination="lbq-HP-a2b" id="wLO-Vw-6ff"/>
-                        <outlet property="userEmailLabel" destination="ibe-0f-g4j" id="doi-R0-df3"/>
+                        <outlet property="userNameLabel" destination="ibe-0f-g4j" id="doi-R0-df3"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UwC-aR-Dq6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -412,7 +412,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p5n-v5-dBY">
-                                <rect key="frame" x="113" y="169" width="148" height="30"/>
+                                <rect key="frame" x="113.5" y="169" width="148" height="30"/>
                                 <state key="normal" title="Start or Resume Chat"/>
                                 <connections>
                                     <action selector="startPressed:" destination="bF4-S1-LGj" eventType="touchUpInside" id="VuV-Fg-IJW"/>

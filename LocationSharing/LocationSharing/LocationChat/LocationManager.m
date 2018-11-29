@@ -108,7 +108,7 @@ NSString * const kLatitudeKey = @"latitude";
 
 #pragma mark - BBMLiveListener
 
-- (void)elementsAdded:(NSArray *)elements listId:(NSString *)listId
+- (void)elementsAdded:(NSArray *)elements
 {
     for (BBMElement *element in elements) {
         if ([element isKindOfClass:[BBMChat class]]) {

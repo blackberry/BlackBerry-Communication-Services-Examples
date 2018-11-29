@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="OFy-SD-iEV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="OFy-SD-iEV">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -173,8 +173,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="User Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="YUp-6h-Gd0">
-                                                    <rect key="frame" x="16" y="13" width="72" height="18"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="User Id" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="YUp-6h-Gd0">
+                                                    <rect key="frame" x="16" y="13" width="48.5" height="18"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                                     <nil key="textColor"/>
@@ -190,39 +190,13 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="F1K-7L-beT">
-                                        <rect key="frame" x="0.0" y="343" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="F1K-7L-beT" id="Wew-ss-bIq">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AUx-uV-m9x" userLabel="Switch Device">
-                                                    <rect key="frame" x="139.5" y="6" width="96" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                                                    <state key="normal" title="Switch Device"/>
-                                                    <connections>
-                                                        <action selector="switchDevice:" destination="bOC-IK-umT" eventType="touchUpInside" id="9gL-fX-DyQ"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="AUx-uV-m9x" firstAttribute="centerY" secondItem="Wew-ss-bIq" secondAttribute="centerY" id="2EM-Hh-tgS"/>
-                                                <constraint firstItem="AUx-uV-m9x" firstAttribute="centerX" secondItem="Wew-ss-bIq" secondAttribute="centerX" id="gHs-Ug-s3u"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="92" id="XYV-An-TgF">
-                                        <rect key="frame" x="0.0" y="387" width="375" height="92"/>
+                                        <rect key="frame" x="0.0" y="343" width="375" height="92"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XYV-An-TgF" id="skw-Ji-Eem">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="91.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ypO-gP-MXd">
-                                                    <rect key="frame" x="3" y="2" width="369" height="86"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XvV-B9-KFc">
                                                     <rect key="frame" x="76" y="23" width="223" height="45"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -240,13 +214,9 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="XvV-B9-KFc" secondAttribute="trailing" constant="60" id="0B0-RD-JQN"/>
-                                                <constraint firstAttribute="trailing" secondItem="ypO-gP-MXd" secondAttribute="trailing" constant="3" id="4T5-FY-Xp6"/>
                                                 <constraint firstItem="d5M-q2-zu0" firstAttribute="centerY" secondItem="skw-Ji-Eem" secondAttribute="centerY" id="6lJ-rn-Ujq"/>
-                                                <constraint firstItem="ypO-gP-MXd" firstAttribute="top" secondItem="skw-Ji-Eem" secondAttribute="top" constant="2" id="Pbz-yE-Wm0"/>
-                                                <constraint firstAttribute="bottom" secondItem="ypO-gP-MXd" secondAttribute="bottom" constant="3" id="SBr-2Z-sWV"/>
                                                 <constraint firstItem="XvV-B9-KFc" firstAttribute="centerY" secondItem="skw-Ji-Eem" secondAttribute="centerY" id="bIN-bq-4aT"/>
                                                 <constraint firstItem="XvV-B9-KFc" firstAttribute="centerX" secondItem="skw-Ji-Eem" secondAttribute="centerX" id="e7D-mW-6GG"/>
-                                                <constraint firstItem="ypO-gP-MXd" firstAttribute="leading" secondItem="skw-Ji-Eem" secondAttribute="leading" constant="3" id="nBJ-ym-3fC"/>
                                                 <constraint firstItem="XvV-B9-KFc" firstAttribute="leading" secondItem="skw-Ji-Eem" secondAttribute="leadingMargin" constant="60" id="vvT-ed-8pb"/>
                                                 <constraint firstItem="d5M-q2-zu0" firstAttribute="centerX" secondItem="skw-Ji-Eem" secondAttribute="centerX" id="ynz-7y-2jm"/>
                                             </constraints>
@@ -269,10 +239,9 @@
                         <outlet property="serviceConnectivityLabel" destination="css-UV-kQR" id="TnQ-XT-CkT"/>
                         <outlet property="serviceStateLabel" destination="eGO-p8-TAY" id="rJg-FB-TPY"/>
                         <outlet property="setupStateLabel" destination="VrV-mj-LoX" id="Jpu-ek-EDe"/>
-                        <outlet property="signInButton" destination="XvV-B9-KFc" id="ZNz-fr-o5l"/>
+                        <outlet property="signInButtonContainer" destination="XvV-B9-KFc" id="znO-P4-MHD"/>
                         <outlet property="signOutButton" destination="d5M-q2-zu0" id="1b6-aL-JS4"/>
-                        <outlet property="switchDeviceButton" destination="AUx-uV-m9x" id="bqN-I5-sfA"/>
-                        <outlet property="userEmailLabel" destination="nOu-cS-fQF" id="353-4m-HDC"/>
+                        <outlet property="userIdField" destination="nOu-cS-fQF" id="VIR-Lk-AgQ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uBn-Mu-LXY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -285,7 +254,7 @@
                 <navigationController id="wEo-JS-OwM" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Chats" image="chat_tab" id="abO-hG-Emb"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="98A-eP-oFK">
-                        <rect key="frame" x="0.0" y="-44" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -398,7 +367,7 @@
                                     <action selector="startPressed:" destination="YA1-tA-gnE" eventType="touchUpInside" id="jRh-mO-0Qa"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Registration ID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4rT-EP-erw">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4rT-EP-erw">
                                 <rect key="frame" x="16" y="58" width="343" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -428,9 +397,9 @@
                     <navigationItem key="navigationItem" id="dwh-TJ-uit"/>
                     <connections>
                         <outlet property="chatCreator" destination="f5V-am-CHr" id="6Z1-cD-3jg"/>
-                        <outlet property="regIdField" destination="4rT-EP-erw" id="faU-Fb-s3s"/>
                         <outlet property="startChatButton" destination="cnF-vi-Wha" id="IpY-cL-Ir7"/>
                         <outlet property="subjectField" destination="6KG-Pv-nqQ" id="GLZ-BV-FTI"/>
+                        <outlet property="userIdField" destination="4rT-EP-erw" id="Dme-7t-5yz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="43z-SV-0eW" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -583,7 +552,7 @@
                     <tabBarItem key="tabBarItem" title="Account" image="account_tab" id="abd-bq-1nu"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Fj0-VA-hgA">
-                        <rect key="frame" x="0.0" y="-44" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

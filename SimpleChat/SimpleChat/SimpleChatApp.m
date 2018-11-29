@@ -27,7 +27,6 @@
 
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "BBMFirebaseKeyStorageProvider.h"
-#import "BBMFirebaseUserManager.h"
 #import "BBMGoogleTokenManager.h"
 #import "Firebase.h"
 #import "BBMAzureTokenManager.h"
@@ -70,13 +69,13 @@
 {
     static dispatch_once_t acToken;
     dispatch_once(&acToken, ^{
-        _authController = [BBMAuthController authControllerFromConfigFile];
+        self->_authController = [BBMAuthController authControllerFromConfigFile];
 
         //Start the BBM Enterprise service.
-        [_authController startBBMEnterpriseService];
+        [self->_authController startBBMEnterpriseService];
 
         //Resume our previous session
-        [_authController signInSilently];
+        [self->_authController signInSilently];
     });
     return _authController;
 }
@@ -86,9 +85,9 @@
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _endpointManager = [[BBMEndpointManager alloc] init];
+        self->_endpointManager = [[BBMEndpointManager alloc] init];
         // The endpoint manager needs to know about auth changes to register an endpoint
-        [_authController addDelegate:_endpointManager];
+        [self->_authController addDelegate:self->_endpointManager];
     });
     return _endpointManager;
 }

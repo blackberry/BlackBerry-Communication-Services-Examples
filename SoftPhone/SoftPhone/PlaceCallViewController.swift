@@ -23,7 +23,7 @@ import UIKit
 
 class PlaceCallViewController : UIViewController, BBMEMediaDelegate
 {
-    @IBOutlet weak var regIdField: UITextField!
+    @IBOutlet weak var userIdField: UITextField!
     @IBOutlet weak var callButton: UIButton!
     @IBOutlet weak var statusLabel: UILabel!
 
@@ -31,17 +31,17 @@ class PlaceCallViewController : UIViewController, BBMEMediaDelegate
 
     override func viewWillAppear(_ animated: Bool) {
         mediaManager.add(self)
+        statusLabel.text = ""
         resetCallButton()
     }
 
     func resetCallButton() {
-        statusLabel.text = ""
         callButton.isEnabled = true
         callButton.setTitle("Start Call", for: UIControlState.normal)
     }
 
     @IBAction func placeCallPressed(_ sender: Any) {
-        regIdField.resignFirstResponder()
+        userIdField.resignFirstResponder()
 
         if mediaManager.currentCallInfo != nil {
             mediaManager.hangup()
@@ -53,12 +53,7 @@ class PlaceCallViewController : UIViewController, BBMEMediaDelegate
             return;
         }
 
-        guard let regIdStr = regIdField.text,
-            let regIdLL = CUnsignedLongLong(regIdStr),
-            regIdStr.lengthOfBytes(using: .utf8) > 10
-            else
-        {
-            statusLabel.text = String("Invalid Registration Id")
+        guard let userIdStr = userIdField.text else{
             return;
         }
 
@@ -67,20 +62,8 @@ class PlaceCallViewController : UIViewController, BBMEMediaDelegate
             if(granted == false) {
                 return;
             }
-
-            let regIdNum = NSNumber(value: regIdLL)
+            self.placeCall(userIdStr)
             self.callButton.setTitle("Cancel Call", for: UIControlState.normal)
-            self.mediaManager.callRegId(regIdNum, mediaMode: kVoice) {
-                (error) -> Void in
-                self.callButton.isEnabled = true
-                if(error != kMediaErrorNoError) {
-                    self.statusLabel.text = "Unable to place call (" + String(error.rawValue) + ")"
-                    self.resetCallButton()
-                    return;
-                }
-
-                self.statusLabel.text = String(format: "Calling %@", regIdNum)
-            }
         }
 
         //Before placing a call, we need to request permission to access the microphone.
@@ -90,9 +73,35 @@ class PlaceCallViewController : UIViewController, BBMEMediaDelegate
     }
 
 
+    func placeCall(_ userId : String) {
+        statusLabel.text = String(format: "Looking Up %@", userId)
+        SoftPhoneApp.app().authController().userManager.getRegId(forUserId: userId) {
+            mapping,success in
+            if(success && mapping?.regId != nil) {
+                self.mediaManager.callRegId(mapping?.regId, mediaMode: kVoice) {
+                    (error) -> Void in
+                    self.callButton.isEnabled = true
+                    if(error != kMediaErrorNoError) {
+                        self.statusLabel.text = "Unable to place call (" + String(error.rawValue) + ")"
+                        self.resetCallButton()
+                        return;
+                    }
+
+                    self.statusLabel.text = String(format: "Calling %@", userId)
+                }
+
+            }else{
+                self.statusLabel.text = "Invalid User Id"
+                self.resetCallButton()
+            }
+        }
+
+    }
+
+
     //Tap gesture recognizer callback
-    @IBAction func dismissNumberPad(_ sender: Any) {
-        regIdField.resignFirstResponder()
+    @IBAction func dismissKeyboard(_ sender: Any) {
+        userIdField.resignFirstResponder()
     }
 
 
@@ -102,19 +111,15 @@ class PlaceCallViewController : UIViewController, BBMEMediaDelegate
     //presenting the various modal UI elements as needed.  
 
     func callEnded(_ call: BBMECall!) {
+        //If the call failed, we don't want to update the UI here, we'll update in in call callDidFail
+        if(!call.failed) {
+            statusLabel.text = "Call Ended"
+        }
         resetCallButton()
     }
 
     func callDidFail(_ call: BBMECall!) {
-        //Handle and display call failures
-        let alert = UIAlertController(title: "Call Failed",
-                                      message: String("Your call failed: " + String(describing: call.failureReason)),
-                                      preferredStyle: UIAlertControllerStyle.alert)
-
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
-        alert.addAction(okAction)
-
-        present(alert, animated: true, completion: nil)
+        statusLabel.text = "Call Failed"
         resetCallButton()
     }
 

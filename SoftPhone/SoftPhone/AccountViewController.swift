@@ -19,7 +19,6 @@
 
 
 import UIKit
-import GoogleSignIn
 import BBMEnterprise
 
 class AccountViewController: UITableViewController, BBMConnectivityListener, BBMAuthControllerDelegate
@@ -29,16 +28,11 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
     @IBOutlet weak var setupStateLabel : UILabel!
     @IBOutlet weak var regIdLabel : UILabel!
     @IBOutlet weak var domainLabel : UILabel!
-    @IBOutlet weak var userEmailLabel : UILabel!
+    @IBOutlet weak var userNameLabel : UILabel!
     @IBOutlet weak var serviceConnectivityLabel : UILabel!
 
-    @IBOutlet weak var switchDeviceButton : UIButton!
-    @IBOutlet weak var signInButton: UIView!
     @IBOutlet weak var signOutButton : UIButton!
-
-    var googleSignInButton : GIDSignInButton!
-    var azureSignInButton : UIButton!
-
+    @IBOutlet weak var signInButton : UIButton!
 
     var serviceMonitor : ObservableMonitor!
     
@@ -63,6 +57,9 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
             self?.authStateChanged(SoftPhoneApp.app().authController().authState)
        }
 
+        assert(BBMConfigManager.default().isUsingBlackBerryKMS(), "SoftPhone only supports the Spark Communications Key Management Service.")
+        assert(BBMConfigManager.default().type == kTestAuth, "SoftPhone only supports the TestTokenManager")
+
         SoftPhoneApp.app().authController().signInSilently()
     }
 
@@ -74,30 +71,12 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
 
     //MARK: View Lifecycle
 
-    override func viewDidLoad() {
-        if BBMConfigManager.default().type == kGoogleSignIn {
-            googleSignInButton = GIDSignInButton.init(frame: signInButton.bounds)
-            signInButton.addSubviewAndContraints(withSameFrame: googleSignInButton)
-        }else if BBMConfigManager.default().type == kAzureAD {
-            azureSignInButton = UIButton.init()
-            azureSignInButton.setTitle("Azure AD Sign In", for: .normal)
-            signInButton.addSubviewAndContraints(withSameFrame: azureSignInButton)
-            azureSignInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
-            self.view.layoutIfNeeded()
-            signInButton.backgroundColor = UIColor.blue;
-
-        }
-
-
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         signInButton.isHidden = true
-        switchDeviceButton.isEnabled = true
         signOutButton.isHidden = true
         domainLabel.text = BBMConfigManager.default().sdkServiceDomain;
-
 
         //This will activate and run our serviceMonitor which will update all of the UI elements
         //via authStateChanged and serviceStateChanged
@@ -124,14 +103,12 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
         setupStateLabel.text = authState.setupState != nil ? authState.setupState! : "Setup Not Started"
         regIdLabel.text = authState.regId != nil ? authState.regId.stringValue : ""
 
-        let email = authState.account != nil ? authState.account.email : ""
-        userEmailLabel.text = email
+        if let account = authState.account {
+            userNameLabel.text = account.name;
+        }
 
         signInButton.isHidden = SoftPhoneApp.app().authController().startedAndAuthenticated;
         signOutButton.isHidden = !SoftPhoneApp.app().authController().startedAndAuthenticated;
-
-        let setupState = authState.setupState != nil ? authState.setupState : ""
-        switchDeviceButton.isEnabled = (setupState == kBBMSetupStateDeviceSwitch)
 
         if (authState.setupState != nil && authState.setupState == kBBMSetupStateFull) {
             SoftPhoneApp.app().authController().endpointManager.deregisterAnyEndpointAndContinueSetup()
@@ -159,8 +136,7 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
         SoftPhoneApp.app().authController().signOut()
     }
 
-    @objc
-    func signIn() {
+    @IBAction func signIn(sender: UIButton?) {
         SoftPhoneApp.app().authController().tokenManager.signIn!()
     }
 

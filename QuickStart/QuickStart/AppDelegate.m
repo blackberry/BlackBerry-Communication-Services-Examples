@@ -28,8 +28,8 @@
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     if([BBMConfigManager defaultManager].type == kAzureAD) {
         //Configuration for Azure active directory authentication.  These values are pulled from
         //ConfigSettings.h.
@@ -55,20 +55,6 @@
                                           annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
     }else if([BBMConfigManager defaultManager].type == kAzureAD) {
         return [MSALPublicClientApplication handleMSALResponse:url];
-    }
-    return NO;
-#
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation
-{
-    if([BBMConfigManager defaultManager].type == kGoogleSignIn) {
-        return [[GIDSignIn sharedInstance] handleURL:url
-                                   sourceApplication:sourceApplication
-                                          annotation:annotation];
     }
     return NO;
 }

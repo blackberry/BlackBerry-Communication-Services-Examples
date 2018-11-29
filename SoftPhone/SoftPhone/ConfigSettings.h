@@ -21,7 +21,7 @@
 #define ConfigSettings_h
 
 #define INCLUDE_AZURE_AD_LIBS 0
-#define INCLUDE_GOOGLE_SIGN_IN_LIBS 1
+#define INCLUDE_GOOGLE_SIGN_IN_LIBS 0
 
 #endif /* ConfigSettings_h */
 

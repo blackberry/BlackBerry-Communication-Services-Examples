@@ -43,18 +43,18 @@ class DataConnectionListener : NSObject, BBMEMediaDelegate
     private func notifyOfIncomingDataConnection(regId: String!) {
         incomingCallAlert = UIAlertController(title:  String(format: "Incoming Data From %@", regId),
                                             message: "Data Connection",
-                                     preferredStyle: UIAlertControllerStyle.alert)
+                                     preferredStyle: UIAlertController.Style.alert)
 
         //It's also possible to answer with video enabled, by calling toggleOutgoingVideo 
         //immediately after answer()
-        let acceptAction = UIAlertAction(title: "Accept", style: UIAlertActionStyle.default) {
+        let acceptAction = UIAlertAction(title: "Accept", style: UIAlertAction.Style.default) {
             [weak self] (action) -> Void in
             if let connection = self?.activeDataConnection {
                 self?.mediaManager.accept(connection)
             }
         }
 
-        let declineAction = UIAlertAction(title: "Decline", style: UIAlertActionStyle.default) {
+        let declineAction = UIAlertAction(title: "Decline", style: UIAlertAction.Style.default) {
             [weak self] (action) -> Void in
             if let connection = self?.activeDataConnection {
                 self?.mediaManager.end(connection)

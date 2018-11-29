@@ -1,10 +1,10 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # SoftPhone for iOS
 
 This directory contains the Swift implementation of a SoftPhone sample
 applicaiton. The app demonstrates how voice and video calling can be
-integrated into your application using the Spark SDK.  This example builds on the [Quick Start Swift](../QuickStartSwift/README.md)
+integrated into your application using the Spark Communications SDK.  This example builds on the [Quick Start Swift](../QuickStartSwift/README.md)
 example that demonstrates how you can authenticate with the SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
 of your application.
 
@@ -40,9 +40,9 @@ This sample can interact with the [Rich Chat](https://developer.blackberry.com/f
 
 ## Getting Started
 
-This samples requires the Spark SDK, which you can find along with related resources at the location below.
+This samples requires the Spark Communications SDK, which you can find along with related resources at the location below.
     
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
@@ -57,8 +57,13 @@ This samples requires the Spark SDK, which you can find along with related resou
 
 ### Configuration
 
-* [Sample application configuration using Google Sign-In and Firebase](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/googleSignInForiOSExamples.html)
-* [Sample application configuration using Azure Active Directory](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/azureForiOSExamples.html)
+This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service.  This allows you to get up and running quickly with minimal setup.
+
+[Create your application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+
+Once your sandbox domain is configured, edit the ConfigSettings.plist file and enter the domain identifier under "testAuth/domain".  Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.  
+
+Note: This sample cannot be run on a production domain or a sandbox domain configured for a true identity provider without modification.
 
 ## Walkthrough
 

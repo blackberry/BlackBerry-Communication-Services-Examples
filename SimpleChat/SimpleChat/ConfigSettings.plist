@@ -3,11 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>authProvider</key>
-	<string>Must be one of googleSignIn, azureAd, or custom to match the keys below</string>
+	<string>set to one of the configurations listed below (testAuth, googleSignIn, etc). </string>
 	<key>useBlackBerryKMS</key>
 	<true/>
+	<key>testAuth</key>
+	<dict>
+		<key>clientId</key>
+		<string>not_used</string>
+		<key>domain</key>
+		<string>YOUR_DOMAIN</string>
+		<key>environment</key>
+		<string>sandbox</string>
+	</dict>
 	<key>googleSignIn</key>
 	<dict>
+		<key>userProvider</key>
+		<string>googlePeople</string>
 		<key>keyProvider</key>
 		<string>firebase</string>
 		<key>domain</key>
@@ -19,6 +30,8 @@
 	</dict>
 	<key>azureAD</key>
 	<dict>
+		<key>userProvider</key>
+		<string>azuerAD</string>
 		<key>keyProvider</key>
 		<string>azure</string>
 		<key>domain</key>

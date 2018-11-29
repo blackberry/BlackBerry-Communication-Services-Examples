@@ -1,11 +1,11 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # QuickStartSwift for iOS
 
-The QuickStartSwift sample application demonstrates how you can authenticate with Spark
+The QuickStartSwift sample application demonstrates how you can authenticate with Spark Communications
 using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
 of your application.  We demonstrate how you can obtain the user ID and token of your user's account 
-and pass them to the Spark SDK to complete setup.  For integrating the SDK into an Objective-C based app, see [Quick Start](../QuickStart/README.md)
+and pass them to the Spark Communications SDK to complete setup.  For integrating the SDK into an Objective-C based app, see [Quick Start](../QuickStart/README.md)
 
 ### Features
 
@@ -16,9 +16,9 @@ This sample allows you to do the following:
 
 ## Getting Started
 
-This sample requires the Spark SDK, which you can find along with related resources at the location below.
+This sample requires the Spark Communications SDK, which you can find along with related resources at the location below.
     
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
@@ -34,7 +34,13 @@ This sample requires the Spark SDK, which you can find along with related resour
 
 ### Configuration
 
-* [Sample application configuration using Google Sign-In and Firebase](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/googleSignInForiOSExamples.html)
+This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service.  This allows you to get up and running quickly with minimal setup.
+
+[Create your application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+
+Once your sandbox domain is configured, edit the ConfigSettings.plist file and enter the domain identifier under "testAuth/domain".  Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.  
+
+Note: This sample cannot be run on a production domain or a sandbox domain configured for a true identity provider without modification.
 
 ## Walkthrough 
 
@@ -48,7 +54,7 @@ This sample requires the Spark SDK, which you can find along with related resour
 
 Common code for authenticating users, synchronizing keys and performing common tasks can be found in /examples/Support/Source.  Much of the heavy lifting can be found in these classes and they should be referenced before implementing a custom key management or authentication scheme.
 
-*BBMAuthController* and *BBMKeyManager* can be instantiated with classes/instances that allow you to substitute your own user authentication or key management scheme while handling all of the Spark related functionality.
+*BBMAuthController* and *BBMKeyManager* can be instantiated with classes/instances that allow you to substitute your own user authentication or key management scheme while handling all of the Spark Communications related functionality.
 
 *BBMAccess* provides wrappers around common outgoing messages and the SDK data model.
 

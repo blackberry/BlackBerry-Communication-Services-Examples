@@ -19,10 +19,13 @@
 
 #import "StartChatViewController.h"
 #import "BBMChatCreator.h"
+#import "SimpleChatApp.h"
+#import "BBMAuthController.h"
+#import "BBMUserManager.h"
 
 @interface StartChatViewController () <UITextFieldDelegate>
 
-@property (weak,   nonatomic) IBOutlet UITextField *regIdField;
+@property (weak,   nonatomic) IBOutlet UITextField *userIdField;
 @property (weak,   nonatomic) IBOutlet UITextField *subjectField;
 @property (weak, nonatomic) IBOutlet UIButton *startChatButton;
 
@@ -36,7 +39,7 @@
 - (IBAction)startPressed:(id)sender
 {
     if([self validateFields]) {
-        [self.regIdField resignFirstResponder];
+        [self.userIdField resignFirstResponder];
         [self.subjectField resignFirstResponder];
         [self startChat];
     }
@@ -49,8 +52,8 @@
         return NO;
     }
 
-    if(self.regIdField.text.length < 1) {
-        [self.regIdField becomeFirstResponder];
+    if(self.userIdField.text.length < 1) {
+        [self.userIdField becomeFirstResponder];
         return NO;
     }
 
@@ -60,32 +63,56 @@
 - (void)startChat
 {
     self.startChatButton.enabled = NO;
-    self.regIdField.enabled = NO;
+    self.userIdField.enabled = NO;
     self.subjectField.enabled = NO;
 
-    NSNumber *regId = @([self.regIdField.text longLongValue]);
+    NSString *userId = self.userIdField.text;;
     NSString *subject = self.subjectField.text;
+
+    [[[[SimpleChatApp sharedApp] authController] userManager] getRegIdForUserId:userId
+                                                                       callback:^(BBMUserIdentity *identity, BOOL success)
+    {
+        if(success && identity.regId) {
+            NSNumber *regId = identity.regId;
+            [self startChatWithRegId:regId subject:subject];
+        }else{
+            UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Unknown UserId"
+                                                                        message:@"The user id entered does not appear to be valid."
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+            [ac addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:ac animated:YES completion:nil];
+        }
+    }];
+
+
+
+}
+
+
+- (void)startChatWithRegId:(NSNumber *)regId subject:(NSString *)subject
+{
 
     //We start a conference here since this allows creation of a new chat every time.  1-1 chats
     //assume there is only ever a single 1-1 chat between two participants and will reuse an
     //existing mailbox if one can be found.
     [self.chatCreator startConferenceWithRegIds:@[regId]
-                                               subject:subject
-                                              callback:^(NSString *chatId, BBMChatStartFailedMessageReason failReason) {
-        if(chatId) {
-            [self.navigationController popViewControllerAnimated:YES];
-        }else{
-            self.startChatButton.enabled = YES;
-            self.regIdField.enabled = YES;
-            self.subjectField.enabled = YES;
-            UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Chat Start Failed"
-                                                                        message:@"Unable to start chat"
-                                                                 preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *dismiss = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
-            [ac addAction:dismiss];
-            [self presentViewController:ac animated:YES completion:nil];
-        }
-    }];
+                                        subject:subject
+                                       callback:^(NSString *chatId, BBMChatStartFailedMessageReason failReason)
+    {
+       if(chatId) {
+           [self.navigationController popViewControllerAnimated:YES];
+       }else{
+           self.startChatButton.enabled = YES;
+           self.userIdField.enabled = YES;
+           self.subjectField.enabled = YES;
+           UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Chat Start Failed"
+                                                                       message:@"Unable to start chat"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+           UIAlertAction *dismiss = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
+           [ac addAction:dismiss];
+           [self presentViewController:ac animated:YES completion:nil];
+       }
+   }];
 }
 
 @end

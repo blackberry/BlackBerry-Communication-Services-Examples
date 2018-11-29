@@ -44,21 +44,8 @@
         return [MSALPublicClientApplication handleMSALResponse:url];
     }
     return NO;
-#
 }
 
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation
-{
-    if([BBMConfigManager defaultManager].type == kGoogleSignIn) {
-        return [[GIDSignIn sharedInstance] handleURL:url
-                                   sourceApplication:sourceApplication
-                                          annotation:annotation];
-    }
-    return NO;
-}
 
 
 @end

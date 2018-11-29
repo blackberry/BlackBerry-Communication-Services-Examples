@@ -18,9 +18,6 @@
 */ 
 
 import Foundation
-import Firebase
-import GoogleSignIn
-import MSAL
 
 //Call Log Event Tag and Properties
 public let kCallEventTag            = "Call_Event"
@@ -73,12 +70,7 @@ class SoftPhoneApp
 
     //iOS CallKit is only available on iOS 10 and up on actual hardware.
     public let callKitManager : CallKitManager? = {
-        if #available(iOS 10.0, *) {
-            if(TARGET_OS_SIMULATOR == 0) {
-                return CallKitManager.init()
-            }
-        }
-        return nil
+        return CallKitManager.init()
     }()
 
     private func startMediaManager() {

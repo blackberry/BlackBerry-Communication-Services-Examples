@@ -18,20 +18,19 @@
  */
 
 import UIKit
-import GoogleSignIn
 import BBMEnterprise
 
-class AccountViewController: UITableViewController, BBMConnectivityListener, BBMAuthControllerDelegate {
+class AccountViewController: UITableViewController, BBMConnectivityListener, BBMAuthControllerDelegate
+{
     @IBOutlet weak var serviceStateLabel : UILabel!
     @IBOutlet weak var authTokenStateLabel : UILabel!
     @IBOutlet weak var setupStateLabel : UILabel!
     @IBOutlet weak var regIdLabel : UILabel!
     @IBOutlet weak var domainLabel : UILabel!
-    @IBOutlet weak var userEmailLabel : UILabel!
+    @IBOutlet weak var userNameLabel : UILabel!
     @IBOutlet weak var serviceConnectivityLabel : UILabel!
 
-    @IBOutlet weak var switchDeviceButton : UIButton!
-    @IBOutlet weak var googleSignInButton : GIDSignInButton!
+    @IBOutlet weak var signInButton : UIButton!
     @IBOutlet weak var signOutButton : UIButton!
 
     var serviceMonitor : ObservableMonitor!
@@ -59,6 +58,9 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
        }
 
         ChatPollApp.app().authController().signInSilently()
+
+        assert(BBMConfigManager.default().isUsingBlackBerryKMS(), "ChatPoll only supports the Spark Communications Key Management Service.")
+        assert(BBMConfigManager.default().type == kTestAuth, "ChatPoll only supports the TestTokenManager")
     }
 
     deinit {
@@ -71,8 +73,7 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        googleSignInButton.isHidden = true
-        switchDeviceButton.isEnabled = true
+        signInButton.isHidden = true
         signOutButton.isHidden = true
         domainLabel.text = BBMConfigManager.default().sdkServiceDomain
 
@@ -101,14 +102,12 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
         setupStateLabel.text = authState.setupState != nil ? authState.setupState! : "Setup Not Started"
         regIdLabel.text = authState.regId != nil ? authState.regId.stringValue : ""
 
-        let email = authState.account != nil ? authState.account.email : ""
-        userEmailLabel.text = email
+        if let account = authState.account {
+            userNameLabel.text = account.name;
+        }
 
-        googleSignInButton.isHidden = ChatPollApp.app().authController().startedAndAuthenticated;
+        signInButton.isHidden = ChatPollApp.app().authController().startedAndAuthenticated;
         signOutButton.isHidden = !ChatPollApp.app().authController().startedAndAuthenticated;
-
-        let setupState = authState.setupState != nil ? authState.setupState : ""
-        switchDeviceButton.isEnabled = (setupState == kBBMSetupStateDeviceSwitch)
 
         if (authState.setupState != nil && authState.setupState == kBBMSetupStateFull) {
             ChatPollApp.app().authController().endpointManager.deregisterAnyEndpointAndContinueSetup()
@@ -126,14 +125,13 @@ class AccountViewController: UITableViewController, BBMConnectivityListener, BBM
 
     //MARK: IB Actions
 
-    @IBAction func switchDevice(sender: UIButton?) {
-        BBMAccess.sendSetupRetry()
-    }
-
-
     @IBAction func signOut(sender: UIButton?) {
         BBMEnterpriseService.shared().resetService()
         ChatPollApp.app().authController().signOut()
+    }
+
+    @IBAction func signIn(sender: UIButton?) {
+        ChatPollApp.app().authController().tokenManager.signIn!()
     }
 
 }

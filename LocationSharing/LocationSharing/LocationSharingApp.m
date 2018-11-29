@@ -18,10 +18,6 @@
 */
 
 #import "LocationSharingApp.h"
-#import "BBMFirebaseKeyStorageProvider.h"
-#import "BBMFirebaseUserManager.h"
-#import "BBMGoogleTokenManager.h"
-#import "Firebase.h"
 #import "BBMAuthenticatedAccount.h"
 #import "BBMAccess.h"
 #import "BBMConfigManager.h"
@@ -65,7 +61,7 @@
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _authController = [BBMAuthController authControllerFromConfigFile];
+        self->_authController = [BBMAuthController authControllerFromConfigFile];
     });
     return _authController;
 }
@@ -74,7 +70,7 @@
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        self.locationManager = [[LocationManager alloc] init];
+        self->_locationManager = [[LocationManager alloc] init];
     });
     return _locationManager;
 }
@@ -83,7 +79,7 @@
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        self.chatListLoader = [[ChatListLoader alloc] init];
+        self->_chatListLoader = [[ChatListLoader alloc] init];
     });
     return _chatListLoader;
 }

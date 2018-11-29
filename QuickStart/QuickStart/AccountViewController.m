@@ -36,6 +36,8 @@
 #import "BBMAzureTokenManager.h"
 #import "BBMAzureUserManager.h"
 
+#import "BBMTestTokenManager.h"
+
 @interface AccountViewController () <BBMConnectivityListener, BBMAuthControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *serviceStateLabel;
@@ -45,13 +47,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *domainLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userEmailLabel;
 @property (weak, nonatomic) IBOutlet UILabel *serviceConnectivityLabel;
-@property (weak, nonatomic) IBOutlet UIButton *switchDeviceButton;
 
-@property (weak, nonatomic) IBOutlet UIView   *signInButton;
+@property (weak, nonatomic) IBOutlet UIView   *signInButtonContainer;
 @property (weak, nonatomic) IBOutlet UIButton *signOutButton;
 
 @property (nonatomic, strong) GIDSignInButton *googleSignInButton;
-@property (nonatomic, strong) UIButton *azureSignInButton;
+@property (nonatomic, strong) UIButton        *signInButton;
 
 @property (nonatomic, strong) BBMAuthController *authController;
 @property (nonatomic, strong) ObservableMonitor *serviceMonitor;
@@ -67,28 +68,40 @@
     Class tokenManager;
     if([BBMConfigManager defaultManager].type == kGoogleSignIn)
     {
-        self.googleSignInButton = [[GIDSignInButton alloc] initWithFrame:self.signInButton.bounds];
-        [self.signInButton addSubviewAndContraintsWithSameFrame:self.googleSignInButton];
+        self.googleSignInButton = [[GIDSignInButton alloc] initWithFrame:self.signInButtonContainer.bounds];
+        [self.signInButtonContainer addSubviewAndContraintsWithSameFrame:self.googleSignInButton];
         tokenManager = [BBMGoogleTokenManager class];
     }
     else if([BBMConfigManager defaultManager].type == kAzureAD)
     {
-        self.azureSignInButton = [[UIButton alloc] init];
-        [self.azureSignInButton setTitle:@"Azure AD Sign In" forState:UIControlStateNormal];
-        [self.signInButton addSubviewAndContraintsWithSameFrame:self.azureSignInButton];
-        [self.azureSignInButton addTarget:self
+        self.signInButton = [[UIButton alloc] init];
+        [self.signInButton setTitle:@"Azure AD Sign In" forState:UIControlStateNormal];
+        [self.signInButtonContainer addSubviewAndContraintsWithSameFrame:self.signInButton];
+        [self.signInButton addTarget:self
                                    action:@selector(signIn:)
                          forControlEvents:UIControlEventTouchUpInside];
         [self.view layoutIfNeeded];
-        self.signInButton.backgroundColor = [UIColor blueColor];
+        self.signInButtonContainer.backgroundColor = [UIColor blueColor];
         tokenManager = [BBMAzureTokenManager class];
+    }
+    else if([BBMConfigManager defaultManager].type == kTestAuth)
+    {
+        self.signInButton = [[UIButton alloc] init];
+        [self.signInButton setTitle:@"Sign In" forState:UIControlStateNormal];
+        [self.signInButtonContainer addSubviewAndContraintsWithSameFrame:self.signInButton];
+        [self.signInButton addTarget:self
+                              action:@selector(signIn:)
+                    forControlEvents:UIControlEventTouchUpInside];
+        [self.view layoutIfNeeded];
+        self.signInButtonContainer.backgroundColor = [UIColor blueColor];
+        tokenManager = [BBMTestTokenManager class];
     }else{
-        NSAssert(NO,@"RichChat is only set up to user Google SignIn or AzureAD.");
+        NSAssert(NO, @"Unsupported identity provider");
     }
 
+
     //Configure our buttons and labels
-    self.signInButton.hidden = YES;
-    self.switchDeviceButton.enabled = NO;
+    self.signInButtonContainer.hidden = YES;
     self.signOutButton.hidden = YES;
     self.domainLabel.text = [BBMConfigManager defaultManager].sdkServiceDomain;
 
@@ -145,18 +158,18 @@
     self.regIdLabel.text = authState.regId.integerValue ? authState.regId.stringValue : @"";
     self.userEmailLabel.text = authState.account.email;
 
-    self.signInButton.hidden = self.authController.startedAndAuthenticated;
+    self.signInButtonContainer.hidden = self.authController.startedAndAuthenticated;
     self.signOutButton.hidden = !self.authController.startedAndAuthenticated;
 
-    //Whenever a user switches devices, a device switch should occur. This button gets
-    //enabled whenever a device switch is required.
-    self.switchDeviceButton.enabled = [authState.setupState isEqualToString:kBBMSetupStateDeviceSwitch];
-
     //In order to complete the setup process, we must synchronize the profile keys.  For the sake of
-    //brevity, we will simply set the key state to synced.  See the other BBM Enterprise samples
-    //and/or BBMKeyManager in /examples/support for details on how to export/import profile keys
-    if([authState.setupState isEqualToString:kBBMSetupStateOngoing] &&
-       [[[[BBMEnterpriseService service] model] globalProfileKeysState] isEqualToString:kBBMKeyStateNotSynced])
+    //brevity, we will simply set the key state to synced which allows setup to complete without setting up
+    //a complete key provider.  See the other BBM Enterprise samples and/or BBMKeyManager in
+    // /examples/support for details on how to export/import profile keys.
+    //This is not required if you're using the default Spark Communications Key Management Service in which case, the
+    //keys will be synced automatically after entering your application password
+    if(![BBMConfigManager defaultManager].isUsingBlackBerryKMS &&
+       authState.setupState == kBBMSetupStateOngoing &&
+       [[[BBMEnterpriseService service] model] globalProfileKeysState] == kBBMKeyStateNotSynced)
     {
         NSDictionary* element = @{@"name":@"profileKeysState", @"value": @"Synced" };
         BBMRequestListChangeMessage *syncProfileKey = [[BBMRequestListChangeMessage alloc] initWithElements:@[element] type:@"global"];
@@ -164,19 +177,20 @@
     }
 
     //Our token has been rejected
-    if([authState.authTokenState isEqualToString:kBBMAuthStateRejected]) {
+    if(authState.authTokenState == kBBMAuthStateRejected) {
         self.signOutButton.hidden = NO;
-        self.signInButton.hidden = YES;
+        self.signInButtonContainer.hidden = YES;
     }
 
     //We're logged in but setup of BBM hasn't completed yet
-    if([authState.setupState isEqualToString:kBBMSetupStateOngoing]) {
-        self.signInButton.hidden = YES;
+    if(authState.setupState == kBBMSetupStateOngoing) {
+        self.signInButtonContainer.hidden = YES;
         self.signOutButton.hidden = NO;
     }
 
     // If state is full, ask for list of endpoints and remove one so that setup can continue.
-    if([authState.setupState isEqualToString:kBBMSetupStateFull]) {
+    // In practice, the user should be prompted to choose an endpoint to log out.
+    if(authState.setupState == kBBMSetupStateFull) {
         [self.authController.endpointManager deregisterAnyEndpointAndContinueSetup];
     }
 
@@ -199,10 +213,6 @@
 
 #pragma mark - UI Actions
 
-- (IBAction)switchDevice:(id)sender
-{
-    [BBMAccess sendSetupRetry];
-}
 
 - (IBAction)signOut:(id)sender
 {
@@ -211,11 +221,9 @@
     [self.authController signOut];
 }
 
-//This is unneeded for GoogleSignIn.  The GIDSignInButton implements this internally and presents
-//the auth web view automatically.
 - (IBAction)signIn:(id)sender
 {
-    [(BBMAzureTokenManager *)self.authController.tokenManager signIn];
+    [self.authController.tokenManager signIn];
 }
 
 

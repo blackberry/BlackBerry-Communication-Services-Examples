@@ -40,17 +40,17 @@
 @property (weak, nonatomic) IBOutlet UILabel *setupStateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *regIdLabel;
 @property (weak, nonatomic) IBOutlet UILabel *domainLabel;
-@property (weak, nonatomic) IBOutlet UILabel *userEmailLabel;
+@property (weak, nonatomic) IBOutlet UILabel *userIdField;
 @property (weak, nonatomic) IBOutlet UILabel *serviceConnectivityLabel;
 @property (weak, nonatomic) IBOutlet UIButton *switchDeviceButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *signOutButton;
-@property (weak, nonatomic) IBOutlet UIView   *signInButton;
+@property (weak, nonatomic) IBOutlet UIView   *signInButtonContainer;
 
 @property (nonatomic, strong) ObservableMonitor *serviceMonitor;
 
 @property (nonatomic, strong) GIDSignInButton *googleSignInButton;
-@property (nonatomic, strong) UIButton *azureSignInButton;
+@property (nonatomic, strong) UIButton *signInButton;
 
 @end
 
@@ -62,20 +62,29 @@
 
     if([BBMConfigManager defaultManager].type == kGoogleSignIn) {
         self.googleSignInButton = [[GIDSignInButton alloc] initWithFrame:self.signInButton.bounds];
-        [self.signInButton addSubviewAndContraintsWithSameFrame:self.googleSignInButton];
+        [self.signInButtonContainer addSubviewAndContraintsWithSameFrame:self.googleSignInButton];
     }
     else if([BBMConfigManager defaultManager].type == kAzureAD) {
-        self.azureSignInButton = [[UIButton alloc] init];
-        [self.azureSignInButton setTitle:@"Azure AD Sign In" forState:UIControlStateNormal];
-        [self.signInButton addSubviewAndContraintsWithSameFrame:self.azureSignInButton];
-        [self.azureSignInButton addTarget:self
+        self.signInButton = [[UIButton alloc] init];
+        [self.signInButton setTitle:@"Azure AD Sign In" forState:UIControlStateNormal];
+        [self.signInButtonContainer addSubviewAndContraintsWithSameFrame:self.signInButton];
+        [self.signInButton addTarget:self
+                                   action:@selector(signIn:)
+                         forControlEvents:UIControlEventTouchUpInside];
+        [self.view layoutIfNeeded];
+        self.signInButton.backgroundColor = [UIColor blueColor];
+    }
+    else if([BBMConfigManager defaultManager].type == kTestAuth) {
+        self.signInButton = [[UIButton alloc] init];
+        [self.signInButton setTitle:@"Sign In" forState:UIControlStateNormal];
+        [self.signInButtonContainer addSubviewAndContraintsWithSameFrame:self.signInButton];
+        [self.signInButton addTarget:self
                                    action:@selector(signIn:)
                          forControlEvents:UIControlEventTouchUpInside];
         [self.view layoutIfNeeded];
         self.signInButton.backgroundColor = [UIColor blueColor];
     }
 
-    self.switchDeviceButton.enabled = NO;
     self.signOutButton.hidden = YES;
     self.domainLabel.text = [BBMConfigManager defaultManager].sdkServiceDomain;
 
@@ -110,17 +119,13 @@
     self.authTokenStateLabel.text = authState.authTokenState ?: @"No Token";
     self.setupStateLabel.text = authState.setupState ?: @"Setup Not Started";
     self.regIdLabel.text = authState.regId.integerValue ? authState.regId.stringValue : @"";
-    self.userEmailLabel.text = authState.account.email;
+    self.userIdField.text = authState.account.accountId ?: @"";
 
-    self.signInButton.hidden = [SimpleChatApp sharedApp].authController.startedAndAuthenticated;
+    self.signInButtonContainer.hidden = [SimpleChatApp sharedApp].authController.startedAndAuthenticated;
     self.signOutButton.hidden = ![SimpleChatApp sharedApp].authController.startedAndAuthenticated;
 
-    //Whenever a user switches devices, a device switch should occur. This button gets
-    //enabled whenever a device switch is required.
-    self.switchDeviceButton.enabled = [authState.setupState isEqualToString:kBBMSetupStateDeviceSwitch];
-
     // If state is full, ask for list of endpoints and remove one so that setup can continue.
-    if([authState.setupState isEqualToString:kBBMSetupStateFull]) {
+    if(authState.setupState == kBBMSetupStateFull) {
         // If state is full, ask for list of endpoints and remove one so that setup can continue.
         [[SimpleChatApp sharedApp].authController.endpointManager deregisterAnyEndpointAndContinueSetup];
     }

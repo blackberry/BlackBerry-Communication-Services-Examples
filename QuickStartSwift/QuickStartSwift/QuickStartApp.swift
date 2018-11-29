@@ -26,9 +26,9 @@ import Foundation
  */
 class QuickStartApp
 {
-    private let _authController : BBMAuthController = BBMAuthController(tokenManager:BBMGoogleTokenManager.self,
-                                                                          userSource:nil,
-                                                                  keyStorageProvider:nil,
+    private let _authController : BBMAuthController = BBMAuthController(tokenManager: BBMTestTokenManager.self,
+                                                                          userSource: nil,
+                                                                  keyStorageProvider: nil,
                                                                               domain: BBMConfigManager.default().sdkServiceDomain,
                                                                          environment: BBMConfigManager.default().environment)
     lazy private var _endpointManager : BBMEndpointManager = BBMEndpointManager()

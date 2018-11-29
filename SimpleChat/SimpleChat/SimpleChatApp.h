@@ -28,7 +28,7 @@
 // Primary application instance
 + (instancetype)sharedApp;
 
-// Controller for handling authentication via GoogleSignIn
-- (BBMAuthController *)authController;
+
+@property (nonatomic, readonly) BBMAuthController *authController;
 
 @end

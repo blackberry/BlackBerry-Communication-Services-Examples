@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ecz-3u-exk">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ecz-3u-exk">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -190,39 +190,13 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="F1K-7L-beT">
-                                        <rect key="frame" x="0.0" y="343" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="F1K-7L-beT" id="Wew-ss-bIq">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AUx-uV-m9x" userLabel="Switch Device">
-                                                    <rect key="frame" x="139" y="6" width="96" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                                                    <state key="normal" title="Switch Device"/>
-                                                    <connections>
-                                                        <action selector="switchDevice:" destination="bOC-IK-umT" eventType="touchUpInside" id="9gL-fX-DyQ"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="AUx-uV-m9x" firstAttribute="centerY" secondItem="Wew-ss-bIq" secondAttribute="centerY" id="2EM-Hh-tgS"/>
-                                                <constraint firstItem="AUx-uV-m9x" firstAttribute="centerX" secondItem="Wew-ss-bIq" secondAttribute="centerX" id="gHs-Ug-s3u"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="92" id="XYV-An-TgF">
-                                        <rect key="frame" x="0.0" y="387" width="375" height="92"/>
+                                        <rect key="frame" x="0.0" y="343" width="375" height="92"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XYV-An-TgF" id="skw-Ji-Eem">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="91.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ypO-gP-MXd">
-                                                    <rect key="frame" x="3" y="2" width="369" height="87"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XvV-B9-KFc">
                                                     <rect key="frame" x="76" y="23" width="223" height="45"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -240,13 +214,9 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="XvV-B9-KFc" secondAttribute="trailing" constant="60" id="0B0-RD-JQN"/>
-                                                <constraint firstAttribute="trailing" secondItem="ypO-gP-MXd" secondAttribute="trailing" constant="3" id="4T5-FY-Xp6"/>
                                                 <constraint firstItem="d5M-q2-zu0" firstAttribute="centerY" secondItem="skw-Ji-Eem" secondAttribute="centerY" id="6lJ-rn-Ujq"/>
-                                                <constraint firstItem="ypO-gP-MXd" firstAttribute="top" secondItem="skw-Ji-Eem" secondAttribute="top" constant="2" id="Pbz-yE-Wm0"/>
-                                                <constraint firstAttribute="bottom" secondItem="ypO-gP-MXd" secondAttribute="bottom" constant="3" id="SBr-2Z-sWV"/>
                                                 <constraint firstItem="XvV-B9-KFc" firstAttribute="centerY" secondItem="skw-Ji-Eem" secondAttribute="centerY" id="bIN-bq-4aT"/>
                                                 <constraint firstItem="XvV-B9-KFc" firstAttribute="centerX" secondItem="skw-Ji-Eem" secondAttribute="centerX" id="e7D-mW-6GG"/>
-                                                <constraint firstItem="ypO-gP-MXd" firstAttribute="leading" secondItem="skw-Ji-Eem" secondAttribute="leading" constant="3" id="nBJ-ym-3fC"/>
                                                 <constraint firstItem="XvV-B9-KFc" firstAttribute="leading" secondItem="skw-Ji-Eem" secondAttribute="leadingMargin" constant="60" id="vvT-ed-8pb"/>
                                                 <constraint firstItem="d5M-q2-zu0" firstAttribute="centerX" secondItem="skw-Ji-Eem" secondAttribute="centerX" id="ynz-7y-2jm"/>
                                             </constraints>
@@ -269,9 +239,8 @@
                         <outlet property="serviceConnectivityLabel" destination="css-UV-kQR" id="wPQ-2N-3Ni"/>
                         <outlet property="serviceStateLabel" destination="eGO-p8-TAY" id="rJg-FB-TPY"/>
                         <outlet property="setupStateLabel" destination="VrV-mj-LoX" id="Jpu-ek-EDe"/>
-                        <outlet property="signInButton" destination="XvV-B9-KFc" id="wqi-nw-Qck"/>
+                        <outlet property="signInButtonContainer" destination="XvV-B9-KFc" id="Hsl-Ck-Amv"/>
                         <outlet property="signOutButton" destination="d5M-q2-zu0" id="1b6-aL-JS4"/>
-                        <outlet property="switchDeviceButton" destination="AUx-uV-m9x" id="bqN-I5-sfA"/>
                         <outlet property="userEmailLabel" destination="nOu-cS-fQF" id="353-4m-HDC"/>
                     </connections>
                 </tableViewController>
