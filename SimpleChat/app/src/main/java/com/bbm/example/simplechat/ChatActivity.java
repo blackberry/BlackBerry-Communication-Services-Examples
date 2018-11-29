@@ -180,6 +180,7 @@ public class ChatActivity extends AppCompatActivity {
         final RecyclerView messageRecyclerView = (RecyclerView) findViewById(R.id.messages_list);
         messageRecyclerView.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(ChatActivity.this);
+        layoutManager.setReverseLayout(true);
         messageRecyclerView.setLayoutManager(layoutManager);
 
         //Add our IncrementalListObserver to the ChatMessageList

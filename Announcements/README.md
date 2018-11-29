@@ -1,10 +1,10 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Announcements for Android
 
 The Announcements app demonstrates how a user can post **announcements** as custom messages in a chat.
 We also demonstrate how the [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/references.html)
-feature of the BlackBerry Spark Communications Platform can be used to edit an announcement and view the edit history.
+feature of BlackBerry Spark Communications Services can be used to edit an announcement and view the edit history.
 This example builds on the [SimpleChat](../SimpleChat/README.md) and utilizes the [Spark Support Library for Android](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html) library to quickly create a basic chat application.
 This example also uses the Android [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview.html).
 
@@ -43,10 +43,11 @@ Visit the [Getting Started with Android](https://developer.blackberry.com/files/
  <b>Getting started video</b>
 </p>
 
-This example can be configured to use Google Sign-In or Azure Active Directory for authenticating your user with the Spark SDK.
+This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service. This allows you to get up and running quickly with minimal setup.
 
-* Configure this sample for [Google Sign-In](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/googleSignInForAndroidExamples.html)
-* Configure this sample for [Azure AD](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/azureForAndroidExamples.html)
+[Create a Spark application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+
+Once your sandbox domain is configured, edit the app.properties file with your Spark domain and your Android signing keystore parameters. Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.
 
 This application has been built using Gradle 4.2.1 (newer versions have not been validated).
 
@@ -65,7 +66,7 @@ This application has been built using Gradle 4.2.1 (newer versions have not been
 
 ### <a name="startingAChat"></a>Starting a chat
 
-The Spark SDK Support library for Android provides a helper to start a new chat. The same principles apply as in [SimpleChat](../SimpleChat/README.md), a Spark Registration ID is needed to start a chat. Instead of creating an [ProtocolMessageConsumer](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/service/ProtocolMessageConsumer.html) and implementing the code to find and verify a messsage, that code has been rolled into the ChatStartHelper class. In the code below. you just need to send in a list of Spark Registration IDs, subject and a callback.
+The Spark SDK Support library for Android provides a helper to start a new chat. The same principles apply as in [SimpleChat](../SimpleChat/README.md), a Spark Registration ID is needed to start a chat. Instead of creating an [ProtocolMessageConsumer](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/service/ProtocolMessageConsumer.html) and implementing the code to find and verify a message, that code has been rolled into the ChatStartHelper class. To start a chat we need to provide a list of Spark Registration IDs, chat subject and a callback.
 
 ```java
     ChatStartHelper.startNewChat(new long[]{regId}, subject, new ChatStartHelper.ChatStartedCallback() {

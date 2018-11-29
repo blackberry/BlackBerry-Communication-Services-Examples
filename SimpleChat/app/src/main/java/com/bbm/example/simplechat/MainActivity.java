@@ -16,19 +16,17 @@
 
 package com.bbm.example.simplechat;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +49,8 @@ import com.bbm.sdk.reactive.SingleshotMonitor;
 import com.bbm.sdk.service.BBMEnterpriseState;
 import com.bbm.sdk.service.ProtocolMessage;
 import com.bbm.sdk.service.ProtocolMessageConsumer;
+import com.bbm.sdk.support.identity.UserIdentityMapper;
+import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.Logger;
 import com.bbm.sdk.support.util.SetupHelper;
@@ -285,28 +285,36 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == 1) {
-            //Create a dialog with fields for entering a registration id and a subject
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
-            dialogBuilder.setTitle(R.string.start_chat);
-            View contents = LayoutInflater.from(MainActivity.this).inflate(R.layout.chat_start_dialog, null);
-            dialogBuilder.setView(contents);
-
-            final EditText regIdEdit = (EditText) contents.findViewById(R.id.reg_id);
-            final EditText subjectEdit = (EditText) contents.findViewById(R.id.subject);
-            dialogBuilder.setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
+            UserIdPrompter prompter = new UserIdPrompter();
+            //Prompt the user to enter a user id and chat subject
+            prompter.setTitle(getString(R.string.start_chat))
+                    .setSecondaryInputLabel(getString(R.string.subject))
+                    .setSecondaryInputHint(getString(R.string.subject_hint))
+                    .setSecondaryInputRequired(getString(R.string.subject_required))
+                    .show(MainActivity.this, new UserIdPrompter.SelectedUserIdCallback() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    try {
-                        final Long regId = Long.parseLong(regIdEdit.getText().toString());
-                        String subject = subjectEdit.length() == 0 ? regIdEdit.getText().toString() : subjectEdit.getText().toString();
-                        startChat(regId, subject);
-                    } catch (NumberFormatException nfe) {
-                        Toast.makeText(MainActivity.this, R.string.not_valid_regid, Toast.LENGTH_LONG).show();
-                        return;
-                    }
+                public void selectedUserId(String userId, String secondaryInput) {
+                    SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
+                        @Override
+                        public boolean run() {
+                            //Lookup the Spark registration id for the provided user id
+                            UserIdentityMapper.IdentityMapResult mapResult =
+                                    UserIdentityMapper.getInstance().getRegIdForUid(userId, true).get();
+                            if (mapResult.existence == Existence.MAYBE) {
+                                 return false;
+                            }
+                            if (mapResult.existence == Existence.YES) {
+                                String subject = TextUtils.isEmpty(secondaryInput) ? userId : secondaryInput;
+                                startChat(mapResult.regId, subject);
+                            } else {
+                                Toast.makeText(MainActivity.this, getString(R.string.user_id_not_found, userId), Toast.LENGTH_LONG).show();
+                            }
+
+                            return false;
+                        }
+                    });
                 }
             });
-            dialogBuilder.create().show();
 
             return true;
         }
@@ -322,7 +330,9 @@ public class MainActivity extends AppCompatActivity {
         invitee.regId(regId);
 
         //Ask the BBM Enterprise SDK to start a new chat with the invitee and subject provided.
-        BBMEnterprise.getInstance().getBbmdsProtocol().send(new ChatStart(cookie, Lists.newArrayList(invitee), subject));
+        ChatStart chatStart = new ChatStart(cookie, Lists.newArrayList(invitee));
+        chatStart.subject(subject);
+        BBMEnterprise.getInstance().getBbmdsProtocol().send(chatStart);
 
         //Add a ProtocolMessageConsumer to track the creation of the chat.
         BBMEnterprise.getInstance().getBbmdsProtocolConnector().addMessageConsumer(new ProtocolMessageConsumer() {

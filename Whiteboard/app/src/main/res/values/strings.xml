@@ -20,5 +20,6 @@
     <string name="menu_whiteboard_chat">Start Whiteboard Chat</string>
     <string name="chat_subject">Chat Subject</string>
     <string name="rationale_write_external_storage">BBM Enterprise requires access to your device storage to save files from the camera and save images and files sent by your contacts.</string>
-    <string name="setting_up">Setting up BBM Enterprise SDK</string>
+    <string name="invite_to_whiteboard">Invite User</string>
+    <string name="user_id_not_found">Unable to find user %1$s</string>
 </resources>

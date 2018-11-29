@@ -1,8 +1,8 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Soft Phone for Android
 
-The SoftPhone app demonstrates how voice and video calling can be integrated into your application using the BlackBerry Spark Communications Platform. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
+The SoftPhone app demonstrates how voice and video calling can be integrated into your application using BlackBerry Spark Communications Services. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
 
 <br>
 
@@ -19,7 +19,7 @@ The SoftPhone app demonstrates how voice and video calling can be integrated int
 
 The SoftPhone sample app allows the user to do the following:
 
-- Start a call by typing in a regId
+- Start calls by entering a user id
 - Accept/Decline incoming calls
 - View a call history list
 - Enable video in a call
@@ -50,10 +50,11 @@ Visit the [Getting Started with Android](https://developer.blackberry.com/files/
  <b>Getting started video</b>
 </p>
 
-This example can be configured to use Google Sign-In or Azure Active Directory for authenticating your user with the Spark SDK.
+This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service. This allows you to get up and running quickly with minimal setup.
 
-* Configure this sample for [Google Sign-In](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/googleSignInForAndroidExamples.html)
-* Configure this sample for [Azure AD](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/azureForAndroidExamples.html)
+[Create a Spark application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+
+Once your sandbox domain is configured, edit the app.properties file with your Spark domain and your Android signing keystore parameters. Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.
 
 This application has been built using Gradle 4.2.1 (newer versions have not been validated).
 

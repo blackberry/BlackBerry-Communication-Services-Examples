@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bbm.sdk.BBMEnterprise;
 import com.bbm.sdk.bbmds.GlobalLocalUri;
@@ -39,8 +40,11 @@ import com.bbm.sdk.media.BBMEMediaManager;
 import com.bbm.sdk.reactive.ObservableMonitor;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
+import com.bbm.sdk.reactive.SingleshotMonitor;
+import com.bbm.sdk.support.identity.UserIdentityMapper;
 import com.bbm.sdk.support.identity.user.AppUser;
 import com.bbm.sdk.support.identity.user.UserManager;
+import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.BbmUtils;
 import com.bbm.sdk.support.util.Logger;
@@ -151,11 +155,31 @@ public class MainActivity extends AppCompatActivity  {
                     inCallIntent.putExtra(InCallActivity.EXTRA_CALL_ID, activeCallId);
                     startActivity(inCallIntent);
                 } else {
-                    CallUserPrompter.promptToStartCall(MainActivity.this, new CallUserPrompter.SelectedRegIdCallback() {
+                    UserIdPrompter prompter = new UserIdPrompter();
+                    prompter.setTitle(getString(R.string.start_call));
+                    prompter.show(MainActivity.this, new UserIdPrompter.SelectedUserIdCallback() {
                         @Override
-                        public void selectedRegId(long regId) {
-                            //Start a call (including permission check)
-                            CallUtils.makeCall(MainActivity.this, null, regId);
+                        public void selectedUserId(String userId, String secondaryInput) {
+                            SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
+                                @Override
+                                public boolean run() {
+                                    UserIdentityMapper.IdentityMapResult mapResult =
+                                            UserIdentityMapper.getInstance().getRegIdForUid(userId, false).get();
+                                    if (mapResult.existence == Existence.MAYBE) {
+                                        return false;
+                                    }
+
+                                    if (mapResult.existence == Existence.YES) {
+                                        //Start a call (including permission check)
+                                        CallUtils.makeCall(MainActivity.this, null, mapResult.regId);
+                                    } else {
+                                        Toast.makeText(MainActivity.this,
+                                                getString(R.string.user_id_not_found, userId),
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                    return true;
+                                }
+                            });
                         }
                     });
                 }

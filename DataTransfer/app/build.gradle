@@ -32,23 +32,21 @@ def appProperties = new Properties()
 appProperties.load(new FileInputStream(appPropertiesFile))
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
     defaultConfig {
         applicationId "com.bbm.example.datatransfer"
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        // The Server Client ID is a Web OAuth 2.0 Client ID obtained from https://console.developers.google.com/.
-        // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
-        buildConfigField "String", "CLIENT_SERVER_ID", appProperties['client_server_id']
-
-        // The Firebase Cloud Messaging Sender ID is obtained from https://console.firebase.google.com/.
-        // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
-        buildConfigField "String", "CLOUD_MESSAGING_SENDER_ID", appProperties['cloud_messaging_sender_id']
+        //Use the mockProvider flavor
+        missingDimensionStrategy "authProvider", "_mockProvider"
 
         // The BBM Enterprise User Domain that is assigned to you.
         // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
@@ -61,29 +59,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    flavorDimensions "authProvider"
-    
-    productFlavors {
-        //Use google for authentication, identity and firebase for key storage.
-        google {
-            dimension "authProvider"
-        }
-        //Use Azure AD for authentication and identity
-        azure {
-            dimension "authProvider"
-            //Force multiDexEnabled to true when using the MSGraph SDK
-            multiDexEnabled true
-            //Microsoft authentication library requires sdk v21
-            minSdkVersion 21
-            resValue "string", "AZURE_APPLICATION_ID", appProperties.getProperty('client_server_id', "\"azure_app_id\"")
-            resValue "string", "MSAL_PREFIX", "msal" + appProperties.getProperty('client_server_id', "\"azure_app_id\"")
-            buildConfigField("String", "AZURE_AD_TENANT_ID", appProperties.getProperty('azure_ad_tenant_id', "\"azure_tenant_id\""))
-            buildConfigField("String", "BBME_AUTH_SCOPE", appProperties.getProperty('bbme_auth_scope', "\"auth_scope\""))
-            buildConfigField("String", "KEY_PROVIDER_SERVER_URL", appProperties.getProperty('azure_kps_url', "\"kps_url\""))
-            buildConfigField("String", "AZURE_LOGIN_AUTHORITY", appProperties.getProperty('azure_login_authority', "\"https://login_authority_here\""))
-        }
     }
 
     signingConfigs {
@@ -101,7 +76,8 @@ android {
             signingConfig signingConfigs.common
         }
         release {
-            minifyEnabled false
+            multiDexEnabled false
+            minifyEnabled true
             signingConfig signingConfigs.common
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -115,14 +91,14 @@ dependencies {
     // Other UI dependencies
     // Firebase Cloud Messaging dependencies
     // Include Google play services auth module to use Open ID.
-    implementation 'com.google.guava:guava:22.0-android'
-    implementation 'com.android.support:appcompat-v7:26.0.2'
-    implementation 'com.android.support:design:26.0.2'
-    implementation 'com.android.support:support-v4:26.0.2'
-    implementation 'com.android.support:recyclerview-v7:26.0.2'
-    implementation 'com.android.support:cardview-v7:26.0.2'
-    implementation 'com.google.firebase:firebase-messaging:11.4.2'
-    implementation 'com.google.android.gms:play-services-auth:11.4.2'
+    implementation 'com.google.guava:guava:25.1-android'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
 }
 // By applying the plugin below this will ensure the project will not compile
 // if google-services.json is missing. When setting up this example please

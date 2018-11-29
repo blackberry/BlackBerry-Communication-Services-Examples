@@ -16,21 +16,14 @@
 
 package com.bbm.example.announcements;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,8 +38,11 @@ import com.bbm.sdk.bbmds.internal.Existence;
 import com.bbm.sdk.bbmds.outbound.SetupRetry;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
+import com.bbm.sdk.reactive.SingleshotMonitor;
+import com.bbm.sdk.support.identity.UserIdentityMapper;
 import com.bbm.sdk.support.identity.user.AppUser;
 import com.bbm.sdk.support.identity.user.UserManager;
+import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.ChatStartHelper;
 import com.bbm.sdk.support.util.Logger;
@@ -252,72 +248,53 @@ public final class MainActivity extends AppCompatActivity {
      */
     private void showNewChatDialog() {
 
-        // Get the custom view to use in the alert dialog.
-        final View contents = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_chat_start, null);
-        final EditText regIdText = contents.findViewById(R.id.reg_id);
-        final EditText subjectText = contents.findViewById(R.id.subject);
-
-        // Setup the alert dialog. On a positive button click a new chat should be started.
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.AppTheme_dialog)
-                .setTitle(R.string.start_chat)
-                .setView(contents)
-                .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
+        UserIdPrompter prompter = new UserIdPrompter();
+        prompter.setTitle(getString(R.string.start_chat));
+        prompter.setSecondaryInputLabel(getString(R.string.subject));
+        prompter.setSecondaryInputHint(getString(R.string.subject));
+        prompter.setSecondaryInputRequired(getString(R.string.subject_required));
+        prompter.show(this, new UserIdPrompter.SelectedUserIdCallback() {
+            @Override
+            public void selectedUserId(String userId, String secondaryInput) {
+                SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        final Long regId = Long.valueOf(regIdText.getText().toString());
-                        final String subject = subjectText.getText().toString();
-
-                        ChatStartHelper.startNewChat(new long[]{regId}, subject, new ChatStartHelper.ChatStartedCallback() {
-                            @Override
-                            public void onChatStarted(@NonNull String chatId) {
-                                //Start our chat activity
-                                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                                intent.putExtra(ChatActivity.INTENT_EXTRA_CHAT_ID, chatId);
-                                startActivity(intent);
-                            }
-
-                            @Override
-                            public void onChatStartFailed(ChatStartFailed.Reason reason) {
-                                Logger.i("Failed to create chat with " + regId);
-                                Toast.makeText(MainActivity.this, "Failed to create chat for reason " + reason.toString(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-
+                    public boolean run() {
+                        //Find the regId for the provided userId
+                        UserIdentityMapper.IdentityMapResult result =
+                                UserIdentityMapper.getInstance().getRegIdForUid(userId, true).get();
+                        if (result.existence == Existence.MAYBE) {
+                            return false;
+                        }
+                        if (result.existence == Existence.YES) {
+                            startChat(result.regId, secondaryInput);
+                        } else {
+                            Toast.makeText(MainActivity.this,
+                                    getString(R.string.user_id_not_found, userId),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        return true;
                     }
                 });
+            }
+        });
 
-        final AlertDialog dialog = builder.create();
+    }
 
-        // Setup the text watchers to only enable the alert dialog positive button if the fields
-        // as valid data. This needs to be setup on the regIdText and subjectText
-        final TextWatcher watcher = new TextWatcher() {
+    private void startChat(long regId, String subject) {
+        ChatStartHelper.startNewChat(new long[]{regId}, subject, new ChatStartHelper.ChatStartedCallback() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            public void onChatStarted(@NonNull String chatId) {
+                //Start our chat activity
+                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                intent.putExtra(ChatActivity.INTENT_EXTRA_CHAT_ID, chatId);
+                startActivity(intent);
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(regIdText.getText().toString().trim()) ||
-                        TextUtils.isEmpty(subjectText.getText().toString().trim())) {
-                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else {
-                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                }
+            public void onChatStartFailed(ChatStartFailed.Reason reason) {
+                Logger.i("Failed to create chat with " + regId);
+                Toast.makeText(MainActivity.this, "Failed to create chat for reason " + reason.toString(), Toast.LENGTH_LONG).show();
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        };
-
-        regIdText.addTextChangedListener(watcher);
-        subjectText.addTextChangedListener(watcher);
-
-        // Finally show the dialog and do some initial adjustments.
-        dialog.show();
-        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-        Helper.resizeAlertDialog(dialog);
+        });
     }
 }

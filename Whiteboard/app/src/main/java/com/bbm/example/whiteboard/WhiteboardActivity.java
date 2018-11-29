@@ -28,24 +28,33 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.bbm.example.common.reactive.SimpleChatMessageList;
-import com.bbm.sdk.support.util.PermissionsUtil;
 import com.bbm.example.common.util.Utils;
 import com.bbm.sdk.BBMEnterprise;
 import com.bbm.sdk.bbmds.Chat;
+import com.bbm.sdk.bbmds.internal.Existence;
+import com.bbm.sdk.bbmds.outbound.ChatInvite;
 import com.bbm.sdk.bbmds.outbound.RetryServerRequests;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
+import com.bbm.sdk.reactive.SingleshotMonitor;
+import com.bbm.sdk.support.identity.UserIdentityMapper;
 import com.bbm.sdk.support.reactive.ObserveConnector;
+import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
 import com.bbm.sdk.support.util.BbmUtils;
 import com.bbm.sdk.support.util.Logger;
+import com.bbm.sdk.support.util.PermissionsUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 
 public class WhiteboardActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_ATTACH_PICTURE = 5;
@@ -268,15 +277,20 @@ public class WhiteboardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        new AsyncTask<Void, Void, Void>() {
+        AsyncTask.execute(new Runnable() {
             @Override
-            protected Void doInBackground(Void... params) {
+            public void run() {
                 //Allow BBM to retry any failed server messages
                 BBMEnterprise.getInstance().getBbmdsProtocol().send(new RetryServerRequests());
-                return null;
             }
-        }.execute();
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.whiteboard_menu, menu);
+        return true;
     }
 
     @Override
@@ -285,6 +299,35 @@ public class WhiteboardActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.menu_invite_user:
+                UserIdPrompter prompter = new UserIdPrompter();
+                prompter.setTitle(getString(R.string.invite_to_whiteboard));
+                prompter.show(this, new UserIdPrompter.SelectedUserIdCallback() {
+                    @Override
+                    public void selectedUserId(String userId, String secondaryInput) {
+                        SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
+                            @Override
+                            public boolean run() {
+                                UserIdentityMapper.IdentityMapResult result =
+                                        UserIdentityMapper.getInstance().getRegIdForUid(userId, true).get();
+                                if (result.existence == Existence.MAYBE) {
+                                    return false;
+                                }
+                                if (result.existence == Existence.YES) {
+                                    ChatInvite.Invitees invitee = new ChatInvite.Invitees();
+                                    invitee.regId(result.regId);
+                                    ChatInvite invite = new ChatInvite(mChatId, Collections.singletonList(invitee));
+                                    BBMEnterprise.getInstance().getBbmdsProtocol().send(invite);
+                                } else {
+                                    Toast.makeText(WhiteboardActivity.this,
+                                            getString(R.string.user_id_not_found, userId),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                                return true;
+                            }
+                        });
+                    }
+                });
         }
 
         return super.onOptionsItemSelected(item);

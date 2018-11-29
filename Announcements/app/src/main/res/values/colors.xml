@@ -26,13 +26,10 @@
     <color name="chat_bubble_outgoing">@color/colorPrimary</color>
     <color name="chat_bubble_incoming">@color/colorAccent</color>
     <color name="chat_bubble_text_incoming">@color/colorPrimaryText</color>
-    <color name="chat_bubble_text_outgoing">@color/colorPrimaryText</color>
     <color name="chat_bubble_highlight_outgoing">#D2D7D3</color>
     <color name="chat_bubble_status_outgoing">#F27935</color>
     <color name="chat_bubble_error_outgoing">#F27935</color>
     <color name="chat_bubble_alert_text_outgoing">#F9BF3B</color>
-
-    <color name="chat_bubble_background_outgoing_highlight">@color/colorAccent</color>
 
     <color name="announcement_background">#F4D03F</color>
     <color name="announcement_edit_background">#D2D7D3</color>

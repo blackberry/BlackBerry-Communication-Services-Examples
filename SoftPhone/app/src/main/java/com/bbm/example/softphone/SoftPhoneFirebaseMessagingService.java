@@ -25,6 +25,7 @@ import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.service.BBMEnterpriseState;
 import com.bbm.sdk.support.util.Logger;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -44,7 +45,8 @@ public class SoftPhoneFirebaseMessagingService extends FirebaseMessagingService 
     @Override
     public void onMessageReceived(final RemoteMessage remoteMessage) {
         Logger.d("onMessageReceived: "+remoteMessage);
-        if (remoteMessage.getFrom().equals(BuildConfig.CLOUD_MESSAGING_SENDER_ID)) {
+        FirebaseApp fbApp = FirebaseApp.getInstance();
+        if (fbApp != null && remoteMessage.getFrom().equals(fbApp.getOptions().getGcmSenderId())) {
             // Handling of push notification must be done of UI thread.
             mMainHandler.post(new Runnable() {
                 @Override

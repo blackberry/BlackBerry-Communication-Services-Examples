@@ -29,7 +29,6 @@
     <string name="video_chat_cannot_switch_cameras">Unable to switch camera.</string>
     <string name="call_audio_selector">Audio Selector</string>
     <string name="switch_camera">Switch Camera</string>
-    <string name="reg_id_to_call">RegId To Call:</string>
     <string name="start_call">Start Call</string>
     <string name="button_send_log_files">Send Log Files</string>
 
@@ -61,8 +60,7 @@
     <string name="call_quality_poor">Limited Network Connection</string>
 
     <string name="error_no_regid">No regId</string>
-    <string name="invalid_regid">Invalid Registration ID, must be a number</string>
 
     <string name="rationale_write_external_storage">BBM Enterprise requires access to your device storage to save files from the camera and save images and files sent by your contacts.</string>
-
+    <string name="user_id_not_found">Unable to find user %1$s</string>
 </resources>

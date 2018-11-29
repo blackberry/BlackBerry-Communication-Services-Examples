@@ -66,7 +66,4 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="SplashProgressBar" parent="@android:style/Widget.ProgressBar">
-        <item name="android:background">@null</item>
-    </style>
 </resources>

@@ -1,8 +1,8 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Quick Start for Android
 
-The Quick Start application demonstrates how you can authenticate with the BlackBerry Spark Communications Platform using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.  This example shows how you can authenticate your user with the Spark SDK using [Google Sign-in](https://developers.google.com/identity/sign-in/android/) and complete setup. This example uses the simple <a href="https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient.Builder#enableAutoManage(android.support.v4.app.FragmentActivity, com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener)">auto-managed mode</a> of the Google API.
+The Quick Start application demonstrates how you can authenticate with the BlackBerry Spark Communications Services using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.  This example shows how you can authenticate your user with the Spark SDK using a mock token and complete setup.
 
 <br>
 
@@ -30,40 +30,26 @@ Visit the [Getting Started with Android](https://developer.blackberry.com/files/
  <b>Getting started video</b>
 </p>
 
-To use this example, you must set up the following elements:
+This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service. This allows you to get up and running quickly with minimal setup.
 
-```
-- local keystore file
-- client_server_id
-- your Spark SDK user domain.
-```
+[Create a Spark application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
 
-You can copy these elements from the google-services.json file, and paste them into the app.properties file. The values for these elements are as follows:
-
-```
-- client_server_id = "client_info" : "client_id"
-- user_domain="your user domain"
-```
+Once your sandbox domain is configured, edit the app.properties file with your Spark domain. Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry 
+Key Management Service.
 
 Notes:
 
-1. The Google web documentation contains an error: when creating an OAuth 2.0 client, you also must
-   create an OAuth 2.0 client with the Application Type set to Android. You will need to input the
-   SHA of your own keystore to complete the client ID (see note 2). Once complete, remember to download the
-   google-services.json file again.
-2. You must create your own signing key. The QuickStart example is setup to use a single signing key for both
-   debug & release. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html .
-   The SHA value is required to create an OAuth 2.0 client ID for a mobile device.
+1. To complete a release build you must create your own signing key. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html .
 
 This application has been built using gradle 4.2.1 (newer versions have not been validated)
 
 ## Walkthrough
 
-Follow this guide for a walkthrough showing how to authenticate with the Spark SDK using Google Sign-in for Android.
+Follow this guide for a walkthrough showing how to set up and authenticate with the Spark SDK.
 
 - [Initialize the Spark SDK](#initialize)
 - [Observe the Spark SDK State](#observe)
-- [Request an access token using the Google Sign-in API](#requestToken)
+- [Generate an authentication token](#generateToken)
 - [Monitor the GlobalAuthTokenState](#monitorAuthState)
 - [Monitor the GlobalSetupState](#monitorSetup)
 - [Monitor for setup errors](#monitorErrors)
@@ -78,6 +64,13 @@ Before starting the Spark SDK we must [initialize()](https://developer.blackberr
 // get the service
 mBbmEnterprise = BBMEnterprise.getInstance();
 mBbmEnterprise.initialize(this);
+
+//Start the SDK
+final boolean startSuccessful = mBbmEnterprise.start();
+if (!startSuccessful) {
+    //implies BBMEnterprise was already started.  Call stop before trying to start again
+    Toast.makeText(SetupActivity.this, "Service already started.", Toast.LENGTH_LONG).show();
+}
 ```
 
 
@@ -120,131 +113,43 @@ private final Observer mEnterpriseStateObserver = new Observer() {
 
 
 
-### <a name="requestToken"></a>Request an access token using the Google Sign-in API
+### <a name="generateToken"></a>Generate an authentication token
 
-To retrieve an access token from the Google Sign-in API we start by creating a [GoogleSignInOptions](https://developers.google.com/android/reference/com/google/android/gms/auth/api/signin/GoogleSignInOptions) configuration. We specify the clientServerId using the value obtained from the **google-services.json**.  The configuration is used to create an instance of the [GoogleApiClient](https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient). The GoogleApiClient generates an intent that we trigger when the sign-in button is pressed.
+To simplify authentication the Spark sandbox servers support authentication with unsigned JWT tokens. Our generated tokens header algorithm ("alg") parameter is set to "none". The token id is randomly generated, the userId is hardcoded value for simplicity.
 
 ```java
-final String clientServerId = BuildConfig.CLIENT_SERVER_ID;
-// Configure sign-in to request the user's ID, email address, and its Id token.
-// ID and basic profile are included in DEFAULT_SIGN_IN.
-GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken(clientServerId)
-        .requestEmail()
-        .build();
+//User Id is hard-coded for convenience here
+String userId = "sampleSparkUserId";
 
-// Build a GoogleApiClient with access to the Google Sign-In API and the
-// options specified by gso.
-mGoogleApiClient = new GoogleApiClient.Builder(this)
-        .enableAutoManage(this, this)
-        .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-        .build();
+JSONObject header = new JSONObject();
+header.put("alg", "none");
 
-mSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
-mSignInButton.setSize(SignInButton.SIZE_STANDARD);
-mSignInButton.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-});
+SecureRandom rand = new SecureRandom();
+byte[] bytes = new byte[128];
+//Get some random bytes
+rand.nextBytes(bytes);
+//Use the first 18 characters as the token id
+String jti = Base64.encodeToString(bytes, base64Flags).substring(0, 18);
+
+JSONObject body = new JSONObject();
+body.put("iss", "NoIDP");
+body.put("jti", jti);
+body.put("sub", userId);
+body.put("iat", System.currentTimeMillis() / 1000);
+//Expires in one hour.
+body.put("exp", System.currentTimeMillis() + 1000 * 60 * 60);
+
+String base64Header = Base64.encodeToString(header.toString().getBytes(), base64Flags);
+String base64Body = Base64.encodeToString(body.toString().getBytes(), base64Flags);
+
+token = base64Header + '.' + base64Body + '.';
 ```
 
-
-
-The result of the intent is processed into a GoogleSignInResult. If the sign-in was successful we start an asynchronous task to request the access token.
+We can send the token to the Spark SDK with the [AuthToken](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/AuthToken) message.
 
 ```java
-@Override
-public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-
-    // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-    if (requestCode == RC_SIGN_IN) {
-        GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-
-        if (result.isSuccess()) {
-            mSetupErrorContainer.setVisibility(View.GONE);
-            mSetupErrorView.setText("");
-
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-            if (acct != null) {
-                FetchAccessToken worker = new FetchAccessToken(acct);
-                worker.execute();
-            } else {
-                mSetupErrorContainer.setVisibility(View.VISIBLE);
-                mSetupErrorView.setText(R.string.google_signed_in_no_acct);
-            }
-        } else {
-            mSetupErrorContainer.setVisibility(View.VISIBLE);
-            mSetupErrorView.setText(R.string.google_sign_failed);
-        }
-    }
-}
-```
-
-
-
-The FetchAccessToken async task requests an access token using the GoogleAuthUtil helper. The scope includes  "openid" to ensure that the UserInfo Endpoint is included in the token.
-
-```java
-//Asynchronous task to fetch a token from the GoogleAuth service.
-private class FetchAccessToken extends AsyncTask<Void, Void, String> {
-
-    private GoogleSignInAccount mSignInAccount;
-
-    private FetchAccessToken(@NonNull final GoogleSignInAccount googleSigninAccount) {
-        mSignInAccount = googleSigninAccount;
-    }
-
-    @Override
-    protected String doInBackground(Void... voids) {
-        Account account = mSignInAccount.getAccount();
-        String accessToken = null;
-        if (account != null) {
-            try {
-                accessToken = GoogleAuthUtil.getToken(SetupActivity.this.getApplicationContext(), account, "oauth2:openid");
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (UserRecoverableAuthException e) {
-                accessToken = null;
-            } catch (GoogleAuthException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return accessToken;
-    }
-
-    @Override
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-        mGoogleUserId = mSignInAccount.getId();
-        mGoogleToken = result;
-
-        startBBMEnterpriseService();
-    }
-}
-```
-
-
-
-Once the token is obtained we start the Spark SDK. The Spark SDK will request the token via the GlobalAuthTokenState.
-
-```java
-private void startBBMEnterpriseService() {
-    mSignInButton.setEnabled(false);  //disable button to avoid multiple clicks
-    mSetupErrorView.setText(null); //clear any outstanding errors
-
-    final boolean startSuccessful = mBbmEnterprise.start();
-    if (!startSuccessful) {
-        //implies BBMEnterprise was already started.  Call stop before trying to start again
-        Toast.makeText(SetupActivity.this, "Service already started.", Toast.LENGTH_LONG).show();
-    }
-    updateServiceButtonState(false);  //show stop on the button
-}
+AuthToken authToken = new AuthToken(token, userId);
+mBbmEnterprise.getBbmdsProtocol().send(authToken);
 ```
 
 
@@ -275,10 +180,8 @@ private final Observer mAuthTokenStateObserver = new Observer() {
             case Ok:
                 break;
             case Needed:
-                if (!TextUtils.isEmpty(mGoogleToken) && !TextUtils.isEmpty(mGoogleUserId)) {
-                    final AuthToken message = new AuthToken(mGoogleToken, mGoogleUserId);
-                    mBbmEnterprise.getBbmdsProtocol().send(message);
-                }
+                //Generate an unsigned token to authenticate with the spark servers
+                generateAuthToken();
                 break;
             case Rejected:
                 break;
@@ -293,12 +196,7 @@ private final Observer mAuthTokenStateObserver = new Observer() {
 
 ### <a name="monitorSetup"></a>Monitor the GlobalSetupState
 
-The [GlobalSetupState](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/GlobalSetupState.html) indicates the state of the Spark SDK setup process. When the setup state is *NotRequested* two things will happen:
-
-1. The local device will be pre-registered as an [Endpoint](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference//android/com/bbm/sdk/bbmds/inbound/Endpoints.html)
-2. We will provide an [AuthToken](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/AuthToken.html) constructed with the token and userId fetched from the Google auth service to kickstart the setup process. 
-
-When the GlobalSetupState is Ongoing the progressMessage will indicate the current phase of the setup.
+The [GlobalSetupState](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/GlobalSetupState.html) indicates the state of the Spark SDK setup process. When the setup state is *NotRequested* we will register the local device as a new [Endpoint](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference//android/com/bbm/sdk/bbmds/inbound/Endpoints.html). When the GlobalSetupState is Ongoing the progressMessage will indicate the current phase of the setup.
 
 ```java
 final BbmdsProtocol protocol = mBbmEnterprise.getBbmdsProtocol();
@@ -318,44 +216,27 @@ private final Observer mSetupStateObserver = new Observer() {
             return;
         }
 
-            final BbmdsProtocol protocol = mBbmEnterprise.getBbmdsProtocol();
-            switch (setupState.state) {
-                case NotRequested:
-                    if (!TextUtils.isEmpty(mGoogleToken) && !TextUtils.isEmpty(mGoogleUserId)) {
-                        registerDevice();
-                        final AuthToken message = new AuthToken(mGoogleToken, mGoogleUserId);
-                        mBbmEnterprise.getBbmdsProtocol().send(message);
-                    }
-                    break;
-                case DeviceSwitchRequired:
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SetupActivity.this);
-                    builder.setMessage(R.string.device_switch_confirmation);
-                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //Send SetupRetry msg. The BBM Enterprise SDK will switch the users account to this device.
-                            protocol.send(new SetupRetry());
-                        }
-                    });
-                    builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mBbmEnterprise.stop();
-                        }
-                    }).show();
-                    break;
-                case Full:
-                    handleFullState();
-                    break;
-                case Ongoing:
-                    //Ongoing has additional information in the progressMessage
-                    mSetupStateView.setText(setupState.state.toString() + ":" + setupState.progressMessage.toString());
-                    break;
-                case Success:
-                    break;
-                case Unspecified:
-                    break;
-            }
+        switch (setupState.state) {
+            case NotRequested:
+                //Register this device as a new endpoint
+                registerDevice();
+                break;
+            case Full:
+                //Handle the case where this account has reached the maximum number of registered endpoints
+                handleFullState();
+                break;
+            case Ongoing:
+                //Ongoing has additional information in the progressMessage
+                mSetupStateView.setText(setupState.state.toString() + ":" + setupState.progressMessage.toString());
+                break;
+            case SyncRequired:
+                //SyncRequired state is processed by the syncPasscodeStateObserver
+            case Success:
+                //Setup completed
+                break;
+            case Unspecified:
+                break;
+        }
     }
 };
 ```

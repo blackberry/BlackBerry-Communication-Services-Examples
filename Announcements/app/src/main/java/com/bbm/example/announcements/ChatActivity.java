@@ -27,17 +27,15 @@ import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.bbm.example.announcements.chatHolders.AnnouncementEditHolder;
 import com.bbm.example.announcements.chatHolders.AnnouncementHolder;
@@ -54,6 +52,9 @@ import com.bbm.sdk.bbmds.outbound.ChatLeave;
 import com.bbm.sdk.bbmds.outbound.ChatMessageSend;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
+import com.bbm.sdk.reactive.SingleshotMonitor;
+import com.bbm.sdk.support.identity.UserIdentityMapper;
+import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
 import com.bbm.sdk.support.ui.widgets.chats.ChatBubbleColorProvider;
 import com.bbm.sdk.support.ui.widgets.chats.ChatBubbleColors;
 import com.bbm.sdk.support.ui.widgets.chats.ChatMessageRecyclerViewAdapter;
@@ -143,6 +144,7 @@ public final class ChatActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager.setReverseLayout(true);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(mAdapter);
@@ -304,53 +306,38 @@ public final class ChatActivity extends AppCompatActivity {
      */
     private void showAddUserDialog() {
 
-        // Get the view layout for the dialog.
-        final View contents = LayoutInflater.from(ChatActivity.this).inflate(R.layout.dialog_add_user, null);
-        final EditText regIdText = contents.findViewById(R.id.reg_id);
-
-        // Setup the dialog to add a user
-        AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this, R.style.AppTheme_dialog)
-                .setTitle(R.string.add_user_menu)
-                .setView(contents)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+        UserIdPrompter prompter = new UserIdPrompter();
+        prompter.setTitle(getString(R.string.add_user_menu));
+        prompter.show(this, new UserIdPrompter.SelectedUserIdCallback() {
+            @Override
+            public void selectedUserId(String userId, String secondaryInput) {
+                SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        final Long regId = Long.valueOf(regIdText.getText().toString());
+                    public boolean run() {
+                        //Find the regId for the provided userId
+                        UserIdentityMapper.IdentityMapResult result =
+                                UserIdentityMapper.getInstance().getRegIdForUid(userId, true).get();
+                        if (result.existence == Existence.MAYBE) {
+                            return false;
+                        }
+                        if (result.existence == Existence.YES) {
+                            final ChatInvite.Invitees invite = new ChatInvite.Invitees();
+                            invite.regId(result.regId);
 
-                        final ChatInvite.Invitees invite = new ChatInvite.Invitees();
-                        invite.regId(regId);
-
-                        final ChatInvite message = new ChatInvite(mChatId, Collections.singletonList(invite));
-                        BBMEnterprise.getInstance().getBbmdsProtocol().send(message);
+                            final ChatInvite message = new ChatInvite(mChatId, Collections.singletonList(invite));
+                            BBMEnterprise.getInstance().getBbmdsProtocol().send(message);
+                        } else {
+                            Toast.makeText(ChatActivity.this,
+                                    getString(R.string.user_id_not_found, userId),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        return true;
                     }
                 });
-
-        final AlertDialog dialog = builder.create();
-
-        // Set a text watcher to enable the alert dialog positive button when a value is entered.
-        regIdText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(regIdText.getText().toString().trim())) {
-                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else {
-                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
             }
         });
 
-        dialog.show();
-        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-        Helper.resizeAlertDialog(dialog);
+
     }
 
 
@@ -407,7 +394,7 @@ public final class ChatActivity extends AppCompatActivity {
             // If this message has an "Edit" reference then use the
             // ITEM_VIEW_TYPE_ANNOUNCEMENT_EDIT type.
             for (ChatMessage.Ref ref : item.ref) {
-                if (ref.tag == ChatMessage.Ref.Tag.Edit) {
+                if (ref.tag.equals(ChatMessage.Ref.Tag.Edit)) {
                     return ITEM_VIEW_TYPE_ANNOUNCEMENT_EDIT;
                 }
             }

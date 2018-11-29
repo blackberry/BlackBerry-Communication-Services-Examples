@@ -55,6 +55,9 @@ import com.bbm.sdk.media.BBMEMediaManager;
 import com.bbm.sdk.reactive.ObservableMonitor;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
+import com.bbm.sdk.reactive.SingleshotMonitor;
+import com.bbm.sdk.support.identity.UserIdentityMapper;
+import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.BbmUtils;
 import com.bbm.sdk.support.util.IOUtils;
@@ -205,10 +208,32 @@ public class MainActivity extends AppCompatActivity implements BBMEDataChannelCr
                 BBMEDataConnection connection = BBMEnterprise.getInstance().getMediaManager().getDataConnection(mDataConnectionId).get();
                 if (connection.getState() == BBMEDataConnection.ConnectionState.DISCONNECTED) {
                     //If there is no connection then start one
-                    UserPrompter.promptForRegId(MainActivity.this, new UserPrompter.SelectedRegIdCallback() {
+                    UserIdPrompter prompter = new UserIdPrompter();
+                    prompter.setTitle(getString(R.string.start_data_connection));
+                    prompter.setSecondaryInputHint(getString(R.string.meta_data_hint));
+                    prompter.setSecondaryInputLabel(getString(R.string.meta_data_label));
+                    prompter.show(MainActivity.this, new UserIdPrompter.SelectedUserIdCallback() {
                         @Override
-                        public void selectedRegId(long regId, String metaData) {
-                            startDataConnection(regId, metaData);
+                        public void selectedUserId(String userId, String secondaryInput) {
+                            SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
+                                @Override
+                                public boolean run() {
+                                    //Find the regId for the provided userId
+                                    UserIdentityMapper.IdentityMapResult result =
+                                            UserIdentityMapper.getInstance().getRegIdForUid(userId, true).get();
+                                    if (result.existence == Existence.MAYBE) {
+                                        return false;
+                                    }
+                                    if (result.existence == Existence.YES) {
+                                        startDataConnection(result.regId, secondaryInput);
+                                    } else {
+                                        Toast.makeText(MainActivity.this,
+                                                getString(R.string.user_id_not_found, userId),
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                    return true;
+                                }
+                            });
                         }
                     });
                 } else {

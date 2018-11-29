@@ -127,7 +127,7 @@ public final class Helper {
     public static String getMessageContent(ChatMessage message) {
 
         for (ChatMessage.RefBy ref : message.refBy) {
-            if (ref.tag == ChatMessage.RefBy.Tag.Edit && ref.newestRef != 0) {
+            if (ref.tag.equals(ChatMessage.RefBy.Tag.Edit) && ref.newestRef != 0) {
                 //We only care about the most recent edit reference to this message
                 ChatMessage.ChatMessageKey key = new ChatMessage.ChatMessageKey(message.chatId, ref.newestRef);
 

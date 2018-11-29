@@ -32,21 +32,17 @@ appProperties.load(new FileInputStream(appPropertiesFile))
 
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.bbm.example.quickstart"
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        // The Server Client ID is a Web OAuth 2.0 Client ID obtained from https://console.developers.google.com/.
-        // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
-        buildConfigField "String", "CLIENT_SERVER_ID", appProperties['client_server_id']
-
-        // The BBM Enterprise User Domain that is assigned to you.
+        // The Spark Domain that is assigned to you.
         // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
         resValue "string", "USER_DOMAIN", appProperties['user_domain']
     }
@@ -56,21 +52,20 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    signingConfigs {
-        common {
-            keyAlias appProperties['keyAlias']
-            keyPassword appProperties['keyPassword']
-            storeFile file(appProperties['storeFile'])
-            storePassword appProperties['storePassword']
-        }
-    }
 
     buildTypes {
         debug{
             debuggable true
-            signingConfig signingConfigs.common
         }
         release {
+            signingConfigs {
+                common {
+                    keyAlias appProperties['keyAlias']
+                    keyPassword appProperties['keyPassword']
+                    storeFile file(appProperties['storeFile'])
+                    storePassword appProperties['storePassword']
+                }
+            }
             minifyEnabled true
             signingConfig signingConfigs.common
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -79,20 +74,14 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:26.0.2'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 
     // Include Google play services auth module to use Open ID.
-    implementation 'com.google.android.gms:play-services-auth:11.4.2'
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
 
     // BBM Enterprise SDK used Guva and is required.
-    implementation 'com.google.guava:guava:22.0-android'
+    implementation 'com.google.guava:guava:25.1-android'
 
     // Include the dependency on the BBM Enterprise SDK
     implementation (name:'bbm_sdk-release', ext:'aar')
 }
-
-// By applying the plugin below this will ensure the project will not
-// if google-services.json is missing. When setting up this example please
-// ensure you follow https://developers.google.com/identity/sign-in/android/start
-// and download the resulting google-services.json file.
-apply plugin: 'com.google.gms.google-services'

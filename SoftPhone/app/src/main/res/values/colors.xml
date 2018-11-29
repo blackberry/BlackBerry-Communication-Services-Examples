@@ -28,5 +28,4 @@
     <color name="call_accept_green">#779933</color>
     <color name="call_moderate_quality">#FFE11A</color>
     <color name="call_poor_quality">#FD7843</color>
-    <color name="active_call_bar">#76bf24</color>
 </resources>

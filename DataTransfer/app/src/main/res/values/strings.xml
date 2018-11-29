@@ -22,10 +22,8 @@
     <string name="my_registration_id">My RegId: %1$d</string>
 
     <string name="error_creating_connection">Unable creating data connection, %1$s</string>
-    <string name="invalid_regid">Invalid Registration ID, must be a number</string>
     <string name="start_data_connection">Start Data Connection</string>
     <string name="start">Start</string>
-    <string name="reg_id_to_call">RegId To Connect:</string>
     <string name="incoming_data_connection_request">%1$s would like to start a data connection with you.</string>
     <string name="incoming_data_connection_description">Description: %1$s</string>
 
@@ -40,5 +38,5 @@
     <string name="accept_connection">Accept Connection</string>
     <string name="transfer_size">(%1$d/%2$d)KB</string>
     <string name="meta_data_hint">Enter a description</string>
-    <string name="enter_a_regid">Enter a reg id</string>
+    <string name="meta_data_label">Description</string>
 </resources>

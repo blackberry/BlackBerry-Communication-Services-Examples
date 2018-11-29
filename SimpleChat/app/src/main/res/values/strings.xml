@@ -21,10 +21,10 @@
     <string name="my_registration_id">Registration Id: %1$d</string>
     <string name="enter_a_message">Enter a message</string>
     <string name="send">Send</string>
-    <string name="enter_a_regid">Enter a registration id</string>
     <string name="subject">Subject</string>
     <string name="start_chat">Start Chat</string>
-    <string name="start">Start</string>
     <string name="chats">Chats</string>
-    <string name="not_valid_regid">Not a valid registration id</string>
+    <string name="user_id_not_found">Unable to find user %1$s</string>
+    <string name="subject_hint">Enter a subject</string>
+    <string name="subject_required">Subject is required</string>
 </resources>

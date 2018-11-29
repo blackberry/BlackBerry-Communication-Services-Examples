@@ -1,6 +1,6 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
-# BlackBerry Spark Communications Platform
+# BlackBerry Spark Communications Services
 Spark is an IP-based cloud communications platform that lets
 you easily create powerful new experiences between your users, machines, and IoT
 devices. Its enterprise-grade communication and data sharing functionality can

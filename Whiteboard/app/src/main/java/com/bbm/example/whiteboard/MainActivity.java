@@ -25,9 +25,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.bbm.example.common.ui.AppUserSelectedCallback;
-import com.bbm.example.common.ui.ChooseAppUserDialog;
 import com.bbm.sdk.BBMEnterprise;
 import com.bbm.sdk.bbmds.GlobalSetupState;
 import com.bbm.sdk.bbmds.inbound.ChatStartFailed;
@@ -35,13 +34,13 @@ import com.bbm.sdk.bbmds.internal.Existence;
 import com.bbm.sdk.bbmds.outbound.SetupRetry;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
-import com.bbm.sdk.support.identity.user.AppUser;
+import com.bbm.sdk.reactive.SingleshotMonitor;
+import com.bbm.sdk.support.identity.UserIdentityMapper;
+import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.ChatStartHelper;
 import com.bbm.sdk.support.util.Logger;
 import com.bbm.sdk.support.util.SetupHelper;
-
-import java.util.Collection;
 
 /**
  * For this simple chat app the main activity is just a chats list with a few
@@ -132,27 +131,34 @@ public class MainActivity extends AppCompatActivity {
         Logger.d("onOptionsItemSelected: item="+item+" id="+id);
         if (id == R.id.start_whiteboard_chat) {
             //display the dialog that has a list of users with avatars and allows multiselect to create a chat or MPC
-            ChooseAppUserDialog.promptToSelectMultiple(this, null, getString(R.string.menu_whiteboard_chat), getString(R.string.chat_subject), new AppUserSelectedCallback() {
+            UserIdPrompter prompter = new UserIdPrompter();
+            prompter.setTitle(getString(R.string.menu_whiteboard_chat));
+            prompter.setSecondaryInputLabel(getString(R.string.chat_subject));
+            prompter.show(this, new UserIdPrompter.SelectedUserIdCallback() {
                 @Override
-                public void selected(Collection<AppUser> contacts, String extraText) {
-                    Logger.d("onClick: selected contacts="+contacts);
-                    if (contacts != null && contacts.size() > 0) {
-                        long[] regIds = new long[contacts.size()];
-                        int i = 0;
-                        for (AppUser user : contacts) {
-                            regIds[i] = user.getRegId();
-                            ++i;
-                        }
-                        //Add a prefix to know its whiteboards
-                        createNewChat(regIds, WhiteboardUtils.WHITEBOARD_CHAT_SUBJECT_PREFIX + extraText);
-                    }
-                }
+                public void selectedUserId(String userId, String secondaryInput) {
+                    SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
+                        @Override
+                        public boolean run() {
+                            //Lookup the Spark registration id for the provided user id
+                            UserIdentityMapper.IdentityMapResult mapResult =
+                                    UserIdentityMapper.getInstance().getRegIdForUid(userId, true).get();
+                            if (mapResult.existence == Existence.MAYBE) {
+                                return false;
+                            }
+                            if (mapResult.existence == Existence.YES) {
+                                //Add a prefix to know its whiteboards
+                                createNewChat(new long[]{mapResult.regId}, WhiteboardUtils.WHITEBOARD_CHAT_SUBJECT_PREFIX + secondaryInput);
+                            } else {
+                                Toast.makeText(MainActivity.this, getString(R.string.user_id_not_found, userId), Toast.LENGTH_LONG).show();
+                            }
 
-                @Override
-                public void selected(AppUser contact) {
-                    //this one won't be called in multiselect mode
+                            return false;
+                        }
+                    });
                 }
-            }, null); //no filter needed here to preselect any contacts
+            });
+
             return true;
         }
 

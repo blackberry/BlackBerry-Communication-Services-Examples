@@ -26,6 +26,7 @@ import com.bbm.sdk.service.BBMEnterpriseState;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.SetupHelper;
 
+
 /**
  * The Announcement application class.
  */

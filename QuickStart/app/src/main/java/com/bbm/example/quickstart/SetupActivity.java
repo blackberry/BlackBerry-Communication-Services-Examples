@@ -16,15 +16,11 @@
 
 package com.bbm.example.quickstart;
 
-import android.accounts.Account;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -53,33 +49,21 @@ import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.reactive.SingleshotMonitor;
 import com.bbm.sdk.service.BBMEnterpriseState;
 import com.bbm.sdk.service.InboundMessageObservable;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
-import java.io.IOException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.SecureRandom;
 import java.util.UUID;
 
 
 /**
- * This example shows how to use Google Sign-in for Android to obtain a user Id and token that can be used
- * as the AuthToken for the BBM SDK. The intention is not to be an overview of Google Sign-in for Android, for
- * more information see https://developers.google.com/identity/sign-in/android/. This example is using
- * the simple auto managed mode of the Google API.
- * <p>
- * Please note you will need to setup a configuration file and a example server client id for this example,
- * steps are found https://developers.google.com/identity/sign-in/android/start
+ * This example demonstrates the required steps to setup a Spark SDK application. This includes
+ * providing an authentication token, and handling endpoint registration.
+ * The mock authentication token that is generated that can only used to register with the
+ * Spark SDK sandbox servers.
  */
-public class SetupActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class SetupActivity extends AppCompatActivity {
 
     private BBMEnterprise mBbmEnterprise;
 
@@ -101,13 +85,6 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
     private Button mServiceStopButton;
     private View mSetupErrorContainer; //for controlling visibility of error msg only
 
-    private static final int RC_SIGN_IN = 9001; // The result code to be used when calling startActivityForResult
-
-    private GoogleApiClient mGoogleApiClient;
-    private SignInButton mSignInButton;
-
-    private String mGoogleUserId;
-    private String mGoogleToken;
 
     //Create an observer to monitor the BBM Enterprise SDK state
     private final Observer mEnterpriseStateObserver = new Observer() {
@@ -143,33 +120,13 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
                 return;
             }
 
-            final BbmdsProtocol protocol = mBbmEnterprise.getBbmdsProtocol();
             switch (setupState.state) {
                 case NotRequested:
-                    if (!TextUtils.isEmpty(mGoogleToken) && !TextUtils.isEmpty(mGoogleUserId)) {
-                        registerDevice();
-                        final AuthToken message = new AuthToken(mGoogleToken, mGoogleUserId);
-                        mBbmEnterprise.getBbmdsProtocol().send(message);
-                    }
-                    break;
-                case DeviceSwitchRequired:
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SetupActivity.this);
-                    builder.setMessage(R.string.device_switch_confirmation);
-                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //Send SetupRetry msg. The BBM Enterprise SDK will switch the users account to this device.
-                            protocol.send(new SetupRetry());
-                        }
-                    });
-                    builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mBbmEnterprise.stop();
-                        }
-                    }).show();
+                    //Register this device as a new endpoint
+                    registerDevice();
                     break;
                 case Full:
+                    //Handle the case where this account has reached the maximum number of registered endpoints
                     handleFullState();
                     break;
                 case Ongoing:
@@ -179,6 +136,7 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
                 case SyncRequired:
                     //SyncRequired state is processed by the syncPasscodeStateObserver
                 case Success:
+                    //Setup completed
                     break;
                 case Unspecified:
                     break;
@@ -232,10 +190,8 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
                 case Ok:
                     break;
                 case Needed:
-                    if (!TextUtils.isEmpty(mGoogleToken) && !TextUtils.isEmpty(mGoogleUserId)) {
-                        final AuthToken message = new AuthToken(mGoogleToken, mGoogleUserId);
-                        mBbmEnterprise.getBbmdsProtocol().send(message);
-                    }
+                    //Generate an unsigned token to authenticate with the spark servers
+                    generateAuthToken();
                     break;
                 case Rejected:
                     break;
@@ -246,6 +202,7 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
     };
 
     private final Observer mLocalRegIdObserver = new Observer() {
+        @SuppressLint("SetTextI18n")
         @Override
         public void changed() {
             //Check if the local uri is populated
@@ -277,83 +234,56 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
 
-        // Initialize BBMEnterprise SDK
-        initializeBBMEnterprise();
-
         // Load the view.
-        mEnterpriseStateView = (TextView) findViewById(R.id.service_state);
+        mEnterpriseStateView = findViewById(R.id.service_state);
 
-        mSetupStateView = (TextView) findViewById(R.id.setup_state);
-        mAuthTokenStateView = (TextView) findViewById(R.id.auth_token_state);
-        mLocalRegIdView = (TextView) findViewById(R.id.reg_id);
+        mSetupStateView = findViewById(R.id.setup_state);
+        mAuthTokenStateView = findViewById(R.id.auth_token_state);
+        mLocalRegIdView = findViewById(R.id.reg_id);
         mSetupErrorContainer = findViewById(R.id.setup_error);
-        mSetupErrorView = (TextView) findViewById(R.id.error_message);
+        mSetupErrorView = findViewById(R.id.error_message);
 
         //STOP button
-        mServiceStopButton = (Button) findViewById(R.id.service_stop_button);
+        mServiceStopButton = findViewById(R.id.service_stop_button);
         mServiceStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mServiceStopButton.isEnabled()) {
                     mServiceStopButton.setEnabled(false);  //disable button to avoid multiple clicks
-
-                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                            new ResultCallback<Status>() {
-                                @Override
-                                public void onResult(@NonNull Status status) {
-                                    mGoogleUserId = "";
-                                    mGoogleToken = "";
-                                    stopBBMEnterpriseService();
-                                }
-                            });
-
+                    stopBBMEnterpriseService();
                 }
-            }
-        });
-
-        final String clientServerId = BuildConfig.CLIENT_SERVER_ID;
-        // Configure sign-in to request the user's ID, email address, and its Id token.
-        // ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(clientServerId)
-                .requestEmail()
-                .build();
-
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        mSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
-        mSignInButton.setSize(SignInButton.SIZE_STANDARD);
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
 
         // initialize the view
         updateServiceButtonState(true);
+
+        // Initialize the Spark SDK
+        mBbmEnterprise = BBMEnterprise.getInstance();
+        mBbmEnterprise.initialize(this);
+
+        //Start the SDK
+        final boolean startSuccessful = mBbmEnterprise.start();
+        if (!startSuccessful) {
+            //implies BBMEnterprise was already started.  Call stop before trying to start again
+            Toast.makeText(SetupActivity.this, "Service already started.", Toast.LENGTH_LONG).show();
+        }
+        updateServiceButtonState(false);  //show stop on the button
+
+        // Initialize our observers of the Spark SDK setup states
+        initializeObservers();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         mEnterpriseStateObserver.changed();
         mSetupStateObserver.changed();
         mAuthTokenStateObserver.changed();
         mLocalRegIdObserver.changed();
     }
 
-    private void initializeBBMEnterprise() {
-        // get the service
-        mBbmEnterprise = BBMEnterprise.getInstance();
-        mBbmEnterprise.initialize(this);
+    private void initializeObservers() {
 
         mBbmEnterpriseState = mBbmEnterprise.getState();
         mBbmEnterpriseState.addObserver(mEnterpriseStateObserver);
@@ -382,16 +312,46 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
         mLocalUri.addObserver(mLocalRegIdObserver);
     }
 
-    private void startBBMEnterpriseService() {
-        mSignInButton.setEnabled(false);  //disable button to avoid multiple clicks
-        mSetupErrorView.setText(null); //clear any outstanding errors
+    /**
+     * Generate an unsigned JWT token that can be used for authentication with the sandbox Spark servers.
+     * This token includes a hard-coded userId value and uses the application package name as the audience value.
+     */
+    private void generateAuthToken() {
+        //Generate a mock token
+        int base64Flags = Base64.NO_PADDING | Base64.URL_SAFE | Base64.NO_WRAP;
+        String token = null;
+        //User Id is hard-coded for convenience here
+        String userId = "sampleSparkUserId";
 
-        final boolean startSuccessful = mBbmEnterprise.start();
-        if (!startSuccessful) {
-            //implies BBMEnterprise was already started.  Call stop before trying to start again
-            Toast.makeText(SetupActivity.this, "Service already started.", Toast.LENGTH_LONG).show();
+        try {
+            JSONObject header = new JSONObject();
+            header.put("alg", "none");
+
+            SecureRandom rand = new SecureRandom();
+            byte[] bytes = new byte[128];
+            //Get some random bytes
+            rand.nextBytes(bytes);
+            //Use the first 18 characters as the token id
+            String jti = Base64.encodeToString(bytes, base64Flags).substring(0, 18);
+
+            JSONObject body = new JSONObject();
+            body.put("iss", "NoIDP");
+            body.put("jti", jti);
+            body.put("sub", userId);
+            body.put("iat", System.currentTimeMillis() / 1000);
+            //Expires in one hour.
+            body.put("exp", System.currentTimeMillis() + 1000 * 60 * 60);
+
+            String base64Header = Base64.encodeToString(header.toString().getBytes(), base64Flags);
+            String base64Body = Base64.encodeToString(body.toString().getBytes(), base64Flags);
+
+            token = base64Header + '.' + base64Body + '.';
+        } catch (JSONException e) {
         }
-        updateServiceButtonState(false);  //show stop on the button
+        if (token != null) {
+            AuthToken authToken = new AuthToken(token, userId);
+            mBbmEnterprise.getBbmdsProtocol().send(authToken);
+        }
     }
 
     private void stopBBMEnterpriseService() {
@@ -408,82 +368,7 @@ public class SetupActivity extends AppCompatActivity implements GoogleApiClient.
     private void updateServiceButtonState(final boolean stopped) {
         //update the click behavior
         mServiceStopButton.setVisibility(stopped ? View.GONE : View.VISIBLE);
-        mSignInButton.setVisibility(stopped ? View.VISIBLE : View.GONE);
-
-        mSignInButton.setEnabled(true);
         mServiceStopButton.setEnabled(true);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mSetupErrorContainer.setVisibility(View.VISIBLE);
-        mSetupErrorView.setText(connectionResult.getErrorMessage());
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-
-            if (result.isSuccess()) {
-                mSetupErrorContainer.setVisibility(View.GONE);
-                mSetupErrorView.setText("");
-
-                // Signed in successfully, show authenticated UI.
-                GoogleSignInAccount acct = result.getSignInAccount();
-                if (acct != null) {
-                    FetchAccessToken worker = new FetchAccessToken(acct);
-                    worker.execute();
-                } else {
-                    mSetupErrorContainer.setVisibility(View.VISIBLE);
-                    mSetupErrorView.setText(R.string.google_signed_in_no_acct);
-                }
-            } else {
-                mSetupErrorContainer.setVisibility(View.VISIBLE);
-                mSetupErrorView.setText(R.string.google_sign_failed);
-            }
-        }
-    }
-
-    //Asynchronous task to fetch a token from the GoogleAuth service.
-    private class FetchAccessToken extends AsyncTask<Void, Void, String> {
-
-        private final GoogleSignInAccount mSignInAccount;
-
-        private FetchAccessToken(@NonNull final GoogleSignInAccount googleSigninAccount) {
-            mSignInAccount = googleSigninAccount;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            Account account = mSignInAccount.getAccount();
-            String accessToken = null;
-            if (account != null) {
-                try {
-                    accessToken = GoogleAuthUtil.getToken(SetupActivity.this.getApplicationContext(), account, "oauth2:openid");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (UserRecoverableAuthException e) {
-                    accessToken = null;
-                } catch (GoogleAuthException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return accessToken;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            mGoogleUserId = mSignInAccount.getId();
-            mGoogleToken = result;
-
-            startBBMEnterpriseService();
-        }
     }
 
     /**

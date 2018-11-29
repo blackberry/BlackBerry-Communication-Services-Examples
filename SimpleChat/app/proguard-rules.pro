@@ -30,3 +30,7 @@
 -dontwarn com.google.common.**
 -dontnote com.google.common.util.concurrent.**
 -dontwarn com.google.errorprone.**
+
+# Checker framework
+-dontwarn afu.org.checkerframework.**
+-dontwarn org.checkerframework.**
