@@ -29,8 +29,8 @@
   /**
    * data-transfer-element element class implementation.
    *
-   * Demonstrates how to implement file transfer functionality using
-   * BBMEnterprise SDK for JavaScript.
+   * Demonstrates how to implement file transfer functionality using the
+   * Spark Communications SDK for JavaScript.
    */
   class DataTransferElement extends Polymer.Element {
     constructor() {
@@ -266,7 +266,7 @@
         }
 
         if (!this.bbmSdk) {
-          alert('BBMEnterprise SDK for JavaScript is not initialized.');
+          alert('The SDK is not initialized.');
           return;
         }
 

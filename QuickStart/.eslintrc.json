@@ -3,7 +3,8 @@
   "globals":
   {
     "GoogleAuthManager": false,
-    "KMS_ARGON_WASM_URL": false
+    "KMS_ARGON_WASM_URL": false,
+    "AUTH_CONFIGURATION": false
   },
   "rules":
   {
@@ -12,7 +13,7 @@
     [
       "error",
       {
-        "varsIgnorePattern": "ID_PROVIDER_DOMAIN|KMS_ARGON_WASM_URL|ID_PROVIDER_ENVIRONMENT|USER_SECRET|createAuthManager"
+        "varsIgnorePattern": "AUTH_CONFIGURATION|ID_PROVIDER_DOMAIN|KMS_ARGON_WASM_URL|ID_PROVIDER_ENVIRONMENT|USER_SECRET|createAuthManager|USER_ID"
       }
     ]
   }

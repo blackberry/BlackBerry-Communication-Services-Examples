@@ -16,10 +16,9 @@
  */
 
 //
-// The bbm sdk requires an oauth2 provider, and a key storage service.
+// The bbm sdk requires an oauth2 provider.
 //
-// This module implements both, using Google for the oauth2 provider, and
-// implementing key storage using Firebase.
+// This module implements it, using Google for the oauth2 provider.
 //
 
 // Include some needed modules.

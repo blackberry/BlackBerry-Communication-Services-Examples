@@ -1,4 +1,4 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # KeyProviderServer Sample for JavaScript
 
@@ -12,15 +12,14 @@ The **KeyProviderServer** demonstrates how your app can enforce access control t
 
 4. Allows all authenticated users to read public key data.
 
-You can use this server with popular cloud storage solutions like [Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction). To learn more about setting up Azure Cosmos DB to store the BlackBerry Secure
-Spark security keys, follow the steps provided [here](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/azureCloudKeyStorage.html).
+You can use this server with popular cloud storage solutions like [Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction). To learn more about setting up Azure Cosmos DB for Cloud Key Storage, follow the steps provided [here](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/azureCloudKeyStorage.html).
 
 
 ## Getting Started
 
-These samples require the Spark SDK which you can find along with related resources at the location below.
+These samples require the Spark Communications SDK for JavaScript which you can find along with related resources at the location below.
     
-* Getting stated with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting stated with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
@@ -35,9 +34,7 @@ These samples require the Spark SDK which you can find along with related resour
 
 # KeyProviderServer
 
-The cryptographic keys used by Spark to protect your communications are stored and distributed in a [cloud storage system](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/cloudKeyStorage.html) that you choose. Some cloud storage solutions like [Firebase](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/firebaseCloudKeyStorage.html) satisfy all the [requirements](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/cloudKeyStorage.html) to securely store and distribute keys to authenticated users. However, you may choose a different cloud storage solution that would require you to enforce access control on your application server.
-
-<!-- Source found in: https://wikis.rim.net/display/hydrogen/BBM+SDK+User+Guide+Diagrams#BBMSDKUserGuideDiagrams-KeyProviderServer-Azure -->
+The cryptographic keys used by Spark Communications Services to protect your communications are stored and distributed in [cloud storage system](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/cloudKeyStorage.html) that you choose. Some cloud storage solutions like [Firebase](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/firebaseCloudKeyStorage.html) satisfy all the [requirements](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/cloudKeyStorage.html) to securely store and distribute keys to authenticated users. However, you may choose a different cloud storage solution that would require you to enforce access control on your application server.
 
 <p align="center">
 <a href="screenShots/keyProviderService-azure.png"><img src="screenShots/keyProviderService-azure.png" width="50%" height="50%"></a>

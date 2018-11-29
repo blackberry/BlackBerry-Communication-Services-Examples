@@ -1,11 +1,17 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Simple Chat for JavaScript
 
-The Simple Chat app demonstrates how you can build a simple chat application 
-using the Spark SDK for JavaScript.  This app demonstrates how easily messaging can be integrated into your application.  For a more rich chat app experience please see the [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/RichChat/README.html) app provided with the SDK. This example builds on the 
-[Quick Start](../QuickStart/README.md) example that demonstrates how you can 
-authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
+The Simple Chat application demonstrates how you can build a simple chat
+application using the Spark Communications Services.  This application
+demonstrates how easily messaging can be integrated into your application.  For
+a more rich chat app experience please see the [Rich
+Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/RichChat/README.html)
+app provided with the SDK. This example builds on the [Quick
+Start](../QuickStart/README.md) example that demonstrates how you can
+authenticate with the SDK using the [Identity
+Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html)
+of your application.
 
 ### Features
 
@@ -25,9 +31,9 @@ It allows the user to do the following:
 
 ## Getting Started
 
-This samples requires the Spark SDK, which you can find along with related resources at the location below.
+This sample requires the Spark Communications SDK for JavaScript, which you can find along with related resources at the location below.
     
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
@@ -49,7 +55,7 @@ Visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-
 To use the SimpleChat example, you must set up the following elements in js/config.js:
 
 - Oauth2 configuration (AUTH_CONFIGURATION)
-- Your Spark user domain (ID_PROVIDER_DOMAIN)
+- Your sandbox domain (ID_PROVIDER_DOMAIN)
 - Firebase configuration (FIREBASE_CONFIG)
 - User passcode (USER_SECRET)
 
@@ -60,7 +66,7 @@ Follow this guide for a walkthrough of how to display a list of chats and a list
 
 - [Import the bbmChatList UI widget into your web application](#importChatList)
 - [Import the bbmChatMessageList UI widget into your web application](#importChatMessageList)
-- [Initialize the Spark SDK for JavaScript](#init)
+- [Initialize the SDK](#init)
 
 ### <a name="importChatList"></a>Import the bbmChatList UI widget into your web application
 
@@ -189,7 +195,7 @@ chatMessageList.setContext({
 
 ```
 
-### <a name="init"></a>Initialize the Spark SDK for JavaScript
+### <a name="init"></a>Initialize the SDK
 
 ```javascript
   // Create a BBMEnterprise instance.
@@ -204,7 +210,7 @@ chatMessageList.setContext({
   });
 ```
 
-For more information about setting up the Spark SDK for JavaScript, visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section of the guide.
+For more information about setting up the SDK, visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section of the guide.
 
 ## License
 

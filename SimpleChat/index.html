@@ -22,15 +22,12 @@
 
   <title>Simple Chat</title>
 
+  <script type="text/javascript" src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+  <script type="text/javascript" src="../support/identity/GenericUserInfo.js"></script>
+  <script type="text/javascript" src="../../sdk/bbm_sdk_web.js"></script>
+
   <link rel="import" href="node_modules/@npm-polymer/iron-flex-layout/iron-flex-layout.html">
   <link rel="import" href="node_modules/@npm-polymer/iron-scroll-threshold/iron-scroll-threshold.html">
-
-  <script type="text/javascript" src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
-  <script type="text/javascript" src="../support/auth/GoogleAuthManager.js"></script>
-  <script type="text/javascript" src="../../sdk/bbm_sdk_web.js"></script>
-  <script type="text/javascript" src="js/simpleChat.js"></script>
-  <script type="text/javascript" src="js/config.js"></script>
-
   <link rel="import" href="node_modules/@npm-polymer/iron-flex-layout/iron-flex-layout-classes.html">
   <link rel="import" href="node_modules/@npm-polymer/iron-icons/iron-icons.html">
   <link rel="import" href="node_modules/@npm-polymer/paper-icon-button/paper-icon-button.html">
@@ -41,9 +38,30 @@
   <link rel="import" href="node_modules/@npm-polymer/app-layout/app-drawer-layout/app-drawer-layout.html">
   <link rel="import" href="node_modules/@npm-polymer/app-layout/app-drawer/app-drawer.html">
   <link rel="import" href="node_modules/@npm-polymer/app-layout/app-header-layout/app-header-layout.html">
+
+  <!-- Import custom controls -->
   <link rel="import" href="node_modules/bbmChatInput/bbmChatInput.html">
   <link rel="import" href="node_modules/bbmChatList/bbmChatList.html">
   <link rel="import" href="node_modules/bbmChatMessageList/bbmChatMessageList.html">
+  <link rel="import" href="node_modules/bbmUserEmailDialog/bbmUserEmailDialog.html"/>
+
+  <!-- Select one of the following configurations (mutually exclusive): -->
+
+  <!-- 1. Simplified: Use below .js to configure your app to work without authentication (no identity provider) -->
+  <script type="text/javascript" src="../support/auth/MockAuthManager.js"></script>
+  <script type="text/javascript" src="js/config_mock.js"></script>
+
+  <!-- 2. Google: Use below .js files to configure application to work with Google -->
+  <!--
+  <script type="text/javascript" src="../support/auth/GoogleAuthManager.js"></script>
+  <script type="text/javascript" src="js/config_google.js"></script>
+  -->
+
+  <!-- 3. Microsoft: Use below .js files to configure application to work with Azure -->
+  <!--
+  <script type="text/javascript" src="../support/auth/AzureAuthManager.js"></script>
+  <script type="text/javascript" src="js/config_azure.js"></script>
+  -->
 
   <style>
 
@@ -137,5 +155,7 @@
 
   <!-- The chat input. This is outside of the app-header-layout, in order to appear at the bottom. -->
   <bbm-chat-input id="chatInput" style="display: none"></bbm-chat-input>
+  
+  <script type="text/javascript" src="js/simpleChat.js"></script>
 </body>
 </html>

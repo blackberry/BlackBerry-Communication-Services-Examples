@@ -84,7 +84,21 @@ let leaveButton;
     // Perform authentication.
     try {
       let isSyncStarted = false;
-      const authManager = createAuthManager();
+      const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
+      // Override getUserId() used by the MockAuthManager.
+      authManager.getUserId = () => new Promise((resolve, reject) => {
+        const userEmailDialog = document.createElement('bbm-user-email-dialog');
+        document.body.appendChild(userEmailDialog);
+        userEmailDialog.addEventListener('Ok', e => {
+          userEmailDialog.parentNode.removeChild(userEmailDialog);
+          resolve(e.detail.userEmail);
+        });
+        userEmailDialog.addEventListener('Cancel', () => {
+          userEmailDialog.parentNode.removeChild(userEmailDialog);
+          reject('Failed to get user email.');
+        });
+      });
+
       authManager.authenticate()
       .then(authUserInfo => {
         if (!authUserInfo) {
@@ -123,8 +137,7 @@ let leaveButton;
                 // Initialize the message list.
                 window.customElements.whenDefined(chatMessageList.localName)
                 .then(() => 
-                createUserManager(userRegId, authManager,
-                    bbmeSdk.getIdentitiesFromAppUserId,
+                  createUserManager(userRegId, authManager,
                     bbmeSdk.getIdentitiesFromAppUserIds)
                   .then(userManager =>
                     userManager.initialize()

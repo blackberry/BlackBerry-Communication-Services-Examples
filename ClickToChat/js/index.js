@@ -21,7 +21,7 @@
  * of how to implement generic Click To Chat functionality using the bbm-chat UI
  * widget.
  *
- * When user clicks "Start Secure Chat" button, application will start a BBME
+ * When the user clicks "Start Secure Chat" button, the application will start a
  * chat with the hard coded user RegId (CONTACT_REG_ID).
  *
  * @class ClickToChat
@@ -36,7 +36,20 @@ const CHAT_DETAILS = {
   subject: ''
 };
 
-const authManager = createAuthManager();
+const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
+// Override getUserId() used by the MockAuthManager.
+authManager.getUserId = () => new Promise((resolve, reject) => {
+  const userEmailDialog = document.createElement('bbm-user-email-dialog');
+  document.body.appendChild(userEmailDialog);
+  userEmailDialog.addEventListener('Ok', e => {
+    userEmailDialog.parentNode.removeChild(userEmailDialog);
+    resolve(e.detail.userEmail);
+  });
+  userEmailDialog.addEventListener('Cancel', () => {
+    userEmailDialog.parentNode.removeChild(userEmailDialog);
+    reject('Failed to get user email.');
+  });
+});
 
 window.onload = async () => {
   try {
@@ -83,7 +96,6 @@ async function startChat() {
       }
       const userRegId = bbmeSdk.getRegistrationInfo().regId;
       const userManager = await createUserManager(userRegId, authManager,
-        bbmeSdk.getIdentitiesFromAppUserId,
         bbmeSdk.getIdentitiesFromAppUserIds);
       await userManager.initialize();
       bbmChat.setBbmSdk(bbmeSdk);
@@ -97,8 +109,8 @@ async function startChat() {
       chatPane.style.display = 'block';
     }
     catch (error) {
-      const errorMessage = 'Failed to initialize Spark SDK for ' + 
-        ` JavaScript. Error: ${error}`;
+      const errorMessage = 
+        `Failed to initialize the SDK. Error: ${error}`;
       alert(errorMessage);
       isChatting = false;
     }
@@ -106,7 +118,7 @@ async function startChat() {
 }
 
 /**
- * This function initializes the Spark SDK.
+ * This function initializes the SDK.
  */
 function initBbmeSdk() {
   return new Promise(async (resolve, reject) => {

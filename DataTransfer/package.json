@@ -6,7 +6,8 @@
   "dependencies": {
     "@webcomponents/webcomponentsjs":"^1.0.20",
     "@npm-polymer":"https://github.com/Polymer/polymer.git#2.2.0",
-    "shadycss":"https://github.com/webcomponents/shadycss.git#1.1.0"
+    "shadycss":"https://github.com/webcomponents/shadycss.git#1.1.0",
+    "bbmUserEmailDialog": "file:../support/ui/widgets/bbmUserEmailDialog"
   }
 }
 

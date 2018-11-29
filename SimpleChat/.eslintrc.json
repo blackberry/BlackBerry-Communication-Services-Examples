@@ -24,7 +24,11 @@
     "KeyProtect": false,
     "HTMLImports": false,
     "USER_SECRET": false,
-    "KMS_ARGON_WASM_URL": false
+    "KMS_ARGON_WASM_URL": false,
+    "AUTH_CONFIGURATION": false,
+    "AuthenticationManager": false,
+    "MockUserManager": false,
+    "AzureUserManager": false
   },
 
   "rules":
@@ -34,7 +38,7 @@
     [
       "error",
       {
-        "varsIgnorePattern": "ID_PROVIDER_DOMAIN|KMS_ARGON_WASM_URL|ID_PROVIDER_ENVIRONMENT|USER_SECRET|createAuthManager|createUserManager|createKeyProvider|createKeyProtect|USER_SECRET|enterChat|leaveChat"
+        "varsIgnorePattern": "AUTH_CONFIGURATION|ID_PROVIDER_DOMAIN|KMS_ARGON_WASM_URL|ID_PROVIDER_ENVIRONMENT|USER_SECRET|createAuthManager|createUserManager|createKeyProvider|createKeyProtect|USER_SECRET|enterChat|leaveChat"
       }
     ]
   }

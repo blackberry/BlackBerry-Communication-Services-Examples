@@ -1,9 +1,9 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # BBMBot Sample for JavaScript
 
 The BBMBot sample app demonstrates how to build a chat bot in Node.js with the
-Spark SDK.  The BBMbot uses the [www.botlibre.com](www.botlibre.com)
+Spark Communications SDK.  The BBMbot uses the [www.botlibre.com](www.botlibre.com)
 webservice as an example of how to generate responses.
 
 <p align="center">
@@ -32,9 +32,9 @@ With the BBMBot example, your app can do the following:
 
 ## Getting Started
 
-This sample requires the Spark SDK, which you can find along with related resources at the location below.
+This sample requires the Spark Communications SDK for JavaScript, which you can find along with related resources at the location below.
     
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
@@ -53,7 +53,7 @@ Visit the [Getting Started with Node](https://developer.blackberry.com/files/bbm
 
 To use the BBMBot example, you must set up the following elements in config.js:
 
--id_provider_domain: Your Spark user domain.
+-id_provider_domain: Your sandbox domain.
 
 -firebaseConfig: The firebase API config.
 

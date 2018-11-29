@@ -1,10 +1,12 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Quick Start Sample for JavaScript
 
-The Quick Start application demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
-of your application. We demonstrate how you can obtain the user ID and token of your user's account 
-and pass them to the Spark SDK to complete setup. 
+The Quick Start application demonstrates how you can authenticate with the
+Spark Communications SDK using the [Identity
+Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html)
+of your application. We demonstrate how you can obtain the user ID and token of
+your user's account and pass them to the SDK to complete setup.
 
 <br>
 
@@ -15,9 +17,9 @@ and pass them to the Spark SDK to complete setup.
 
 ## Getting Started
 
-This sample requires the Spark SDK, which you can find along with related resources at the location below.
+This sample requires the Spark Communications SDK for JavaScript, which you can find along with related resources at the location below.
     
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
@@ -37,22 +39,22 @@ Visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-
 To use this example, you must set up the following elements in config.js:
 
 - Oauth2 configuration (AUTH_CONFIGURATION)
-- Your Spark user domain (ID_PROVIDER_DOMAIN)
+- Your sandbox domain (ID_PROVIDER_DOMAIN)
 - User passcode (USER_SECRET)
 
 ## Walkthrough
 
-Follow this guide for a walkthrough showing how to authenticate with the Spark SDK using Google Sign-in for Web.
+Follow this guide for a walkthrough showing how to authenticate with the SDK using Google Sign-in for Web.
 
 - [Validate the browser](#validateBrowser)
 - [Request an access token using the Google Sign-in API](#requestToken)
-- [Initialize the Spark SDK](#initialize)
+- [Initialize the SDK](#initialize)
 - [Monitor the setup state](#monitorSetup)
 - [Monitor for setup errors](#monitorSetupErrors)
 - [Perform setup](#performSetup)
 
 
-### <a name="validateBrowser"></a>Validate that the browser supports the Spark SDK for JavaScript
+### <a name="validateBrowser"></a>Validate that the browser supports the SDK
 
 To verify that the browser has all required features, call BBMEnterprise.validateBrowser. It will return a rejected Promise in browsers which support Promise. If Promise is not supported, it will throw an exception.
 
@@ -80,13 +82,13 @@ function LogIn() {
   const authManager = createAuthManager();
   authManager.authenticate()
   .then(userData => {
-    //  ... Initialize the Spark SDK here ...
+    //  ... Initialize the SDK here ...
   }
 }
 
 ```
 
-### <a name="initialize"></a>Initialize the Spark SDK
+### <a name="initialize"></a>Initialize the SDK
 
 ```javascript
 // Construct BBMEnterprise object.

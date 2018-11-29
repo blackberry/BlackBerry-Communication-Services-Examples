@@ -4,6 +4,7 @@
   "version": "1.0.1",
   "main": "index.html",
   "dependencies": {
-    "bbmChat": "file:../support/ui/widgets/bbmChat"
+    "bbmChat": "file:../support/ui/widgets/bbmChat",
+    "bbmUserEmailDialog": "file:../support/ui/widgets/bbmUserEmailDialog"
   }
 }

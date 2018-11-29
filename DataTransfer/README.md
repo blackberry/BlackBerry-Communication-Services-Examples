@@ -1,8 +1,8 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Data Transfer for JavaScript
 
-The DataTransfer application shows how to use the peer-to-peer data connection capability in the Spark SDK for JavaScript. The data connection API allows arbitrary data to be sent securely through a familiar stream interface.
+The DataTransfer application shows how to use the peer-to-peer data connection capability in the Spark Communications SDK. The data connection API allows arbitrary data to be sent securely through a familiar stream interface.
 
 ### Features
 
@@ -20,9 +20,9 @@ The sample application allows the user to do the following:
 
 ## Getting Started
 
-This sample requires the Spark SDK, which you can find along with related resources at the location below.
+This sample requires the Spark Communications SDK for JavaScript, which you can find along with related resources at the location below.
 
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
@@ -44,21 +44,21 @@ Visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-
 To use the DataTransfer example, you must set up the following elements in js/config.js:
 
 - Oauth2 configuration (AUTH_CONFIGURATION)
-- Your Spark user domain (ID_PROVIDER_DOMAIN)
+- Your sandbox domain (ID_PROVIDER_DOMAIN)
 - Firebase configuration (FIREBASE_CONFIG)
 - User passcode (USER_SECRET)
 
 ## Walkthrough
 
-Follow this guide for a walkthrough explaining how the Spark SDK for JavaScript is used to share data over a secure peer-to-peer data connection.
-- [Initialize the Spark SDK for JavaScript](#init)
+Follow this guide for a walkthrough explaining how the Spark Communications SDK is used to share data over a secure peer-to-peer data connection.
+- [Initialize the SDK](#init)
 - [Perform setup](#setup)
 - [Creating a connection](#create)
 - [Receive a connection](#receive)
 - [Receiving a file](#receiveFile)
 - [Sending a file](#sendFile)
 
-### <a name="init"></a>Initialize the Spark SDK for JavaScript
+### <a name="init"></a>Initialize the SDK
 
 ```javascript
   // Create new instance of BBMEnterprise.

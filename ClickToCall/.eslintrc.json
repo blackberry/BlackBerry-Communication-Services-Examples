@@ -24,7 +24,12 @@
     "FirebaseKeyProvider": false,
     "KeyProtect": false,
     "USER_SECRET": false,
-    "KMS_ARGON_WASM_URL": false
+    "KMS_ARGON_WASM_URL": false,
+    "GooglePeopleUserManager": false,
+    "AUTH_CONFIGURATION": false,
+    "AuthenticationManager": false,
+    "MockUserManager": false,
+    "AzureUserManager": false
   },
 
   "rules":
@@ -34,7 +39,7 @@
     [
       "error",
       {
-        "varsIgnorePattern": "makeCall|KMS_ARGON_WASM_URL|CONTACT_REG_ID|ID_PROVIDER_DOMAIN|USER_SECRET|ID_PROVIDER_ENVIRONMENT|createAuthManager|createUserManager|createKeyProvider|createKeyProtect"
+        "varsIgnorePattern": "AUTH_CONFIGURATION|makeCall|KMS_ARGON_WASM_URL|CONTACT_REG_ID|ID_PROVIDER_DOMAIN|USER_SECRET|ID_PROVIDER_ENVIRONMENT|createAuthManager|createUserManager"
       }
     ]
   }

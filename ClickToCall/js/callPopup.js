@@ -31,7 +31,21 @@
       bbmCallWidget = document.createElement('bbm-call');
       await window.customElements.whenDefined('bbm-call');
       await BBMEnterprise.validateBrowser();
-      const authManager = createAuthManager();
+      const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
+      // Override getUserId() used by the MockAuthManager.
+      authManager.getUserId = () => new Promise((resolve, reject) => {
+        const userEmailDialog = document.createElement('bbm-user-email-dialog');
+        document.body.appendChild(userEmailDialog);
+        userEmailDialog.addEventListener('Ok', e => {
+          userEmailDialog.parentNode.removeChild(userEmailDialog);
+          resolve(e.detail.userEmail);
+        });
+        userEmailDialog.addEventListener('Cancel', () => {
+          userEmailDialog.parentNode.removeChild(userEmailDialog);
+          reject('Failed to get user email.');
+        });
+      });
+
       const authUserInfo = await authManager.authenticate();
 
       if (!authUserInfo) {
@@ -59,7 +73,6 @@
               const userRegId = bbmeSdk.getRegistrationInfo().regId;
               contactsManager = await createUserManager(userRegId,
                 authManager,
-                bbmeSdk.getIdentitiesFromAppUserId,
                 bbmeSdk.getIdentitiesFromAppUserIds);
               await contactsManager.initialize();
               makeCall(CONTACT_REG_ID, true);

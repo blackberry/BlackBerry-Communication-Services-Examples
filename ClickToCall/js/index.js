@@ -21,8 +21,8 @@
  * of how to implement generic Click To Call functionality using bbm-call UI
  * widget.
  *
- * When user clicks "Start Secure Call" button, application will start BBME
- * call with the hard coded user RegId (CONTACT_REG_ID).
+ * When the user clicks the "Start Secure Call" button, the application will
+ * start a call with the hard coded user RegId (CONTACT_REG_ID).
  *
  * @class ClickToCall
  * @memberof Examples

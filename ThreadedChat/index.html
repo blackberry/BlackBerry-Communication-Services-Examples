@@ -23,21 +23,41 @@
   <title>Threaded Chat</title>
 
   <script type="text/javascript" src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
-  <script type="text/javascript" src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
-  <script type="text/javascript" src="../support/protect/firebase/config.js"></script>
-  <script type="text/javascript" src="../support/auth/GoogleAuthManager.js"></script>
+  <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+
   <script type="text/javascript" src="../support/identity/GenericUserInfo.js"></script>
-  <script type="text/javascript" src="../support/identity/FirebaseUserManager.js"></script>
   <script type="text/javascript" src="../support/util/MessageFormatter.js"></script>
   <script type="text/javascript" src="../support/util/TimeRangeFormatter.js"></script>
   <script type="text/javascript" src="../support/util/Observer.js"></script>
-  <script type="text/javascript" src="../support/protect/KeyProviderError.js"></script>
   <script type="text/javascript" src="../../sdk/bbm_sdk_web.js"></script>
-  <script type="text/javascript" src="js/config.js"></script>
 
+  <!-- Import custom controls -->
   <link rel="import" href="node_modules/bbmChatInput/bbmChatInput.html">
   <link rel="import" href="node_modules/bbmChatList/bbmChatList.html">
   <link rel="import" href="node_modules/bbmChatMessageList/bbmChatMessageList.html">
+  <link rel="import" href="node_modules/bbmUserEmailDialog/bbmUserEmailDialog.html"/>
+
+  <!-- Select one of the following configurations (mutually exclusive): -->
+
+  <!-- 1. Simplified: Use below .js to configure your app to work without authentication (no identity provider) -->
+  <script type="text/javascript" src="../support/auth/MockAuthManager.js"></script>
+  <script type="text/javascript" src="../support/identity/MockUserManager.js"></script>
+  <script type="text/javascript" src="js/config_mock.js"></script>
+
+  <!-- 2. Google: Use below .js files to configure application to work with Google -->
+  <!--
+  <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+  <script type="text/javascript" src="../support/auth/GoogleAuthManager.js"></script>
+  <script type="text/javascript" src="../support/identity/GooglePeopleUserManager.js"></script>
+  <script type="text/javascript" src="js/config_google.js"></script>
+  -->
+
+  <!-- 3. Microsoft: Use below .js files to configure application to work with Azure -->
+  <!--
+  <script type="text/javascript" src="../support/auth/AzureAuthManager.js"></script>
+  <script type="text/javascript" src="../support/identity/AzureUserManager.js"></script>
+  <script type="text/javascript" src="js/config_azure.js"></script>
+  -->
 
   <style>
 
@@ -361,6 +381,5 @@
     </bbm-chat-message-list>
   </template>
 </dom-module>
-
 <script type="text/javascript" src="js/threadedChat.js"></script>
 </html>

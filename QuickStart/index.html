@@ -23,11 +23,26 @@
 
     <script type="text/javascript" src="../../sdk/bbm_sdk_web.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script type="text/javascript" src="../support/auth/GoogleAuthManager.js"></script>
     <script type="text/javascript" src="../support/identity/GenericUserInfo.js"></script>
 
-    <!-- Import the local configuration -->
-    <script type="text/javascript" src="config.js"></script>
+    <!-- Select one of the following configurations (mutually exclusive): -->
+
+    <!-- 1. Simplified: Use below .js to configure your app to work without authentication (no identity provider) -->
+    <script type="text/javascript" src="../support/auth/MockAuthManager.js"></script>
+    <script type="text/javascript" src="config_mock.js"></script>
+
+    <!-- 2. Google: Use below .js files to configure application to work with Google -->
+    <!--
+    <script type="text/javascript" src="../support/auth/GoogleAuthManager.js"></script>
+    <script type="text/javascript" src="config_google.js"></script>
+    -->
+
+    <!-- 3. Microsoft: Use below .js files to configure application to work with Azure -->
+    <!--
+    <script type="text/javascript" src="../support/auth/AzureAuthManager.js"></script>
+    <script type="text/javascript" src="config_azure.js"></script>
+    -->
+
     <style>
       #signInButton {
         margin:0px auto;
@@ -86,115 +101,130 @@
       </tr>
     </table>
     <script>
-      // Validate that the browser is supported.
-      try {
-        BBMEnterprise.validateBrowser()
-        .catch(reportBrowserError)
-        .then(function() {
-          // Handle clicking the 'Sign in' button.
-          $('#signInButton').click(LogIn);
-        });
-      } catch(error) {
-        reportBrowserError(error);
-      }
-
-      // Report an error if browser validation fails.
-      function reportBrowserError(error) {
-        $('#setupState').text(error.toString());
-
-        // Rethrow to skip the rest of the Promise chain.
-        throw error;
-      }
-
-      // Display the domain and environment or an error if undefined.
-      try {
-        $('#domain').text(ID_PROVIDER_DOMAIN);
-        $('#environment').text(ID_PROVIDER_ENVIRONMENT);
-      } catch (error) {
-        console.log("QuickStart: error="+error);
-        $('#authTokenState').text(error);
-      }
-
-      const authManager = createAuthManager();
-      if (authManager.isAuthenticated) {
-        // User is already authenticated.
-        LogIn();
-      }
-
-      // Perform login if the user clicks on the Sign In button.
-      function LogIn() {
+      window.onload = () => {
+        // Validate that the browser is supported.
         try {
-          let isSyncStarted = false;
-          // Hide the sign-in button now that signing in is in progress.
-          $('#signInButton').hide();
-
-          // Create the auth manager for the configured auth service.
-          authManager.authenticate()
-          .then(userData => {
-            // We have successfully authenticated with the oAuth service
-            // provider.
-            $('#authTokenState').text('Ok');
-            try {
-              $('#userId').text(userData.userId);
-              $('#email').text(userData.email);
-              $('#displayName').text(userData.displayName);
-
-              // Construct BBMEnterprise object.
-              const bbmeSdk = new BBMEnterprise({
-                domain: ID_PROVIDER_DOMAIN,
-                environment: ID_PROVIDER_ENVIRONMENT,
-                userId: userData.userId,
-                getToken: () => authManager.getBbmSdkToken(),
-                description: navigator.userAgent,
-                kmsArgonWasmUrl: KMS_ARGON_WASM_URL
-              });
-
-              // Handle changes of BBM Enterprise setup state.
-              bbmeSdk.on('setupState', state => {
-                console.log(`BBMEnterprise setup state: ${state.value}`);
-                $('#setupState').text(state.value);
-                switch (state.value) {
-                  case BBMEnterprise.SetupState.Success:
-                    const userRegId = bbmeSdk.getRegistrationInfo().regId;
-                    $('#regId').text(userRegId || '?');
-                  break;
-                  case BBMEnterprise.SetupState.SyncRequired: {
-                    if (isSyncStarted) {
-                      $('#setupState').text(`Failed to get user keys using provided USER_SECRET`);
-                      return;
-                    }
-                    const isNew =
-                      bbmeSdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New;
-                    const syncAction = isNew
-                      ? BBMEnterprise.SyncStartAction.New
-                      : BBMEnterprise.SyncStartAction.Existing;
-                    bbmeSdk.syncStart(USER_SECRET, syncAction);
-                  }
-                  break;
-                  case BBMEnterprise.SetupState.SyncStarted:
-                    isSyncStarted = true;
-                  break;
-                }
-              });
-
-              // Handle setup error.
-              bbmeSdk.on('setupError', error => {
-                $('#setupState').text(`Failed to create BBMEnterprise | Error: ${error.value}`);
-              });
-
-              // Start BBM Enterprise setup.
-              bbmeSdk.setupStart();
-            } catch (error) {
-              $('#setupState').text(`Failed to create BBMEnterprise| Error: ${error}`);
-            }
-          }).catch(error => {
-            console.log(`QuickStart: Failed to start BBMEnterprise | Error: ${error}`);
-            $('#authTokenState').text(error);
+          BBMEnterprise.validateBrowser()
+          .catch(reportBrowserError)
+          .then(function() {
+            // Handle clicking the 'Sign in' button.
+            $('#signInButton').click(LogIn);
           });
         } catch(error) {
-          console.log(`QuickStart: Failed to authenticate and start BBMEnterprise | Error: ${error}`);
+          reportBrowserError(error);
+        }
+
+        // Report an error if browser validation fails.
+        function reportBrowserError(error) {
+          $('#setupState').text(error.toString());
+
+          // Rethrow to skip the rest of the Promise chain.
+          throw error;
+        }
+
+        // Display the domain and environment or an error if undefined.
+        try {
+          $('#domain').text(ID_PROVIDER_DOMAIN);
+          $('#environment').text(ID_PROVIDER_ENVIRONMENT);
+        } catch (error) {
+          console.log("QuickStart: error="+error);
           $('#authTokenState').text(error);
-        };
+        }
+
+        const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
+        // Override getUserId() used by the MockAuthManager.
+        authManager.getUserId = () => {
+          if (USER_ID) {
+            return Promise.resolve(USER_ID);
+          }
+          return Promise.reject(new Error ('USER_ID is not defined'));
+        }
+
+        if (authManager.isAuthenticated) {
+          // User is already authenticated.
+          LogIn();
+        }
+
+        // Perform login if the user clicks on the Sign In button.
+        function LogIn() {
+          try {
+            let isSyncStarted = false;
+            // Hide the sign-in button now that signing in is in progress.
+            $('#signInButton').hide();
+
+            // Create the auth manager for the configured auth service.
+            authManager.authenticate()
+            .then(userData => {
+              // We have successfully authenticated with the oAuth service
+              // provider.
+              $('#authTokenState').text('Ok');
+              try {
+                $('#userId').text(userData.userId);
+                $('#email').text(userData.email);
+                $('#displayName').text(userData.displayName);
+
+                // Construct BBMEnterprise object.
+                const bbmeSdk = new BBMEnterprise({
+                  domain: ID_PROVIDER_DOMAIN,
+                  environment: ID_PROVIDER_ENVIRONMENT,
+                  userId: userData.userId,
+                  getToken: () => authManager.getBbmSdkToken(),
+                  description: navigator.userAgent,
+                  kmsArgonWasmUrl: KMS_ARGON_WASM_URL
+                });
+
+                // Handle changes of BBM Enterprise setup state.
+                bbmeSdk.on('setupState', state => {
+                  console.log(`BBMEnterprise setup state: ${state.value}`);
+                  $('#setupState').text(state.value);
+                  switch (state.value) {
+                    case BBMEnterprise.SetupState.Success:
+                      const userRegId = bbmeSdk.getRegistrationInfo().regId;
+                      $('#regId').text(userRegId || '?');
+                    break;
+                    case BBMEnterprise.SetupState.SyncRequired: {
+                      if (isSyncStarted) {
+                        $('#setupState').text('Failed to get user keys using provided '
+                        + USER_SECRET);
+                        return;
+                      }
+                      const isNew =
+                        bbmeSdk.syncPasscodeState === 
+                          BBMEnterprise.SyncPasscodeState.New;
+                      const syncAction = isNew
+                        ? BBMEnterprise.SyncStartAction.New
+                        : BBMEnterprise.SyncStartAction.Existing;
+                      bbmeSdk.syncStart(USER_SECRET, syncAction);
+                    }
+                    break;
+                    case BBMEnterprise.SetupState.SyncStarted:
+                      isSyncStarted = true;
+                    break;
+                  }
+                });
+
+                // Handle setup error.
+                bbmeSdk.on('setupError', error => {
+                  $('#setupState').text('Failed to create BBMEnterprise | Error: ' +
+                    error.value);
+                });
+                // Start BBM Enterprise setup.
+                bbmeSdk.setupStart();
+              } catch (error) {
+                $('#setupState')
+                  .text(`Failed to create BBMEnterprise| Error: ${error}`);
+              }
+            }).catch(error => {
+              console.log('QuickStart: Failed to start BBMEnterprise | Error: '
+                + error);
+              $('#authTokenState').text(error);
+            });
+          } catch(error) {
+            console.log('QuickStart: Failed to authenticate and start BBMEnterprise'+ 
+            ` | Error: ${error}`);
+            $('#authTokenState').text(error);
+          };
+        }
       }
     </script>
   </body>

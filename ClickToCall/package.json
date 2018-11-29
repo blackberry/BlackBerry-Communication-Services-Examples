@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "main": "index.html",
   "dependencies": {
-    "bbmCall": "file:../support/ui/widgets/bbmCall"
+    "bbmCall": "file:../support/ui/widgets/bbmCall",
+    "bbmUserEmailDialog": "file:../support/ui/widgets/bbmUserEmailDialog"
   }
 }

@@ -1,15 +1,17 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Click To Call Sample for JavaScript
 
 The Click to Call sample app demonstrates how to integrate a video call
-experience into your website with the Spark SDK for JavaScript. This app allows a user to click a button on a webpage to start a secure video call with a predefined user or agent. The bbmChat widget handles the rendering of messages within the chat, and allows the user to send text, picture, and file messages.
+experience into your website with the Spark Communications SDK. This app allows
+a user to click a button on a webpage to start a secure video call with a
+predefined user or agent. The bbmCall widget handles the rendering of the
+incoming and outgoing video streams.
 
 ### Features
 
 This app demonstrates how easy it is to integrate the bbmCall widget into your
-webpage. It initializes the Spark SDK for JavaScript, and starts a 
-video call with a predefined user.
+webpage. It initializes the SDK, and starts a video call with a predefined user.
 
 <br>
 
@@ -19,9 +21,9 @@ video call with a predefined user.
 
 ## Getting Started
 
-This sample requires the Spark SDK, which you can find along with related resources at the location below.
+This sample requires the Spark Communications SDK for JavaScript, which you can find along with related resources at the location below.
     
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
@@ -44,7 +46,7 @@ To use the ClickToCall example, you must set up the following elements in js/con
 
 - Oauth2 configuration (AUTH_CONFIGURATION)
 - A hard coded contact registration ID with whom anyone who views the page will talk (CONTACT_REG_ID)
-- Your Spark user domain (ID_PROVIDER_DOMAIN)
+- Your sandbox domain (ID_PROVIDER_DOMAIN)
 - Firebase configuration (FIREBASE_CONFIG)
 - User passcode (USER_SECRET)
 
@@ -53,7 +55,7 @@ To use the ClickToCall example, you must set up the following elements in js/con
 Follow this guide for a walkthrough of how to integrate a video call into your webpage.
 
 - [Import the bbmCall UI widget into your web application](#importCall)
-- [Initialize the Spark SDK for JavaScript](#init)
+- [Initialize the SDK](#init)
 - [Perform setup](#setup)
 - [Start a video call with a predefined user](#startCall)
 
@@ -65,7 +67,7 @@ Your web application needs to import the bbmCall widget in order to bring a vide
   <link rel="import" href="node_modules/bbmCall/bbmCall.html">
 ```
 
-### <a name="init"></a>Initialize the Spark SDK for JavaScript
+### <a name="init"></a>Initialize the SDK
 
 ```javascript
   // Instantiate BBMEnterprise.
@@ -80,7 +82,7 @@ Your web application needs to import the bbmCall widget in order to bring a vide
   });
 ```
 
-For more information about setting up the Spark SDK for JavaScript, visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section of the guide.
+For more information about setting up the SDK, visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section of the guide.
 
 ### <a name="setup"></a>Perform setup
 ```javascript

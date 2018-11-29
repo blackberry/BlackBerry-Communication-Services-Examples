@@ -1,17 +1,17 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Threaded Chat Sample for JavaScript
 
-The Threaded Chat sample app demonstrates how a user can post comments on other messages in a chat to create threaded 
-conversations using the [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/references.html) feature of the Spark SDK for JavaScript.
+The Threaded Chat sample application demonstrates how a user can post comments on other messages in a chat to create threaded 
+conversations using the [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/references.html) feature of the Spark Communications SDK.
 
 This example utilizes the [Support](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/support/README.html) library to quickly create a basic chat application.
 
 This directory contains sample code for a Threaded Chat app that
 demonstrates how to use message references to build a threaded
-conversation using the Spark SDK.  For a more rich chat app experience please see the
+conversation.  For a more rich chat app experience please see the
 [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/RichChat/README.html)
-app provided with the SDK.
+application provided with the SDK.
 
 ### Features
 
@@ -30,9 +30,9 @@ It allows the user to do the following:
 
 ## Getting Started
 
-These samples require the Spark SDK which you can find along with related resources at the location below.
+These samples require the Spark Communications SDK for JavaScript which you can find along with related resources at the location below.
     
-* Getting stated with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting stated with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
@@ -54,7 +54,7 @@ Visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-
 To use the ThreadedChat example, you must set up the following elements in js/config.js:
 
 - Oauth2 configuration (AUTH_CONFIGURATION)
-- Your Spark user domain (ID_PROVIDER_DOMAIN)
+- Your sandbox domain (ID_PROVIDER_DOMAIN)
 - Firebase configuration (FIREBASE_CONFIG)
 - User passcode (USER_SECRET)
 
@@ -64,7 +64,7 @@ Follow this guide for a walkthrough of how to make a comment on another message 
 
 - [Import the bbmChatList UI widget into your web application](#importChatList)
 - [Import the bbmChatMessageList UI widget into your web application](#importChatMessageList)
-- [Initialize the Spark SDK for JavaScript](#init)
+- [Initialize the SDK](#init)
 - [Display a threaded conversation](#displayThreadedConversatoin)
 - [Make a comment on a message](#makeComment)
 
@@ -133,7 +133,7 @@ A bbmChatMessageList requires an html template to describe a bubble and will ins
 </dom-module>
 ```
 
-### <a name="init"></a>Initialize the Spark SDK for JavaScript
+### <a name="init"></a>Initialize the SDK
 
 ```javascript
   // Create a BBMEnterprise instance.
@@ -149,7 +149,7 @@ A bbmChatMessageList requires an html template to describe a bubble and will ins
 ```
 
 ### <a name="displayThreadedConversatoin"></a>Display a threaded conversation
-With the [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/references.html) of the Spark SDK, a message contains an list of outgoing references and a list of incoming references. 
+With the [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/references.html) of the SDK, a message contains an list of outgoing references and a list of incoming references.
 Each incoming reference is identified by a "refBy" object that has:
 - a tag that identifies what type of reference it is, for example, a tag of "Threaded"
 - a list of message IDs identifying the source messages which refers to this message

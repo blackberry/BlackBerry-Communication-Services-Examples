@@ -16,6 +16,7 @@
     "@npm-polymer/iron-scroll-threshold": "^2.0.0",
     "bbmChatInput": "file:../support/ui/widgets/bbmChatInput",
     "bbmChatList": "file:../support/ui/widgets/bbmChatList",
-    "bbmChatMessageList": "file:../support/ui/widgets/bbmChatMessageList"
+    "bbmChatMessageList": "file:../support/ui/widgets/bbmChatMessageList",
+    "bbmUserEmailDialog": "file:../support/ui/widgets/bbmUserEmailDialog"
   }
 }

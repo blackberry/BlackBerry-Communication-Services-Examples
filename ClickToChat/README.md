@@ -1,9 +1,12 @@
-![BlackBerry Spark Communications Platform](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
+![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
 # Click To Chat Sample for JavaScript
 
-The Click to Chat sample app demonstrates how to integrate a chat
-experience into your website with the Spark SDK for JavaScript. This app allows a user to click a button on a webpage to start a secure chat with a predefined user or agent. The bbmChat widget handles the rendering of messages within the chat, and allows the user to send text, picture, and file messages.
+The Click to Chat sample app demonstrates how to integrate a chat experience
+into your website with the Spark Communications SDK. This app allows a user to
+click a button on a webpage to start a secure chat with a predefined user or
+agent. The bbmChat widget handles the rendering of messages within the chat,
+and allows the user to send text, picture, and file messages.
 
 <p align="center">
 <br>
@@ -17,7 +20,9 @@ experience into your website with the Spark SDK for JavaScript. This app allows 
 
 ### Features
 
-This app demonstrates how easy it is to integrate the bbmChat widget into your webpage. It initializes the Spark SDK for JavaScript, and starts a chat with a predefined user. The app then launches the bbmChat widget which allows the user to:
+This app demonstrates how easy it is to integrate the bbmChat widget into your
+webpage. It initializes the SDK, and starts a chat with a predefined user. The
+app then launches the bbmChat widget which allows the user to:
 * View all sent and received messages in a chat
 * Send a text message, picture, or file attachment
 * Send high priority messages
@@ -37,9 +42,9 @@ This app demonstrates how easy it is to integrate the bbmChat widget into your w
 
 ## Getting Started
 
-This sample requires the Spark SDK, which you can find along with related resources at the location below.
+This sample requires the Spark Communications SDK for JavaScript, which you can find along with related resources at the location below.
 
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
+* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
 * [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
@@ -62,7 +67,7 @@ To use the ClickToChat example, you must set up the following elements in js/con
 
 - Oauth2 configuration (AUTH_CONFIGURATION)
 - A hardcoded contact registration ID with whom anyone who views the page will chat (CONTACT_REG_ID)
-- Your Spark user domain (ID_PROVIDER_DOMAIN)
+- Your sandbox domain (ID_PROVIDER_DOMAIN)
 - Firebase configuration (FIREBASE_CONFIG)
 - User passcode (USER_SECRET)
 
@@ -71,7 +76,7 @@ To use the ClickToChat example, you must set up the following elements in js/con
 Follow this guide for a walkthrough of how to integrate a rich chat experience into your webpage.
 
 - [Import the bbmChat UI widget into your web application](#importChat)
-- [Initialize the Spark SDK for JavaScript](#init)
+- [Initialize the SDK](#init)
 - [Perform setup](#setup)
 - [Start a chat with a predefined user](#startChat)
 
@@ -102,7 +107,7 @@ Create new instance of BBMEnterprise.
   });
 ```
 
-For more information about setting up the Spark SDK for JavaScript, visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section of the guide.
+For more information about setting up the SDK, visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section of the guide.
 
 ### <a name="setup"></a>Perform setup
 

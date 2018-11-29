@@ -16,12 +16,24 @@
 
 'use strict';
 
-// This domain is a string known to the BBM Enterprise server, which is
-// generally a GUID.
-const ID_PROVIDER_DOMAIN = 'your_idp_domain';
-
 // This secret is used to protect user keys. Must be individual for each user.
 const USER_SECRET = 'user_secret';
+
+// Refer to the guide to set up your application to use Google:
+// https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/googleSignInForWebExamples.html
+
+// This domain is a string known to the BBM Enterprise server, which is
+// generally a GUID.
+// To create a new domain follow the link below
+// https://account.good.com/#/a/organization/applications/add
+const ID_PROVIDER_DOMAIN = 'your_idp_domain';
+
+// The client ID of application registered on OAuth 2.0 server.
+const CLIENT_ID = 'your_client_id';
+
+// =============================================================================
+// Configuration below does not require modifications. Change it only if you
+// want to change existing application behavior.
 
 // The environment of your BBM Enterprise server. Must be either 'Sandbox' or
 // 'Production'.
@@ -34,28 +46,11 @@ const KMS_ARGON_WASM_URL = '../../sdk/argon2.wasm';
 // authentication.
 const AUTH_CONFIGURATION = {
   // OAuth 2.0 endpoint for requesting an access token
-  // To use google OAuth service, put:
-  // 'https://accounts.google.com/o/oauth2/v2/auth'
-  authService : 'your_auth_service_endpoint',
-
-  // OAuth 2.0 endpoint for token validation
-  // To use google toke info service, put:
-  // 'https://www.googleapis.com/oauth2/v3/tokeninfo'
-  tokenInfoService : 'your_oauth_token_info_endpoint',
-
-  // OAuth 2.0 endpoint for obtaining user information (name, email, avatar URL)
-  // To use google user info service, put:
-  // 'https://www.googleapis.com/plus/v1/people/me'
-  userInfoService : 'your_oauth_user_info_endpoint',
+  authService : 'https://accounts.google.com/o/oauth2/v2/auth',
 
   // Scopes of OAuth 2.0 access token (which resources it can access)
-  // If google OAuth service is used, put following scopes:
-  // 'https://www.googleapis.com/auth/firebase https://www.googleapis.com/auth/userinfo.email'
-  scope : 'your_scope_oauth',
+  scope : 'profile',
 
-  // The client ID of application registered on OAuth 2.0 server
-  clientId: 'your_client_id'
+  // The client ID of application registered on OAuth 2.0 server.
+  clientId: CLIENT_ID
 };
-
-// Create the auth manager for the Data Transfer app.
-const createAuthManager = () => new GoogleAuthManager(AUTH_CONFIGURATION);
