@@ -2,18 +2,18 @@
 
 # Announcements for Android
 
-The Announcements app demonstrates how a user can post **announcements** as custom messages in a chat.
+The Announcements example application demonstrates how a user can post **announcements** as custom messages in a chat.
 We also demonstrate how the [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/references.html)
 feature of BlackBerry Spark Communications Services can be used to edit an announcement and view the edit history.
-This example builds on the [SimpleChat](../SimpleChat/README.md) and utilizes the [Spark Support Library for Android](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html) library to quickly create a basic chat application.
+This example builds on [SimpleChat](../SimpleChat/README.md) and utilizes the [Support library](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html) library to quickly create a basic chat application.
 This example also uses the Android [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview.html).
 
 ### Features
 
-- Post announcements as custom messages in a chat
-- View all announcements posted in a chat
-- Edit an announcement
-- View the edit history of an announcement
+* Post announcements as custom messages in a chat
+* View all announcements posted in a chat
+* Edit an announcement
+* View the edit history of an announcement
 
 <br>
 
@@ -26,10 +26,13 @@ This example also uses the Android [RecyclerView](https://developer.android.com/
 
 ## Getting Started
 
-This example requires the Spark SDK, which you can find along with related resources at the location below.
+This example requires the Spark Communications SDK, which you can find along with related resources at the locations below.
 
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [Android Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-android.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 
 Visit the [Getting Started with Android](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-android.html) section to see the minimum requirements.
@@ -43,30 +46,55 @@ Visit the [Getting Started with Android](https://developer.blackberry.com/files/
  <b>Getting started video</b>
 </p>
 
-This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service. This allows you to get up and running quickly with minimal setup.
+By default, this example application is configured to work in a domain with user
+authentication disabled and the BlackBerry Key Management Service enabled.
+See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-[Create a Spark application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+Once you have a domain in the sandbox, edit Announcment's `app.properties` file
+to configure the example with your domain ID.
 
-Once your sandbox domain is configured, edit the app.properties file with your Spark domain and your Android signing keystore parameters. Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.
+```
+# Your Spark Domain ID
+user_domain="your_spark_domain"
+```
+When you run the Announcements application, it will prompt you for a user ID and
+a password. Since you've configured your domain to have user authentication
+disabled, you can enter any string you like for the user ID and an SDK identity
+will be created for it. Other applications that you run in the same domain will
+be able to find this identity by this user ID. The password is used to protected
+the keys stored in the
+[BlackBerry Key Management Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
 
-This application has been built using Gradle 4.2.1 (newer versions have not been validated).
+Notes:
+
+* To complete a release build you must create your own signing key. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html.
+* This application has been built using gradle 4.2.1 (newer versions have not been validated).
 
 ## Walkthrough
 
-- [Starting a chat](#startingAChat)
-- [Setup of Chat Activity](#setupChatActivity)
-- [Adding a user to a chat](#addAUser)
-- [Create an Announcement message](#createAnnouncementMessage)
-- [Editing an Announcement message](#editAnnouncementMessage)
-- [View all the sent Announcement](#viewSentAnnouncements)
-- [View history of the Announcement](#viewAnnouncementHistory)
-- [Marking messages as read](#markMessageRead)
-- [End Chat](#endChat)
+* [Starting a chat](#startingAChat)
+* [Setup of Chat Activity](#setupChatActivity)
+* [Adding a user to a chat](#addAUser)
+* [Create an Announcement message](#createAnnouncementMessage)
+* [Editing an Announcement message](#editAnnouncementMessage)
+* [View all the sent Announcement](#viewSentAnnouncements)
+* [View history of the Announcement](#viewAnnouncementHistory)
+* [Marking messages as read](#markMessageRead)
+* [End Chat](#endChat)
 
 
 ### <a name="startingAChat"></a>Starting a chat
 
-The Spark SDK Support library for Android provides a helper to start a new chat. The same principles apply as in [SimpleChat](../SimpleChat/README.md), a Spark Registration ID is needed to start a chat. Instead of creating an [ProtocolMessageConsumer](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/service/ProtocolMessageConsumer.html) and implementing the code to find and verify a message, that code has been rolled into the ChatStartHelper class. To start a chat we need to provide a list of Spark Registration IDs, chat subject and a callback.
+The [Support library](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html)
+provides a helper to start a new chat.  A `regId` is needed to start a chat as demonstrated in the
+[SimpleChat](../SimpleChat/README.md). Instead of creating a
+[ProtocolMessageConsumer](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/service/ProtocolMessageConsumer.html)
+and implementing the code to find and verify a message, that code has been
+rolled into the ChatStartHelper class. To start a chat you need to provide a list
+containing one or more `regIds`, chat subject, and a callback.
 
 ```java
     ChatStartHelper.startNewChat(new long[]{regId}, subject, new ChatStartHelper.ChatStartedCallback() {
@@ -86,10 +114,18 @@ The Spark SDK Support library for Android provides a helper to start a new chat.
     });
 ```
 
-
 ### <a name="setupChatActivity"></a>Setup of Chat Activity
 
-The Support library provided with the Spark SDK for Android also offers some additional helpers to quickly create chat activity, see **chatActivity.java**. It also provides an extensible **ChatMessageRecyclerViewAdapter** to create message bubbles. The **ChatMessageRecyclerViewAdapter** ties a **ChatBubbleColorProvider** and **ChatMessageViewProvider** together to automatically create the chat message bubbles for you. Start by creating a ChatMessageRecyclerViewAdapter and setting it in the [Recycler View](https://developer.android.com/guide/topics/ui/layout/recyclerview.html).
+The
+[Support library](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html)
+also offers some additional helpers to quickly create chat
+activity, see `chatActivity.java`. It also provides an extensible
+`ChatMessageRecyclerViewAdapter` to create message bubbles. The
+`ChatMessageRecyclerViewAdapter` ties a `ChatBubbleColorProvider` and
+`ChatMessageViewProvider` together to automatically create the chat message
+bubbles for you. Start by creating a ChatMessageRecyclerViewAdapter and setting
+it in the
+[Recycler View](https://developer.android.com/guide/topics/ui/layout/recyclerview.html).
 
 ```java
     // Initialize the recycler view
@@ -110,7 +146,7 @@ The Support library provided with the Spark SDK for Android also offers some add
     recyclerView.setAdapter(mAdapter);
 ```
 
-The MessageViewProvider creates the different view types we want to have in the chat activity. You can define the message types you want to render with a simple integer definition. For example, we define an outgoing, incoming, chat event, and other bubble types (to be added later in this example)
+The `MessageViewProvider` creates the different view types we want to have in the chat activity. You can define the message types you want to render with a simple integer definition. For example, we define an outgoing, incoming, chat event, and other bubble types (to be added later in this example).
 
 ```java
     public final class MessageViewProvider implements ChatMessageViewProvider {
@@ -122,7 +158,7 @@ The MessageViewProvider creates the different view types we want to have in the 
     ...
 ```
 
-The values are used to determine what view type will be used for each [ChatMessage](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html). The view type is decided in the method *getItemTypeForMessage()*.
+The values are used to determine what view type will be used for each [ChatMessage](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html). The view type is decided in the method `getItemTypeForMessage()`.
 
 ```java
     @Override
@@ -150,10 +186,10 @@ The values are used to determine what view type will be used for each [ChatMessa
 
 Once the view type is determined, the specific view holder can be created. The custom bubble layouts included in this example are:
 
-- EventHolder
-- IncomingTextHolder
-- OutgoingTextHolder
-- UnknownMessage
+* EventHolder
+* IncomingTextHolder
+* OutgoingTextHolder
+* UnknownMessage
 
 These holders have their own xml layouts, colors and strings that will be used in the app. When the [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview.html) is ready to render the view, the appropriate holder will be created based on the view type.
 
@@ -174,7 +210,11 @@ These holders have their own xml layouts, colors and strings that will be used i
     }
 ```
 
-Our next piece is the **MessageColorProvider**. This implements the **ChatBubbleColorProvider** which provides the basic chat bubble shape and color to be used for each chat message. The important items for this example are the R.drawable and the first R.color item, these are tied together in the drawable xml. For this example we defined:
+The next piece is the `MessageColorProvider`. This implements the
+`ChatBubbleColorProvider` which provides the basic chat bubble shape and color
+to be used for each chat message. The important items for this example are the
+R.drawable and the first R.color item, these are tied together in the drawable
+xml. For this example we defined:
 
 ```java
     public final class MessageColorProvider implements ChatBubbleColorProvider {
@@ -206,10 +246,9 @@ Our next piece is the **MessageColorProvider**. This implements the **ChatBubble
         ...
 ```
 
-
 ### <a name="addAUser"></a>Adding a user to a chat
 
-The Spark SDK supports chats with up to 250 participants. We created this chat with only one other user, so we need a mechanism to add more users to the existing chat.
+The SDK supports chats with up to 250 participants. We created this chat with only one other user, so we need a mechanism to add more users to the existing chat.
 
 Next we need to handle the menu action
 ```java
@@ -232,7 +271,7 @@ Next we need to handle the menu action
     }
 ```
 
-When the user selects "Add User" our method **showAddUserDialog()** is called. The method will show an AlertDialog that will allow a user to enter in a Spark Registration ID. On the positive button action the following is sent to trigger the Spark SDK to add the provided user:
+When the user selects "Add User" our method `showAddUserDialog()` is called. The method will show an AlertDialog that will allow a user to enter in a Spark Registration ID. On the positive button action the following is sent to trigger the SDK to add the provided user:
 
 ```java
     final Long regId = Long.valueOf(regIdText.getText().toString());
@@ -247,14 +286,22 @@ When the user selects "Add User" our method **showAddUserDialog()** is called. T
 
 ### <a name="createAnnouncementMessage"></a>Create an Announcement Message
 
-The first step in creating a custom text message is to define the tag that represents this [ChatMessage](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html).
+The first step in creating a custom text message is to define the tag that
+represents this
+[ChatMessage](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html).
+
 
 ```java
     // The custom tag used to identify an announcement message
     public final static String TAG_ANNOUNCEMENTS = "announcement";
 ```
 
-In **chatActivity.java** we have defined a button dedicated for creating an Announcement message. To send the Announcement message we create a new [ChatMessageSend](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.html) providing the chat identifier and our defined message tag TAG_ANNOUNCEMENTS and the text content of the message.
+In `chatActivity.java` we have defined a button dedicated for creating an
+Announcement message. To send the Announcement message we create a new
+[ChatMessageSend](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.html)
+providing the chat identifier and our defined message tag TAG_ANNOUNCEMENTS and
+the text content of the message.
+
 
 ```java
     final AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this, R.style.AppTheme_dialog)
@@ -274,7 +321,12 @@ In **chatActivity.java** we have defined a button dedicated for creating an Anno
             .setNegativeButton(android.R.string.no, null);
 ```
 
-Now that an Announcement has been created, we need to display the message and have it standout from regular chat messages. This involves updating the **MessageViewProvider** to add a new view type and then *getItemTypeForMessage* to return a new holder. To do this, we add in the *ITEM_VIEW_TYPE_ANNOUNCEMENT* type and a new holder *AnnouncementHolder*
+Now that an Announcement has been created, we need to display the message and
+have it standout from regular chat messages. This involves updating the
+`MessageViewProvider` to add a new view type and then `getItemTypeForMessage` to
+return a new holder. To do this, we add in the `ITEM_VIEW_TYPE_ANNOUNCEMENT`
+type and a new holder `AnnouncementHolder`
+
 
 ```java
     public final class MessageViewProvider implements ChatMessageViewProvider {
@@ -315,7 +367,7 @@ Now that an Announcement has been created, we need to display the message and ha
         }
 ```
 
-We also define a new color in **MessageColorProvider** to be used for our announcement chat bubble.
+We also define a new color in `MessageColorProvider` to be used for our announcement chat bubble.
 
 ```java
         MessageColorProvider() {
@@ -351,7 +403,7 @@ We also define a new color in **MessageColorProvider** to be used for our announ
         }
 ```
 
-Finally we define our announcement bubble, **AnnouncementHolder.java** as
+Finally we define our announcement bubble, `AnnouncementHolder.java` as
 
 ```java
 public final class AnnouncementHolder extends BaseBubbleHolder implements RecyclerViewHolder<DecoratedMessage> {
@@ -394,11 +446,18 @@ After this is done, all announcement chat bubbles will have their own look compa
 <a href="screenShots/announcementBubble.png"><img src="screenShots/announcementBubble.png" width="25%" height="25%"></a>
 </p>
 
-Of note here, the **AnnouncementHolder** is setup to show the most recent edited announcement, this is achieved by using the **Helper.getMessageContent()** this is be covered in more detail [Editing an Announcement message](#editAnnouncementMessage)
+Of note here, the `AnnouncementHolder` is setup to show the most recent edited announcement, this is achieved by using the `Helper.getMessageContent()` this is be covered in more detail [Editing an Announcement message](#editAnnouncementMessage).
 
 ### <a name="editAnnouncementMessage"></a>Editing an Announcement message
 
-Now, lets add the ability to edit the announcement. To do so, add in the support to long-click the announcement chat bubble to bring up a popup-menu in our chat activity. We first need to update our **AnnouncementHolder** to implement the Spark SDK Support library ContextMenuAwareHolder interface and the required method. The result is a **RecyclerContextMenuInfoWrapperView** is created internally in the Spark SDK Support library which will be used to link the **AnnouncementHolder** to Androids menu framework.
+Now, lets add the ability to edit the announcement. To do so, add in the support
+to long-click the announcement chat bubble to bring up a popup-menu in our chat
+activity. We first need to update our `AnnouncementHolder` to implement the
+[Support library][Support library](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html) 
+`ContextMenuAwareHolder` interface and the required method. The
+result is a `RecyclerContextMenuInfoWrapperView` is created internally in the 
+[Support library which][Support library](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html) 
+will be used to link the `AnnouncementHolder` to Androids menu framework.
 
 ```java
     public final class AnnouncementHolder extends BaseBubbleHolder implements RecyclerViewHolder<DecoratedMessage>, ContextMenuAwareHolder {
@@ -412,7 +471,7 @@ Now, lets add the ability to edit the announcement. To do so, add in the support
     }
 ```
 
-Next update the chat activity to implement the Android [Activity](https://developer.android.com/reference/android/app/Activity.html) method *onCreateContextMenu*. The chat activity will need to keep track of which user selected announcement message has been long-pressed in mAnnouncementMessageToEdit. To determine that the code must verify the provided menuInfo is an instance of our **RecyclerContextMenuInfoWrapperView** inner class of **RecyclerContextMenuInfo**. The inner class contains useful information to find a chat message from the ChatMessageRecyclerViewAdapter. From there we simply look for our announcement message tag to set the the mAnnouncementMessageToEdit.
+Next update the chat activity to implement the Android [Activity](https://developer.android.com/reference/android/app/Activity.html) method `onCreateContextMenu`. The chat activity will need to keep track of which user selected announcement message has been long-pressed in mAnnouncementMessageToEdit. To determine that the code must verify the provided menuInfo is an instance of our `RecyclerContextMenuInfoWrapperView` inner class of `RecyclerContextMenuInfo`. The inner class contains useful information to find a chat message from the ChatMessageRecyclerViewAdapter. From there we simply look for our announcement message tag to set the the mAnnouncementMessageToEdit.
 
 ```java
     @Override
@@ -439,7 +498,7 @@ Next update the chat activity to implement the Android [Activity](https://develo
     (where R.string.edit_announcement displays "Edit Announcement")
 ```
 
-When a user does click on the popup menu item,  *mAnnouncementMessageToEdit* will have the selected chat message when *onContextItemSelected* is invoked.
+When a user does click on the popup menu item,  `mAnnouncementMessageToEdit` will have the selected chat message when `onContextItemSelected` is invoked.
 
 ```java
     @Override
@@ -453,7 +512,7 @@ When a user does click on the popup menu item,  *mAnnouncementMessageToEdit* wil
     }
 ```
 
-At this point the **Helper.showEditAnnouncementDialog** will show a dialog that allows a user to edit the announcement message. [ChatMessageSend](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.html) is used to first construct a the message, setting the chat ID and [ChatMessageSend.Tag](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.Tag.html) value of *Text*. If we send the message, it would be considered a regular text message, we need to link this new message as an edit to the announcement. 
+At this point the `Helper.showEditAnnouncementDialog` will show a dialog that allows a user to edit the announcement message. [ChatMessageSend](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.html) is used to first construct a the message, setting the chat ID and [ChatMessageSend.Tag](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.Tag.html) value of `Text`. If we send the message, it would be considered a regular text message, we need to link this new message as an edit to the announcement. 
 
 To do so, we need to use the [ChatMessageSend.Ref](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.Ref.html) to set the original announcement chat message identifier and the type of reference using [ChatMessageSend.Ref.Tag](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.Ref.Tag.html). It is important to note a single message can only have one reference for each [ChatMessageSend.Ref.Tag](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.Ref.Tag.html), this is done to allow multiple different kinds of references between messages. For example, a message could both 'Quote' one message and 'Edit' another. Once the [ChatMessageSend.Ref](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.Ref.html) is set we can send the message as normally.
 
@@ -471,7 +530,7 @@ To do so, we need to use the [ChatMessageSend.Ref](https://developer.blackberry.
     BBMEnterprise.getInstance().getBbmdsProtocol().send(editedMessage);
 ```
 
-Backing up for a moment, when a user decides to edit the announcement we want to display the most recent announcement edit. To find the most recent message we need to traverse the [ChatMessage.RefBy](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.RefBy.html) array looking for a [ChatMessage.RefBy.Tag](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.RefBy.Tag.html) of type *Edit*.  The [ChatMessage.RefBy](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.RefBy.html) will also contain the message identifier to the newest message. With that data we can lookup the referenced chat message and obtain the message content to display. This is all wrapped up in the **Helper.getMessageContent()** method.
+Backing up for a moment, when a user decides to edit the announcement we want to display the most recent announcement edit. To find the most recent message we need to traverse the [ChatMessage.RefBy](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.RefBy.html) array looking for a [ChatMessage.RefBy.Tag](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.RefBy.Tag.html) of type `Edit`.  The [ChatMessage.RefBy](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.RefBy.html) will also contain the message identifier to the newest message. With that data we can lookup the referenced chat message and obtain the message content to display. This is all wrapped up in the `Helper.getMessageContent()` method.
 
 
 ```java
@@ -492,7 +551,7 @@ Backing up for a moment, when a user decides to edit the announcement we want to
     }
 ```
 
-Putting it together, when we need to show the most recent announcement edit, simply call the **Helper.getMessageContent()**
+Putting it together, when we need to show the most recent announcement edit, simply call the `Helper.getMessageContent()`
 
 ```java
     // Get the announcement message, we want to update the latest edit, so need to find the
@@ -509,7 +568,15 @@ At this point we also want to visually show an edited announcement message diffe
 
 ### <a name="viewSentAnnouncements"></a>View all the sent Announcement
 
-This example has an activity to view all the announcements in a chat, **ViewAnnouncementsActivity.java**. The **ViewAnnouncementsActivity** uses the Android [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview.html) and the Spark SDK Support library **MonitoredRecyclerAdapter** to create a data adapter. We can then use [ChatMessageCriteria](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessageCriteria.html) to request a filter list of items from the Spark SDK. To do so simply provide the chat identifier and the custom announcement tag **TAG_ANNOUNCEMENTS**
+This example has an activity to view all the announcements in a chat,
+`ViewAnnouncementsActivity.java`. The `ViewAnnouncementsActivity` uses the
+Android [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview.html)
+and the [Support library][Support library](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html) 
+`MonitoredRecyclerAdapter` to create a data adapter. We can then use
+[ChatMessageCriteria](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessageCriteria.html)
+to request a filter list of items from the SDK. To do so simply provide
+the chat identifier and the custom announcement tag `TAG_ANNOUNCEMENTS`
+
 
 ```java
     AnnouncementsDataAdapter(@NonNull final Context context, @NonNull final RecyclerView recyclerView) {
@@ -531,9 +598,9 @@ This example has an activity to view all the announcements in a chat, **ViewAnno
 <a href="screenShots/announcementHistory.png"><img src="screenShots/announcementHistory.png" width="25%" height="25%"></a>
 </p>
 
-In addition to viewing a list of announcements in a chat we can also see all the edits to single announcement. The activity **ViewAnnouncementHistory** is similar to the [View all the sent Announcement](#viewSentAnnouncements), but the usage of the [ChatMessageCriteria](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessageCriteria.html) differs.
+In addition to viewing a list of announcements in a chat we can also see all the edits to single announcement. The activity `ViewAnnouncementHistory` is similar to the [View all the sent Announcement](#viewSentAnnouncements), but the usage of the [ChatMessageCriteria](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessageCriteria.html) differs.
 
-Since we want to show all the edits to a single announcement we must create a [ChatMessage.Ref](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.Ref.html) that uses the announcement message identifier as the reference to filter by. In addition we need to set the [ChatMessage.Ref.Tag](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.Ref.Tag.html) to *Edit*. Once created the [ChatMessage.Ref](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.Ref.html) is used in the [ChatMessageCriteria](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessageCriteria.html) along with the chat identifier. This however returns a list of edited announcements, which will not include the original announcement item, to add that into the list, we request that chat message separately as the chat and message identifier are known.
+Since we want to show all the edits to a single announcement we must create a [ChatMessage.Ref](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.Ref.html) that uses the announcement message identifier as the reference to filter by. In addition we need to set the [ChatMessage.Ref.Tag](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.Ref.Tag.html) to `Edit`. Once created the [ChatMessage.Ref](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.Ref.html) is used in the [ChatMessageCriteria](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessageCriteria.html) along with the chat identifier. This however returns a list of edited announcements, which will not include the original announcement item, to add that into the list, we request that chat message separately as the chat and message identifier are known.
 
 ```java
     // Get the root message for the history. It is not included in the edit lookup.

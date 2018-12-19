@@ -1,17 +1,26 @@
 ![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 # SimpleChat for Android
 
-The Simple Chat app demonstrates how you can build a simple chat application using BlackBerry Spark Communications Services.  This app demonstrates how easily messaging can be integrated into your application.  For a more rich chat app experience please see the [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/RichChat/README.html) app provided with the Spark SDK. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
+The Simple Chat example demonstrates how you can build a simple chat
+application using BlackBerry Spark Communications Services.  This example
+demonstrates how easily messaging can be integrated into your application.  For
+a more rich chat app experience please see the
+[Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/RichChat/README.html)
+app provided with the SDK. This example builds on the
+[Quick Start](../QuickStart/README.md) example that demonstrates how you can
+authenticate with the SDK using the
+[Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html)
+of your application.
 
 ### Features
 
 It allows the user to do the following:
 
-- Create a chat
-- View the chat list
-- View all sent and received messages in a chat
-- Send text-based messages
-- Mark incoming messages as Read
+* Create a chat
+* View the chat list
+* View all sent and received messages in a chat
+* Send text-based messages
+* Mark incoming messages as Read
 
 <br>
 
@@ -22,14 +31,14 @@ It allows the user to do the following:
 
 ## Getting Started
 
-This example requires the Spark SDK, which you can find along with related resources at the location below.
+This example requires the Spark Communications SDK, which you can find along with related resources at the locations below.
 
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [Android Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-android.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
-
-Visit the [Getting Started with Android](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-android.html) section to see the minimum requirements.
-
 <p align="center">
     <a href="http://www.youtube.com/watch?feature=player_embedded&v=310UDOFCLWM"
       target="_blank"><img src="../QuickStart/screenShots/bbme-sdk-android-getting-started.jpg"
@@ -39,30 +48,49 @@ Visit the [Getting Started with Android](https://developer.blackberry.com/files/
  <b>Getting started video</b>
 </p>
 
-This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service. This allows you to get up and running quickly with minimal setup.
+By default, this example application is configured to work in a domain with user
+authentication disabled and the BlackBerry Key Management Service enabled.
+See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-[Create a Spark application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+Once you have a domain in the sandbox, edit Simple Chat's `app.properties` file
+to configure the example with your domain ID.
 
-Once your sandbox domain is configured, edit the app.properties file with your Spark domain and your Android signing keystore parameters. Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.
+```
+# Your Spark Domain ID
+user_domain="your_spark_domain"
+```
+When you run the Simple Chat application, it will prompt you for a user ID and
+a password. Since you've configured your domain to have user authentication
+disabled, you can enter any string you like for the user ID and an SDK identity
+will be created for it. Other applications that you run in the same domain will
+be able to find this identity by this user ID. The password is used to protected
+the keys stored in the
+[BlackBerry Key Management Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
 
-This application has been built using Gradle 4.2.1 (newer versions have not been validated).
+Notes:
+
+* To complete a release build you must create your own signing key. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html.
+* This application has been built using gradle 4.2.1 (newer versions have not been validated).
 
 ## Walkthrough
 
-Follow this guide for a walkthrough showing how the Spark SDK is used to demonstrate simple messaging in this sample application.
+Follow this guide for a walkthrough showing how the SDK is used to demonstrate simple messaging in this sample application.
 
-- [Spark SDK Initialization](#sdkSetup)
-- [Getting chats](#gettingChats)
-- [Starting a chat](#startingAChat)
-- [Getting chat messages](#gettingChatMessages)
-- [Displaying chat messages](#displayChatMessages)
-- [Sending a chat message](#sendChatMessage)
-- [Marking messages as read](#markAsRead)
+* [SDK Initialization](#sdkSetup)
+* [Getting chats](#gettingChats)
+* [Starting a chat](#startingAChat)
+* [Getting chat messages](#gettingChatMessages)
+* [Displaying chat messages](#displayChatMessages)
+* [Sending a chat message](#sendChatMessage)
+* [Marking messages as read](#markAsRead)
 
 
-### <a name="sdkSetup"></a>Spark SDK Initialization
+### <a name="sdkSetup"></a>SDK Initialization
 
-To use the BlackBerry Spark Communications Services SDK in our application we need to initialize and start the sdk.
+To use the BlackBerry Spark Communications Services SDK in your application you need to initialize and start the sdk.
 
 ```java
 // Initialize BBMEnterprise SDK then start it
@@ -71,7 +99,14 @@ BBMEnterprise.getInstance().start();
 ```
 *MainActivity.java*
 
-The Spark SDK will encrypt our messages for us. The SimpleChat example uses the BlackBerry Key Management System to store the security keys generated by the Spark SDK. The specifics of the key distribution are not described in this guide. For more information visit the [Protect](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html) guide and check out the example implementation in the [Spark SDK Support Library](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html).
+The SDK will encrypt your messages for you. The SimpleChat example uses the
+BlackBerry Key Management System to store the security keys generated by the
+SDK. The specifics of the key distribution are not described in this
+guide. For more information visit the
+[Protect](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html)
+guide and check out the example implementation in the
+[Support library](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html).
+
 
 ```java
 KeySource keySource = new BlackBerryKMSSource(new UserChallengePasscodeProvider(context));
@@ -81,11 +116,20 @@ keySource.start();
 
 This sample uses a mock identity provider to create unsigned JWT tokens. For more information see [Identity Management](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) and the [Quick Start sample](../QuickStart/README.md). The MockTokenProvider class from the support library is used to generate the tokens.
 
-We monitor the [GlobalSetupState](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/GlobalSetupState.html) to handle key states. First we add an [Observer](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/reactive/Observer.html) to the [GlobalSetupState](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/GlobalSetupState.html) [ObservableValue](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/reactive/ObservableValue.html). When the GlobalSetupState changes our observers changed() method will be called. If the setup state is:
+We monitor the
+[GlobalSetupState](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/GlobalSetupState.html)
+to handle key states. First we add an
+[Observer](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/reactive/Observer.html)
+to the
+[GlobalSetupState](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/GlobalSetupState.html)
+[ObservableValue](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/reactive/ObservableValue.html). When
+the GlobalSetupState changes our observers changed() method will be called. If
+the setup state is:
 
-- *DeviceSwitchRequired* we will ask the Spark SDK to switch to this device by sending a [SetupRetry](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/SetupRetry.html) message.
-- *NotRequested* we will register the local device by sending a [EndpointUpdate](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/EndpointUpdate.html).
-- *Full* we will need to deregister a device using [EndpointDeregister](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/EndpointDeregister.html). If successful then send a [SetupRetry](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/SetupRetry.html) message to continue setup.
+
+* `DeviceSwitchRequired` we will ask the SDK to switch to this device by sending a [SetupRetry](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/SetupRetry.html) message.
+* `NotRequested` we will register the local device by sending a [EndpointUpdate](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/EndpointUpdate.html).
+* `Full` we will need to deregister a device using [EndpointDeregister](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/EndpointDeregister.html). If successful then send a [SetupRetry](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/SetupRetry.html) message to continue setup.
 
 ```java
 //Listen to the setup events
@@ -131,7 +175,16 @@ mBbmSetupObserver.changed();
 
 ### <a name="gettingChats"></a>Getting chats
 
-The [chats list](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/BbmdsProtocol.html#getChatList--) is provided from the Spark SDK as an [ObservableList](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/internal/lists/ObservableList). To track changes to the chat list we register an [IncrementalListObserver](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/internal/lists/IncrementalListObserver) with the chats list. Our IncrementalListObserver will be informed when the chat list is modified. We pass those change notifications on to a RecyclerView.Adapter which displays the chat list.
+The
+[`chatList`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/BbmdsProtocol.html#getChatList--)
+is provided from the SDK as an
+[`ObservableList`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/internal/lists/ObservableList). To
+track changes to the chat list we register an
+[`IncrementalListObserver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/internal/lists/IncrementalListObserver)
+with the chats list. Our `IncrementalListObserver` will be informed when the chat
+list is modified. We pass those change notifications on to a
+RecyclerView.Adapter which displays the chat list.
+
 
 ```java
 //This observer will be used to notify the adapter when chats have been changed or added.
@@ -167,11 +220,10 @@ final RecyclerView chatsRecyclerView = (RecyclerView)findViewById(R.id.chats_lis
 chatsRecyclerView.setAdapter(mAdapter);
 chatsRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 ```
+
 *MainActivity.java*
 
-
-
-To display the chats we are using a simple RecyclerView.Adapter and ViewHolder. For this example each item in the list displays the subject of the [chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/Chat.html). When a user clicks on one of the chats we launch the ChatActivity.
+To display the chats we are using a simple `RecyclerView.Adapter` and `ViewHolder`. For this example each item in the list displays the subject of the [`chat`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/Chat.html). When a user clicks on one of the chats we launch the `ChatActivity`.
 
 ```java
 //Our chats recycler view adapter
@@ -219,13 +271,21 @@ private class ChatViewHolder extends RecyclerView.ViewHolder {
 }
 ```
 
-
-
 ### <a name="startingAChat"></a>Starting a chat
 
-To start a chat we first need to indentify who we want to chat with. The Spark SDK provides a unique id for every user who registers. The Spark SDK keeps a mapping of your application user identifier and Spark registration ids. See the [identity management](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) guide for more information.
+To start a chat you first need to indentify who you want to chat with. The SDK
+provides a unique `regId` for every user who registers. The SDK keeps a
+mapping of your application user identifier and `regIds`. See the
+[identity management](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html)
+guide for more information.
 
-This sample adds a menu item which creates a dialog with input fields for a user id and chat subject. The registration id for a user can be found using the [IdentitiesGet](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/IdentitiesGet.html) message. We are using the UserIdentityMapper class from the support library to get an  [Observable](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/reactive/Observable.html) map result. If the map result is found we can use the Spark registration id to start the chat.
+This example adds a menu item which creates a dialog with input fields for a
+user id and chat subject. The `regId` for a user can be found using the
+[`IdentitiesGet`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/IdentitiesGet.html)
+message. We are using the UserIdentityMapper class from the support library to
+get an [`Observable`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/reactive/Observable.html)
+map result. If the map result is found we can use the `regId` to start the chat.
+
 ```java
 SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
     @Override
@@ -248,8 +308,7 @@ SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
 });
 ```
 
-
-This example only allows creating a chat with a single participant, but the Spark SDK supports chats with up to 250 participants. To start a chat we send a [ChatStart](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatStart.html) message to the Spark SDK.
+This example only allows creating a chat with a single participant, but the SDK supports chats with up to 250 participants. To start a chat we send a [`ChatStart`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatStart.html) message to the SDK.
 
 ```java
 //Create a cookie to track the chat creation
@@ -263,11 +322,19 @@ invitee.regId(regId);
 BBMEnterprise.getInstance().getBbmdsProtocol().send(new ChatStart(cookie, Lists.newArrayList(invitee), subject));
 ```
 
+To track the creation of the chat you need to register a
+[`ProtocolMessageConsumer`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/service/ProtocolMessageConsumer.html). The
+ProtocolMessageConsumer is notified of every message that the SDK sends to
+the application. Use the cookie we sent with the `ChatStart` to process only
+the response to your request.
 
+If the message was of type
+[`ChatStartFailed`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/inbound/ChatStartFailed.html)
+the SDK was not able to start your chat. If the type was `listAdd` then the
+SDK is returning us the chat that was created. You can parse the chat by using
+the [`setAttributes()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/internal/JsonConstructable.html)
+method. Finally, launch the chat activity and attach the `chatId`.
 
-To track the creation of the chat we need to register a [ProtocolMessageConsumer](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/service/ProtocolMessageConsumer.html). The ProtocolMessageConsumer is notified of every message that the Spark SDK sends to the application. We use the cookie we sent with the ChatStart to process only the response to our request.
-
-If the message was of type [ChatStartFailed](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/inbound/ChatStartFailed.html) the Spark SDK was not able to start our chat. If the type was listAdd then the Spark SDK is returning us the chat that was created. We can parse the chat by using the [setAttributes()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/internal/JsonConstructable.html) method. Finally, we launch the chat activity and attach the chatId.
 
 ```java
 //Add a ProtocolMessageConsumer to track the creation of the chat.
@@ -311,12 +378,19 @@ BBMEnterprise.getInstance().getBbmdsProtocolConnector().addMessageConsumer(new P
 ```
 
 
-
 ### <a name="gettingChatMessages"></a>Getting chat messages
 
-Now that we've started a chat we need to populate the chat messages. Chat messages can be retrieved from the Spark SDK by providing a [ChatMessageKey](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.ChatMessageKey.html) to [getChatMessage](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/BbmdsProtocol.html#getChatMessage-com.bbm.sdk.bbmds.ChatMessage.ChatMessageKey-). The ChatMessageKey is a combination of the chat id and message id and uniquely identifies a chat message. The valid set of message ids for a chat is given by [[Chat.lastMessage](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/Chat.html#lastMessage) - [Chat.numMessages](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/Chat.html#numMessages) , Chat.lastMessage).
+Now that you have started a chat you need to populate the chat messages. Chat
+messages can be retrieved from the SDK by providing a
+[`ChatMessageKey`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.ChatMessageKey.html)
+to
+[`getChatMessage`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/BbmdsProtocol.html#getChatMessage-com.bbm.sdk.bbmds.ChatMessage.ChatMessageKey-). The
+`ChatMessageKey` is a combination of the chat id and message id and uniquely
+identifies a chat message. The valid set of message ids for a chat is given by
+[[Chat.lastMessage](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/Chat.html#lastMessage) -
+[`Chat.numMessages`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/Chat.html#numMessages)].
 
-In this example to load messages we are using ChatMessageList from the [Spark SDK Support Library](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html) library. ChatMessageList is a utility we've created which simplifies lazy loading of chat messages. We use ChatMessageList and the IncrementalListObserver to populate a RecyclerView.Adapter just like we did with the chats list. We do need to tell the ChatMessageList when to start and stop monitoring the chat for new messages. We only monitor messages while the activity is resumed.
+In this example to load messages we are using ChatMessageList from the [Support library](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/android/Support/README.html) library. `ChatMessageList` is a utility we've created which simplifies lazy loading of chat messages. We use `ChatMessageList` and the `IncrementalListObserver` to populate a `RecyclerView.Adapter` just like we did with the chats list. We do need to tell the `ChatMessageList` when to start and stop monitoring the chat for new messages. We only monitor messages while the activity is resumed.
 
 ```java
 //This observer will notify the adapter when chat messages are added or changed.
@@ -375,12 +449,16 @@ protected void onResume() {
 *ChatActivity.java*
 
 
-
 ### <a name="displayChatMessages"></a>Displaying chat messages
 
-Our [ChatMessages](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html) are text only in this example. But ChatMessage also supports file attachments, thumbnails, recall and custom data and types you can define.
+The [`ChatMessages`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html) are text only in this example. But ChatMessage also supports file attachments, thumbnails, recall and custom data and types you can define.
 
-To display the chat messages we provide our Adapter and ViewHolder. To left and right align outgoing and incoming messages we're providing two different types in our Adapter. Each chat message includes a set of [flags](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.Flags.html) we can check to find out if the message was incoming.
+To display the chat messages we provide our `Adapter` and `ViewHolder`. To left
+and right align outgoing and incoming messages we're providing two different
+types in our `Adapter`. Each chat message includes a set of
+[`flags`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.Flags.html)
+we can check to find out if the message was incoming.
+
 ```java
 @Override
 public int getItemViewType(int position) {
@@ -400,8 +478,7 @@ public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 *ChatActivity.java*
 
 
-
-Messages have a [state](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.State.html) which is used to notify users if their message has been sent, delivered or read. Incoming messages that are unread are bolded and outgoing messages have their state prepended. Finally, we add the content of the text message, or if the message not a Text message then display the name of the message type.
+Messages have a [`state`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.State.html) which is used to notify users if their message has been sent, delivered or read. Incoming messages that are unread are bolded and outgoing messages have their state prepended. Finally, we add the content of the text message, or if the message not a Text message then display the name of the message type.
 ```java
 @Override
 public void onBindViewHolder(MessageViewHolder holder, int position) {
@@ -453,7 +530,7 @@ public void onBindViewHolder(MessageViewHolder holder, int position) {
 
 ### <a name="sendChatMessage"></a>Sending a chat message
 
-Sending a new message in the chat is easy. We create a [ChatMessageSend](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.html) and the text the user typed as the content. You can also set a file, thumbnail and custom JSON data to the chat message.
+Sending a new message in the chat is easy. Create a [`ChatMessageSend`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.html) and the text the user typed as the content. You can also set a file, thumbnail and custom JSON data to the chat message.
 
 ```java
 sendButton.setOnClickListener(new View.OnClickListener() {
@@ -468,13 +545,14 @@ sendButton.setOnClickListener(new View.OnClickListener() {
     }
 });
 ```
+
 *ChatActivity.java*
 
 
 
 ### <a name="markAsRead"></a>Marking messages as read
 
-We need to notify the Spark SDK of when a user has read a message. The Spark SDK will propagate the status change to the other participants in the chat. To mark a message as read we send a [ChatMessageRead](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageRead.html) to the Spark SDK. All messages which are older than the message id provided are automatically marked as read. To keep this example simple, we are just sending a ChatMessageRead change with the lastMessage id. This example only sends message status changes when the chat activity is paused or resumed. You might want to choose a different action, like a marking a message as read when it becomes visible in the chat.
+You need to notify the  SDK of when a user has read a message. The SDK will propagate the status change to the other participants in the chat. To mark a message as read, send a [`ChatMessageRead`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageRead.html) to the SDK. All messages which are older than the message id provided are automatically marked as read. To keep this example simple, we are just sending a ChatMessageRead change with the lastMessage id. This example only sends message status changes when the chat activity is paused or resumed. You might want to choose a different action, like a marking a message as read when it becomes visible in the chat.
 
 ```java
 /**
