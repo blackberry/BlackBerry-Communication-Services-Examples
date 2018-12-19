@@ -18,23 +18,26 @@ help build your messaging solution with Spark Communications.
 
 | Example Application                      | Description                              |
 | ---------------------------------------- | ---------------------------------------- |
-| [Quick Start](QuickStart/README.md)      | Build a basic objective C app to initialize and authenticate|
-| [Quick Start Swift](QuickStartSwift/README.md)     | Build a basic swift app to initialize and authenticate|
-| [Simple Chat](SimpleChat/README.md) | Build a basic chat app|
-| [Location Sharing](LocationSharing/README.md) | Build an app to share the user's location with other users|
-| [Soft Phone](SoftPhone/README.md) | 	Build an app with voice and video calling|
-| [Data Transfer](DataTransfer/README.md) | Build an app to send files over a secure peer-to-peer connection|
-| [Chat Poll](ChatPoll/README.md) | Build an app that allows users to post polls within custom chat messages|
-| [Raspberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) |Build an iOS app that securely communicates with an IoT device (LED controlled by a Raspberry Pi |
+| [Quick Start](QuickStart/README.md)      | Build a basic Objective C application to initialize and authenticate with the SDK | 
+| [Quick Start Swift](QuickStartSwift/README.md)     | Build a basic swift application to initialize and authenticate with the SDK | 
+| [Simple Chat](SimpleChat/README.md) | Build a basic chat application |
+| [Location Sharing](LocationSharing/README.md) | Build an application to share the user's location with other users|
+| [SoftPhone](SoftPhone/README.md) | 	Build an application with voice and video calling|
+| [Data Transfer](DataTransfer/README.md) | Build an application to send files over a secure peer-to-peer connection|
+| [Chat Poll](ChatPoll/README.md) | Build an application that allows users to post polls within custom chat messages|
+| [Raspberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) |Build an iOS application that securely communicates with an IoT device (LED controlled by a Raspberry Pi |
 
 For more details on all the Spark Communications examples see the online [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).
 
 # Getting Started
 
-These samples require the Spark Communications SDK, which you can find along with related resources at the location below.
+These examples require the Spark Communications SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
-* [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [iOS Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-ios.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
 <p align="center">
@@ -45,7 +48,6 @@ These samples require the Spark Communications SDK, which you can find along wit
 <p align="center">
  <b>Getting started video</b>
 </p>
-
 
 # License
 

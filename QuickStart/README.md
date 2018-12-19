@@ -1,25 +1,22 @@
 ![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
-# QuickStart for iOS (objective-c)
+# Quick Start for iOS
 
-The QuickStart sample application demonstrates the objective-c implementation for 
-authenticating with Spark Communications using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
-of your application. We demonstrate how you can obtain the user ID and token of your user's account 
-and pass them to the SDK to complete setup.  For integrating the SDK into a Swift app, see [Quick Start Swift](../QuickStartSwift/README.md) 
-
-### Features
-
-This sample allows you to do the following:
-
-* Start the BBM Enterprise Service
-* Authenticate a user via GoogleSignIn
+The Quick Start example application demonstrates how you can authenticate
+with BlackBerry Spark Communications Services with user authentication disabled
+while using the BlackBerry Key Management Service. This example is implemented
+in Objective-C; for the Swift implementation, see the
+[Quick Start Swift](../QuickStartSwift/README.md) example.
 
 ## Getting Started
 
-This sample requires the Spark Communications SDK, which you can find along with related resources at the location below.
-    
-* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+This example requires the Spark Communications SDK, which you can find along with related resources at the location below.
+
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [iOS Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-ios.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
 <p align="center">
@@ -33,16 +30,44 @@ This sample requires the Spark Communications SDK, which you can find along with
 
 ### Configuration
 
-This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service.  This allows you to get up and running quickly with minimal setup.
+By default, this example application is configured to work in a domain with user
+authentication disabled and the BlackBerry Key Management Service enabled.
+See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-[Create your application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service. 
+Once you have a domain in the sandbox, edit Quick Start's `ConfigSettings.plist` file
+to configure the example with your domain ID.
 
-Once your sandbox domain is configured, edit the ConfigSettings.plist file and enter the domain identifier under "testAuth/domain".  Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.  
+```
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>authProvider</key>
+	<string>testAuth</string>
+	<key>useBlackBerryKMS</key>
+	<true/>
+	<key>testAuth</key>
+	<dict>
+		<key>clientId</key>
+		<string>not_used</string>
+		<key>domain</key>
+		<string>UPDATE_WITH_YOUR_DOMAIN</string>
+		<key>environment</key>
+		<string>sandbox</string>
+	</dict>
+</dict>
+</plist>
+```
 
-This sample application may also be configured to use Google Sign-In or Azure Active Directory:
-* [Sample application configuration using Google Sign-In](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/googleSignInForiOSExamples.html)
-* [Sample application configuration using Azure Active Directory](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/azureForiOSExamples.html)
-
+When you run Quick Start, it will prompt you for a user ID and a password. Since
+you've configured your domain to have user authentication disabled, you can
+enter any string you like for the user ID and an SDK identity will be created
+for it. Other applications that you run in the same domain will be able to find
+this identity by this user ID. The password is used to protected the keys stored
+in the
+[BlackBerry Key Management Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
 
 ## Walkthrough 
 
@@ -54,18 +79,18 @@ This sample application may also be configured to use Google Sign-In or Azure Ac
 
 ### <a name="supportLibrary"></a>Support Library
 
-Common code for authenticating users, synchronizing keys and performing common tasks can be found in /examples/Support/Source.  Much of the heavy lifting can be found in these classes and they should be referenced before implementing a custom key management or authentication scheme.
+Common code for authenticating users, synchronizing keys and performing common tasks can be found in `examples/Support/Source`.  Much of the heavy lifting can be found in these classes and they should be referenced before implementing a custom key management or authentication scheme.
 
-*BBMAuthController* and *BBMKeyManager* can be instantiated with classes/instances that allow you to substitute your own user authentication or key management scheme while handling all of the SDK related functionality.
+`BBMAuthController` and `BBMKeyManager` can be instantiated with classes/instances that allow you to substitute your own user authentication or key management scheme while handling all of the SDK related functionality.
 
-*BBMAccess* provides wrappers around common outgoing messages and the SDK data model.
+`BBMAccess` provides wrappers around common outgoing messages and the SDK data model.
 
 You may use, extend, or modify this code as needed for your own application.
 
 
 ### <a name="accountController"></a>AccountViewController
 
-*AccountViewController* is the primary entry point for the application.
+`AccountViewController` is the primary entry point for the application.
 
 To observe connectivity changes to the BBM Enterprise Service we first add our instance as a connectivity listener to the service:
 ```objective-c
@@ -79,7 +104,7 @@ And implement the delegate method to update the UI when connectivity changes:
 }
 ```
 
-We then create an instance of a *BBMAuthController*, set ourselves as the rootController (which provides a UI context for pushing auth related modal UI) and add ourselves as a delegate:
+We then create an instance of a `BBMAuthController`, set ourselves as the rootController (which provides a UI context for pushing auth related modal UI) and add ourselves as a delegate:
 ```objective-c
 Class tokenManager = [BBMGoogleTokenManager class];
 //Alternatively: Class tokenManager = [BBMAzureTokenManager class];
@@ -96,7 +121,7 @@ self.authController.rootController = self;
 [self.authController addDelegate:self];
 ```
 
-Once we have an authController instance we can use it to start the service and and sign in if we have cached credentials:
+Once we have an `authController` instance we can use it to start the service and and sign in if we have cached credentials:
 ```objective-c
 //Start the service.
 [self.authController startBBMEnterpriseService];
@@ -105,7 +130,7 @@ Once we have an authController instance we can use it to start the service and a
 [self.authController signInSilently];
 ```
 
-*BBMAuthControllerDelegate* calls back via two delegate methods where we update the user interface to show the auth state.  You may also use an *ObservableMonitor* from anywhere in you code to monitor the credentials and service state.  See the [Simple Chat](../SimpleChat/README.html) for a more detailed example on how to use *ObservableMonitor*s to monitor credential changes.
+`BBMAuthControllerDelegate` calls back via two delegate methods where we update the user interface to show the auth state.  You may also use an `ObservableMonitor` from anywhere in you code to monitor the credentials and service state.  See the [Simple Chat](../SimpleChat/README.html) for a more detailed example on how to use `ObservableMonitor`s to monitor credential changes.
 
 ```objective-c
 //The AuthController will invoke this callback any time the user credentials/auth state changes
@@ -122,9 +147,9 @@ Once we have an authController instance we can use it to start the service and a
 
 ### <a name="bbmAuthController"></a>BBMAuthController
 
-*BBMAuthController* handles the details of starting the BBM Enterprise service and retrieving and setting user tokens.
+`BBMAuthController` handles the details of starting the BBM Enterprise service and retrieving and setting user tokens.
 
-The actual fetching of the tokens is handled by an id&lt;BBMTokenManager&gt; class.   You may substitue any class that implements the BBMTokenManager protocol in initWithTokenManager: if you wish to use a different oAuth provider.
+The actual fetching of the tokens is handled by an `id<BBMTokenManager>` class.   You may substitue any class that implements the `BBMTokenManager` protocol in `initWithTokenManager:` if you wish to use a different oAuth provider.
 
 To start the service call:
 ```objective-c
@@ -134,7 +159,7 @@ To start the service call:
 }];
 ```
 
-The primary purpose of *BBMAuthController* is to respond to delegate callbacks from the *BBMTokenManager* instance.  These happen via two delegate callbacks defined in *BBMAuthenticationDelegate.h* and in turn update the UI via the *BBMAuthControllerDelegate* methods and/or via monitored changes to the observable authState and serviceState properties:
+The primary purpose of `BBMAuthController` is to respond to delegate callbacks from the `BBMTokenManager` instance.  These happen via two delegate callbacks defined in `BBMAuthenticationDelegate.h` and in turn update the UI via the `BBMAuthControllerDelegate` methods and/or via monitored changes to the observable authState and serviceState properties:
 ```objective-c
 - (void)localAuthDataChanged:(BBMAuthenticatedAccount *)accountData error:(NSError *)error
 {
@@ -189,12 +214,12 @@ The critical part here is updating the service authentication tokens.  This is d
                                   forUserName:accountData.accountId
                               setupStateBlock:callback];
 ```
-The callback will be invoked multiple times as the setupState and authState of the user changes with some states such as *DeviceSwitchRequired* requiring user interaction.
+The callback will be invoked multiple times as the `setupState` and authState of the user changes with some states such as `DeviceSwitchRequired` requiring user interaction.
 
 #### <a name="observableMonitor"></a>Note on ObservableMontitor
 
-To make a property on a class observable via an ObservableMonitor you must call ObservableTracker getterCalledForObject:propertyName: from the property setter.  Usage of ObservableMonitors 
-is entirely optional, but is implemented for all properties on SDK model objects and can be leveraged in your code in lieu of directly using KVO.  See [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/RichChat/README.html) or [Simple Chat](../SimpleChat/README.md) for examples.  ObservableMonitors and observable properties are not thread safe.  See the [ObservableMonitor](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_observable_monitor.html) documentation for additional details.
+To make a property on a class observable via an `ObservableMonitor` you must call `ObservableTracker` `getterCalledForObject:propertyName:` from the property setter.  Usage of `ObservableMonitors` 
+is entirely optional, but is implemented for all properties on SDK model objects and can be leveraged in your code in lieu of directly using KVO.  See [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/RichChat/README.html) or [Simple Chat](../SimpleChat/README.md) for examples.  `ObservableMonitors` and observable properties are not thread safe.  See the [ObservableMonitor](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_observable_monitor.html) documentation for additional details.
 ```objective-c
 - (BBMAuthState *)authState
 {
@@ -206,7 +231,7 @@ is entirely optional, but is implemented for all properties on SDK model objects
 
 ### <a name="bbmTokenManager"></a>BBMTokenManager
 
-localAuthDataChanged:account:error is called from a BBMTokenManager instance when the credentials change.  This is implemented in BBMGoogleTokenManager for the GoogleSignIn API as follows:
+`localAuthDataChanged:account:error` is called from a `BBMTokenManager` instance when the credentials change.  This is implemented in `BBMGoogleTokenManager` for the GoogleSignIn API as follows:
 ```objective-c
 - (void)googleSignInStateChanged:(NSError *)error
 {
@@ -232,10 +257,10 @@ localAuthDataChanged:account:error is called from a BBMTokenManager instance whe
 
 ## License
 
-These samples are released as Open Source and licensed under the
+These examples are released as Open Source and licensed under the
 [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html). 
 
-These samples were created using SDKs from Apple Inc. and may contain code
+These examples were created using SDKs from Apple Inc. and may contain code
 licensed for use only with Apple products. Please review your Apple SDK
 Agreement for additional details.
 

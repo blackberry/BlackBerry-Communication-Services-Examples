@@ -2,18 +2,18 @@
 
 # Chat Poll for iOS
 
-The Chat Poll sample application demonstrates how a user can post polls within a chat as custom messages. 
-The app also demonstrates how the 
+The Chat Poll example application demonstrates how a user can post polls within a chat as custom messages. 
+The example also demonstrates how the 
 [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message.html)
-feature of the SDK can be used to cast and tally votes for a particular poll.
+feature of the BlackBerry Spark Communications Services SDK can be used to cast and tally votes for a particular poll.
 We demonstrate how a user can post **polls** within a chat as custom messages. 
 We also demonstrate how the [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message.html) feature of the SDK can be used to cast and tally votes for a particular poll. 
 
 
 ### Features
 
-This app can be used with the other sample apps but will only send and render messages with
-the "Text" tag and other tags related to polls: "Poll", "PollVoteUp" and "PollVoteDown".  It will allow you to do the following:
+This example can be used with the other examples but will only send and render messages with
+the `Text` tag and other tags related to polls: `Poll`, `PollVoteUp` and `PollVoteDown`.  It will allow you to do the following:
 
 * Create a poll as custom messages in a chat
 * Vote on a poll created by other users
@@ -27,10 +27,13 @@ the "Text" tag and other tags related to polls: "Poll", "PollVoteUp" and "PollVo
 
 ## Getting Started
 
-This sample requires the Spark Communications SDK, which you can find along with related resources at the location below.
+This example requires the Spark Communications SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [iOS Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-ios.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
 <p align="center">
@@ -45,13 +48,44 @@ This sample requires the Spark Communications SDK, which you can find along with
 
 ### Configuration
 
-This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service.  This allows you to get up and running quickly with minimal setup.
+By default, this example application is configured to work in a domain with user
+authentication disabled and the BlackBerry Key Management Service enabled.
+See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-[Create your application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+Once you have a domain in the sandbox, edit Chat Poll's `ConfigSettings.plist` file
+to configure the example with your domain ID.
 
-Once your sandbox domain is configured, edit the ConfigSettings.plist file and enter the domain identifier under "testAuth/domain".  Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.  
+```
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>authProvider</key>
+	<string>testAuth</string>
+	<key>useBlackBerryKMS</key>
+	<true/>
+	<key>testAuth</key>
+	<dict>
+		<key>clientId</key>
+		<string>not_used</string>
+		<key>domain</key>
+		<string>UPDATE_WITH_YOUR_DOMAIN</string>
+		<key>environment</key>
+		<string>sandbox</string>
+	</dict>
+</dict>
+</plist>
+```
 
-Note: This sample cannot be run on a production domain or a sandbox domain configured for a true identity provider without modification.
+When you run Chat Poll, it will prompt you for a user ID and a password. Since
+you've configured your domain to have user authentication disabled, you can
+enter any string you like for the user ID and an SDK identity will be created
+for it. Other applications that you run in the same domain will be able to find
+this identity by this user ID. The password is used to protected the keys stored
+in the
+[BlackBerry Key Management Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
 
 ## Walkthrough
 - [Chat Poll App](#chatPollApp)
@@ -59,9 +93,9 @@ Note: This sample cannot be run on a production domain or a sandbox domain confi
 
 ### <a name="chatPollApp"></a>ChatPollApp
 
-The *ChatPollApp* class is the primary entry point for the application and owns an instance of a *BBMAuthController*.  These classes provide authentication via GoogleSignIn and key management via Firebase.
+The `ChatPollApp` class is the primary entry point for the application and owns an instance of a *BBMAuthController*.  These classes provide authentication via GoogleSignIn and key management via Firebase.
 
-For *BBMAuthController*, you can substitute an implementation of *id&lt;BBMTokenManager&gt;* that interacts with your oAuth provider of choice.  Configuration is handled via the ConfigSettings.plist file:
+For `BBMAuthController`, you can substitute an implementation of *id&lt;BBMTokenManager&gt;* that interacts with your oAuth provider of choice.  Configuration is handled via the ConfigSettings.plist file:
 ```swift
     private let _authController : BBMAuthController! = {
         let controller = BBMAuthController.fromConfigFile()
@@ -69,7 +103,7 @@ For *BBMAuthController*, you can substitute an implementation of *id&lt;BBMToken
     }()
 ```
 
-Sample Token Managers are provided for both Azure AD and Google SignIn.  To use Google SignIn with the BlackBerry Key Management Service (for example), the ConfigSettings.plist should be configured as follows:
+Example Token Managers are provided for both Azure AD and Google SignIn.  To use Google SignIn with the BlackBerry Key Management Service (for example), the `ConfigSettings.plist` should be configured as follows:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -96,9 +130,9 @@ Sample Token Managers are provided for both Azure AD and Google SignIn.  To use 
 
 ### <a name="chatViewController"></a>ChatViewController
 
-*ChatViewController* will render a list of the messages in a specific chat.  An ObservableMonitor is used to monitor the message count and last message identifier on the chat and request messages and update the tableView when either change. Only messages with a tag known by the app will be displayed, the rest will be ignored.
+`ChatViewController` will render a list of the messages in a specific chat.  An `ObservableMonitor` is used to monitor the message count and last message identifier on the chat and request messages and update the `tableView` when either change. Only messages with a tag known by the app will be displayed, the rest will be ignored.
 
-*ChatViewController* will monitor the chat state and load new messages and update the tableView via:
+`ChatViewController` will monitor the chat state and load new messages and update the `tableView` via:
 ```swift
 //This monitor will lazy-load all of the messages in a given chat and add them to an array
 //that we can use to drive our tableView.  chat.lastMessage and chat.numMessages are both
@@ -134,7 +168,9 @@ chatMonitor = ObservableMonitor.init(activatedWithName: "messageMonitor") {
         }
 ```
 
-When sending a message the tag "Text" is used for text messages and "Poll" is used to create a poll. We render the "Poll" message differently, allowing the participants in a chat to vote "YES" or "NO" on it.
+When sending a message the tag `Text` is used for text messages and `Poll` is
+used to create a poll. We render the `Poll` message differently, allowing the
+participants in a chat to vote `YES` or `NO` on it.
 
 <p align="center">
 <a href="screenShots/ChatPoll_4.png"><img src="screenShots/ChatPoll_4.png" width="25%" height="25%"></a>
@@ -147,9 +183,9 @@ chatMessageSend.content = self.messageField.text
 BBMEnterpriseService.shared().sendMessage(toService: chatMessageSend)
 ```
 
-When a user votes, a message with the tag "PollVoteUp" or "PollVoteDown" is sent. We use [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message.html) to associate the vote with the "Poll" message. We pass the "Poll" message's id as a reference in BBMChatMessageSendMessage_Ref and use the "PollVoteUp" or "PollVoteDown" tags to help us tally the votes later on.
+When a user votes, a message with the tag `PollVoteUp` or `PollVoteDown` is sent. We use [Chat Message References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message.html) to associate the vote with the `Poll` message. We pass the `Poll` message's id as a reference in `BBMChatMessageSendMessage_Ref` and use the `PollVoteUp` or `PollVoteDown` tags to help us tally the votes later on.
 
-To avoid more than one vote per user, we record locally that the user has cast a vote in the localData field of the chat.
+To avoid more than one vote per user, we record locally that the user has cast a vote in the `localData` field of the chat.
 ```swift
 func sendVote(vote : Bool) {
     let tag : String = vote ? "PollVoteUp" : "PollVoteDown"
@@ -188,7 +224,7 @@ if(message.tag == "PollVoteUp" || message.tag == "PollVoteDown") {
 }
 ```
 
-After the messageId of the poll message is obtained, a BBMChatMessageCriteria request is sent to get the list of messages with the tag "PollVoteUp" that reference the poll. The result is a list of BBMChatMessage objects.
+After the `messageId` of the poll message is obtained, a `BBMChatMessageCriteria` request is sent to get the list of messages with the tag `PollVoteUp` that reference the poll. The result is a list of `BBMChatMessage` objects.
 ```swift
 //Get list for upvotes by matching a criteria
 let forChatMessageCriteria : BBMChatMessageCriteria = BBMChatMessageCriteria()
@@ -200,7 +236,7 @@ forChatMessageCriteria.ref = forRef
 let forRefs : BBMLiveList = BBMEnterpriseService.shared().model().chatMessage(with: forChatMessageCriteria)
 ```
 
-Now the same is done but using the tag "PollVoteDown" and the same messasgeId. This will return a list of messages with the tag "PollVoteDown" that reference the poll.
+Now the same is done but using the tag `PollVoteDown` and the same `messasgeId`. This will return a list of messages with the tag `PollVoteDown` that reference the poll.
 ```swift
 //Get list of downvotes by matching a criteria
 let againstChatMessageCriteria : BBMChatMessageCriteria = BBMChatMessageCriteria()
@@ -241,10 +277,10 @@ pollResultsMonitor = ObservableMonitor.init(activatedWithName: "voteMonitor", se
 
 ## License
 
-These samples are released as Open Source and licensed under the
+These examples are released as Open Source and licensed under the
 [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 
-These samples were created using SDKs from Apple Inc. and may contain code
+These examples were created using SDKs from Apple Inc. and may contain code
 licensed for use only with Apple products. Please review your Apple SDK
 Agreement for additional details.
 
