@@ -30,62 +30,28 @@ let leaveButton;
  * @memberof Examples
  */
 
-(function (window, document) {
-  //String that identifies what type of reference it is
-  const REFERENCE_TAG_THREADED = "Threaded";
+window.onload = async () => {
+  // Find the necessary HTMLElements and cache them.
+  title = document.getElementById('title');
+  chatInput = document.getElementById('chatInput');
+  chatMessageList = document.getElementById('chatMessageList');
+  chatListDiv = document.getElementById('chatListDiv');
+  leaveButton = document.getElementById('leaveButton');
+  const status = document.getElementById('status');
+  const chatList = document.getElementById('chatList');
 
-  //String is displayed on the field of message reference
-  //when a message is being edited
-  const REFERENCE_COMMENT_FIELD_TEXT = "Commenting on: ";
-  const REFERENCE_MESSAGE_STRING_COMMENT = " commented on: ";
+  try {
+    // Wait for the custom web components to load.
+    await new Promise((resolve) => { HTMLImports.whenReady(resolve); });
 
-  const IMG_CHEVRON = "img/bubble_menu.png";
+    // Notify the user that we are authenticating.
+    status.innerHTML = 'Authenticating';
 
-  var widgetURI = (document._currentScript || document.currentScript).src;
-  var m_basePath = widgetURI.substring(0, widgetURI.lastIndexOf("/js") + 1);
-
-  // The observable object used by Observer class from SDK to monitor a message
-  var MessageObservable = function Observable(messenger, chatId, messageId) {
-    return {
-      then: (callback) => {
-        this.callback = callback;
-        messenger.chatMessageWatch(chatId, messageId, callback);
-      },
-      unwatch: () => {
-        messenger.chatMessageUnwatch(chatId, messageId, this.callback);
-      }
-    };
-  };
-
-  const waitPageLoaded = () => new Promise(resolve => {
-    window.onload = () => {
-      resolve();
-    };
-  });
-
-  HTMLImports.whenReady(async () => {
-    await waitPageLoaded();
-    // Find the necessary HTMLElements and cache them.
-    title = document.getElementById('title');
-    const status = document.getElementById('status');
-    chatInput = document.getElementById('chatInput');
-    chatMessageList = document.getElementById('chatMessageList');
-    const chatList = document.getElementById('chatList');
-    chatListDiv = document.getElementById('chatListDiv');
-    leaveButton = document.getElementById('leaveButton');
-
-    let bbmeSdk;
-
-    // Show the information field for message reference.
-    chatMessageList.addEventListener('messageReference', e => {
-      chatInput.showRefField(e);
-    });
-
-    // Perform authentication.
-    try {
-      let isSyncStarted = false;
-      const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
-      // Override getUserId() used by the MockAuthManager.
+    // Setup the authentication manager for the application.
+    const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
+    if (AuthenticationManager.name === 'MockAuthManager') {
+      // We are using the MockAuthmanager, so we need to override how it
+      // acquires the local user's user ID.
       authManager.getUserId = () => new Promise((resolve, reject) => {
         const userEmailDialog = document.createElement('bbm-user-email-dialog');
         document.body.appendChild(userEmailDialog);
@@ -98,576 +64,170 @@ let leaveButton;
           reject('Failed to get user email.');
         });
       });
-
-      authManager.authenticate()
-      .then(authUserInfo => {
-        if (!authUserInfo) {
-          console.warn('Application will be redirected to the authentication page');
-          return;
-        }
-        try {
-          // Construct BBMEnterprise.Messenger which provides higher level
-          // functionality used to manipulate and annotate chats.
-          bbmeSdk = new BBMEnterprise({
-            domain: ID_PROVIDER_DOMAIN,
-            environment: ID_PROVIDER_ENVIRONMENT,
-            userId: authUserInfo.userId,
-            getToken: authManager.getBbmSdkToken,
-            description: navigator.userAgent,
-            messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher,
-            kmsArgonWasmUrl: KMS_ARGON_WASM_URL
-          });
-
-          // Handle changes of BBM Enterprise setup state.
-          bbmeSdk.on('setupState', state => {
-            console.log(`BBMEnterprise setup state: ${state.value}`);
-            switch (state.value) {
-              case BBMEnterprise.SetupState.Success:
-              {
-                // Setup was successful. Create user manager and initiate call.
-                const userRegId = bbmeSdk.getRegistrationInfo().regId;
-                const messenger = bbmeSdk.messenger;
-
-                // Initialize the chat input.
-                window.customElements.whenDefined(chatInput.localName)
-                .then(() => {
-                  chatInput.setBbmMessenger(messenger);
-                });
-
-                // Initialize the message list.
-                window.customElements.whenDefined(chatMessageList.localName)
-                .then(() => 
-                  createUserManager(userRegId, authManager,
-                    bbmeSdk.getIdentitiesFromAppUserIds)
-                  .then(userManager =>
-                    userManager.initialize()
-                    .then(() => {
-                      chatMessageList.setBbmMessenger(messenger);
-                      const messageFormatter = new MessageFormatter(userManager);
-                      chatMessageList.setMessageFormatter(messageFormatter);
-                      chatMessageList.setTimeRangeFormatter(new TimeRangeFormatter());
-                    })
-                  )
-                );
-
-                // Initialize the chat list.
-                window.customElements.whenDefined(chatList.localName)
-                .then(() => {
-                  chatList.setBbmMessenger(messenger);
-                  chatList.setContext({
-                    // Get the name to use for the chat. This is the other
-                    // participant's registration ID for a 1:1 chat, otherwise
-                    // it is the chat's subject.
-                    getChatName: chat => {
-                      if(chat.isOneToOne) {
-                        return (chat.participants[0].regId === userRegId)
-                          ? chat.participants[1].regId.toString()
-                          : chat.participants[0].regId.toString();
-                      } else {
-                        return chat.subject;
-                      }
-                    }
-                  });
-                });
-
-                // Report the status to the user.
-                status.innerHTML = `Registration Id: ${userRegId}`;
-              }
-              break;
-
-              case BBMEnterprise.SetupState.SyncRequired: {
-                if (isSyncStarted) {
-                  showError('Failed to get user keys using provided USER_SECRET');
-                  return;
-                }
-                const isNew =
-                  bbmeSdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New;
-                const syncAction = isNew
-                  ? BBMEnterprise.SyncStartAction.New
-                  : BBMEnterprise.SyncStartAction.Existing;
-                bbmeSdk.syncStart(USER_SECRET, syncAction);
-              }
-              break;
-              case BBMEnterprise.SetupState.SyncStarted:
-                isSyncStarted = true;
-              break;
-            }
-          });
-
-          // Handle setup error.
-          bbmeSdk.on('setupError', error => {
-            showError(`Failed to create BBMEnterprise: ${error.value}`);
-          });
-
-          // Start BBM Enterprise setup.
-          bbmeSdk.setupStart();
-
-          // Notify the user that we are working on signing in.
-          status.innerHTML = 'Signing in';
-        } catch (error) {
-          showError(`Failed to create BBMEnterprise: ${error}`);
-          return;
-        }
-      }).catch(error => {
-        showError(`Failed to complete setup. Error: ${error}`);
-      });
-    } catch(error) {
-      showError(`Failed to authenticate and start BBM SDK. Error: ${error}`);
     }
 
-    /**
-     * The implementation for the message list component. Note: this function
-     * takes an html template as a child, which will be used to display each
-     * message. The template has some important properties:
-     * - A string enclosed in [[]] may be used to insert javascript code into
-     *   the block, either as text or attributes.
-     * - The types of javascript allowed include:
-     *   - message.XXX where XXX is a property of a ChatMessage (and will be
-     *   resolved to the value of that property for the ChatMessage being
-     *   displayed).
-     *   - The name of a function where the function is in the object passed to
-     *     `context'.
-     *   - ! to negate a value.
-     *
-     * @memberof Support.Widgets
-     */
-    class ThreadedChatMessageList extends Polymer.Element {
-      static get is() {
-        return 'bbm-threaded-message-list';
-      }
+    // Authenticate the user.  Configurations that use a real identity
+    // provider (IDP) will redirect the browser to the IDP's authentication
+    // page.
+    const authUserInfo = await authManager.authenticate();
+    if (!authUserInfo) {
+      console.warn('Redirecting for authentication.');
+      return;
+    }
 
-      ready() {
-        super.ready();
+    // Notify the user that we are working the SDK setup.
+    status.innerHTML = 'Setting up the SDK';
 
-        window.customElements.whenDefined('bbm-chat-message-list').then(() => {
-          this.$.list.setMappingFunction(this.render.bind(this),
-            this.clear.bind(this));
-        });
-      }
+    // Instantiate the SDK.
+    const sdk = new BBMEnterprise({
+      domain: DOMAIN_ID,
+      environment: ENVIRONMENT,
+      userId: authUserInfo.userId,
+      getToken: () => authManager.getBbmSdkToken(),
+      description: navigator.userAgent,
+      messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher,
+      kmsArgonWasmUrl: KMS_ARGON_WASM_URL
+    });
 
-      // Defined list of properties of custom control
-      static get properties() {
-        return {
-          // Holds the currently selected message
-          selectedMessage: {
-            type: Object,
-            readOnly: false,
-            notify: true
+    // Setup is asynchronous.  Create a promise we can use to wait on
+    // until the SDK setup has completed.
+    const sdkSetup = new Promise((resolve, reject) => {
+      // Handle changes to the SDK's setup state.
+      let isSyncStarted = false;
+      sdk.on('setupState', (state) => {
+        console.log(
+          `ThreadedChat: BBMEnterprise setup state: ${state.value}`);
+        switch (state.value) {
+          case BBMEnterprise.SetupState.Success: {
+            // Setup was successful.
+            resolve();
+            break;
           }
-        };
-      }
+          case BBMEnterprise.SetupState.SyncRequired: {
+            if (isSyncStarted) {
+              // We have already tried to sync the user's keys using the
+              // given passcode.  For simplicity in this example, we don't
+              // try to recover when the configured passcode cannot be
+              // used.
+              reject(new Error(
+                'Failed to get user keys using provided KEY_PASSCODE.'));
+              return;
+            }
 
-      /**
-       * Sets instance of bbmMessenger
-       * @param {BBMEnterprise.Messenger} messenger
-       *   The messenger to use to retrieve a chat's message list.
-       */
-      setBbmMessenger(messenger) {
-        this.bbmMessenger = messenger;
-        this.$.list.setBbmMessenger(messenger);
-      }
+            // We need to provide the SDK with the user's key passcode.
+            sdk.syncStart(
+              // For simplicity in this example, we always use the
+              // configured passcode.
+              KEY_PASSCODE,
 
-      /**
-       * Sets current chat id
-       * @param {String} chatId - Current chat id
-       */
-      setChatId(chatId) {
-        this.chatId = chatId;
-        this.$.list.setChatId(chatId);
-      }
-
-      /**
-       * Sets instance of contactManager. The contactManager is used for
-       * rendering contact information in bubbles.
-       *
-       * @param {object} value
-       *   The contact manager used to display information about contacts in
-       *   bubbles.
-       */
-      setContactManager(value) {
-        if(this.contactManager) {
-          this.contactManager.removeEventListener("user_changed", onUserChanged);
-        }
-
-        this.contactManager = value;
-
-        if (value) {
-          this.contactManager.addEventListener("user_changed", onUserChanged);
-        }
-      }
-
-      /**
-       * Sets the time range formatter. The time range formatter is used for
-       * displaying time stamps relative to the current time.
-       *
-       * @param {object} value
-       *   The time range formatter used to display relative timestamps in
-       *   bubbles.
-       */
-      setTimeRangeFormatter(value) {
-        this.timeRangeFormatter = value;
-      }
-
-      /**
-       * Sets the message formatter. The message formatter is used to format
-       * the content of messages for display.
-       *
-       * @param {object} value
-       *   The message formatter used to display information about the message.
-       */
-      setMessageFormatter(value) {
-        this.messageFormatter = value;
-      }
-
-      /**
-       * Get the image to display for a message chevron
-       *
-       * @returns {string} Path to the image.
-       */
-      getChevronImage() {
-        return m_basePath + IMG_CHEVRON;
-      }
-
-      /**
-       * Trigger a chevron's dropdown menu to be displayed.
-       *
-       * @param {Event} event
-       *   The mouse press event which triggers the dropdown to be displayed.
-       */
-      showChevronDropdown(event) {
-        var element = this.shadowRoot.querySelector('.chevronDropdown');
-
-        this.selectedMessage =  event.model.message;
-
-        // Sets the position to display the menu button dropdown list
-        element.setAttribute(
-          "style","display: flex; position: fixed; z-index: 1; top: " 
-          + event.y + "px; left: " + event.x + "px;");
-
-        event.stopPropagation();
-
-        var windowClickHandler = () => {
-          this.closeDropdowns();
-          window.removeEventListener('click', windowClickHandler);
-        };
-
-        window.addEventListener('click', windowClickHandler);
-      }
-
-      /**
-       * Close all dropdown menus associated with the message list.
-       */
-      closeDropdowns() {
-        var dropdowns =
-          this.shadowRoot.querySelectorAll('.chevronDropdown');
-        dropdowns.forEach(item => {
-          if (item.style.display !== 'none') {
-            item.style.display = 'none';
-          }
-        });
-
-        // Now that the dropdown is closed, hide chevrons too, if required.
-        var chevrons =
-          this.shadowRoot.querySelectorAll('.chevron');
-        chevrons.forEach(item => {
-          if (item.needsToHide) {
-            item.style.display = 'none';
-            item.needsToHide = false;
-          }
-        });
-      }
-
-      /**
-       * check if a menu button needs to be displayed for a message
-       *
-       * @param {BBMEnterprise.Messenger.ChatMessage} selectedMessage 
-       *  The selected ChatMessage that the menu button belongs to
-       *
-       * @returns {string} 'none' to display the button, or 'block' to
-       *  hide the button
-       */
-      isMenuButtonDisplayed(selectedMessage) {
-        return selectedMessage && selectedMessage.message.isIncoming
-          ? 'none' : 'block';
-      }
-
-      /**
-       * Dispatch an event of quoting the selected message.
-       */
-      commentMessage() {
-        this.dispatchEvent(new CustomEvent('messageReference', 
-          {'detail': { targetMessageId:  this.selectedMessage.message.messageId, 
-            refTag: REFERENCE_TAG_THREADED,
-        content: REFERENCE_COMMENT_FIELD_TEXT + '"' + this.selectedMessage.content + '"',
-        textMessage: ""}}));
-        chatInput.focus();
-      }
-
-      // Get the username for a registration ID. If there is a name registered
-      // for the user, it will be used. Otherwise, the registration ID in string
-      // form will be used.
-      getUserName(regId) {
-        var contactName = this.contactManager.getDisplayName(regId);
-        return contactName ? contactName : regId.toString();
-      }
-
-      // Get the timestamp for a message in string form, using the time range
-      // formatter registered with this widget.
-      getTimestamp(message) {
-        let ret =
-          {
-            formattedTime: ''
-          };
-
-        if (this.timeRangeFormatter) {
-          var now = new Date();
-          var formattedMessage = this.timeRangeFormatter.format(
-            this.timeRangeFormatter.chatBubbleFormatters,
-            message.timestamp,
-            now);
-
-          // Construct a return value. It definitely has a time.
-          ret.formattedTime = formattedMessage.formattedTime;
-
-          // It may also have a timeout, after which the time should be updated.
-          if (formattedMessage.expiresIn) {
-            ret.expiryTimer = setTimeout(
-              () => this.refresh(message),
-              formattedMessage.expiresIn.getTime() - now.getTime()
+              // Does the user have existing keys?
+              sdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New
+              // No, we must create new keys.  The key passcode will be
+              // used to protect the new keys.
+              ? BBMEnterprise.SyncStartAction.New
+              // Yes, we have existing keys.  The key passcode will be
+              // used to unprotect the keys.
+              : BBMEnterprise.SyncStartAction.Existing
             );
+            break;
+          }
+          case BBMEnterprise.SetupState.SyncStarted: {
+            // Syncing of the user's keys has started.  Remember this so
+            // that we can tell if the setup state regresses.
+            isSyncStarted = true;
+            break;
           }
         }
+      });
 
-        return ret;
-      }
+      // Any setup error received will fail the SDK setup promise.
+      sdk.on('setupError', error => {
+       reject(new Error(
+         `Endpoint setup failed: ${error.value}`));
+      });
 
+      // Start the SDK setup.
+      sdk.setupStart();
+    });
+
+    // Wait for the SDK setup to complete.
+    await sdkSetup;
+
+    // This example doesn't remove the event listeners on the setupState
+    // or setupErrors events that were used to monitor the setup progress.
+    // It also doesn't setup new listeners to monitor these events going
+    // forward to act on any issue that causes the SDK's state to regress.
+
+    // The SDK is now setup.  Remember the local user's regId.
+    const regId = sdk.getRegistrationInfo().regId;
+
+    // Create and initialize the user manager.  This will be used by the
+    // bbmChatMessageList component for displaying user information.
+    const userManager = await createUserManager(
+      sdk.getRegistrationInfo().regId,
+      authManager,
+      (...args) => sdk.getIdentitiesFromAppUserIds(...args)
+    );
+    await userManager.initialize();
+
+    // Wait for the custom components to be upgraded before we configure them.
+    await Promise.all([
+      window.customElements.whenDefined(chatList.localName),
+      window.customElements.whenDefined(chatMessageList.localName),
+      window.customElements.whenDefined(chatInput.localName)
+    ]);
+
+    // Configure the chatList component.  It needs a handle to the SDK's
+    // messenger object.  We also setup a context for the element that defines
+    // how it will behave.
+    chatList.setBbmMessenger(sdk.messenger);
+    chatList.setContext({
       /**
-       * Clear the data associated with a message. This should be called when
-       * a message is about to be deleted, and cleans up temporary data created
-       * by formatting the message.
-       */
-      clear(message) {
-        if(message.timestamp.expiryTimer) {
-          clearTimeout(message.timestamp.expiryTimer);
-        }
-      }
-
-      // Cause a message to refresh. This should be invoked when something
-      // outside of message data causes a bubble to need to be refreshed.
-      refresh(message) {
-        var formattedMessage;
-        // Upon timeout, find the message, re-render, and splice it back
-        // in. First find the message and make sure it's still in the
-        // list.
-        var index = this.$.list.$.list.items.findIndex((element) =>
-          element.message === message
-        );
-
-        if (index >= 0) {
-          formattedMessage = this.$.list.$.list.items[index];
-
-          // Rerender based on the appData, which is assumed to have been
-          // updated already by whatever triggered the refresh.
-          var reRendered = this.format(message, formattedMessage.appData);
-
-          // And splice it in.
-          this.$.list.$.list.splice('items', index, 1, reRendered);
-        }
-      }
-
-      render(message) {
-        // Make a spot for data that belongs to the app, rather than the sdk.
-        var appData = {
-          commentSystemMessageTracker: undefined,
-          commentMessageTracker: undefined
-        };
-
-        // Format the original message data for display.
-        return this.format(message, appData);
-      }
-
-      // Construct the data needed to display a message.
-      // @param {ChatMessage} message
-      // The message from the BBM Enterprise for Javascript SDK.
-      // @returns {object} The data needed by the template used for this message
-      // list, defined in the html file.
-      format(message, appData) {
-        var isStatus = this.messageFormatter.getIsStatusMessage(message) 
-        || (message.ref && message.ref[0] 
-          && message.ref[0].tag === REFERENCE_TAG_THREADED);
-
-        var ret = {
-          // This is the original SDK data.
-          message: message,
-          // This is the original app data.
-          appData: appData,
-          // The rest is the formatted data. This is all build out of the first
-          // two.
-          isStatus: isStatus ? 'block' : 'none',
-          isBubble: isStatus ? 'none' : 'flex',
-          isText: !isStatus? 'flex' : 'none',
-          avatar: this.messageFormatter.getMessageAvatar(message),
-          isIncoming: message.isIncoming ? 'block' : 'none',
-          indent: '10px',
-          childIndent: '85px',
-          username: message.isIncoming 
-            ? this.messageFormatter.getUserName(message)
-            : 'You',
-          timestamp: this.getTimestamp(message),
-          content: this.messageFormatter.getMessageText(message),
-          backgroundColor: message.isIncoming ? '#efefef' : '#cee2eb',
-          childBackgroundColor: message.isIncoming ? '#fafafa' : '#eff8fb',
-          isHidden: message.isDeleted 
-            || (!message.isIncoming && message.isRecalled)
-            ? 'none': 'block',
-          alignment: message.isIncoming ? 'left' : 'right'
-        };
-
-        //For message references
-        if(message.ref) {
-          //For quoted message
-          if(message.ref && message.ref[0] 
-              && message.ref[0].tag === REFERENCE_TAG_THREADED) {
-           this.formatCommentSystemMessage(message.ref[0].messageId, ret);
-          }
-        }
-
-        if(message.refBy) {
-          ret.refBys = [];
-          for(var i=0; i < message.refBy.length; i++) {
-            if(message.refBy[i].tag === REFERENCE_TAG_THREADED
-              && message.refBy[i].messageIds.length > 0) {
-              for(var j=0; j < message.refBy[i].messageIds.length; j++) {
-                this.formatCommentMessage(message.refBy[i].messageIds[j], ret);
-              }
-              break;
-            }
-          }
-        }
-        return ret;
-      }
-
-      // Construct the data needed to display a comment system message.
-      // For example, 'XXX commented on "aaaaaaaaa"'
-      // @param {Object} messageId 
-      //  the MessageId object of the comment system message
-      // @param {Object} ret
-      //  the wrapper of the data to display the comment system message
-      formatCommentSystemMessage(messageId, ret) {
-        var targetMessage;
-
-        if(ret.appData.commentSystemMessageTracker) {
-          ret.appData.commentSystemMessageTracker.clear();
-        }
-
-        ret.appData.commentSystemMessageTracker 
-          = Observer.getObserverContext((getter) => {
-          var observable = new MessageObservable(this.$.list.messenger,
-              this.chatId, messageId);
-          //observe the message.
-          getter.observe(observable, (getter, message) => {
-              ret.content = ret.username + REFERENCE_MESSAGE_STRING_COMMENT
-              + '"' + message.content + '"';
-          });
-        }, () => {
-          //Callback will be called after getting the message 
-          //asynchronously. Refresh the UI to render the data
-          this.refresh(targetMessage);
-        });
-      }
-
-      // Construct the data needed to display a comment message.
-      // @param {Object} messageId 
-      //  The MessageId object of the comment message
-      // @param {Object} ret
-      //  The wrapper of the data to display the comment message
-      formatCommentMessage(messageId, ret) {
-
-        if(ret.appData.commentMessageTracker) {
-          ret.appData.commentMessageTracker.clear();
-        }
-
-        var refMessage;
-        ret.appData.commentMessageTracker
-          = Observer.getObserverContext((getter) => {
-          var messageObservable
-            = new MessageObservable(this.$.list.messenger,
-              this.chatId, messageId);
-
-          //observe the message.
-          getter.observe(messageObservable, (getter, message) => {
-            refMessage = message;
-            var refMessageId = refMessage.messageId.toString();
-            var isMessageFound = false;
-            for(var i = 0; i < ret.refBys.length; i++) {
-              if(ret.refBys[i].childMessageId === refMessageId) {
-                //Update the existing child message
-                ret.refBys[i].content = refMessage.content;
-                isMessageFound = true;
-                break;
-              }
-            }
-
-            if(!isMessageFound) {
-              //add the child message
-              ret.refBys.push({
-                childMessageId: refMessageId,
-                childMessageUsername: refMessage.isIncoming 
-                  ? this.messageFormatter.getUserName(message.sender)
-                  : 'You',
-                childMessageContent: refMessage.content,
-                childMessageAvatar: 
-                  this.messageFormatter.getMessageAvatar(refMessage),
-                bubbleBackgroundColor: refMessage.isIncoming 
-                  ? '#efefef' : '#cee2eb',
-                timestamp: this.getTimestamp(refMessage)
-              });
-            }
-          });
-        }, () => {
-          //Callback will be called after getting the message 
-          //asynchronously. Refresh the UI to render the data
-          this.refresh(refMessage);
-        }); 
-      }
-
-      /**
-       * Show the chevron when hovering over a message bubble.
+       * Get the name to use for the chat.
        *
-       * @param {Event} event
-       *   The mouse enter event which triggers the show
-       */
-      showChevron(event) {
-        var element = event.target.querySelector('.chevron');
-        element.style.display='block';
-      }
-
-      /**
-       * Hide the chevron when ending a hover over a message bubble. Don't hide
-       * it if the menu is open.
+       * @param {BBMEnterprise.Messenger.Chat} chat
+       *   The chat whose name is to be returned.
        *
-       * @param {Event} event
-       *   The mouse leave event which triggers the hide
+       * @returns {string}
+       *   The name to be used for the chat.
        */
-      hideChevron(event) {
-        var chevron = event.target.querySelector('.chevron');
-        var dropdown = this.shadowRoot.querySelector('.chevronDropdown');
-        if(dropdown.style.display !== 'flex') {
-          // Hide the chevron.
-          chevron.style.display='none';
-          chevron.needsToHide = false;
-        } else {
-          // We have to mark that the chevron should be hidden, but not actually
-          // hide it.
-          chevron.needsToHide = true;
+      getChatName: (chat) => {
+        if (chat.isOneToOne) {
+          // We have a 1:1 chat.  We will be returning the regId of the other
+          // participant as the chat name.
+          return (chat.participants[0].regId === regId)
+            ? chat.participants[1].regId : chat.participants[0].regId;
         }
+        // Otherwise, return the chat's subject.
+        return chat.subject;
       }
-    }
+    });
 
-    window.customElements.define(ThreadedChatMessageList.is,
-                                   ThreadedChatMessageList);
-  });
-})(window, document);
+    // Configure the chatMessageList component.  It needs a handle to the
+    // SDK's messenger object.  We also setup formatters for the Message and
+    // its timestamp.   The user manager is used to get information about
+    // the message sender.
+    chatMessageList.setBbmMessenger(sdk.messenger);
+    chatMessageList.setMessageFormatter(new MessageFormatter(userManager));
+    chatMessageList.setTimeRangeFormatter(new TimeRangeFormatter());
+
+    // When a message is referenced, we will show the referenced message
+    // information in the bbmChatInput component.
+    chatMessageList.addEventListener('messageReference', e => {
+      chatInput.showRefField(e);
+    });
+
+    // Configure the chatInput component.  It needs a handle to the SDK's
+    // messenger object.
+    chatInput.setBbmMessenger(sdk.messenger);
+
+    // Everything is setup.  Report our regId as the status.
+    status.innerHTML = `regId: ${regId}`;
+  }
+  catch(error) {
+    showError(`SimpleChat encountered an error: ${error}`);
+  }
+};
 
 //============================================================================
 // :: HTML functions
@@ -728,3 +288,518 @@ function showError(message) {
   // to displaying it.
   document.getElementById('status').innerHTML = message;
 }
+
+//============================================================================
+// :: Web Components
+
+HTMLImports.whenReady(() => {
+  // The tag that will be used when sending messages that reference a message
+  // so that they are identified as threaded messages.
+  const REFERENCE_TAG_THREADED = "Threaded";
+
+  // The string used to annotate a message that is being referenced while
+  // editing the message to be sent.
+  const REFERENCE_COMMENT_FIELD_TEXT = "Commenting on:";
+
+  // The string used to annotate the chat to indicate which user commented on
+  // a message.
+  const REFERENCE_MESSAGE_STRING_COMMENT = " commented on: ";
+
+  // The image that will appear next to a message bubble to indicate that a
+  // menu is available for the message.  The image path is given relative to
+  // the example application.
+  const IMG_CHEVRON = "./img/bubble_menu.png";
+
+  // A helper object for observing changes to a chat message.
+  const MessageObservable = function(messenger, chatId, messageId) {
+    return {
+      // Set the callback to be called when the message changes.
+      then: (callback) => {
+        this._callback = callback;
+        messenger.chatMessageWatch(chatId, messageId, this._callback);
+      },
+      // Stop watching the message and remove the callback.
+      unwatch: () => {
+        messenger.chatMessageUnwatch(chatId, messageId, this._callback);
+      }
+    };
+  };
+
+  /**
+   * The implementation for the threaded message list component.
+   *
+   * Note: this component takes an HTML template as a child, which will be
+   * used to display each message.  The template has some important
+   * properties:
+   *
+   * A string enclosed in [[]] may be used to insert JavaScript code into the
+   * block, either as text or attributes.  Some JavaScript values that may be
+   * included are:
+   *
+   * - Any property of a ChatMessage may be referenced for display of the
+   *   property value.  For example: '[[message.messageId]]'
+   *
+   * - You may call any function that is defined in the configured context of
+   *   the component.  For example: '[[getMessageText()]]'
+   *
+   * - You can use '!' to negate a value.  For example:
+   *   '[[! message.isIncoming]]'
+   *
+   * @memberof Support.Widgets
+   */
+  class ThreadedChatMessageList extends Polymer.Element {
+    static get is() {
+      return 'bbm-threaded-message-list';
+    }
+
+    ready() {
+      super.ready();
+
+      window.customElements.whenDefined('bbm-chat-message-list').then(() => {
+        this.$.list.setMappingFunction(this.render.bind(this),
+          this.clear.bind(this));
+      });
+    }
+
+    // Defined list of properties of custom control
+    static get properties() {
+      return {
+        // Holds the currently selected message
+        selectedMessage: {
+          type: Object,
+          readOnly: false,
+          notify: true
+        }
+      };
+    }
+
+    /**
+     * Sets instance of bbmMessenger
+     * @param {BBMEnterprise.Messenger} messenger
+     *   The messenger to use to retrieve a chat's message list.
+     */
+    setBbmMessenger(messenger) {
+      this.bbmMessenger = messenger;
+      this.$.list.setBbmMessenger(messenger);
+    }
+
+    /**
+     * Sets current chat id
+     * @param {String} chatId - Current chat id
+     */
+    setChatId(chatId) {
+      this.chatId = chatId;
+      this.$.list.setChatId(chatId);
+    }
+
+    /**
+     * Sets instance of contactManager. The contactManager is used for
+     * rendering contact information in bubbles.
+     *
+     * @param {object} value
+     *   The contact manager used to display information about contacts in
+     *   bubbles.
+     */
+    setContactManager(value) {
+      if(this.contactManager) {
+        this.contactManager.removeEventListener("user_changed", onUserChanged);
+      }
+
+      this.contactManager = value;
+
+      if (value) {
+        this.contactManager.addEventListener("user_changed", onUserChanged);
+      }
+    }
+
+    /**
+     * Sets the time range formatter. The time range formatter is used for
+     * displaying time stamps relative to the current time.
+     *
+     * @param {object} value
+     *   The time range formatter used to display relative timestamps in
+     *   bubbles.
+     */
+    setTimeRangeFormatter(value) {
+      this.timeRangeFormatter = value;
+    }
+
+    /**
+     * Sets the message formatter. The message formatter is used to format
+     * the content of messages for display.
+     *
+     * @param {object} value
+     *   The message formatter used to display information about the message.
+     */
+    setMessageFormatter(value) {
+      this.messageFormatter = value;
+    }
+
+    /**
+     * Get the image to display for a message chevron
+     *
+     * @returns {string} Path to the image.
+     */
+    getChevronImage() {
+      return IMG_CHEVRON;
+    }
+
+    /**
+     * Trigger a chevron's dropdown menu to be displayed.
+     *
+     * @param {Event} event
+     *   The mouse press event which triggers the dropdown to be displayed.
+     */
+    showChevronDropdown(event) {
+      var element = this.shadowRoot.querySelector('.chevronDropdown');
+
+      this.selectedMessage =  event.model.message;
+
+      // Sets the position to display the menu button dropdown list
+      element.setAttribute(
+        "style","display: flex; position: fixed; z-index: 1; top: " 
+        + event.y + "px; left: " + event.x + "px;");
+
+      event.stopPropagation();
+
+      var windowClickHandler = () => {
+        this.closeDropdowns();
+        window.removeEventListener('click', windowClickHandler);
+      };
+
+      window.addEventListener('click', windowClickHandler);
+    }
+
+    /**
+     * Close all dropdown menus associated with the message list.
+     */
+    closeDropdowns() {
+      var dropdowns =
+        this.shadowRoot.querySelectorAll('.chevronDropdown');
+      dropdowns.forEach(item => {
+        if (item.style.display !== 'none') {
+          item.style.display = 'none';
+        }
+      });
+
+      // Now that the dropdown is closed, hide chevrons too, if required.
+      var chevrons =
+        this.shadowRoot.querySelectorAll('.chevron');
+      chevrons.forEach(item => {
+        if (item.needsToHide) {
+          item.style.display = 'none';
+          item.needsToHide = false;
+        }
+      });
+    }
+
+    /**
+     * check if a menu button needs to be displayed for a message
+     *
+     * @param {BBMEnterprise.Messenger.ChatMessage} selectedMessage 
+     *  The selected ChatMessage that the menu button belongs to
+     *
+     * @returns {string} 'none' to display the button, or 'block' to
+     *  hide the button
+     */
+    isMenuButtonDisplayed(selectedMessage) {
+      return selectedMessage && selectedMessage.message.isIncoming
+        ? 'none' : 'block';
+    }
+
+    /**
+     * Dispatch an event to notify listeners that a message is being commented
+     * on.
+     */
+    commentMessage() {
+      // Dispatch the 'messageReference' event.
+      this.dispatchEvent(new CustomEvent('messageReference', {
+        'detail': {
+          // The messageId of the message being referenced.
+          targetMessageId: this.selectedMessage.message.messageId,
+          // The reference tag to use when referencing the message.
+          refTag: REFERENCE_TAG_THREADED,
+          // What text to show when we are composing a comment on the
+          // referenced message.
+          content:
+            `${REFERENCE_COMMENT_FIELD_TEXT} "${this.selectedMessage.content}"`,
+          // What text to show as the comment.
+          textMessage: ""
+        }
+      }));
+      chatInput.focus();
+    }
+
+    // Get the username for a registration ID. If there is a name registered
+    // for the user, it will be used. Otherwise, the registration ID in string
+    // form will be used.
+    getUserName(regId) {
+      var contactName = this.contactManager.getDisplayName(regId);
+      return contactName ? contactName : regId.toString();
+    }
+
+    // Get the timestamp for a message in string form, using the time range
+    // formatter registered with this widget.
+    getTimestamp(message) {
+      let ret =
+        {
+          formattedTime: ''
+        };
+
+      if (this.timeRangeFormatter) {
+        var now = new Date();
+        var formattedMessage = this.timeRangeFormatter.format(
+          this.timeRangeFormatter.chatBubbleFormatters,
+          message.timestamp,
+          now);
+
+        // Construct a return value. It definitely has a time.
+        ret.formattedTime = formattedMessage.formattedTime;
+
+        // It may also have a timeout, after which the time should be updated.
+        if (formattedMessage.expiresIn) {
+          ret.expiryTimer = setTimeout(
+            () => this.refresh(message),
+            formattedMessage.expiresIn.getTime() - now.getTime()
+          );
+        }
+      }
+
+      return ret;
+    }
+
+    /**
+     * Clear the data associated with a message. This should be called when
+     * a message is about to be deleted, and cleans up temporary data created
+     * by formatting the message.
+     */
+    clear(message) {
+      if(message.timestamp.expiryTimer) {
+        clearTimeout(message.timestamp.expiryTimer);
+      }
+    }
+
+    // Cause a message to refresh. This should be invoked when something
+    // outside of message data causes a bubble to need to be refreshed.
+    refresh(message) {
+      var formattedMessage;
+      // Upon timeout, find the message, re-render, and splice it back
+      // in. First find the message and make sure it's still in the
+      // list.
+      var index = this.$.list.$.list.items.findIndex((element) =>
+        element.message === message
+      );
+
+      if (index >= 0) {
+        formattedMessage = this.$.list.$.list.items[index];
+
+        // Rerender based on the appData, which is assumed to have been
+        // updated already by whatever triggered the refresh.
+        var reRendered = this.format(message, formattedMessage.appData);
+
+        // And splice it in.
+        this.$.list.$.list.splice('items', index, 1, reRendered);
+      }
+    }
+
+    render(message) {
+      // Make a spot for data that belongs to the app, rather than the sdk.
+      var appData = {
+        commentSystemMessageTracker: undefined,
+        commentMessageTracker: undefined
+      };
+
+      // Format the original message data for display.
+      return this.format(message, appData);
+    }
+
+    // Construct the data needed to display a message.
+    // @param {ChatMessage} message
+    // The message from the BBM Enterprise for Javascript SDK.
+    // @returns {object} The data needed by the template used for this message
+    // list, defined in the html file.
+    format(message, appData) {
+      var isStatus = this.messageFormatter.getIsStatusMessage(message) 
+      || (message.ref && message.ref[0] 
+        && message.ref[0].tag === REFERENCE_TAG_THREADED);
+
+      var ret = {
+        // This is the original SDK data.
+        message: message,
+        // This is the original app data.
+        appData: appData,
+        // The rest is the formatted data. This is all build out of the first
+        // two.
+        isStatus: isStatus ? 'block' : 'none',
+        isBubble: isStatus ? 'none' : 'flex',
+        isText: !isStatus? 'flex' : 'none',
+        avatar: this.messageFormatter.getMessageAvatar(message),
+        isIncoming: message.isIncoming ? 'block' : 'none',
+        indent: '10px',
+        childIndent: '85px',
+        username: message.isIncoming 
+          ? this.messageFormatter.getUserName(message)
+          : 'You',
+        timestamp: this.getTimestamp(message),
+        content: this.messageFormatter.getMessageText(message),
+        backgroundColor: message.isIncoming ? '#efefef' : '#cee2eb',
+        childBackgroundColor: message.isIncoming ? '#fafafa' : '#eff8fb',
+        isHidden: message.isDeleted 
+          || (!message.isIncoming && message.isRecalled)
+          ? 'none': 'block',
+        alignment: message.isIncoming ? 'left' : 'right'
+      };
+
+      if(message.ref) {
+        // The message being formatted references a top-level message.  This
+        // example only references a single message at a time.
+        //
+        // We format this message as a 'system' message to be injected into
+        // the chat message list.
+        if(message.ref && message.ref[0]
+            && message.ref[0].tag === REFERENCE_TAG_THREADED) {
+         this.formatCommentSystemMessage(message.ref[0].messageId, ret);
+        }
+      }
+
+      if(message.refBy) {
+        // The message being formatted is referenced by at least one other
+        // message.  Format each of the messages that reference this messages
+        // as 'comment' messages.
+        ret.refBys = [];
+        for (const ref of message.refBy) {
+          if (ref.tag === REFERENCE_TAG_THREADED) {
+            for (const messageId of ref.messageIds) {
+              this.formatCommentMessage(messageId, ret);
+            }
+            // We've handled the only reference tag type we care about, so we
+            // can exit the loop early.
+            break;
+          }
+          // Ignore all other reference tag types.
+        }
+      }
+      return ret;
+    }
+
+    // Construct the data needed to display a comment system message.
+    // For example, 'XXX commented on "aaaaaaaaa"'
+    // @param {Object} messageId 
+    //  the MessageId object of the comment system message
+    // @param {Object} ret
+    //  the wrapper of the data to display the comment system message
+    formatCommentSystemMessage(messageId, ret) {
+      var targetMessage;
+
+      if(ret.appData.commentSystemMessageTracker) {
+        ret.appData.commentSystemMessageTracker.clear();
+      }
+
+      ret.appData.commentSystemMessageTracker 
+        = Observer.getObserverContext((getter) => {
+        var observable = new MessageObservable(this.$.list.messenger,
+            this.chatId, messageId);
+        //observe the message.
+        getter.observe(observable, (getter, message) => {
+            ret.content = ret.username + REFERENCE_MESSAGE_STRING_COMMENT
+            + '"' + message.content + '"';
+        });
+      }, () => {
+        //Callback will be called after getting the message 
+        //asynchronously. Refresh the UI to render the data
+        this.refresh(targetMessage);
+      });
+    }
+
+    // Construct the data needed to display a comment message.
+    // @param {Object} messageId 
+    //  The MessageId object of the comment message
+    // @param {Object} ret
+    //  The wrapper of the data to display the comment message
+    formatCommentMessage(messageId, ret) {
+
+      if(ret.appData.commentMessageTracker) {
+        ret.appData.commentMessageTracker.clear();
+      }
+
+      var refMessage;
+      ret.appData.commentMessageTracker
+        = Observer.getObserverContext((getter) => {
+        var messageObservable
+          = new MessageObservable(this.$.list.messenger,
+            this.chatId, messageId);
+
+        //observe the message.
+        getter.observe(messageObservable, (getter, message) => {
+          refMessage = message;
+          var refMessageId = refMessage.messageId.toString();
+          var isMessageFound = false;
+          for(var i = 0; i < ret.refBys.length; i++) {
+            if(ret.refBys[i].childMessageId === refMessageId) {
+              //Update the existing child message
+              ret.refBys[i].content = refMessage.content;
+              isMessageFound = true;
+              break;
+            }
+          }
+
+          if(!isMessageFound) {
+            //add the child message
+            ret.refBys.push({
+              childMessageId: refMessageId,
+              childMessageUsername: refMessage.isIncoming 
+                ? this.messageFormatter.getUserName(message.sender)
+                : 'You',
+              childMessageContent: refMessage.content,
+              childMessageAvatar: 
+                this.messageFormatter.getMessageAvatar(refMessage),
+              bubbleBackgroundColor: refMessage.isIncoming 
+                ? '#efefef' : '#cee2eb',
+              timestamp: this.getTimestamp(refMessage)
+            });
+          }
+        });
+      }, () => {
+        //Callback will be called after getting the message 
+        //asynchronously. Refresh the UI to render the data
+        this.refresh(refMessage);
+      }); 
+    }
+
+    /**
+     * Show the chevron when hovering over a message bubble.
+     *
+     * @param {Event} event
+     *   The mouse enter event which triggers the show
+     */
+    showChevron(event) {
+      var element = event.target.querySelector('.chevron');
+      element.style.display='block';
+    }
+
+    /**
+     * Hide the chevron when ending a hover over a message bubble. Don't hide
+     * it if the menu is open.
+     *
+     * @param {Event} event
+     *   The mouse leave event which triggers the hide
+     */
+    hideChevron(event) {
+      var chevron = event.target.querySelector('.chevron');
+      var dropdown = this.shadowRoot.querySelector('.chevronDropdown');
+      if(dropdown.style.display !== 'flex') {
+        // Hide the chevron.
+        chevron.style.display='none';
+        chevron.needsToHide = false;
+      } else {
+        // We have to mark that the chevron should be hidden, but not actually
+        // hide it.
+        chevron.needsToHide = true;
+      }
+    }
+  }
+
+  window.customElements.define(ThreadedChatMessageList.is,
+                               ThreadedChatMessageList);
+});
+

@@ -1,10 +1,24 @@
 {
+  // Disable the node environment since this module doesn't support it.  This
+  // will inhibit the node plugin's rules from running and will remove the
+  // node environment's global variables from the global scope.
+  "env":
+  {
+    "node": false
+  },
+  
   // Ignore unknown variables that will be available at runtime.
   "globals":
   {
-    "GoogleAuthManager": false,
+    "$": false,
+    "BBMEnterprise": false,
+    "DOMAIN_ID": false,
+    "ENVIRONMENT": false,
+    "USER_ID": false,
+    "KEY_PASSCODE": false,
     "KMS_ARGON_WASM_URL": false,
-    "AUTH_CONFIGURATION": false
+    "AUTH_CONFIGURATION": false,
+    "AuthenticationManager": false
   },
   "rules":
   {
@@ -13,7 +27,7 @@
     [
       "error",
       {
-        "varsIgnorePattern": "AUTH_CONFIGURATION|ID_PROVIDER_DOMAIN|KMS_ARGON_WASM_URL|ID_PROVIDER_ENVIRONMENT|USER_SECRET|createAuthManager|USER_ID"
+        "varsIgnorePattern": "AUTH_CONFIGURATION|DOMAIN_ID|KMS_ARGON_WASM_URL|ENVIRONMENT|KEY_PASSCODE|USER_ID"
       }
     ]
   }

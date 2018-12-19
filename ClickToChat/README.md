@@ -1,12 +1,17 @@
 ![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
-# Click To Chat Sample for JavaScript
+# Click To Chat for JavaScript
 
-The Click to Chat sample app demonstrates how to integrate a chat experience
-into your website with the Spark Communications SDK. This app allows a user to
-click a button on a webpage to start a secure chat with a predefined user or
-agent. The bbmChat widget handles the rendering of messages within the chat,
-and allows the user to send text, picture, and file messages.
+The Click to Chat example application demonstrates how to integrate a chat
+experience into your website with BlackBerry Spark Communications Services.
+This example allows a user to click a button on a webpage to start a
+secure chat with a predefined user or agent. The `bbmChat` component handles
+the rendering of messages within the chat, and allows the user to send text,
+picture, and file messages.
+
+This example builds on the [Quick Start](../QuickStart/README.md) example that
+demonstrates setting up the SDK in a domain with user authentication disabled
+and the BlackBerry Key Management Service enabled.
 
 <p align="center">
 <br>
@@ -15,14 +20,15 @@ and allows the user to send text, picture, and file messages.
       alt=Integrate Chat Bots into your Apps" width="486" height="" border="364"/></a>
 </p>
 <p align="center">
- <b>Demo video: Integrate a secure chat widget into your web page</b>
+ <b>Demo video: Integrate a secure chat component into your web page</b>
 </p>
 
 ### Features
 
-This app demonstrates how easy it is to integrate the bbmChat widget into your
-webpage. It initializes the SDK, and starts a chat with a predefined user. The
-app then launches the bbmChat widget which allows the user to:
+This example demonstrates how easy it is to integrate the `bbmChat`
+component into your webpage. It initializes the SDK and starts a chat with a
+predefined user. The app then launches the `bbmChat` component which allows
+the user to:
 * View all sent and received messages in a chat
 * Send a text message, picture, or file attachment
 * Send high priority messages
@@ -32,21 +38,25 @@ app then launches the bbmChat widget which allows the user to:
 * Delete messages
 * Show delivered and read message status
 * Show the chat participant
+* End and leave the chat
 
-<br>
-
+<br/>
 <p align="center">
-<a href="screenShots/ClickToChat.png"><img src="screenShots/ClickToChat.png" width="50%" height="50%"></a>
+  <a href="screenShots/ClickToChat.png"><img src="screenShots/ClickToChat.png" width="50%" height="50%"></a>
 </p>
-
 
 ## Getting Started
 
-This sample requires the Spark Communications SDK for JavaScript, which you can find along with related resources at the location below.
+This example requires the Spark Communications SDK, which you can find along
+with related resources at the locations below.
 
-* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
+This sample requires the Spark Communications SDK for JavaScript, which you can find along with related resources at the location below.
 
 <p align="center">
     <a href="https://www.youtube.com/watch?v=LAbxok2EQtI"
@@ -57,119 +67,163 @@ This sample requires the Spark Communications SDK for JavaScript, which you can 
  <b>Getting started video</b>
 </p>
 
-### Prerequisites
+By default, this example application is configured to work in a domain with
+user authentication disabled and the BlackBerry Key Management Service
+enabled.  See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-Run "yarn install" in the ClickToChat application directory to install the required packages.
+When you have a domain in the sandbox, edit Click to Chat's `config_mock.js`
+file to configure the example with your domain ID, your agent's user ID, and a
+key passcode.
 
-Visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section to see the minimum requirements.
+Set the `DOMAIN_ID` parameter to your sandbox domain ID.
 
-To use the ClickToChat example, you must set up the following elements in js/config.js:
+```javascript
+const DOMAIN_ID = 'your_domain_id';
+```
 
-- Oauth2 configuration (AUTH_CONFIGURATION)
-- A hardcoded contact registration ID with whom anyone who views the page will chat (CONTACT_REG_ID)
-- Your sandbox domain (ID_PROVIDER_DOMAIN)
-- Firebase configuration (FIREBASE_CONFIG)
-- User passcode (USER_SECRET)
+Set the `AGENT_USER_ID` parameter to the user ID of the agent that will be
+handling the chat.  This example cannot interact with chats it did not
+initiate, but the [Rich Chat example
+application](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/RichChat/README.html)
+can.  You can configure the Rich Chat example application to use your domain.
+The user ID of the user logged into the Rich Chat application may be used as
+the `AGENT_USER_ID` for this example as long as the Rich Chat user remains
+logged in.
+
+```javascript
+const AGENT_USER_ID = 'agent_user_id';
+```
+
+Set the `KEY_PASSCODE` parameter to the string used to protect the logged in
+user's keys stored in the [BlackBerry Key Management Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
+Real applications should not use the same passcode for all users.   However,
+it allows this example application to be smaller and focus on demonstrating
+its call functionality instead of passcode management.
+```javascript
+const KEY_PASSCODE = 'passcode';
+```
+
+Run `yarn install` in the Click to Chat application directory to install the
+required packages.
+
+When you run the Click to Chat application, it will prompt you for a user ID.
+Because you've configured your domain to have user authentication disabled, you
+can enter any string you like for the user ID and an SDK identity will be
+created for it.  Other applications that you run in the same domain will be
+able to find this identity by this user ID.
 
 ## Walkthrough
 
-Follow this guide for a walkthrough of how to integrate a rich chat experience into your webpage.
+Before a chat with a configured user can be initiated, the user must be
+[authenticated](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html#authentication)
+and the [SDK
+started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html#start-sdk).
 
-- [Import the bbmChat UI widget into your web application](#importChat)
-- [Initialize the SDK](#init)
-- [Perform setup](#setup)
-- [Start a chat with a predefined user](#startChat)
+Follow this guide for a walkthrough of how to integrate a rich chat experience
+into your webpage.
 
-### <a name="importChat"></a>Import the bbmChat UI widget into your web application
+- [Import the bbmChat component into your web application](#importChat)
+- [Create the user manager](#createUserManager)
+- [Configure the bbmChat component](#configureComponent)
+- [Lookup the identity of the configured user](#identityLookup)
+- [Start a chat with the configured user](#startChat)
 
-Your web application simply needs to import the bbmChat widget in order to bring a rich chat experience into your webpages.
+### <a name="importChat"></a>Import the bbmChat component into your web application
+
+The `bbmChat` component will manage all aspects of chat interaction for your
+application, except chat creation.
 
 ```html
   <link rel="import" href="node_modules/bbmChat/bbmChat.html">
 ```
 
-The bbmChat widget needs only the ID of the chat you've created and it will handle the rest.
+### <a name="createUserManager"></a>Create the user manager
 
-
-### <a name="init"></a>Initialize the Spark SDK for JavaScript
-
-Create new instance of BBMEnterprise.
+The `bbmChat` component requires a user manager to supply information
+about the user for display purposes.  The `createUserManager` function is
+defined in `config_mock.js` to create a `MockUserManager` instance from
+the support library.
 
 ```javascript
-  bbmeSdk = new BBMEnterprise({
-    domain: ID_PROVIDER_DOMAIN,
-    environment: ID_PROVIDER_ENVIRONMENT,
-    userId: authUserInfo.userId,
-    getToken: authManager.getBbmSdkToken,
-    description: navigator.userAgent,
-    messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher,
-    kmsArgonWasmUrl: KMS_ARGON_WASM_URL
-  });
+  // Create and initialize the user manager.
+  const contactsManager = await createUserManager(
+    sdk.getRegistrationInfo().regId,
+    authManager,
+    (...args) => sdk.getIdentitiesFromAppUserIds(...args)
+  );
+  await contactsManager.initialize();
 ```
 
-For more information about setting up the SDK, visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section of the guide.
+### <a name="configureComponent"></a>Configure the bbmChat component
 
-### <a name="setup"></a>Perform setup
-
-When the setup state changes, a 'setupState' event will be emitted. Listen for this to determine when the setup state changes.
+The `bbmChat` component must be associated with the SDK and user manager so
+that it can manage the chat your application will create.
 
 ```javascript
-  // Handle changes of BBM Enterprise setup state.
-  bbmeSdk.on('setupState', state => {
-    console.log(`BBMEnterprise setup state: ${state.value}`);
-    switch (state.value) {
-      case BBMEnterprise.SetupState.Success: {
-        const userRegId = bbmeSdk.getRegistrationInfo().regId;
-        createUserManager(userRegId, authManager,
-          bbmeSdk.getIdentitiesFromAppUserId,
-            bbmeSdk.getIdentitiesFromAppUserIds)
-        .then(userManager => {
-          // User manager is created.
-          // Application is able ot start chat now.
-          // ... Start chat here.
-        });
-        break;
-      }
-      case BBMEnterprise.SetupState.SyncRequired: {
-        if (isSyncStarted) {
-          reject(new Error('Failed to get user keys using provided USER_SECRET'));
-          return;
-        }
-        const isNew =  bbmeSdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New;
-        const syncAction = isNew ? BBMEnterprise.SyncStartAction.New : BBMEnterprise.SyncStartAction.Existing;
-        bbmeSdk.syncStart(USER_SECRET, syncAction);
-      }
-      break;
-      case BBMEnterprise.SetupState.SyncStarted:
-        isSyncStarted = true;
-      break;
-    }
-  });
-
-  // Handle setup error.
-  bbmeSdk.on('setupError', error => {
-    // Notify user about failure.
-    alert(`BBM Enterprise setup failed: ${error.value}`);
-    reject(error.value);
-  });
-
-  // Start BBM Enterprise setup.
-  bbmeSdk.setupStart();
+  // Setup the bbmChat component to use the SDK and contact manager that
+  // we've created for it to use.  We also disable the media
+  // capabilities of the component.
+  const bbmChat = Polymer.dom(document.body).querySelector('#bbm-chat');
+  bbmChat.setBbmSdk(sdk);
+  bbmChat.setContactManager(userManager);
+  bbmChat.getChatHeader().set('isMediaEnabled', false);
 ```
 
-### <a name="startChat"></a>Start a chat with a predefined user
-To start a chat with a predefined user and show the bbmChat widget, you need to invoke the [bbmMessenger.chatStart](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.html#chatStart) API and pass in the user's regId. Upon successfully creating the chat, launch the bbmChat widget to allow the user to view and send messages in the chat.
+### <a name="identityLookup"></a>Lookup the identity of the configured user
+
+The SDK can only start a chat with an identity if they have a `regId`.  You
+can use
+[`BBMEnterprise.getIdentitiesFromAppUserId()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.html#getIdentitiesFromAppUserId)
+to lookup the identity details for the configured user.
 
 ```javascript
-  const bbmChat = document.querySelector('#bbm-chat');
-  bbmMessenger.chatStart(CHAT_DETAILS).then(pendingChat => {
-    bbmChat.setChatId(pendingChat.chat.chatId);
+  const identity = await sdk.getIdentitiesFromAppUserId(AGENT_USER_ID);
+```
+
+### <a name="startChat"></a>Start a chat with the configured user
+To start a chat, you must call
+[`BBMEnterprise.Messenger.chatStart()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.html#chatStart).
+When the chat with the configured user identity has been started, control over
+the chat interaction can be handed over to the `bbmChat` component.  Listening
+for the `chatDefunct` event will allow you to handle any necessary cleanup
+when the chat is no longer active.
+
+```javascript
+  // Before we can start a chat, we must wait for all of the chat
+  // creation dependencies to have completed.  This includes the SDK
+  // setup and the identity lookup for the user that we will be starting
+  // a chat with.
+  const { sdk, identity } = await bbmChatIsReady.promise;
+
+  // Begin a 1:1 chat with the configured user.
+  const newChat = await sdk.messenger.chatStart({
+    // This is a one-to-one chat with the configured user.
+    isOneToOne: true,
+    invitees: identity.regId
+  });
+
+  // Let the bbmChat component handle the chat interactions.
+  const bbmChat = Polymer.dom(document.body).querySelector('#bbm-chat');
+  bbmChat.setChatId(newChat.chat.chatId);
+
+  // Show the chat window.
+  document.querySelector('#chat-pane').style.display = 'block';
+
+  // Listen for the chatDefunct event which indicates that the chat is
+  // no longer active.  We use this event hide the bbmChat component
+  // and indicate that the user is no longer chatting.
+  bbmChat.addEventListener('chatDefunct', () => {
+    document.querySelector('#chat-pane').style.display = 'none';
+    isChatting = false;
   });
 ```
 
 ## License
 
-These samples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
+These examples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 This page includes icons from: https://material.io/icons/ used under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 

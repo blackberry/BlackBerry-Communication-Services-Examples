@@ -77,10 +77,10 @@
   dependencies:
     "@npm-polymer" "https://github.com/Polymer/polymer.git#2.2.0"
     "@webcomponents/webcomponentsjs" "^1.0.20"
-    bbmChatHeader "file:../../../../.cache/yarn/v1/bbmChatHeader"
-    bbmChatInput "file:../../../../.cache/yarn/v1/bbmChatInput"
-    bbmChatTypingNotification "file:../../../../.cache/yarn/v1/bbmChatTypingNotification"
-    bbmRichChatMessageList "file:../../../../.cache/yarn/v1/bbmRichChatMessageList"
+    bbmChatHeader "file:../../../../../../Library/Caches/Yarn/v1/bbmChatHeader"
+    bbmChatInput "file:../../../../../../Library/Caches/Yarn/v1/bbmChatInput"
+    bbmChatTypingNotification "file:../../../../../../Library/Caches/Yarn/v1/bbmChatTypingNotification"
+    bbmRichChatMessageList "file:../../../../../../Library/Caches/Yarn/v1/bbmRichChatMessageList"
 
 "bbmChatHeader@file:../support/ui/widgets/bbmChatHeader":
   version "1.0.0"
@@ -95,6 +95,7 @@
     "@npm-polymer" "https://github.com/Polymer/polymer.git#2.2.0"
     "@npm-polymer/shadycss" "https://github.com/webcomponents/shadycss.git#1.1.0"
     "@webcomponents/webcomponentsjs" "^1.0.20"
+    util "file:../../../../../../Library/Caches/util"
 
 "bbmChatMessageList@file:../support/ui/widgets/bbmChatMessageList":
   version "1.0.0"
@@ -128,9 +129,16 @@
   dependencies:
     "@npm-polymer" "https://github.com/Polymer/polymer.git#2.2.0"
     "@webcomponents/webcomponentsjs" "^1.0.20"
-    bbmChatMessageList "file:../../../../.cache/yarn/v1/bbmChatMessageList"
-    bbmChatMessageStateList "file:../../../../.cache/yarn/v1/bbmChatMessageStateList"
-    util "file:../../../../.cache/util"
+    bbmChatMessageList "file:../../../../../../Library/Caches/Yarn/v1/bbmChatMessageList"
+    bbmChatMessageStateList "file:../../../../../../Library/Caches/Yarn/v1/bbmChatMessageStateList"
+    util "file:../../../../../../Library/Caches/util"
+
+"bbmUserEmailDialog@file:../support/ui/widgets/bbmUserEmailDialog":
+  version "1.0.0"
+  dependencies:
+    "@npm-polymer" "https://github.com/Polymer/polymer.git#2.2.0"
+    "@npm-polymer/shadycss" "https://github.com/webcomponents/shadycss.git#1.1.0"
+    "@webcomponents/webcomponentsjs" "^1.0.20"
 
 "util@file:../support/util":
-  version "1.0.0"
+  version "0.0.0"

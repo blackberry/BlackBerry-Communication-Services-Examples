@@ -28,7 +28,7 @@ module.exports = {
   //   * regex
   //   * array of strings
   //   * array of regexes
-  applicationIds: 'YOUR APPLICATION ID',
+  applicationIds: 'your_applicaiton_id',
 
   // The tenant GUID(s) whose users are allowed to interact with the
   // KeyProviderServer.
@@ -40,28 +40,32 @@ module.exports = {
   // This configuration value will accept the following types:
   //   * string
   //   * array of strings
-  tenantIds: 'YOUR TENANT ID',
+  tenantIds: 'your_tenant_id',
 
-  // The connection string to connect to CosmosDB database. Obtain this
-  // string from Azure Portal, in CosmosDB database settings.
-  connectionString: 'YOUR DB CONNECTION STRING',
+  // The primary connection string to connect to CosmosDB database. Obtain
+  // this string from Azure Portal, in CosmosDB database settings.
+  connectionString: 'your_cosmos_db_primary_connection_string',
 
-  // Name of the collection (table) where keys are stored. For example type
-  // 'KeyStore' if your table name is 'KeyStore'.
-  collectionName: 'YOUR TABLE NAME IN DATABASE',
+  // The name of the partition that contains your collection (table).  For
+  // example: 'KeysPartition'.
+  collectionPartition: 'your_cosmos_db_partition_name',
 
-  // Entities partition in the collection. All entities reside in the same
-  // partition. For example: 'KeysPartition'.
-  collectionPartition: 'YOUR PARTITION NAME',
-
-  // Regular expression that defines the format of user ID, issued by your
-  // identity provider.
-  userIdRegex: /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/,
+  // Name of the collection (table) where keys are stored. For example:
+  // 'KeyStore'.
+  collectionName: 'your_cosmos_db_table_name',
 
   // CORS settings
   accessControlAllowOrigin: '*',
   accessControlAllowHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
   accessControlAllowedMethods: 'GET, PUT',
+
+  // Server port.
+  serverPort: 3000,
+
+  // Indicate if the server should be HTTP or HTTPS.  Using HTTP is NOT
+  // recommended outside of a test environment because bearer access tokens
+  // will be transmitted in plain text.
+  useSsl: true,
 
   // Server private key location (full path).
   keyPath: __dirname + '/cert/privateKey.pem',
@@ -70,13 +74,9 @@ module.exports = {
   certPath: __dirname + '/cert/publicCert.pem',
 
   // Server key passphrase
-  keyPassphrase: 'PASSPHRASE FOR PRIVATE KEY',
+  keyPassphrase: 'your_private_key_passphrase',
 
-  // Indicate if the server should be HTTP or HTTPS.  Using HTTP is NOT
-  // recommended outside of a test environment because bearer access tokens
-  // will be transmitted in plain text.
-  useSsl: true,
-
-  // Server port.
-  serverPort: 3000
+  // Regular expression that defines the format of user ID, issued by your
+  // identity provider.
+  userIdRegex: /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
 };

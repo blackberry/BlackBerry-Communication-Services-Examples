@@ -10,20 +10,13 @@
   // Ignore unknown variables that will be available at runtime.
   "globals":
   {
-    "CONTACT_REG_ID": false,
-    "createAuthManager": false,
+    "AGENT_USER_ID": false,
     "BBMEnterprise": false,
-    "ID_PROVIDER_DOMAIN": false,
-    "ID_PROVIDER_ENVIRONMENT": false,
+    "DOMAIN_ID": false,
+    "ENVIRONMENT": false,
     "createUserManager": false,
-    "createKeyProtect": false,
-    "createKeyProvider": false,
-    "GoogleAuthManager": false,
-    "FirebaseUserManager": false,
     "GenericUserInfo": false,
-    "FirebaseKeyProvider": false,
-    "KeyProtect": false,
-    "USER_SECRET": false,
+    "KEY_PASSCODE": false,
     "KMS_ARGON_WASM_URL": false,
     "GooglePeopleUserManager": false,
     "AUTH_CONFIGURATION": false,
@@ -39,7 +32,7 @@
     [
       "error",
       {
-        "varsIgnorePattern": "AUTH_CONFIGURATION|makeCall|KMS_ARGON_WASM_URL|CONTACT_REG_ID|ID_PROVIDER_DOMAIN|USER_SECRET|ID_PROVIDER_ENVIRONMENT|createAuthManager|createUserManager"
+        "varsIgnorePattern": "AUTH_CONFIGURATION|makeCall|KMS_ARGON_WASM_URL|AGENT_USER_ID|DOMAIN_ID|KEY_PASSCODE|ENVIRONMENT|createUserManager"
       }
     ]
   }

@@ -1,30 +1,38 @@
 ![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 
-# Click To Call Sample for JavaScript
+# Click To Call for JavaScript
 
-The Click to Call sample app demonstrates how to integrate a video call
-experience into your website with the Spark Communications SDK. This app allows
-a user to click a button on a webpage to start a secure video call with a
-predefined user or agent. The bbmCall widget handles the rendering of the
-incoming and outgoing video streams.
+The Click to Call example application demonstrates how to integrate a video
+call experience into your website with BlackBerry Spark Communications
+Services.  This example allows a user to click a button on a webpage to
+start a secure video call with a predefined user or agent. The `bbmCall`
+component handles the rendering of the incoming and outgoing video streams.
+
+This example builds on the [Quick Start](../QuickStart/README.md) example that
+demonstrates setting up the SDK in a domain with user authentication disabled
+and the BlackBerry Key Management Service enabled.
 
 ### Features
 
-This app demonstrates how easy it is to integrate the bbmCall widget into your
-webpage. It initializes the SDK, and starts a video call with a predefined user.
+This example demonstrates how easy it is to integrate the `bbmCall`
+component into your webpage. It initializes the SDK and starts a video call
+with a predefined user.
 
-<br>
-
+<br/>
 <p align="center">
-<a href="screenShots/ClickToCall.png"><img src="screenShots/ClickToCall.png" width="50%" height="50%"></a>
+  <a href="screenShots/ClickToCall.png"><img src="screenShots/ClickToCall.png" width="50%" height="50%"></a>
 </p>
 
 ## Getting Started
 
-This sample requires the Spark Communications SDK for JavaScript, which you can find along with related resources at the location below.
-    
-* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+This example requires the Spark Communications SDK, which you can find along
+with related resources at the locations below.
+
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
 <p align="center">
@@ -33,123 +41,136 @@ This sample requires the Spark Communications SDK for JavaScript, which you can 
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>
 <p align="center">
- <b>Getting started video</b>
+  <b>Getting started video</b>
 </p>
 
-### Prerequisites
+By default, this example application is configured to work in a domain with
+user authentication disabled and the BlackBerry Key Management Service
+enabled.  See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-Run "yarn install" in the ClickToCall application directory to install the required packages.
+When you have a domain in the sandbox, edit Click to Call's `config_mock.js`
+file to configure the example with your domain ID, your agent's user ID, and a
+key passcode.
 
-Visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section to see the minimum requirements.
+Set the `DOMAIN_ID` parameter to your sandbox domain ID.
 
-To use the ClickToCall example, you must set up the following elements in js/config.js:
+```javascript
+const DOMAIN_ID = 'your_domain_id';
+```
 
-- Oauth2 configuration (AUTH_CONFIGURATION)
-- A hard coded contact registration ID with whom anyone who views the page will talk (CONTACT_REG_ID)
-- Your sandbox domain (ID_PROVIDER_DOMAIN)
-- Firebase configuration (FIREBASE_CONFIG)
-- User passcode (USER_SECRET)
+Set the `AGENT_USER_ID` parameter to the user ID of the agent that will
+receive the call.  This example cannot receive calls, but the [Rich Chat
+example application](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/RichChat/README.html)
+can.  You can configure the Rich Chat example application to use your domain.
+The user ID of the user logged into the Rich Chat application may be used as
+the `AGENT_USER_ID` for this example as long as the Rich Chat user remains
+logged in.
+
+```javascript
+const AGENT_USER_ID = 'agent_user_id';
+```
+
+Set the `KEY_PASSCODE` parameter to the string used to protect the logged in
+user's keys stored in the [BlackBerry Key Management
+Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
+Real applications should not use the same passcode for all users.   However,
+it allows this example application to be smaller and focus on demonstrating
+its call functionality instead of passcode management.
+
+```javascript
+const KEY_PASSCODE = 'passcode';
+```
+
+Run `yarn install` in the Click to Call application directory to install the
+required packages.
+
+When you run the Click to Call application, it will prompt you for a user ID.
+Because you've configured your domain to have user authentication disabled, you
+can enter any string you like for the user ID and an SDK identity will be
+created for it.  Other applications that you run in the same domain will be
+able to find this identity by this user ID.
 
 ## Walkthrough
 
-Follow this guide for a walkthrough of how to integrate a video call into your webpage.
+Before a video call with a configured user can be initiated, the user must be
+[authenticated](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html#authentication)
+and the [SDK
+started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html#start-sdk).
 
-- [Import the bbmCall UI widget into your web application](#importCall)
-- [Initialize the SDK](#init)
-- [Perform setup](#setup)
+Follow this guide for a walkthrough of how to integrate a video call into your
+webpage.
+
+- [Import the bbmCall component into your web application](#importCall)
+- [Create the user manager](#createUserManager)
 - [Start a video call with a predefined user](#startCall)
 
-### <a name="importCall"></a>Import the bbmCall UI widget into your web application
+### <a name="importCall"></a>Import the bbmCall component into your web application
 
-Your web application needs to import the bbmCall widget in order to bring a video call experience into your webpages.
+The `bbmCall` component will manage all aspects of the video call interaction
+for your application.
 
 ```html
   <link rel="import" href="node_modules/bbmCall/bbmCall.html">
 ```
 
-### <a name="init"></a>Initialize the SDK
+### <a name="createUserManager"></a>Create the user manager
+
+The `bbmCall` component requires a user manager to supply information
+about the user for display purposes.  The `createUserManager` function is
+defined in `config_mock.js` to create a `MockUserManager` instance from
+the support library.
 
 ```javascript
-  // Instantiate BBMEnterprise.
-  bbmeSdk = new BBMEnterprise({
-    domain: ID_PROVIDER_DOMAIN,
-    environment: ID_PROVIDER_ENVIRONMENT,
-    userId: authUserInfo.userId,
-    getToken: authManager.getBbmSdkToken,
-    description: navigator.userAgent,
-    messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher,
-    kmsArgonWasmUrl: KMS_ARGON_WASM_URL
-  });
-```
-
-For more information about setting up the SDK, visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section of the guide.
-
-### <a name="setup"></a>Perform setup
-```javascript
-  // Handle changes of BBM Enterprise setup state.
-  bbmeSdk.on('setupState', state => {
-    console.log(`ClickToCall: BBMEnterprise setup state: ${state.value}`);
-    switch (state.value) {
-      case BBMEnterprise.SetupState.Success: {
-        // Setup was successful. Create user manager and initiate call.
-        const userRegId = bbmeSdk.getRegistrationInfo().regId;
-        createUserManager(userRegId, authManager, bbmeSdk.getIdentitiesFromAppUserId, bbmeSdk.getIdentitiesFromAppUserIds)
-        .then(userManager => {
-            contactsManager = userManager;
-            contactsManager.initialize()
-            .then(() => {
-              // User manage was created and initialized. Make a call to CONTACT_REG_ID.
-              makeCall(CONTACT_REG_ID, true);
-            });
-          });
-      }
-      break;
-      case BBMEnterprise.SetupState.SyncRequired: {
-        if (isSyncStarted) {
-          alert('Failed to get user keys using provided USER_SECRET.');
-          window.close();
-          return;
-        }
-        const isNew = bbmeSdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New;
-        const syncAction = isNew ? BBMEnterprise.SyncStartAction.New : BBMEnterprise.SyncStartAction.Existing;
-        bbmeSdk.syncStart(USER_SECRET, syncAction);
-      }
-      break;
-      case BBMEnterprise.SetupState.SyncStarted:
-        isSyncStarted = true;
-      break;
-    }
-  });
-  
-  // Handle setup error.
-  bbmeSdk.on('setupError', error => {
-    // Notify user about the setup error.
-    alert(`BBM Enterprise registration failed: ${error.value}`);
-  });
-
-  // Start BBM Enterprise setup.
-  bbmeSdk.setupStart();
+  // Create and initialize the user manager.
+  const userManager = await createUserManager(
+    sdk.getRegistrationInfo().regId,
+    authManager,
+    (...args) => sdk.getIdentitiesFromAppUserIds(...args)
+  );
+  await userManager.initialize();
 ```
 
 ### <a name="startCall"></a>Start a video call with a predefined user
-To start a video call with a predefined user and show the bbmCall widget, you must invoke the public method makeCall() of the bbmCall widget and pass in the user's registration ID. After the call is finished, the bbmCall widget will fire the 'CallEnded' event.
+
+For every call you place, you must create a new `bbmCall` component and use
+`makeCall()`.  When the call finishes, the `bbmCall` component will send your
+application the `CallEnded` event, and you should discard the component.
 
 ```javascript
-  // Create bbm-call widget.
-  const bbmCallWidget = document.createElement('bbm-call');
-  // Initiate video call.
-  bbmCallWidget.makeCall(regId, isVideo);
-  // Handle 'CallEnded' event.
-  bbmCallWidget.addEventListener('CallEnded', () => {
-    document.body.removeChild(bbmCallWidget);
-    bbmCallWidget = null;
+  // bbmCall is a single-use component.  Create an instance and add
+  // it to the application.
+  let bbmCall = document.createElement('bbm-call');
+  await window.customElements.whenDefined('bbm-call');
+
+  // Associate the bbmCall component with the SDK and user manager we
+  // created.
+  bbmCall.setBbmSdk(sdk);
+  bbmCall.setContactManager(userManager);
+
+  // When the call is finished, the CallEnded event is fired.
+  bbmCall.addEventListener('CallEnded', () => {
+    // The call has ended.  We can now clean up the dynamically added
+    // component and close the popup window.
+    document.body.removeChild(bbmCall);
+    bbmCall= null;
     window.close();
   });
+
+  // Add the component to the application.
+  document.body.appendChild(bbmCall);
+
+  // Place the call to the configured user ID once we have looked up their
+  // regId.
+  const identity = await sdk.getIdentitiesFromAppUserId(AGENT_USER_ID);
+  bbmCall.makeCall(identity.regId, true);
 ```
 
 ## License
 
-These samples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
+These examples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 This page includes icons from: https://material.io/icons/ used under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 

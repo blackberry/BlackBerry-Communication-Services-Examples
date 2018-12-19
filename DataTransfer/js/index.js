@@ -24,24 +24,18 @@
 
 window.onload = async () => {
   try {
-    const dataTransferElement = document.querySelector('data-transfer-element');
-    await window.customElements.whenDefined(dataTransferElement.localName);
-    await BBMEnterprise.validateBrowser();
-    const bbmeSdk = await initBbme();
-    dataTransferElement.setBbmSdk(bbmeSdk);
-  }
-  catch(error) {
-    alert(`Failed to start application. Error: ${error}`);
-  }
-};
+    // Make sure that the browser supports all of the necessary functionality,
+    // including support for interacting with the BlackBerry Key Management
+    // Service (KMS).
+    await BBMEnterprise.validateBrowser({
+      kms: { argonWasmUrl: KMS_ARGON_WASM_URL }
+    });
 
-// Function initializes BBM Enterprise SDK for JavaScript.
-function initBbme() {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let isSyncStarted = false;
-      const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
-      // Override getUserId() used by the MockAuthManager.
+    // Setup the authentication manager for the application.
+    const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
+    if (AuthenticationManager.name === 'MockAuthManager') {
+      // We are using the MockAuthmanager, so we need to override how it
+      // acquires the local user's user ID.
       authManager.getUserId = () => new Promise((resolve, reject) => {
         const userEmailDialog = document.createElement('bbm-user-email-dialog');
         document.body.appendChild(userEmailDialog);
@@ -54,59 +48,104 @@ function initBbme() {
           reject('Failed to get user email.');
         });
       });
+    }
 
-      const authUserInfo = await authManager.authenticate();
-      if (!authUserInfo) {
-        console.warn('Application will be redirected to the '
-          + 'authentication page');
-        return;
-      }
+    // Authenticate the user.  Configurations that use a real identity
+    // provider (IDP) will redirect the browser to the IDP's authentication
+    // page.
+    const authUserInfo = await authManager.authenticate();
+    if (!authUserInfo) {
+      console.warn('Redirecting for authentication.');
+      return;
+    }
 
-      const bbmeSdk = new BBMEnterprise({
-        domain: ID_PROVIDER_DOMAIN,
-        environment: ID_PROVIDER_ENVIRONMENT,
-        userId: authUserInfo.userId,
-        getToken: authManager.getBbmSdkToken,
-        description: navigator.userAgent,
-        kmsArgonWasmUrl: KMS_ARGON_WASM_URL
-      });
+    // Instantiate the SDK.
+    const sdk = new BBMEnterprise({
+      domain: DOMAIN_ID,
+      environment: ENVIRONMENT,
+      userId: authUserInfo.userId,
+      getToken: () => authManager.getBbmSdkToken(),
+      description: navigator.userAgent,
+      kmsArgonWasmUrl: KMS_ARGON_WASM_URL
+    });
 
-      // Handle changes of BBM Enterprise setup state.
-      bbmeSdk.on('setupState', state => {
-        console.log(`BBMEnterprise setup state: ${state.value}`);
+    // Setup is asynchronous.  Create a promise we can use to wait on
+    // until the SDK setup has completed.
+    const sdkSetup = new Promise((resolve, reject) => {
+      // Handle changes to the SDK's setup state.
+      let isSyncStarted = false;
+      sdk.on('setupState', (state) => {
+        console.log(
+          `DataTransfer: BBMEnterprise setup state: ${state.value}`);
         switch (state.value) {
-          case BBMEnterprise.SetupState.Success:
-            resolve(bbmeSdk);
-          return;
+          case BBMEnterprise.SetupState.Success: {
+            // Setup was successful.
+            resolve();
+            break;
+          }
           case BBMEnterprise.SetupState.SyncRequired: {
             if (isSyncStarted) {
-              reject(new Error('Failed to get user keys using provided '
-                + 'USER_SECRET'));
+              // We have already tried to sync the user's keys using the
+              // given passcode.  For simplicity in this example, we don't
+              // try to recover when the configured passcode cannot be
+              // used.
+              reject(new Error(
+                'Failed to get user keys using provided KEY_PASSCODE.'));
               return;
             }
-            const isNew =
-              bbmeSdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New;
-            const syncAction = isNew
+
+            // We need to provide the SDK with the user's key passcode.
+            sdk.syncStart(
+              // For simplicity in this example, we always use the
+              // configured passcode.
+              KEY_PASSCODE,
+
+              // Does the user have existing keys?
+              sdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New
+              // No, we must create new keys.  The key passcode will be
+              // used to protect the new keys.
               ? BBMEnterprise.SyncStartAction.New
-              : BBMEnterprise.SyncStartAction.Existing;
-            bbmeSdk.syncStart(USER_SECRET, syncAction);
+              // Yes, we have existing keys.  The key passcode will be
+              // used to unprotect the keys.
+              : BBMEnterprise.SyncStartAction.Existing
+            );
+            break;
           }
-          break;
-          case BBMEnterprise.SetupState.SyncStarted:
+          case BBMEnterprise.SetupState.SyncStarted: {
+            // Syncing of the user's keys has started.  Remember this so
+            // that we can tell if the setup state regresses.
             isSyncStarted = true;
-          break;
+            break;
+          }
         }
       });
 
-      // Handle setup error.
-      bbmeSdk.on('setupError', error => {
-        reject(error.value);
+      // Any setup error received will fail the SDK setup promise.
+      sdk.on('setupError', error => {
+       reject(new Error(
+         `Endpoint setup failed: ${error.value}`));
       });
 
-      bbmeSdk.setupStart();
-    }
-    catch(error) {
-      alert(`Failed to start application. Error: ${error}`);
-    }
-  });
-}
+      // Start the SDK setup.
+      sdk.setupStart();
+    });
+
+    // Wait for the SDK setup to complete.
+    await sdkSetup;
+
+    // This example doesn't remove the event listeners on the setupState
+    // or setupErrors events that were used to monitor the setup progress.
+    // It also doesn't setup new listeners to monitor these events going
+    // forward to act on any issue that causes the SDK's state to regress.
+
+    // Allow the dataTransferElement to interact with the SDK to perform
+    // peer-to-peer data transfers.
+    const dataTransferElement =
+      Polymer.dom(document.body).querySelector('#data-transfer');
+    dataTransferElement.setBbmSdk(sdk);
+  }
+  catch(error) {
+    alert(`DataTransfer encountered an error; error=${error}`);
+  }
+};
+

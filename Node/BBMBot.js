@@ -20,17 +20,54 @@
 // message which starts with '@bbmbot'.
 //
 
-const login = require('./GoogleLogin');
-const config = require('./config');
+// Usage: node ./BBMBot.js [idp]
+//   Where idp is the identity provider of choice.   Valid values are:
+//
+//     * google:  Google will be used as the identity provide.  Only valid
+//                Google identities can be used.
+//
+//     * mock:    No identity provider is to be used.  Only stubbed tokens and
+//                identity will be provided.
+//
+//   If no idp value is supplied, the default idp is 'mock'.
+//
+const idp = process.argv.length === 3 ? process.argv[2] : 'mock';
+
+// Try to load the configuration for the IDP.
+let config;
+let login;
+switch(idp) {
+case 'google':
+  console.log('Loading configuration from: ./config_google.js');
+  config = require('./config_google');
+  login = require('./GoogleLogin');
+  break;
+
+case 'mock':
+  console.log('Loading configuration from: ./config_mock.js');
+  config = require('./config_mock');
+  login = require('./MockLogin');
+  break;
+
+default:
+  throw new Error(
+    `Invalid idp argument: ${idp}; supported IDP: google, mock`);
+}
+
 const bot = require('./botlibre')(config.botLibre.application,
                                   config.botLibre.instance);
-require('firebase');
+
+// Load the module we use to setup the SDK.
+const sdkSetup = require('./SdkSetup');
+
+const BBMEnterprise = require('bbm-enterprise');
 
 // Create an SDK instance.
 login.login(config)
-.then(bbmsdk => {
+.then((authManager) => sdkSetup.sdkSetup(config, authManager))
+.then(sdk => {
   // Cache the messenger for simplicity.
-  const messenger = bbmsdk.messenger;
+  const messenger = sdk.messenger;
 
   // A helper function to say what to do with a message. We will send it off
   // to the bot web service, and then post a message in reply with either the
@@ -61,7 +98,7 @@ login.login(config)
   };
 
   // Look at messages.
-  bbmsdk.messenger.on('chatMessageAdded', addedEvent => {
+  sdk.messenger.on('chatMessageAdded', addedEvent => {
     const message = addedEvent.message;
 
     // Only respond if the message is incoming.
@@ -71,7 +108,12 @@ login.login(config)
       // chat, and to those prefixed with @bbmbot in a multiparty chat.
       const sendResponse = () => {
         // Mark the message as read.
-        messenger.chatMessageRead(message.chatId, message.messageId);
+        messenger.chatMessageRead(message.chatId, message.messageId)
+        .catch(error => console.error(
+          'bbm-chat-message-list: Cannot send message read notification for '
+          + 'messageId=' + message.messageId + ' in chat=' + message.chatId
+          + ': ' + error
+        ));
 
         // If the conversation is 1:1, always reply.
         if(messenger.getChat(message.chatId).isOneToOne) {
