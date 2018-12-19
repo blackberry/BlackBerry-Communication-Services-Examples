@@ -2,27 +2,31 @@
 
 # IDP for Linux
 
-This sample requires the SDK, which you can find along with related resources
-at the location below.
-    
-* Getting started with [BlackBerry Spark Communications Services](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
-* [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+This example requires the Spark Communications Services SDK, which you can find
+along with related resources at the locations below.
+
+* Instructions to [Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html) the SDK.
+* [Linux Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-linux.html) instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/bbmds.html)
+
+Visit the
+[Getting Started with Linux](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-linux.html)
+section to see the minimum requirements.
 
 # Authentication
 
-These SDK sample applications use [JWT tokens](https://jwt.io/) to
+These SDK example applications use [JWT tokens](https://jwt.io/) to
 authenticate with the BlackBerry Infrastructure.
 
-For simplicity, these sample applications do not support connecting to a real
+For simplicity, these example applications do not support connecting to a real
 Identity Provider (IDP).  Instead, they support two different ways of
 authenticating:
 
 ## Option 1: No Authentication
 
-If you run these samples in a Spark Communications sandbox domain, you can
+If you run these examples in a Spark Communications sandbox domain, you can
 configure that domain to not require authentication.  In this configuration,
-you need to configure each sample with an _identity_ identifier only, and the
+you need to configure each example with an _identity_ identifier only, and the
 applications will use self-generated, unsigned tokens when connecting to the
 BlackBerry Infrastructure.
 
@@ -61,10 +65,10 @@ You will learn how to do the following things:
  - Configure your domain to trust that public key.
    
  - Issue JWT "auth token" values from the command-line for use with these
-   sample applications.
+   example applications.
    
 This is not how you would set up a production authentication system, but it is
-enough to get started with these sample applications.
+enough to get started with these example applications.
 
 
 # Roles and Responsibilities
@@ -82,10 +86,10 @@ SDK, and the SDK uses that to prove to the BlackBerry Infrastructure that it
 is allowed to act on behalf of the endpoint's identity within your
 application's SDK domain.
 
-These sample applications do not have their own personal copy of credentials
-and they do not reach out to an IDP service.  Instead, each sample application
+These example applications do not have their own personal copy of credentials
+and they do not reach out to an IDP service.  Instead, each example application
 simply gets a pre-configured, long-lived auth token value that is granted by
-the simulated IDP.  This keeps the sample applications simple and focused, but
+the simulated IDP.  This keeps the example applications simple and focused, but
 allows them to work within the sandbox domain you configure.
 
 **Production applications should not follow the simulated IDP model described
@@ -118,7 +122,7 @@ available by running the following command as root:
 # Setup
 
 The `idp` tool found in this directory will let you create your own
-command-line simulated identity provider for use with these sample
+command-line simulated identity provider for use with these example
 applications.
 
 The identity provider must remember a few things between invocations, so it
@@ -147,7 +151,7 @@ The first three `[generate]` lines show the tool generating a new key pair and
 the JWK form of the public key.
 
 The last `[generate]` line shows the tool generating a new auth token that can
-be used by one of the sample applications.
+be used by one of the example applications.
 
 The remaining lines show the newly generated auth token for a randomly
 generated identity's user ID.  Every time you run the tool, it tries to
@@ -196,7 +200,7 @@ Your application's domain is now configured to trust the tokens issued by
 the simulated identity provider.
 
 
-# Generating and using auth tokens with the sample applications
+# Generating and using auth tokens with the example applications
 
 After successfully completing the above steps, simply run the `idp` tool and
 it will generate a new random user ID (known as `sub` in JWT) and a new token
@@ -215,7 +219,7 @@ to go with it.  For example:
 The auth token is stored in a file named `token` and also printed to the screen for
 convenience.  The auth token is represented as a
 [BBMDS `authToken` message](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/bbmds/bbmcore_to_ui.html#authToken)
-that can be immediately used inside one of the sample applications.
+that can be immediately used inside one of the example applications.
 
 To use a specific user ID instead of a randomly generated one, pass it as the
 `SUB` command-line argument:

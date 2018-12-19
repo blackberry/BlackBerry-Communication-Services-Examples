@@ -2,7 +2,7 @@
 
 # Endpoint Manager for Linux
 
-This sample application will demonstrate how to use the BlackBerry Spark
+This example application will demonstrate how to use the BlackBerry Spark
 Communications Services SDK to
 [manage an identity's registered endpoints](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/mpop.html).
 
@@ -13,23 +13,27 @@ BlackBerry Infrastructure as a representative of an _identity_.
 
 # Getting Started
 
-This sample requires the SDK, which you can find along with related
-resources at the location below.
-    
-* Getting started with [BlackBerry Spark Communications Services](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
-* [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+This example requires the Spark Communications Services SDK, which you can find
+along with related resources at the locations below.
+
+* Instructions to [Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html) the SDK.
+* [Linux Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-linux.html) instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/bbmds.html)
+
+Visit the
+[Getting Started with Linux](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-linux.html)
+section to see the minimum requirements.
 
 ## Compiling
 
-This sample application uses libjsoncpp to construct and parse JSON
+This example application uses libjsoncpp to construct and parse JSON
 messages. To install the jsoncpp development package:
 
     $ sudo apt-get install libjsoncpp-dev
 
 Compile the application using the included artefacts. See the `Makefile` for
 important variables such as `SPARK_SDK` and support for cross compiling.  To
-compile for the native architecture from the sample's default location in the
+compile for the native architecture from the example's default location in the
 SDK archive:
 
     $ make
@@ -62,14 +66,14 @@ identity: The presence of this file indicates that your domain is configured
           to use no authentication.  This file includes a single line
           containing a single string that will be used to specify the identity
           (i.e. the "account") that the application will use to connect to the
-          BlackBerry Infrastructure.  See the README for the `idp` sample
+          BlackBerry Infrastructure.  See the README for the `idp` example
           application for more information about configuring a Spark
           Communications sandbox domain for no authentication.
 
 token: The presence of this file indicates that your domain is configured to
        use a "micro IDP".  This file includes the identity to use when
        authenticating with the BlackBerry Infrastructure as well as the JWT
-       "auth token". See the README for the `idp` sample application for
+       "auth token". See the README for the `idp` example application for
        details on how to generate a token file.
 
 
@@ -104,7 +108,7 @@ not include the current endpoint:
        Nickname: Phone
        IsCurrent: false
     2) Id: XIOvRQMYGKehJQhW6W17AgW2YVGcATjvSqQZdobLRvPLku0FA7gYBmR2zPiLXRVf
-       Description: Sample application
+       Description: Example application
        Nickname:
        IsCurrent: true
     3) Id: xDgwV2EJgkAJ3KD10bdQzKvghqYsG5VTdwrPTm51UnMPpIPLhf90WkUxNnqe4Jkg
