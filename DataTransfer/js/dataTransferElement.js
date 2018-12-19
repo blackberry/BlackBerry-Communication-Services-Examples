@@ -259,9 +259,9 @@
         }
 
         this.set('connectionState', STATE_INITIATED);
-        // Make sure the other party Reg ID is specified.
+        // Make sure the other party regId is specified.
         if (!this.contactRegId) {
-          alert('Contact Reg ID is not specified.');
+          alert('Contact regId is not specified.');
           return;
         }
 
@@ -270,7 +270,7 @@
           return;
         }
 
-        // Create connection to the specified Reg ID.
+        // Create connection to the specified regId.
         this.bbmSdk.media.createDataConnection(
           new BBMEnterprise.Media.Callee(this.contactRegId), null)
         .then(connection => {

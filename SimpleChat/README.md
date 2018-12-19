@@ -3,38 +3,48 @@
 # Simple Chat for JavaScript
 
 The Simple Chat application demonstrates how you can build a simple chat
-application using the Spark Communications Services.  This application
-demonstrates how easily messaging can be integrated into your application.  For
-a more rich chat app experience please see the [Rich
+application using the BlackBerry Spark Communications Services.  This
+application demonstrates how easily messaging can be integrated into your
+application.
+
+This example utilizes the
+[Support](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/support/README.html)
+library to quickly create a basic chat application.  For a more rich chat
+application experience, please see the [Rich
 Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/RichChat/README.html)
-app provided with the SDK. This example builds on the [Quick
-Start](../QuickStart/README.md) example that demonstrates how you can
-authenticate with the SDK using the [Identity
-Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html)
-of your application.
+app provided with the SDK.
+
+This example builds on the [Quick Start](../QuickStart/README.md) example that
+demonstrates setting up the SDK in a domain with user authentication disabled
+and the BlackBerry Key Management Service enabled.
 
 ### Features
 
-It allows the user to do the following:
+This example demonstrates how easy it is to integrate the `bbmChatList`,
+`bbmChatMessageList`, and `bbmChatInput` components into your webpage so that
+you can:
 
-- Create a chat
-- View the chat list
-- View all sent and received messages in a chat
-- Send text-based messages
-- Mark incoming messages as Read
+* Create a chat
+* View the chat list
+* View all sent and received messages in a chat
+* Mark incoming messages as `Read`
+* Send text-based messages
 
-<br>
-
+<br/>
 <p align="center">
-<a href="screenShots/SimpleChat.png"><img src="screenShots/SimpleChat.png" width="50%" height="50%"></a>
+  <a href="screenShots/SimpleChat.png"><img src="screenShots/SimpleChat.png" width="50%" height="50%"></a>
 </p>
 
 ## Getting Started
 
-This sample requires the Spark Communications SDK for JavaScript, which you can find along with related resources at the location below.
-    
-* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-spark-communications-platform.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+This example requires the Spark Communications SDK, which you can find along
+with related resources at the locations below.
+
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
 <p align="center">
@@ -43,40 +53,78 @@ This sample requires the Spark Communications SDK for JavaScript, which you can 
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>
 <p align="center">
- <b>Getting started video</b>
+  <b>Getting started video</b>
 </p>
 
-### Prerequisites
+By default, this example application is configured to work in a domain with
+user authentication disabled and the BlackBerry Key Management Service
+enabled.  See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-Run "yarn install" in the SimpleChat application directory to install the required packages.
+When you have a domain in the sandbox, edit Simple Chat's `config_mock.js`
+file to configure the example with your domain ID and a key passcode.
 
-Visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section to see the minimum requirements.
+Set the `DOMAIN_ID` parameter to your sandbox domain ID.
 
-To use the SimpleChat example, you must set up the following elements in js/config.js:
+```javascript
+const DOMAIN_ID = 'your_domain_id';
+```
 
-- Oauth2 configuration (AUTH_CONFIGURATION)
-- Your sandbox domain (ID_PROVIDER_DOMAIN)
-- Firebase configuration (FIREBASE_CONFIG)
-- User passcode (USER_SECRET)
+Set the `KEY_PASSCODE` parameter to the string used to protect the logged-in
+user's keys stored in the [BlackBerry Key Management Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
+Real applications should not use the same passcode for all users.   However,
+it allows this example application to be smaller and focus on demonstrating
+its call functionality instead of passcode management.
 
+```javascript
+const KEY_PASSCODE = 'passcode';
+```
+
+Run `yarn install` in the Simple Chat application directory to install the
+required packages.
+
+When you run the Simple Chat application, it will prompt you for a user ID.
+Because you've configured your domain to have user authentication disabled, you
+can enter any string you like for the user ID and an SDK identity will be
+created for it.  Other applications that you run in the same domain will be
+able to find this identity by this user ID.
+
+The Simple Chat example application cannot initiate a chat.  Configure the
+[Rich
+Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/javascript/RichChat/README.html)
+example application to use your domain and initiate a chat with the user
+logged into Simple Chat.
 
 ## Walkthrough
 
-Follow this guide for a walkthrough of how to display a list of chats and a list of messages in one chat.
+Before interaction with the user's chats can begin, the user must be
+[authenticated](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html#authentication)
+and the [SDK
+started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html#start-sdk).
 
-- [Import the bbmChatList UI widget into your web application](#importChatList)
-- [Import the bbmChatMessageList UI widget into your web application](#importChatMessageList)
-- [Initialize the SDK](#init)
+Follow this guide for a walkthrough of how to display a list of chats and a
+list of messages in one chat.
 
-### <a name="importChatList"></a>Import the bbmChatList UI widget into your web application
+- [Import and configure the bbmChatList component](#importChatList)
+- [Import and configure the bbmChatMessageList component](#importChatMessageList)
+- [Import and configure the bbmChatInput component](#importChatInput)
 
-Your web application needs to import the bbmChatList widget in order to display a list of chats.
+### <a name="importChatList"></a>Import the and configure bbmChatList component
+
+Import the `bbmChatList` component to display the list of chats the logged-in
+user is participating in.
 
 ```html
   <link rel="import" href="node_modules/bbmChatList/bbmChatList.html">
 ```
 
-The element is initialized with a template to give the appearance for each chat.
+The `bbmChatList` component has a template that allows you to control its
+look, feel, and behavior.  In this example, your chat list will be composed of
+a button for each chat.  When clicked, the button will call the `enterChat`
+function for the chat whose button was clicked to display the name and
+messages in the chat.
 
 ```html
 <bbm-chat-list id="chatList" style="height:100%">
@@ -86,38 +134,54 @@ The element is initialized with a template to give the appearance for each chat.
 </bbm-chat-list>
 ```
 
-The bbmChatList widget only needs the messenger object and it will do the rest. It optionally takes a context object as well, which can be used to resolve the names of functions, as in the above getChatName.
+The `bbmChatList` component only requires a setup instance
+[`BBMEnterprise.Messenger`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.html)
+it will do the rest.  In this example, the function used for displaying the
+chat name in the template are defined as part of the component's context.
 
 ```javascript
-chatList.setBbmMessenger(messenger);
-chatList.setContext({
-  // Get the name to use for the chat. This is the other participant's
-  // registration ID for a 1:1 chat, otherwise it is the chat's
-  // subject.
-  getChatName: function(chat) {
-    if(chat.isOneToOne) {
-      if(chat.participants[0].regId ===
-          bbmsdk.getRegistrationInfo().regId) {
-        return chat.participants[1].regId.toString();
-      } else {
-        return chat.participants[0].regId.toString();
+  // Configure the chatList component.  It needs a handle to the SDK's
+  // messenger object.  We also setup a context for the element that defines
+  // how it will behave.
+  chatList.setBbmMessenger(sdk.messenger);
+  chatList.setContext({
+    /**
+     * Get the name to use for the chat.
+     *
+     * @param {BBMEnterprise.Messenger.Chat} chat
+     *   The chat whose name is to be returned.
+     *
+     * @returns {string}
+     *   The name to be used for the chat.
+     */
+    getChatName: (chat) => {
+      if (chat.isOneToOne) {
+        // We have a 1:1 chat.  We will be returning the regId of the other
+        // participant as the chat name.
+        return (chat.participants[0].regId === regId)
+          ? chat.participants[1].regId : chat.participants[0].regId;
       }
-    } else {
+      // Otherwise, return the chat's subject.
       return chat.subject;
     }
-  }
-});
+  });
 ```
 
-### <a name="importChatMessageList"></a>Import the bbmChatMessageList UI widget into your web application
+### <a name="importChatMessageList"></a>Import and configure the bbmChatMessageList component
 
-Your web application needs to import the bbmChatMessageList widget in order to display the messages in a chat.
+The `bbmChatMessageList` component is used to display the messages of a chat.
+When focus is given to the window displaying the `bbmChatMessageList`, it will
+automatically mark the most recently received message as `Read`.
 
 ```html
   <link rel="import" href="node_modules/bbmChatMessageList/bbmChatMessageList.html">
 ```
 
-The chatMessageList element is initialized with a template to give the appearance for each message. The richChatMessageList element may be used in place of the chatMessageList element. It does not require a template, instead it provides a default appearance for each message.
+The `bbmChatMessageList` component has a template that allows you to control
+its look, feel, and behavior.  In this example, your chat message list will
+display incoming messages as left aligned text and outgoing messages as right
+aligned text.  All outgoing messages will also be decorated with a string that
+represents its current status.
 
 ```html
 <bbm-chat-message-list id="chatMessageList" style="display: none; height:100%">
@@ -127,94 +191,101 @@ The chatMessageList element is initialized with a template to give the appearanc
 </bbm-chat-message-list>
 ```
 
-The bbmChatMessageList widget only needs the messenger object and it will do the rest. It optionally takes a context object as well, which can be used to resolve the names of functions, as in the above getChatName.
+The `bbmChatMessageList` component only requires a setup instance
+[`BBMEnterprise.Messenger`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.html)
+it will do the rest.  In this example, the functions used for display in the
+template are defined as part the component's context.
 
 ```javascript
-chatMessageList.setBbmMessenger(messenger);
-chatMessageList.setContext({
-   /**
-    * A function to retrieve the status indicator to use for a message.
-    *
-    * @param {BBMEnterprise.ChatMessage} message
-    *   The message to retrieve status for.
-    * @returns {string}
-    *   (R) for read messages, (D) for delivered messages, nothing
-    *   otherwise.
-    */
-  getMessageStatus: function(message) {
-    if(message.isIncoming) {
-      return '';
-    }
+  // Configure the chatMessageList component.  It needs a handle to the
+  // SDK's messenger object.  We also setup a context for the element that
+  // defines how it will behave.
+  chatMessageList.setBbmMessenger(sdk.messenger);
+  chatMessageList.setContext({
+    /**
+     * A function to retrieve the status indicator to use for an outgoing
+     * message.
+     *
+     * @param {BBMEnterprise.ChatMessage} message
+     *   The message to retrieve status for.
+     *
+     * @returns {string}
+     *   The empty string is used for all incoming messages.  Otherwise, the
+     *   following status indicators are used:
+     *   - (...) => Sending
+     *   - (S)   => Sent
+     *   - (D)   => Delivered
+     *   - (R)   => Read
+     *   - (F)   => Failed
+     *   - (?)   => Any unknown status value.
+     */
+    getMessageStatus: (message) => {
+      if (message.isIncoming) {
+        return '';
+      }
+      switch (message.state.value) {
+        case 'Sending': return '(...)';
+        case 'Sent': return '(S)';
+        case 'Delivered': return '(D)';
+        case 'Read': return '(R)';
+        case 'Failed': return '(F)';
+        default: return '(?)';
+      }
+    },
 
-    switch(message.state.value) {
-      case 'Sending':
-        return '(...)';
-      case 'Sent':
-        return '(S)';
-      case 'Delivered':
-        return '(D)';
-      case 'Read':
-        return '(R)';
-      case 'Failed':
-        return '(F)';
-      default:
-        return '(?)';
-    }
-  },
+    /**
+     * A function to retrieve the content to use for a message.
+     *
+     * @param {BBMEnterprise.Messenger.ChatMessage} message
+     *   The message to retrieve content for.
+     *
+     * @returns {string}
+     *   The content for a Text message, and other appropriate
+     *   values for other types of messages.
+     */
+    getMessageContent: (message) =>
+      message.tag === 'Text' ? message.content : message.tag,
 
-
-   /**
-    * A function to retrieve the content to use for a message.
-    *
-    * @param {BBMEnterprise.Messenger.ChatMessage} message
-    *   The message to retrieve content for.
-    * @returns {string}
-    *   The content for a Text message, and other appropriate values
-    *   for other types of messages.
-    */
-  getMessageContent: function(message) {
-    if(message.tag === 'Text') {
-      return message.content;
-    } else {
-      return message.tag;
-    }
-  },
-
-  /**
-   * A function to retrieve the alignment to use for a message.
-   *
-   * @param {BBMEnterprise.ChatMessage} message
-   *   The message to retrieve alignment for.
-   * @returns {string}
-   *   The alignment for the message.
-   */
-  getMessageAlignment: function(message) {
-    return message.isIncoming ? 'right' : 'left';
-  }
-});
-
-```
-
-### <a name="init"></a>Initialize the SDK
-
-```javascript
-  // Create a BBMEnterprise instance.
-  bbmeSdk = new BBMEnterprise({
-    domain: ID_PROVIDER_DOMAIN,
-    environment: ID_PROVIDER_ENVIRONMENT,
-    userId: authUserInfo.userId,
-    getToken: authManager.getBbmSdkToken,
-    description: navigator.userAgent,
-    messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher,
-    kmsArgonWasmUrl: KMS_ARGON_WASM_URL
+    /**
+     * A function to retrieve the alignment to use for a message.
+     *
+     * @param {BBMEnterprise.ChatMessage} message
+     *   The message to retrieve alignment for.
+     *
+     * @returns {string}
+     *   The alignment for the message.
+     */
+    getMessageAlignment: (message) =>
+      message.isIncoming ? 'right' : 'left'
   });
 ```
 
-For more information about setting up the SDK, visit the [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html) section of the guide.
+### <a name="importChatInput"></a>Import and configure the bbmChatInput component
+
+The `bbmChatInput` component is used to send text messages to the chat
+currently being displayed.
+
+```html
+  <link rel="import" href="node_modules/bbmChatInput/bbmChatInput.html">
+```
+
+The `bbmChatInput` component only requires a setup instance
+[`BBMEnterprise.Messenger`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.html)
+it will do the rest.
+
+```javascript
+  // Configure the chatInput component.  It needs a handle to the SDK's
+  // messenger object.
+  chatInput.setBbmMessenger(sdk.messenger);
+```
+
+You can send text messages to the chat being displayed by typing in the
+`bbmChatInput` component.  You can press `Enter` or click the Send button to
+send your message to the chat.
 
 ## License
 
-These samples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
+These examples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 ## Reporting Issues and Feature Requests
 

@@ -16,41 +16,51 @@
 
 'use strict';
 
-// This secret is used to protect user keys. Must be individual for each user.
-const USER_SECRET = 'user_secret';
+// This configuration will configure the SimpleChat example application to
+// run against a domain configured to use Google for authentication and user
+// management.
+//
+// Refer to the Developer Guide for more details on how to setup your
+// application to use Google:
+// https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/googleSignInIdentityManagement.html
+//
+// This configuration uses the BlackBerry Key Management Service (KMS), which
+// BlackBerry recommends for most applications. See
+// https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html
 
-// Refer to the guide to set up your application to use Google:
-// https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/googleSignInForWebExamples.html
+// The ID of the domain assigned to this application.  Refer to the Developer
+// Guide for more information on setting up your domain:
+// https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html#domain
+const DOMAIN_ID = 'your_domain_id';
 
-// This domain is a string known to the BBM Enterprise server, which is
-// generally a GUID.
-// To create a new domain follow the link below
-// https://account.good.com/#/a/organization/applications/add
-const ID_PROVIDER_DOMAIN = 'your_idp_domain';
+// The client ID of the Google OAuth 2.0 service.
+const CLIENT_ID = 'your_google_oauth_client_id';
 
-// The client ID of application registered on OAuth 2.0 server.
-const CLIENT_ID = 'your_client_id';
+// This passcode is used to protect user keys.  This is configurable only to
+// simplify the setup flow for the example application.  This is not a
+// recommended practice.  Please refer to the RichChat application, which will
+// prompt the logged in user for their passcode.
+const KEY_PASSCODE = 'passcode';
 
-// =============================================================================
-// Configuration below does not require modifications. Change it only if you
-// want to change existing application behavior.
+// ===========================================================================
+// The default values provided below configure SimpleChat to work as
+// described in the Developer Guide.
 
-// The environment of your BBM Enterprise server. Must be either 'Sandbox' or
-// 'Production'.
-const ID_PROVIDER_ENVIRONMENT = 'Sandbox';
+// The environment in which your domain was created.  This must be either
+// 'Sandbox' or 'Production'.
+const ENVIRONMENT = 'Sandbox';
 
-// The URL or relative path of the Argon2 WASM file.
-const KMS_ARGON_WASM_URL = '../../sdk/argon2.wasm';
-
-// This configuration contains service endpoints and information for OAuth2
-// authentication.
+// The OAuth 2.0 configuration for authenticating users and managing contacts.
 const AUTH_CONFIGURATION = {
-  // OAuth 2.0 endpoint for requesting an access token
+  // The Google OAuth 2.0 service endpoint.
   authService : 'https://accounts.google.com/o/oauth2/v2/auth',
 
   // Scopes of OAuth 2.0 access token (which resources it can access)
   scope : 'profile',
 
-  // The client ID of application registered on OAuth 2.0 server.
+   // The client ID of the Google OAuth 2.0 service.
   clientId: CLIENT_ID
 };
+
+// The URL or relative path of the Argon2 WASM file.
+const KMS_ARGON_WASM_URL = '../../sdk/argon2.wasm';

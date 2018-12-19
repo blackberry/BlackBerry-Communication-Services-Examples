@@ -1,6 +1,6 @@
 {
   "name": "threaded-chat",
-  "description": "Displays a single BBM conversation which demonstrates the full power of Chat Message References",
+  "description": "Displays a single chat which demonstrates the full power of Chat Message References using BlackBerry Spark Communications Services",
   "license": "Apache-2.0",
   "keywords": [],
   "version": "1.0.0",

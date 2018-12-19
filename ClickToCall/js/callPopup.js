@@ -19,20 +19,20 @@
  * @memberof Examples
  */
 
-(function() {
+window.onload = async () => {
+  try {
+    // Make sure that the browser supports all of the necessary functionality,
+    // including support for interacting with the BlackBerry Key Management
+    // Service (KMS).
+    await BBMEnterprise.validateBrowser({
+      kms: { argonWasmUrl: KMS_ARGON_WASM_URL }
+    });
 
-  let bbmeSdk = null;
-  let contactsManager = null;
-  let bbmCallWidget = null;
-  let isSyncStarted = false;
-
-  window.onload = async () => {
-    try {
-      bbmCallWidget = document.createElement('bbm-call');
-      await window.customElements.whenDefined('bbm-call');
-      await BBMEnterprise.validateBrowser();
-      const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
-      // Override getUserId() used by the MockAuthManager.
+    // Setup the authentication manager for the application.
+    const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
+    if (AuthenticationManager.name === 'MockAuthManager') {
+      // We are using the MockAuthmanager, so we need to override how it
+      // acquires the local user's user ID.
       authManager.getUserId = () => new Promise((resolve, reject) => {
         const userEmailDialog = document.createElement('bbm-user-email-dialog');
         document.body.appendChild(userEmailDialog);
@@ -45,90 +45,134 @@
           reject('Failed to get user email.');
         });
       });
+    }
 
-      const authUserInfo = await authManager.authenticate();
+    // Authenticate the user.  Configurations that use a real identity
+    // provider (IDP) will redirect the browser to the IDP's authentication
+    // page.
+    const authUserInfo = await authManager.authenticate();
+    if (!authUserInfo) {
+      console.warn('Redirecting for authentication.');
+      return;
+    }
 
-      if (!authUserInfo) {
-        console.warn('Popup will be redirected to the authentication page.');
-        return;
-      }
+    // Instantiate the SDK.
+    const sdk = new BBMEnterprise({
+      domain: DOMAIN_ID,
+      environment: ENVIRONMENT,
+      userId: authUserInfo.userId,
+      getToken: authManager.getBbmSdkToken,
+      description: navigator.userAgent,
+      kmsArgonWasmUrl: KMS_ARGON_WASM_URL
+    });
 
-      // Instantiate BBMEnterprise.
-      bbmeSdk = new BBMEnterprise({
-        domain: ID_PROVIDER_DOMAIN,
-        environment: ID_PROVIDER_ENVIRONMENT,
-        userId: authUserInfo.userId,
-        getToken: authManager.getBbmSdkToken,
-        description: navigator.userAgent,
-        kmsArgonWasmUrl: KMS_ARGON_WASM_URL
-      });
-
-      // Handle changes of BBM Enterprise setup state.
-      bbmeSdk.on('setupState', async state => {
+    // Setup is asynchronous.  Create a promise we can use to wait on until
+    // the SDK setup has completed.
+    const sdkSetup = new Promise((resolve, reject) => {
+      // Handle changes to the SDK's setup state.
+      let isSyncStarted = false;
+      sdk.on('setupState', async state => {
         console.log(`ClickToCall: BBMEnterprise setup state: ${state.value}`);
         switch (state.value) {
           case BBMEnterprise.SetupState.Success: {
-            // Setup was successful. Create user manager and initiate call.
-            try {
-              const userRegId = bbmeSdk.getRegistrationInfo().regId;
-              contactsManager = await createUserManager(userRegId,
-                authManager,
-                bbmeSdk.getIdentitiesFromAppUserIds);
-              await contactsManager.initialize();
-              makeCall(CONTACT_REG_ID, true);
-            }
-            catch(error) {
-              alert(`Failed to start call. Error: ${error}`);
-              window.close();
-            }
+            // Setup was successful.
+            resolve();
+            break;
           }
-          break;
           case BBMEnterprise.SetupState.SyncRequired: {
             if (isSyncStarted) {
-              alert('Failed to get user keys using provided USER_SECRET.');
-              window.close();
+              // We have already tried to sync the user's keys using the given
+              // passcode.  For simplicity in this example, we don't try to
+              // recover when the configured passcode cannot be used.
+              reject(new Error(
+                'Failed to get user keys using provided KEY_PASSCODE.'));
               return;
             }
-            const isNew =
-              bbmeSdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New;
-            const syncAction = isNew
+
+            // We need to provide the SDK with the user's key passcode.
+            sdk.syncStart(
+              // For simplicity in this example, we always use the configured
+              // passcode.
+              KEY_PASSCODE,
+
+              // Does the user have existing keys?
+              sdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New
+              // No, we must create new keys.  The key passcode will be used
+              // to protect the new keys.
               ? BBMEnterprise.SyncStartAction.New
-              : BBMEnterprise.SyncStartAction.Existing;
-            bbmeSdk.syncStart(USER_SECRET, syncAction);
+              // Yes, we have existing keys.  The key passcode will be used to
+              // unprotect the keys.
+              : BBMEnterprise.SyncStartAction.Existing
+            );
+            break;
           }
-          break;
-          case BBMEnterprise.SetupState.SyncStarted:
+          case BBMEnterprise.SetupState.SyncStarted: {
+            // Syncing of the user's keys has started.  Remember this so that
+            // we can tell if the setup state regresses.
             isSyncStarted = true;
-          break;
+            break;
+          }
         }
       });
 
-      // Handle setup error.
-      bbmeSdk.on('setupError', error => {
-        alert(`BBM Enterprise registration failed: ${error.value}`);
+      // Any setup error received will fail the SDK setup promise.
+      sdk.on('setupError', error => {
+       reject(new Error(
+         `Endpoint setup failed: ${error.value}`));
       });
 
-      // Start BBM Enterprise setup.
-      bbmeSdk.setupStart();
-    }
-    catch (error) {
-      alert(`Failed to start call. Error: ${error}`);
-    }
-  };
-  
-  // Function makes call to the specified contact.
-  function makeCall(regId, isVideo) {
-    document.body.appendChild(bbmCallWidget);
-    bbmCallWidget.isFullScreen = true;
-    bbmCallWidget.isResizeAllowed = false;
-    bbmCallWidget.setContactManager(contactsManager);
-    bbmCallWidget.setBbmSdk(bbmeSdk);
-    bbmCallWidget.makeCall(regId, isVideo);
-    bbmCallWidget.addEventListener('CallEnded', () => {
-      document.body.removeChild(bbmCallWidget);
-      bbmCallWidget = null;
+      // Start the SDK setup.
+      sdk.setupStart();
+    });
+
+    // Wait for the SDK setup to complete.
+    await sdkSetup;
+
+    // This example doesn't remove the event listeners on the setupState or
+    // setupErrors events that were used to monitor the setup progress.  It
+    // also doesn't setup new listeners to monitor these events going forward
+    // to act on any issue that causes the SDK's state to regress.
+
+    // Create and initialize the user manager.
+    const userManager = await createUserManager(
+      sdk.getRegistrationInfo().regId,
+      authManager,
+      (...args) => sdk.getIdentitiesFromAppUserIds(...args)
+    );
+    await userManager.initialize();
+
+    // bbmCall is a single-use component.  Create an instance and add
+    // it to the application.
+    let bbmCall = document.createElement('bbm-call');
+    await window.customElements.whenDefined('bbm-call');
+
+    // Associate the bbmCall component with the SDK and user manager we
+    // created.
+    bbmCall.setBbmSdk(sdk);
+    bbmCall.setContactManager(userManager);
+
+    // Customize the component.
+    bbmCall.isFullScreen = true;
+    bbmCall.isResizeAllowed = false;
+
+    // When the call is finished, the CallEnded event is fired.
+    bbmCall.addEventListener('CallEnded', () => {
+      // The call has ended.  We can now clean up the dynamically added
+      // component and close the popup window.
+      document.body.removeChild(bbmCall);
+      bbmCall= null;
       window.close();
     });
-  }
 
- }());
+    // Add the component to the application.
+    document.body.appendChild(bbmCall);
+
+    // Place the call to the configured user ID once we have looked up their
+    // regId.
+    const identity = await sdk.getIdentitiesFromAppUserId(AGENT_USER_ID);
+    bbmCall.makeCall(identity.regId, true);
+  }
+  catch (error) {
+    alert(`ClickToCall encountered an error; error=${error}`);
+  }
+};

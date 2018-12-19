@@ -22,14 +22,14 @@
 
   <title>Threaded Chat</title>
 
-  <script type="text/javascript" src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
-  <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+  <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="https://apis.google.com/js/api.js"></script>
 
-  <script type="text/javascript" src="../support/identity/GenericUserInfo.js"></script>
-  <script type="text/javascript" src="../support/util/MessageFormatter.js"></script>
-  <script type="text/javascript" src="../support/util/TimeRangeFormatter.js"></script>
-  <script type="text/javascript" src="../support/util/Observer.js"></script>
-  <script type="text/javascript" src="../../sdk/bbm_sdk_web.js"></script>
+  <script src="../support/identity/GenericUserInfo.js"></script>
+  <script src="../support/util/MessageFormatter.js"></script>
+  <script src="../support/util/TimeRangeFormatter.js"></script>
+  <script src="../support/util/Observer.js"></script>
+  <script src="../../sdk/bbm_sdk_web.js"></script>
 
   <!-- Import custom controls -->
   <link rel="import" href="node_modules/bbmChatInput/bbmChatInput.html">
@@ -40,23 +40,23 @@
   <!-- Select one of the following configurations (mutually exclusive): -->
 
   <!-- 1. Simplified: Use below .js to configure your app to work without authentication (no identity provider) -->
-  <script type="text/javascript" src="../support/auth/MockAuthManager.js"></script>
-  <script type="text/javascript" src="../support/identity/MockUserManager.js"></script>
-  <script type="text/javascript" src="js/config_mock.js"></script>
+  <script src="../support/auth/MockAuthManager.js"></script>
+  <script src="../support/identity/MockUserManager.js"></script>
+  <script src="js/config_mock.js"></script>
 
   <!-- 2. Google: Use below .js files to configure application to work with Google -->
   <!--
-  <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
-  <script type="text/javascript" src="../support/auth/GoogleAuthManager.js"></script>
-  <script type="text/javascript" src="../support/identity/GooglePeopleUserManager.js"></script>
-  <script type="text/javascript" src="js/config_google.js"></script>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script src="../support/auth/GoogleAuthManager.js"></script>
+  <script src="../support/identity/GooglePeopleUserManager.js"></script>
+  <script src="js/config_google.js"></script>
   -->
 
   <!-- 3. Microsoft: Use below .js files to configure application to work with Azure -->
   <!--
-  <script type="text/javascript" src="../support/auth/AzureAuthManager.js"></script>
-  <script type="text/javascript" src="../support/identity/AzureUserManager.js"></script>
-  <script type="text/javascript" src="js/config_azure.js"></script>
+  <script src="../support/auth/AzureAuthManager.js"></script>
+  <script src="../support/identity/AzureUserManager.js"></script>
+  <script src="js/config_azure.js"></script>
   -->
 
   <style>
@@ -155,6 +155,9 @@
     <bbm-chat-input id="chatInput" style="display: none"></bbm-chat-input>
   </div>  
 </body>
+
+<!-- ===================================================================== -->
+<!-- Web Components                                                        -->
 
 <dom-module id="bbm-threaded-message-list">
   <template>
@@ -308,16 +311,31 @@
 
     </style>
 
-    <div class="chevronDropdown" id="chevronDropdown" style="margin-left:9px;margin-top:9px;">
+    <!--
+      This defines the contents of the menu that appears when clicking on the
+      chevron associated with any given top-level chat message.
+    -->
+    <div class="chevronDropdown" id="chevronDropdown"
+         style="margin-left:9px;margin-top:9px;">
       <div class="bbmChatMenuButton" on-click="commentMessage">Comment</div>
     </div>
+
+    <!--
+      Extend the bbmChatMessageList component so that we can display a
+      top-level message in a chat with any messages that reference it nested
+      beneath it.
+    -->
     <bbm-chat-message-list id="list" items="[]" as="message">
       <template id="bubbleTemplate">
         <!-- Visible if this is a status message. -->
         <div class="messageRow">
-          <div class="status" style$="display:[[message.isStatus]]">[[message.content]]</div>
+          <div class="status
+               " style$="display:[[message.isStatus]]">[[message.content]]</div>
           <div class="messageRow" style$="display:[[message.isText]]">
-            <!-- Visible if this is a bubble message. -->
+            <!--
+              The main bubble wrapper for a top-level message that does not
+              reference another message.
+            -->
             <div class="bubble-wrapper" style$="display:[[message.isBubble]]">
               <!-- Avatar -->
               <img class="bubble-avatar" src="[[message.avatar]]"/>
@@ -329,8 +347,10 @@
                   <div>[[message.timestamp.formattedTime]]</div>
                 </div>
                 <!-- Second row -->
-                <div class="secondRowWithChevron" on-mouseenter="showChevron" on-mouseleave="hideChevron">
-                  <div class="secondRow" style$="margin-left: [[message.indent]]; background-color: [[message.backgroundColor]]">
+                <div class="secondRowWithChevron" on-mouseenter="showChevron"
+                     on-mouseleave="hideChevron">
+                  <div class="secondRow"
+                       style$="margin-left: [[message.indent]]; background-color: [[message.backgroundColor]]">
                     <!-- Text content -->
                     <div style="flex-direction: column; margin: 0px 5px 0px 5px;">
                       <div style$="display:[[message.isText]];">
@@ -340,6 +360,11 @@
                       </div>
                     </div>
                   </div>
+                  <!--
+                    The chevron menu icon that will appear when the user's
+                    mouse hovers over the message.  When clicked, the
+                    chevronDropDown menu will be shown.
+                  -->
                   <div class="chevronPlaceholder">
                     <div class="chevron"
                       style$="background-image: url('[[getChevronImage()]]')"
@@ -349,9 +374,13 @@
                 </div>
               </div>
             </div>
-             <!-- First row -->
+             <!--
+               The container for the messages that reference the above
+               top-level message.
+             -->
             <template is="dom-repeat" items="{{message.refBys}}">
-              <div class="refMessageRow" style$="margin-left: [[message.childIndent]]; background-color: [[message.childBackgroundColor]]">
+              <div class="refMessageRow"
+                   style$="margin-left: [[message.childIndent]]; background-color: [[message.childBackgroundColor]]">
                 <div class="child-bubble-wrapper">
                   <!-- Avatar -->
                   <img class="child-avatar" src="[[item.childMessageAvatar]]"/>
@@ -363,7 +392,8 @@
                       <div>[[item.timestamp.formattedTime]]</div>
                     </div>
                     <!-- Second row -->
-                    <div class="child-secondRow" style$="background-color: [[item.bubbleBackgroundColor]]">
+                    <div class="child-secondRow"
+                         style$="background-color: [[item.bubbleBackgroundColor]]">
                       <!-- Text content -->
                       <div style="flex-direction: column; margin: 0px 5px 0px 5px;">
                         <div class="child-bubble-content">
@@ -381,5 +411,11 @@
     </bbm-chat-message-list>
   </template>
 </dom-module>
-<script type="text/javascript" src="js/threadedChat.js"></script>
+
+  <!--
+    Include the JavaScript that drives the Threaded Chat's example
+    application. This file also contains the backing JavaScript for the
+    threaded chat message list web component defined above.
+  -->
+  <script src="js/threadedChat.js"></script>
 </html>

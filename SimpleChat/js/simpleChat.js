@@ -22,6 +22,8 @@ let chatInput;
 let chatMessageList;
 let chatListDiv;
 let leaveButton;
+let status;
+let chatList;
 
 /**
  * A simple chat program.
@@ -30,27 +32,28 @@ let leaveButton;
  * @memberof Examples
  */
 
-HTMLImports.whenReady(function() {
-  // Find the necessary HTMLElements and cache them.
+window.onload = async () => {
+  // Find the necessary HTMLElements and cache them
   title = document.getElementById('title');
-  const status = document.getElementById('status');
+  status = document.getElementById('status');
   chatInput = document.getElementById('chatInput');
   chatMessageList = document.getElementById('chatMessageList');
-  const chatList = document.getElementById('chatList');
+  chatList = document.getElementById('chatList');
   chatListDiv = document.getElementById('chatListDiv');
   leaveButton = document.getElementById('leaveButton');
 
-  window.onload = () => {
-    bbmeInit();
-  };
+  try {
+    // Wait for the custom web components to load.
+    await new Promise((resolve) => { HTMLImports.whenReady(resolve); });
 
-  const bbmeInit = () => {
-    // Perform authentication.
-    try {
-      let bbmeSdk;
-      let isSyncStarted = false;
-      const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
-      // Override getUserId() used by the MockAuthManager.
+    // Notify the user that we are authenticating.
+    status.innerHTML = 'Authenticating';
+
+    // Setup the authentication manager for the application.
+    const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
+    if (AuthenticationManager.name === 'MockAuthManager') {
+      // We are using the MockAuthmanager, so we need to override how it
+      // acquires the local user's user ID.
       authManager.getUserId = () => new Promise((resolve, reject) => {
         const userEmailDialog = document.createElement('bbm-user-email-dialog');
         document.body.appendChild(userEmailDialog);
@@ -63,166 +66,209 @@ HTMLImports.whenReady(function() {
           reject('Failed to get user email.');
         });
       });
+    }
 
-      authManager.authenticate()
-      .then(authUserInfo => {
-        if (!authUserInfo) {
-          console.warn('Application will be redirected the the authentication' +
-            ' page');
-          return;
-        }
-  
-        try {
-          // Create a BBMEnterprise instance.
-          bbmeSdk = new BBMEnterprise({
-            domain: ID_PROVIDER_DOMAIN,
-            environment: ID_PROVIDER_ENVIRONMENT,
-            userId: authUserInfo.userId,
-            getToken: authManager.getBbmSdkToken,
-            description: navigator.userAgent,
-            messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher,
-            kmsArgonWasmUrl: KMS_ARGON_WASM_URL
-          });
-  
-          // Notify the user that we are working on signing in.
-          status.innerHTML = 'Signing in';
-        } catch (error) {
-          showError(`Failed to create BBMEnterprise: ${error}`);
-          return;
-        }
-  
-        // Handle changes of BBMEnterprise setup state.
-        bbmeSdk.on('setupState', state => {
-          console.log(`SimpleChat: BBMEnterprise setup state: ${state.value}`);
-          switch (state.value) {
-            case BBMEnterprise.SetupState.Success:
-            {
-              // Setup was successful. Create user manager and initiate call.
-              const registrationId = bbmeSdk.getRegistrationInfo().regId;
-              const messenger = bbmeSdk.messenger;
-  
-              // Initialize the chat input.
-              window.customElements.whenDefined(chatInput.localName)
-              .then(() => {
-                chatInput.setBbmMessenger(messenger);
-              });
-      
-              // Initialize the message list.
-              window.customElements.whenDefined(chatMessageList.localName)
-              .then(() => {
-                chatMessageList.setBbmMessenger(messenger);
-                chatMessageList.setContext({
-                  /**
-                   * A function to retrieve the status indicator to use for a
-                   * message.
-                   * @param {BBMEnterprise.ChatMessage} message
-                   * The message to retrieve status for.
-                   * @returns {string} 
-                   * (R) for read messages, (D) for delivered messages,
-                   * nothing otherwise.
-                   */
-  
-                  getMessageStatus: message => {
-                    if (message.isIncoming) {
-                      return '';
-                    }
-                    switch (message.state.value) {
-                      case 'Sending': return '(...)';
-                      case 'Sent': return '(S)';
-                      case 'Delivered': return '(D)';
-                      case 'Read': return '(R)';
-                      case 'Failed': return '(F)';
-                      default: return '(?)';
-                    }
-                  },
-  
-                  /**
-                   * A function to retrieve the content to use for a message.
-                   *
-                   * @param {BBMEnterprise.Messenger.ChatMessage} message
-                   *   The message to retrieve content for.
-                   * @returns {string}
-                   *   The content for a Text message, and other appropriate
-                   *   values for other types of messages.
-                   */
-                  getMessageContent: message => message.tag === 'Text'
-                    ? message.content : message.tag,
-  
-                  /**
-                   * A function to retrieve the alignment to use for a message.
-                   *
-                   * @param {BBMEnterprise.ChatMessage} message
-                   *   The message to retrieve alignment for.
-                   * @returns {string}
-                   *   The alignment for the message.
-                   */
-                  getMessageAlignment: message => message.isIncoming
-                    ? 'right' : 'left'
-                });
-              });
-  
-              // Initialize the chat list.
-              window.customElements.whenDefined(chatList.localName)
-              .then(() => {
-                chatList.setBbmMessenger(messenger);
-                chatList.setContext({
-                  // Get the name to use for the chat. This is the other
-                  // participant's registration ID for a 1:1 chat, otherwise it
-                  // is the chat's subject.
-                  getChatName: chat => {
-                    if(chat.isOneToOne) {
-                      return (chat.participants[0].regId === registrationId)
-                        ? chat.participants[1].regId.toString()
-                        : chat.participants[0].regId.toString();
-                    } else {
-                      return chat.subject;
-                    }
-                  }
-                });
-              });
-  
-              // The message list needs to know about changes to the message
-              // store.
-  
-              // Report the status to the user.
-              status.innerHTML = `Registration Id: ${registrationId}`;
-            }
-            break;
-            case BBMEnterprise.SetupState.SyncRequired: {
-              if (isSyncStarted) {
-                showError('Failed to get user keys using provided USER_SECRET');
-                return;
-              }
-              const isNew =
-                bbmeSdk.syncPasscodeState ===
-                  BBMEnterprise.SyncPasscodeState.New;
-              const syncAction = isNew
-                ? BBMEnterprise.SyncStartAction.New
-                : BBMEnterprise.SyncStartAction.Existing;
-              bbmeSdk.syncStart(USER_SECRET, syncAction);
-            }
-            break;
-            case BBMEnterprise.SetupState.SyncStarted:
-              isSyncStarted = true;
+    // Authenticate the user.  Configurations that use a real identity
+    // provider (IDP) will redirect the browser to the IDP's authentication
+    // page.
+    const authUserInfo = await authManager.authenticate();
+    if (!authUserInfo) {
+      console.warn('Redirecting for authentication.');
+      return;
+    }
+
+    // Notify the user that we are setting up the SDK.
+    status.innerHTML = 'Setting up the SDK';
+
+    // Instantiate the SDK.
+    const sdk = new BBMEnterprise({
+      domain: DOMAIN_ID,
+      environment: ENVIRONMENT,
+      userId: authUserInfo.userId,
+      getToken: () => authManager.getBbmSdkToken(),
+      description: navigator.userAgent,
+      messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher,
+      kmsArgonWasmUrl: KMS_ARGON_WASM_URL
+    });
+
+    // Setup is asynchronous.  Create a promise we can use to wait on
+    // until the SDK setup has completed.
+    const sdkSetup = new Promise((resolve, reject) => {
+      // Handle changes to the SDK's setup state.
+      let isSyncStarted = false;
+      sdk.on('setupState', (state) => {
+        console.log(
+          `SimpleChat: BBMEnterprise setup state: ${state.value}`);
+        switch (state.value) {
+          case BBMEnterprise.SetupState.Success: {
+            // Setup was successful.
+            resolve();
             break;
           }
-        });
-  
-        // Handle setup error.
-        bbmeSdk.on('setupError', error => {
-          alert(`BBM Enterprise registration failed: ${error.value}`);
-        });
-  
-        // Start BBM Enterprise setup.
-        bbmeSdk.setupStart();
-      }).catch(error => {
-        showError(`Failed to complete setup. Error: ${error}`);
+          case BBMEnterprise.SetupState.SyncRequired: {
+            if (isSyncStarted) {
+              // We have already tried to sync the user's keys using the
+              // given passcode.  For simplicity in this example, we don't
+              // try to recover when the configured passcode cannot be
+              // used.
+              reject(new Error(
+                'Failed to get user keys using provided KEY_PASSCODE.'));
+              return;
+            }
+
+            // We need to provide the SDK with the user's key passcode.
+            sdk.syncStart(
+              // For simplicity in this example, we always use the
+              // configured passcode.
+              KEY_PASSCODE,
+
+              // Does the user have existing keys?
+              sdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New
+              // No, we must create new keys.  The key passcode will be
+              // used to protect the new keys.
+              ? BBMEnterprise.SyncStartAction.New
+              // Yes, we have existing keys.  The key passcode will be
+              // used to unprotect the keys.
+              : BBMEnterprise.SyncStartAction.Existing
+            );
+            break;
+          }
+          case BBMEnterprise.SetupState.SyncStarted: {
+            // Syncing of the user's keys has started.  Remember this so
+            // that we can tell if the setup state regresses.
+            isSyncStarted = true;
+            break;
+          }
+        }
       });
-    } catch(error) {
-      showError(`Failed to authenticate and start BBM SDK. Error: ${error}`);
-    }
-  };
-});
+
+      // Any setup error received will fail the SDK setup promise.
+      sdk.on('setupError', error => {
+       reject(new Error(
+         `Endpoint setup failed: ${error.value}`));
+      });
+
+      // Start the SDK setup.
+      sdk.setupStart();
+    });
+
+    // Wait for the SDK setup to complete.
+    await sdkSetup;
+
+    // This example doesn't remove the event listeners on the setupState
+    // or setupErrors events that were used to monitor the setup progress.
+    // It also doesn't setup new listeners to monitor these events going
+    // forward to act on any issue that causes the SDK's state to regress.
+
+    // The SDK is now setup.  Remember the local user's regId.
+    const regId = sdk.getRegistrationInfo().regId;
+
+    // Wait for the custom components to be upgraded before we configure them.
+    await Promise.all([
+      window.customElements.whenDefined(chatList.localName),
+      window.customElements.whenDefined(chatMessageList.localName),
+      window.customElements.whenDefined(chatInput.localName)
+    ]);
+
+    // Configure the chatList component.  It needs a handle to the SDK's
+    // messenger object.  We also setup a context for the element that defines
+    // how it will behave.
+    chatList.setBbmMessenger(sdk.messenger);
+    chatList.setContext({
+      /**
+       * Get the name to use for the chat.
+       *
+       * @param {BBMEnterprise.Messenger.Chat} chat
+       *   The chat whose name is to be returned.
+       *
+       * @returns {string}
+       *   The name to be used for the chat.
+       */
+      getChatName: (chat) => {
+        if (chat.isOneToOne) {
+          // We have a 1:1 chat.  We will be returning the regId of the other
+          // participant as the chat name.
+          return (chat.participants[0].regId === regId)
+            ? chat.participants[1].regId : chat.participants[0].regId;
+        }
+        // Otherwise, return the chat's subject.
+        return chat.subject;
+      }
+    });
+
+    // Configure the chatMessageList component.  It needs a handle to the
+    // SDK's messenger object.  We also setup a context for the element that
+    // defines how it will behave.
+    chatMessageList.setBbmMessenger(sdk.messenger);
+    chatMessageList.setContext({
+      /**
+       * A function to retrieve the status indicator to use for an outgoing
+       * message.
+       *
+       * @param {BBMEnterprise.ChatMessage} message
+       *   The message to retrieve status for.
+       *
+       * @returns {string}
+       *   The empty string is used for all incoming messages.  Otherwise, the
+       *   following status indicators are used:
+       *   - (...) => Sending
+       *   - (S)   => Sent
+       *   - (D)   => Delivered
+       *   - (R)   => Read
+       *   - (F)   => Failed
+       *   - (?)   => Any unknown status value.
+       */
+      getMessageStatus: (message) => {
+        if (message.isIncoming) {
+          return '';
+        }
+        switch (message.state.value) {
+          case 'Sending': return '(...)';
+          case 'Sent': return '(S)';
+          case 'Delivered': return '(D)';
+          case 'Read': return '(R)';
+          case 'Failed': return '(F)';
+          default: return '(?)';
+        }
+      },
+
+      /**
+       * A function to retrieve the content to use for a message.
+       *
+       * @param {BBMEnterprise.Messenger.ChatMessage} message
+       *   The message to retrieve content for.
+       *
+       * @returns {string}
+       *   The content for a Text message, and other appropriate
+       *   values for other types of messages.
+       */
+      getMessageContent: (message) =>
+        message.tag === 'Text' ? message.content : message.tag,
+
+      /**
+       * A function to retrieve the alignment to use for a message.
+       *
+       * @param {BBMEnterprise.ChatMessage} message
+       *   The message to retrieve alignment for.
+       *
+       * @returns {string}
+       *   The alignment for the message.
+       */
+      getMessageAlignment: (message) =>
+        message.isIncoming ? 'right' : 'left'
+    });
+
+    // Configure the chatInput component.  It needs a handle to the SDK's
+    // messenger object.
+    chatInput.setBbmMessenger(sdk.messenger);
+
+    // Everything is setup.  Report our regId as the status.
+    status.innerHTML = `regId: ${regId}`;
+  }
+  catch(error) {
+    showError(`SimpleChat encountered an error: ${error}`);
+  }
+};
 
 //============================================================================
 // :: HTML functions
@@ -245,9 +291,9 @@ function enterChat(element) {
 
   // Make the right things visible.
   chatListDiv.style.display = 'none';
-  chatMessageList.style.display = 'block';
+  chatMessageList.style.display = 'flex';
   chatInput.style.display = 'block';
-  leaveButton.style.display = 'block';
+  leaveButton.style.display = 'flex';
 
   // Set the title
   title.innerHTML = element.innerHTML;

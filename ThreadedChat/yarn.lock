@@ -187,6 +187,7 @@
     "@npm-polymer" "https://github.com/Polymer/polymer.git#2.2.0"
     "@npm-polymer/shadycss" "https://github.com/webcomponents/shadycss.git#1.1.0"
     "@webcomponents/webcomponentsjs" "^1.0.20"
+    util "file:../../../../../../Library/Caches/util"
 
 "bbmChatList@file:../support/ui/widgets/bbmChatList":
   version "1.0.0"
@@ -208,3 +209,13 @@
     "@npm-polymer/paper-spinner" "2.0.0"
     "@npm-polymer/shadycss" "https://github.com/webcomponents/shadycss.git#1.1.0"
     "@webcomponents/webcomponentsjs" "^1.0.20"
+
+"bbmUserEmailDialog@file:../support/ui/widgets/bbmUserEmailDialog":
+  version "1.0.0"
+  dependencies:
+    "@npm-polymer" "https://github.com/Polymer/polymer.git#2.2.0"
+    "@npm-polymer/shadycss" "https://github.com/webcomponents/shadycss.git#1.1.0"
+    "@webcomponents/webcomponentsjs" "^1.0.20"
+
+"util@file:../support/util":
+  version "0.0.0"

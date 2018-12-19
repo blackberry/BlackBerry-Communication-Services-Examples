@@ -23,9 +23,9 @@
     <link rel="icon" type="image/png" href="img/favicon.ico">
     <link rel="stylesheet" type="text/css" href="css/dataTransfer.css"/>
 
-    <script type="text/javascript" src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
-    <script type="text/javascript" src="../support/identity/GenericUserInfo.js"></script>
-    <script type="text/javascript" src="../../sdk/bbm_sdk_web.js"></script>
+    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../support/identity/GenericUserInfo.js"></script>
+    <script src="../../sdk/bbm_sdk_web.js"></script>
 
     <!-- Import custom controls -->
     <link rel="import" href="html/dataTransferElement.html">
@@ -35,25 +35,25 @@
     <!-- Select one of the following configurations (mutually exclusive): -->
 
     <!-- 1. Simplified: Use below .js to configure your app to work without authentication (no identity provider) -->
-    <script type="text/javascript" src="../support/auth/MockAuthManager.js"></script>
-    <script type="text/javascript" src="js/config_mock.js"></script>
+    <script src="../support/auth/MockAuthManager.js"></script>
+    <script src="js/config_mock.js"></script>
 
     <!-- 2. Google: Use below .js files to configure application to work with Google -->
     <!--
-    <script type="text/javascript" src="../support/auth/GoogleAuthManager.js"></script>
-    <script type="text/javascript" src="js/config_google.js"></script>
+    <script src="../support/auth/GoogleAuthManager.js"></script>
+    <script src="js/config_google.js"></script>
     -->
 
     <!-- 3. Microsoft: Use below .js files to configure application to work with Azure -->
     <!--
-    <script type="text/javascript" src="../support/auth/AzureAuthManager.js"></script>
-    <script type="text/javascript" src="js/config_azure.js"></script>
+    <script src="../support/auth/AzureAuthManager.js"></script>
+    <script src="js/config_azure.js"></script>
     -->
 
   </head>
   <body>
-    <data-transfer-element>
+    <data-transfer-element id="data-transfer">
     </data-transfer-element>
   </body>
-  <script type="text/javascript" src="js/index.js"></script>
+  <script src="js/index.js"></script>
 </html>
