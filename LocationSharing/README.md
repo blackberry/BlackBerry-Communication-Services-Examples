@@ -2,10 +2,10 @@
 
 # Location Sharing App for iOS
 
-The Location Sharing sample application demonstrates how to share a user's real-time location 
-with others using Spark Communications.
+The Location Sharing example application demonstrates how to share a user's real-time location 
+with others using BlackBerry Spark Communications Services.
 The application monitors the user's location updates using the iOS
-CoreLocation APIs. The user's locations are then shared with other users in a
+`CoreLocation` APIs. The user's locations are then shared with other users in a
 chat using chat messages. The application defines a custom message type that
 includes the latitude and longitude coordinates of the user's location. The
 application marks all of the the user's locations on a map with pins.
@@ -40,10 +40,13 @@ The following features are demonstrated:
 
 ## Getting Started
 
-This sample requires the Spark Communications SDK, which you can find along with related resources at the location below.
-    
-* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+This example requires the Spark Communications SDK, which you can find along with related resources at the location below.
+
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [iOS Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-ios.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
 <p align="center">
@@ -56,14 +59,45 @@ This sample requires the Spark Communications SDK, which you can find along with
 </p>
 
 ### Configuration
+By default, this example application is configured to work in a domain with user
+authentication disabled and the BlackBerry Key Management Service enabled.
+See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service.  This allows you to get up and running quickly with minimal setup.
+Once you have a domain in the sandbox, edit Location Sharing's `ConfigSettings.plist` file
+to configure the example with your domain ID.
 
-[Create your application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+```
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>authProvider</key>
+	<string>testAuth<string>
+	<key>useBlackBerryKMS</key>
+	<true/>
+	<key>testAuth</key>
+	<dict>
+		<key>clientId</key>
+		<string>not_used</string>
+		<key>domain</key>
+		<string>UPDATE_WITH_YOUR_DOMAIN</string>
+		<key>environment</key>
+		<string>sandbox</string>
+	</dict>
+</dict>
+</plist>
+```
 
-Once your sandbox domain is configured, edit the ConfigSettings.plist file and enter the domain identifier under "testAuth/domain".  Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.  
+When you run Location Sharing, it will prompt you for a user ID and a password. Since
+you've configured your domain to have user authentication disabled, you can
+enter any string you like for the user ID and an SDK identity will be created
+for it. Other applications that you run in the same domain will be able to find
+this identity by this user ID. The password is used to protected the keys stored
+in the
+[BlackBerry Key Management Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
 
-Note: This sample cannot be run on a production domain or a sandbox domain configured for a true identity provider without modification.
 ## Walkthrough
 
 The following explains how to use the SDK to send location information embedded in chat messages.
@@ -80,7 +114,7 @@ a chat is shared with other participants. As the user's location changes, a new 
 
 ### <a name="startChat"></a>Starting a chat
 
-To start a chat, the regIds of the participants are needed. The class ***BBMChatCreator*** is used to create a new chat.
+To start a chat, the `regIds` of the participants are needed. The class `BBMChatCreator` is used to create a new chat.
 
 ```objective-c
 - (void)startChatWithRegIds:(NSArray *)regIds subject:(NSString *)subject
@@ -106,7 +140,7 @@ To start a chat, the regIds of the participants are needed. The class ***BBMChat
 
 ### <a name="sharingCurrentLocation"></a>Sharing current location
 
-The current location is obtained by using ***CLLocationManager***. When there is a location change, a new chat message that includes the latitude and longitude of the user is created and sent.
+The current location is obtained by using `CLLocationManager`. When there is a location change, a new chat message that includes the latitude and longitude of the user is created and sent.
 
 ```objective-c
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
@@ -126,7 +160,7 @@ The current location is obtained by using ***CLLocationManager***. When there is
 }
 ```
 
-The location data is a dictionary that contains the latitude and the longitude. This is embedded in the [rawData](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message_send_message.html#a2e4b035e565a635b4f6d9df6b5a8f4be) field in a [BBMChatMessageSendMessage](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message_send_message.html) object and then sent. The tag for the messages is set to the custom value "Location".
+The location data is a dictionary that contains the latitude and the longitude. This is embedded in the [`rawData`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message_send_message.html#a2e4b035e565a635b4f6d9df6b5a8f4be) field in a [`BBMChatMessageSendMessage`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message_send_message.html) object and then sent. The tag for the messages is set to the custom value "Location".
 
 ```objective-c
 - (void)sendLocation:(NSDictionary *)locationData toChatId:(NSString *)chatId
@@ -139,7 +173,7 @@ The location data is a dictionary that contains the latitude and the longitude. 
 
 ### <a name="showingLocations"></a>Showing locations on a map
 
-The first step to showing locations on a map is to load the location messages for a chat. This is done in the class ***LocationMessageLoader*** by creating an instance of [BBMChatMessageSendMessage](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message_criteria.html) and setting the tag and chatId properties. This is then passed to the model and a list containing the chat messages that match the criteria is returned. For this application we need to sort messages by user so the regId is used for that purpose. The sort operation is done inside a monitor so that changes are detected and the messages are sorted by user again.
+The first step to showing locations on a map is to load the location messages for a chat. This is done in the class `LocationMessageLoader` by creating an instance of [`BBMChatMessageSendMessage`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message_criteria.html) and setting the tag and chatId properties. This is then passed to the model and a list containing the chat messages that match the criteria is returned. For this application we need to sort messages by user so the `regId` is used for that purpose. The sort operation is done inside a monitor so that changes are detected and the messages are sorted by user again.
 
 ```objective-c
 -(void)observeMessages
@@ -203,7 +237,7 @@ Every time a new location is loaded the map view gets refreshed.
 }
 ```
 
-The latitude and longitude are stored in the [rawData](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message.html#a4107b9c8feea30792181bcef87e8e918) property in every instance of [BBMChatMessage](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message.html).
+The latitude and longitude are stored in the [`rawData`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message.html#a4107b9c8feea30792181bcef87e8e918) property in every instance of [`BBMChatMessage`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message.html).
 
 ```objective-c
 - (void)setMessage:(BBMChatMessage *)message
@@ -294,10 +328,10 @@ There is a toggle option to display a pin for each location or just for the late
 
 ## License
 
-These samples are released as Open Source and licensed under the
+These examples are released as Open Source and licensed under the
 [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html). 
 
-These samples were created using SDKs from Apple Inc. and may contain code
+These examples were created using SDKs from Apple Inc. and may contain code
 licensed for use only with Apple products. Please review your Apple SDK
 Agreement for additional details.
 

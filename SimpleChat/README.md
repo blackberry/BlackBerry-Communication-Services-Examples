@@ -2,19 +2,18 @@
 
 # Simple Chat for iOS
 
-The Simple Chat sample demonstrates how you can build a simple chat
-application using the Spark Communications SDK and how easily messaging can be integrated
-into your application.  For a more rich chat app experience please see the
+The Simple Chat example application demonstrates how you can build a chat
+application using the BlackBerry Spark Communications Services. The example
+demonstrates how to use the Spark Communications SDK to integrate Chat into your
+application.  For a more rich chat app experience please see the
 [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/RichChat/README.html)
 app provided with the SDK.
-This example builds on the [Quick Start](../QuickStart/README.md) example that
-demonstrates how you can authenticate with the SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) 
-of your application.
+This example builds on the [Quick Start](../QuickStart/README.md) example.
 
 ### Features
 
-This app can be used with the other sample apps but will only send and render messages with
-the "Text" tag.  It will allow you to do the following:
+This app can be used with the other example apps but will only send and render messages with
+the `Text` tag.  It will allow you to do the following:
 
 * Authenticate a user
 * Public key management
@@ -23,19 +22,22 @@ the "Text" tag.  It will allow you to do the following:
 * Send text messages
 * Mark messages as read and view delivery status
 
-This sample can interact with the
+This example can interact with the
 [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/RichChat/README.html)
-and [Quick Start](../QuickStart/README.md) samples so it may utilize the same
+and [Quick Start](../QuickStart/README.md) examples so it may utilize the same
 configuration.  SimpleChat will only render and send messages with the "Text" 
 tag to the [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/RichChat/README.html) app.
 
 
 ## Getting Started
 
-This sample requires the Spark Communications SDK, which you can find along with related resources at the location below.
-    
-* Getting started with the [Spark Communications SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+This example requires the Spark Communications SDK, which you can find along with related resources at the location below.
+
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [iOS Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-ios.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
 <p align="center">
@@ -49,16 +51,44 @@ This sample requires the Spark Communications SDK, which you can find along with
 
 ### Configuration
 
-This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service.  This allows you to get up and running quickly with minimal setup.
+By default, this example application is configured to work in a domain with user
+authentication disabled and the BlackBerry Key Management Service enabled.
+See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-[Create your application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+Once you have a domain in the sandbox, edit Simple Chat's `ConfigSettings.plist` file
+to configure the example with your domain ID.
 
-Once your sandbox domain is configured, edit the ConfigSettings.plist file and enter the domain identifier under "testAuth/domain".  Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.  
+```
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>authProvider</key>
+	<string>testAuth</string>
+	<key>useBlackBerryKMS</key>
+	<true/>
+	<key>testAuth</key>
+	<dict>
+		<key>clientId</key>
+		<string>not_used</string>
+		<key>domain</key>
+		<string>UPDATE_WITH_YOUR_DOMAIN</string>
+		<key>environment</key>
+		<string>sandbox</string>
+	</dict>
+</dict>
+</plist>
+```
 
-This sample applications may also be configured to use Google Sign-In or Azure Active Directory:
-* [Sample application configuration using Google Sign-In and Firebase](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/googleSignInForiOSExamples.html)
-* [Sample application configuration using Azure Active Directory](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/azureForiOSExamples.html)
-
+When you run Simple Chat, it will prompt you for a user ID and a password. Since
+you've configured your domain to have user authentication disabled, you can
+enter any string you like for the user ID and an SDK identity will be created
+for it. Other applications that you run in the same domain will be able to find
+this identity by this user ID. The password is used to protected the keys stored
+in the
+[BlackBerry Key Management Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
 
 ## Walkthrough
 
@@ -70,20 +100,20 @@ This sample applications may also be configured to use Google Sign-In or Azure A
 
 ### <a name="supportLib"></a>Support Library
 
-Common code for authenticating users, synchronizing keys and performing common tasks can be found in /examples/Support/Source.  Much of the heavy lifting can be found in these classes and they should be referenced before implementing a custom key management or authentication scheme.
+Common code for authenticating users, synchronizing keys and performing common tasks can be found in `examples/Support/Source`.  Much of the heavy lifting can be found in these classes and they should be referenced before implementing a custom key management or authentication scheme.
 
-*BBMAuthController* and *BBMKeyManager* can be instantiated with classes/instances that allow you to substitute your own user authentication or key management scheme while handling all of the SDK related functionality.
+`BBMAuthController` and `BBMKeyManager` can be instantiated with classes/instances that allow you to substitute your own user authentication or key management scheme while handling all of the SDK related functionality.
 
-*BBMAccess* provides wrappers around common outgoing messages and the SDK data model.
+`BBMAccess` provides wrappers around common outgoing messages and the SDK data model.
 
 You may use, extend, or modify this code as needed for your own application.
 
 ### <a name="simpleChatApp"></a>SimpleChatApp
 
-The *SimpleChatApp* class is the primary entry point for the application and owns and instance of a *BBMAuthController* and a *BBMKeyManager*.  These classes provide authentication via GoogleSignIn and key management via Firebase.  *SimpleChatApp* uses ObservableMonitors to monitor the credential and service state on the BBMAuthController instance and syncronizes keys and/or configures services when the appropriate conditions are met.
+The `SimpleChatApp` class is the primary entry point for the application and owns and instance of a `BBMAuthController` and a `BBMKeyManager`.  These classes provide authentication via GoogleSignIn and key management via Firebase.  `SimpleChatApp` uses `ObservableMonitors` to monitor the credential and service state on the `BBMAuthController` instance and syncronizes keys and/or configures services when the appropriate conditions are met.
 
 
-For *BBMAuthController*, you can substitute an implementation of *id&lt;BBMTokenManager&gt;* that interacts with your oAuth provider of choice.  Configuration is handled via the ConfigSettings.plist file:
+For `BBMAuthController`, you can substitute an implementation of `id<BBMTokenManager>` that interacts with your oAuth provider of choice.  Configuration is handled via the `ConfigSettings.plist` file:
 ```swift
 private let _authController : BBMAuthController! = {
     let controller = BBMAuthController.fromConfigFile()
@@ -91,7 +121,7 @@ private let _authController : BBMAuthController! = {
 }()
 ```
 
-Sample Token Managers are provided for both Azure AD and Google SignIn.  To use Google SignIn with the BlackBerry Key Management Service (for example), the ConfigSettings.plist should be configured as follows:
+Example Token Managers are provided for both Azure AD and Google SignIn.  To use Google SignIn with the BlackBerry Key Management Service (for example), the `ConfigSettings.plist` should be configured as follows:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -118,7 +148,7 @@ Sample Token Managers are provided for both Azure AD and Google SignIn.  To use 
 
 ### <a name="startChatViewController"></a>StartChatViewController
 
-*StartChatViewController* shows how to start a chat.   The details for starting a chat are found in *BBMChatCreator.m* which submits the request to start a chat to the service and waits for the response before calling back to the view controller.
+`StartChatViewController` shows how to start a chat.   The details for starting a chat are found in `BBMChatCreator.m` which submits the request to start a chat to the service and waits for the response before calling back to the view controller.
 
 ```objective-c
 [self.chatCreator startConferenceWithRegIds:@[regId]
@@ -132,7 +162,7 @@ Sample Token Managers are provided for both Azure AD and Google SignIn.  To use 
 }];
 ```
 
-The implementation of startConferenceWithRegIds:subject:callback: in *BBMChatCreator* looks something like this:
+The implementation of startConferenceWithRegIds:subject:callback: in `BBMChatCreator` looks something like this:
 ```objective-c
 NSMutableArray *invitees = [[NSMutableArray alloc] init];
 for (NSNumber *regId in regIds) {
@@ -151,9 +181,9 @@ chatStart.isOneToOne = isOneToOne;
 
 ### <a name="chatsListViewController"></a>ChatsListViewController
 
-*ChatsListViewController* will render a list of the available chats.  An ObservableMonitor is used to monitor the list of chats and update the tableView as chats are added or removed.
+`ChatsListViewController` will render a list of the available chats.  An `ObservableMonitor` is used to monitor the list of chats and update the `tableView` as chats are added or removed.
 
-*ChatsListViewController* monitors the chat list and updates a table view for any changes via:
+`ChatsListViewController` monitors the chat list and updates a table view for any changes via:
 ```objective-c
 //Observe the list of chats.  Note the use of the "observableArray" property on the chat
 //LiveList which will trigger this monitor any time there is a change in the chat LiveList.
@@ -179,9 +209,9 @@ self.chatsMonitor = [ObservableMonitor monitorActivatedWithName:@"chatsMonitor" 
 
 ### <a name="chatViewController"></a>ChatViewController
 
-*ChatViewController* will render a list of the messages in a specific chat.  An ObservableMonitor is used to monitor the message count and last message identifier on the chat and request messages and update the tableView when either change.
+`ChatViewController` will render a list of the messages in a specific chat.  An `ObservableMonitor` is used to monitor the message count and last message identifier on the chat and request messages and update the tableView when either change.
 
-*ChatViewController* will monitor the chat state and load new messages and update the tableView via:
+`ChatViewController` will monitor the chat state and load new messages and update the tableView via:
 ```
 //This monitor will lazy-load all of the messages in a given chat and add them to an array
 //that we can use to drive our tableView.  chat.lastMessage and chat.numMessages are both
@@ -240,10 +270,10 @@ for(BBMChatMessage *message in self.messages.reverseObjectEnumerator) {
 
 ## License
 
-These samples are released as Open Source and licensed under the
+These examples are released as Open Source and licensed under the
 [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html). 
 
-These samples were created using SDKs from Apple Inc. and may contain code
+These examples were created using SDKs from Apple Inc. and may contain code
 licensed for use only with Apple products. Please review your Apple SDK
 Agreement for additional details.
 
