@@ -11,27 +11,32 @@ service) solution that can enable you to build powerful connections
 around the world, while keeping everything safe and secure in a
 “private garden” communication system.
 
-# Spark Examples for Android
+# Examples for Android
 
-This repository contains code for Android example applications that you can use to help build your messaging solution with Spark.
+This repository contains code for Android example applications that you can use
+to help build your messaging solution with the BlackBerry Spark Communications
+Services SDK.
 
 | Example Application                      | Description                              |
 | ---------------------------------------- | ---------------------------------------- |
-| [Quick Start](QuickStart/README.md)      | Build a basic app to initialize and authenticate with Spark|
-| [Simple Chat](SimpleChat/README.md)      | Build a basic chat app with Spark |
-| [Soft Phone](SoftPhone/README.md) |	Build an app with voice and video calling with Spark|
-| [Whiteboard](Whiteboard/README.md) |	Build a shared white board app with Spark |
-| [Data Transfer](DataTransfer/README.md) | Build an app to send files over a secure peer-to-peer connection with Spark |
-| [Announcements](Announcements/README.md) | Build an app that allows users to send, view, and edit announcements in a chat with Spark |
+| [Quick Start](QuickStart/README.md)      | Build a basic application that authenticates with the SDK |
+| [Simple Chat](SimpleChat/README.md)      | Build a basic chat application using the SDK |
+| [Soft Phone](SoftPhone/README.md) |	Build an application with voice and videocalling with the SDK |
+| [Whiteboard](Whiteboard/README.md) |	Build a shared white board application with the SDK |
+| [Data Transfer](DataTransfer/README.md) | Build an application to send files over a secure peer-to-peer connection with the SDK |
+| [Announcements](Announcements/README.md) | Build an application that allows users to send, view, and edit announcements in a chat with the SDK |
 
-For more details on all the Spark examples see the online [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).
+For more details on all the SDK examples see the online [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).
 
 # Getting Started
 
-These samples require the Spark SDK, which you can find along with related resources at the location below.
+These examples require the Spark Communications SDK, which you can find along with related resources at the location below.
 
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
-* [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [Android Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-android.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 
 <p align="center">

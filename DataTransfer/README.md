@@ -2,14 +2,20 @@
 
 # Data Transfer for Android
 
-The Data Transfer application demonstrates how to use the peer-to-peer data connection feature of BlackBerry Spark Communications Services. The data connection API allows arbitrary data to be sent securely through a familiar stream interface. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
+The Data Transfer example application demonstrates how to use the peer-to-peer
+data connection feature of BlackBerry Spark Communications Services. The data
+connection API allows arbitrary data to be sent securely through a familiar
+stream interface. This
+example builds on the [Quick Start](../QuickStart/README.md) example that
+demonstrates how you can authenticate with the SDK with user authentication
+disabled while using the BlackBerry Key Management Service.
 
 ### Features
 
-The sample application allows the user to do the following:
+The Data Transfer example allows the user to do the following:
 
-- Start a data connection
-- Send and receive files over the connection
+* Start a data connection
+* Send and receive files over the connection
 
 <br>
 
@@ -21,13 +27,14 @@ The sample application allows the user to do the following:
 
 ## Getting Started
 
-This example requires the Spark SDK, which you can find along with related resources at the location below.
+This example requires the Spark Communications SDK, which you can find along with related resources at the locations below.
 
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [Android Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-android.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
-
-Visit the [Getting Started with Android](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-android.html) section to see the minimum requirements.
 
 <p align="center">
     <a href="http://www.youtube.com/watch?feature=player_embedded&v=310UDOFCLWM"
@@ -38,28 +45,46 @@ Visit the [Getting Started with Android](https://developer.blackberry.com/files/
  <b>Getting started video</b>
 </p>
 
-This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service. This allows you to get up and running quickly with minimal setup.
+By default, this example application is configured to work in a domain with user
+authentication disabled and the BlackBerry Key Management Service enabled.
+See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-[Create a Spark application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+Once you have a domain in the sandbox, edit DataTransfer's `app.properties` file
+to configure the example with your domain ID.
 
-Once your sandbox domain is configured, edit the app.properties file with your Spark domain and your Android signing keystore parameters. Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.
+```
+# Your Spark Domain ID
+user_domain="your_spark_domain"
+```
+When you run the Data Transfer application, it will prompt you for a user ID and
+a password. Since you've configured your domain to have user authentication
+disabled, you can enter any string you like for the user ID and an SDK identity
+will be created for it. Other applications that you run in the same domain will
+be able to find this identity by this user ID. The password is used to protected
+the keys stored in the
+[BlackBerry Key Management Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
 
-This application has been built using Gradle 4.2.1 (newer versions have not been validated).
+Notes:
 
+* To complete a release build you must create your own signing key. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html.
+* This application has been built using gradle 4.2.1 (newer versions have not been validated).
 
 ## Walkthrough
 
 Follow this guide for a walkthrough explaining how the Spark SDK is used to share data over a secure peer-to-peer data connection.
 
-- [Creating a connection](#create)
-- [Receive a connection](#receive)
-- [Data channels](#channels)
-- [Send and receive data](#sendAndReceive)
+* [Creating a connection](#create)
+* [Receive a connection](#receive)
+* [Data channels](#channels)
+* [Send and receive data](#sendAndReceive)
 
 
 ### <a name="create"></a> Creating a connection
 
-We can start a new data connection using [startDataConnection](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#startDataConnection-long-java.lang.String-com.bbm.sdk.media.BBMEDataConnectionCreatedObserver-). When starting a data connection we can include a metadata string which is passed to the participant. The meta data can be used to describe the intent or content of the connection.
+You can start a new data connection using [`startDataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#startDataConnection-long-java.lang.String-com.bbm.sdk.media.BBMEDataConnectionCreatedObserver-). When starting a data connection you can include a metadata string which is passed to the participant. The meta data can be used to describe the intent or content of the connection.
 
 ```java
 /**
@@ -86,7 +111,7 @@ public void startDataConnection(final long regId, final String metaData) {
 
 #### Observing the connection
 
-The [state](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ConnectionState.html) of the data connection can be observed by [getting](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#getDataConnection-int-) the data connection from the [media manager](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html). When the state is connected we show the send file button. When the state is disconnected we hide the button. We can also check the [failure reason](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.FailReason.html) when the connection is disconnected.
+The [`state`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ConnectionState.html) of the data connection can be observed by [`getting`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#getDataConnection-int-) the data connection from the [`media manager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html). When the state is connected we show the send file button. When the state is disconnected we hide the button. You can also check the [`failure reason`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.FailReason.html) when the connection is disconnected.
 
 ```java
 //Monitor to observe the data connection
@@ -137,7 +162,7 @@ ObservableMonitor mConnectionMonitor = new ObservableMonitor() {
 
 ### <a name="receive"></a> Receive a connection
 
-To monitor for incoming data connections, we register a [BBMEIncomingDataConnectionObserver](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEIncomingDataConnectionObserver.html).
+To monitor for incoming data connections, you register a [`BBMEIncomingDataConnectionObserver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEIncomingDataConnectionObserver.html).
 
 ```java
 //Add incoming connection observer
@@ -176,7 +201,11 @@ public class IncomingConnectionObserver implements BBMEIncomingDataConnectionObs
 ```
 *IncomingConnectionObserver.java*
 
-To complete the connection, we must call [openDataConnection](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#openDataConnection-int-). The connection should transition to [connected](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ConnectionState.html#CONNECTED) and we can being writing data into the connection.
+To complete the connection, you must call
+[`openDataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#openDataConnection-int-). The
+connection should transition to
+[`connected`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ConnectionState.html#CONNECTED)
+and you can begin writing data into the connection.
 
 ```java
 //Open the data connection, this will transition the connection to "connected"
@@ -186,9 +215,9 @@ BBMEnterprise.getInstance().getMediaManager().openDataConnection(mDataConnection
 
 ### <a name="channels"></a> Data channels
 
-Sending and receiving data in a connection is done through a [DataChannel](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannel.html). A data channel is a stream with a specified name and [type](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ChannelType.html). The type and name define the expected data for the receiver. [File](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ChannelType.html#FILE) and [Data](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ChannelType.html#DATA) types have a defined expected size. The [Stream](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ChannelType.html#STREAM) type should be used when the size of the transfer is undefined.
+Sending and receiving data in a connection is done through a [`DataChannel`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannel.html). A data channel is a stream with a specified name and [`type`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ChannelType.html). The type and name define the expected data for the receiver. [`File`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ChannelType.html#FILE) and [`Data`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ChannelType.html#DATA) types have a defined expected size. The [`Stream`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.ChannelType.html#STREAM) type should be used when the size of the transfer is undefined.
 
-Each time the user selects a file to send, we'll create a new data channel using the [createDataChannel](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.html#createDataChannel-java.lang.String-java.lang.String-long-com.bbm.sdk.media.BBMEDataConnection.ChannelType-) method. We add a transfer item to the adapter to display the status of the file transfer to the user.
+Each time the user selects a file to send, we'll create a new data channel using the [`createDataChannel`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataConnection.html#createDataChannel-java.lang.String-java.lang.String-long-com.bbm.sdk.media.BBMEDataConnection.ChannelType-) method. We add a transfer item to the adapter to display the status of the file transfer to the user.
 
 ```java
 //Create a new data channel of type "File" specifying the name and size. The channel id we are providing is a random string.
@@ -208,7 +237,7 @@ mDataChannelsAdapter.notifyDataSetChanged();
 
 #### Observe a new incoming channel
 
-To be notified when a new channel has been created in a connection use the [BBMEDataChannelCreatedObserver](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannelCreatedObserver.html). When a new channel arrives a [BBMEDataChannelReceiver](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannelReceiver.html) is provided.
+To be notified when a new channel has been created in a connection use the [`BBMEDataChannelCreatedObserver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannelCreatedObserver.html). When a new channel arrives a [`BBMEDataChannelReceiver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannelReceiver.html) is provided.
 
 ```java
 connection.setDataChannelCreatedObserver(MainActivity.this);
@@ -227,7 +256,7 @@ public void onDataChannelCreated(String s, BBMEDataChannelReceiver receiver) {
 
 ### <a name="sendAndReceive"></a> Send and receive data
 
-Data can be sent into the channel through an [OutputStream](https://developer.android.com/reference/java/io/OutputStream.html) in the [BBMEDataChannelSender](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannelSender.html). In our example we copy a file into the channel output stream. Reading and writing from a data channel stream will block when required to send and receive from the underlying connection. Accessing data in the stream should always be performed on a background thread to avoid blocking the main activity.
+Data can be sent into the channel through an [`OutputStream`](https://developer.android.com/reference/java/io/OutputStream.html) in the [`BBMEDataChannelSender`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannelSender.html). In our example we copy a file into the channel output stream. Reading and writing from a data channel stream will block when required to send and receive from the underlying connection. Accessing data in the stream should always be performed on a background thread to avoid blocking the main activity.
 
 ```java
 //Start a background task to write the file to the data channel
@@ -261,7 +290,7 @@ AsyncTask.execute(new Runnable() {
 
 #### Reading data from a channel
 
-Data is read from a [BBMEDataChannelReceiver](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannelReceiver.html) through an [InputStream](https://developer.android.com/reference/java/io/InputStream.html). All incoming channels are written into the /data_transfer_example directory.
+Data is read from a [`BBMEDataChannelReceiver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannelReceiver.html) through an [`InputStream`](https://developer.android.com/reference/java/io/InputStream.html). All incoming channels are written into the /data_transfer_example directory.
 
 ```java
 private void writeFile(final BBMEDataChannelReceiver receiver, final DataChannelsAdapter.TransferItem transferItem) {
@@ -318,7 +347,7 @@ private void writeFile(final BBMEDataChannelReceiver receiver, final DataChannel
 
 #### Observing a channel
 
-To display a progress bar, we ask the [DataChannel](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannel.html) for the [progress](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannel.html#getProgress--). The progress value is a provided as an observable value integer between 0 and 100. The progress is only available for channel types where the expected size is known. We also display the number of bytes transferred using [getBytesTransferred()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannel.html#getBytesTransferred--). If the bytes transferred or progress values change the [ObservableMonitor](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/reactive/ObservableMonitor.html) is triggered and the UI is updated.
+To display a progress bar, you ask the [`DataChannel`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannel.html) for the [`progress`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannel.html#getProgress--). The progress value is a provided as an observable value integer between 0 and 100. The progress is only available for channel types where the expected size is known. We also display the number of bytes transferred using [`getBytesTransferred()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEDataChannel.html#getBytesTransferred--). If the bytes transferred or progress values change the [`ObservableMonitor`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/reactive/ObservableMonitor.html) is triggered and the UI is updated.
 
 ```java
 public ObservableMonitor mProgressObserver = new ObservableMonitor() {
@@ -335,7 +364,7 @@ public ObservableMonitor mProgressObserver = new ObservableMonitor() {
 
 ## License
 
-These samples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).  
+These examples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).  
 
 The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the [Creative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
 

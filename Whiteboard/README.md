@@ -1,7 +1,11 @@
 ![BlackBerry Spark Communications Services](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/resources/images/bnr-bbm-enterprise-sdk-title.png)
 # Whiteboard for Android
 
-The Whiteboard app demonstrations how you can share arbitrary data in a BlackBerry Spark Communications Services chat. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
+The Whiteboard example demonstrations how you can share arbitrary data in a
+BlackBerry Spark Communications Services chat. This example builds on the
+[Quick Start](../QuickStart/README.md) example that demonstrates how you can
+authenticate the BlackBerry Spark Communications Services with user
+authentication disabled while using the BlackBerry Key Management Service.
 
 <br>
 
@@ -16,11 +20,11 @@ The Whiteboard app demonstrations how you can share arbitrary data in a BlackBer
 
 ### Features
 
-The Whiteboard sample app allows the user to do the following:
+The Whiteboard example application allows the user to do the following:
 
-- Create new whiteboards with one or more users
-- Share pictures and markup
-- Clear the whiteboard
+* Create new whiteboards with one or more users
+* Share pictures and markup
+* Clear the whiteboard
 
 <br>
 <p align="center">
@@ -30,14 +34,14 @@ The Whiteboard sample app allows the user to do the following:
 
 ## Getting Started
 
-This example requires the Spark SDK, which you can find along with related resources at the location below.
+This example requires the Spark Communications SDK, which you can find along with related resources at the locations below.
 
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [Android Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-android.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
-
-Visit the [Getting Started with Android](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-android.html) section to see the minimum requirements.
-<br>
 
 <p align="center">
     <a href="http://www.youtube.com/watch?feature=player_embedded&v=310UDOFCLWM"
@@ -48,34 +52,47 @@ Visit the [Getting Started with Android](https://developer.blackberry.com/files/
  <b>Getting started video</b>
 </p>
 
-This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service. This allows you to get up and running quickly with minimal setup.
+By default, this example application is configured to work in a domain with user
+authentication disabled and the BlackBerry Key Management Service enabled.
+See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-[Create a Spark application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+Once you have a domain in the sandbox, edit Whiteboard's `app.properties` file
+to configure the example with your domain ID.
 
-Once your sandbox domain is configured, edit the app.properties file with your Spark domain and your Android signing keystore parameters. Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.
+```
+# Your Spark Domain ID
+user_domain="your_spark_domain"
+```
 
-This application has been built using Gradle 4.2.1 (newer versions have not been validated).
+When you run the Whiteboard application it will prompt you for a user ID and a password. Since you've configured your domain to have user authentication disabled, you can enter any string you like for the user ID and an SDK identity will be created for it. Other applications that you run in the same domain will be able to find this identity by this user ID. The password is used to protected the keys stored in the [BlackBerry Key Management Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
 
+Notes:
+
+* To complete a release build you must create your own signing key. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html.
+* This application has been built using gradle 4.2.1 (newer versions have not been validated).
 
 ## Walkthrough
 
-Follow this guide for a walkthrough showing how to use the Spark SDK to send images and markup to create a shared whiteboard.
+Follow this guide for a walkthrough showing how to use the SDK to send images and markup to create a shared whiteboard.
 
-- [Getting started](#gettingStarted)
-- [Sending a Doodle](#sendingADoodle)
-- [Populating the Whiteboard](#populateWhiteboard)
-- [Clearing the Whiteboard](#clearing)
+* [Getting started](#gettingStarted)
+* [Sending a Doodle](#sendingADoodle)
+* [Populating the Whiteboard](#populateWhiteboard)
+* [Clearing the Whiteboard](#clearing)
 
 
 ### <a name="gettingStarted"></a>Getting Started
 
-The Spark SDK can be used to send more then just text messages. The Spark SDK supports sending opaque JSON content within a chat message. This example sends pictures and simple markup to create a shared whiteboard experience.
+The SDK can be used to send more then just text messages. The SDK supports sending opaque JSON content within a chat message. This example sends pictures and simple markup to create a shared whiteboard experience.
 
 ### <a name="sendingADoodle"></a>Sending a Doodle
 
-Doodles drawn by the user are sent in the [data](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html#data) section of a [ChatMessage](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html). To send the doodle we convert the bitmap into a base 64 encoded string. The encoded image content, size and position are written into a JSON object. The JSON object is set in the [ChatMessageSend](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.html).
+Doodles drawn by the user are sent in the [`data`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html#data) section of a [`ChatMessage`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html). To send the doodle we convert the bitmap into a base 64 encoded string. The encoded image content, size and position are written into a JSON object. The JSON object is set in the [`ChatMessageSend`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.html).
 
-***Tip ChatMessages can be up to 70KB in size, See [ChatMessageSend#data](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.html#data-JSONObject-)***
+***Tip ChatMessages can be up to 70KB in size, See [`ChatMessageSend`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/outbound/ChatMessageSend.html#data-JSONObject-)***
 
 First compress the bitmap we captured of the users input and encode it as a base64 string. The bitmap is always compressed as a PNG first, if the size is still outside our bounds its compressed as a JPEG.
 ```java
@@ -128,7 +145,7 @@ BBMEnterprise.getInstance().getBbmdsProtocol().send(messageSend);
 
 ### <a name="populateWhiteboard"></a>Populating the Whiteboard
 
-To populate the whiteboard with the doodle messages we iterate over the list of received [chat messages](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html) in reverse creating a draw list. To avoid re-drawing chat messages we keep track of the last message drawn and only draw messages new messages. If we encounter a message with the tag CHAT_MESSAGE_TAG_CLEAR we can stop since earlier images would not be visible after the clear.
+To populate the whiteboard with the doodle messages we iterate over the list of received [`chat messages`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html) in reverse creating a draw list. To avoid re-drawing chat messages we keep track of the last message drawn and only draw messages new messages. If we encounter a message with the tag CHAT_MESSAGE_TAG_CLEAR we can stop since earlier images would not be visible after the clear.
 
 ```java
 //build list to display
@@ -173,7 +190,7 @@ for (int i=size - 1; i >= 0; --i) {
 
 
 
-Drawing the doodles or pictures requires us to recreate a bitmap from the base64 encoded data in the [chat message](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html). The size and position metadata included in the message are used to position the bitmap within the canvas.
+Drawing the doodles or pictures requires us to recreate a bitmap from the base64 encoded data in the [`chat message`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html). The size and position metadata included in the message are used to position the bitmap within the canvas.
 
 ```java
 if (WhiteboardUtils.CHAT_MESSAGE_TAG_WHITEBOARD.equals(tag) || WhiteboardUtils.CHAT_MESSAGE_TAG_PICTURE.equals(tag)) {
@@ -221,7 +238,7 @@ if (WhiteboardUtils.CHAT_MESSAGE_TAG_WHITEBOARD.equals(tag) || WhiteboardUtils.C
 
 ### <a name="clearing"></a>Clearing the whiteboard
 
-To clear the whiteboard of any existing doodles we send another [chat message](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html) with the tag "ClearScreen". When we encounter a clear tag we'll wipe the canvas.
+To clear the whiteboard of any existing doodles we send another [`chat message`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html) with the tag "ClearScreen". When we encounter a clear tag we'll wipe the canvas.
 
 ```java
 } else if (WhiteboardUtils.CHAT_MESSAGE_TAG_CLEAR.equals(tag)) {
@@ -240,7 +257,7 @@ To clear the whiteboard of any existing doodles we send another [chat message](h
 
 ## License
 
-These samples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
+These examples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the [Creative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
 

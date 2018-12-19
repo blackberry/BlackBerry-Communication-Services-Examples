@@ -2,7 +2,11 @@
 
 # Soft Phone for Android
 
-The SoftPhone app demonstrates how voice and video calling can be integrated into your application using BlackBerry Spark Communications Services. This example builds on the [Quick Start](../QuickStart/README.md) example that demonstrates how you can authenticate with the Spark SDK using the [Identity Provider](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/identityManagement.html) of your application.
+The SoftPhone example application demonstrates how voice and video calling can be integrated
+into your application using BlackBerry Spark Communications Services. This
+example builds on the [Quick Start](../QuickStart/README.md) example that
+demonstrates how you can authenticate with the SDK with user authentication
+disabled while using the BlackBerry Key Management Service.
 
 <br>
 
@@ -17,12 +21,12 @@ The SoftPhone app demonstrates how voice and video calling can be integrated int
 
 ### Features
 
-The SoftPhone sample app allows the user to do the following:
+The SoftPhone example application allows the user to do the following:
 
-- Start calls by entering a user id
-- Accept/Decline incoming calls
-- View a call history list
-- Enable video in a call
+* Start calls by entering a user id
+* Accept/Decline incoming calls
+* View a call history list
+* Enable video in a call
 
 <br>
 <p align="center"> 
@@ -33,13 +37,14 @@ The SoftPhone sample app allows the user to do the following:
 
 ## Getting Started
 
-This example requires the Spark SDK, which you can find along with related resources at the location below.
+This example requires the Spark Communications SDK, which you can find along with related resources at the locations below.
 
-* Getting started with the [Spark SDK](https://developers.blackberry.com/us/en/products/blackberry-bbm-enterprise-sdk.html)
-* [Development Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/index.html)
+* Instructions to
+[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+the SDK.
+* [Android Getting Started](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-android.html)
+instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
-
-Visit the [Getting Started with Android](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-android.html) section to see the minimum requirements.
 
 <p align="center">
     <a href="http://www.youtube.com/watch?feature=player_embedded&v=310UDOFCLWM"
@@ -50,32 +55,46 @@ Visit the [Getting Started with Android](https://developer.blackberry.com/files/
  <b>Getting started video</b>
 </p>
 
-This sample application is pre-configured to use simple unvalidated user authentication and the BlackBerry Key Management Service. This allows you to get up and running quickly with minimal setup.
+By default, this example application is configured to work in a domain with user
+authentication disabled and the BlackBerry Key Management Service enabled.
+See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+section of the Developer Guide to get started configuring a
+[domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
+in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
 
-[Create a Spark application](https://account.good.com/#/a/organization//applications/add) and configure a sandbox domain, with settings to use no identity provider and using the BlackBerry Key Management Service.   
+Once you have a domain in the sandbox, edit SoftPhone's `app.properties` file
+to configure the example with your domain ID.
 
-Once your sandbox domain is configured, edit the app.properties file with your Spark domain and your Android signing keystore parameters. Signing-in will require you to enter a unique user identifier (such as a name or email) and a password for the BlackBerry Key Management Service.
+```
+# Your Spark Domain ID
+user_domain="your_spark_domain"
+```
+When you run the SoftPhone application, it will prompt you for a user ID and
+a password. Since you've configured your domain to have user authentication
+disabled, you can enter any string you like for the user ID and an SDK identity
+will be created for it. Other applications that you run in the same domain will
+be able to find this identity by this user ID. The password is used to protected
+the keys stored in the
+[BlackBerry Key Management Service](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html).
 
-This application has been built using Gradle 4.2.1 (newer versions have not been validated).
+Notes:
+
+* To complete a release build you must create your own signing key. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html.
+* This application has been built using gradle 4.2.1 (newer versions have not been validated).
 
 ## Walkthrough
 
-Follow this guide for a walkthrough explaining how the Spark SDK is used to add voice and video calling in this sample application.
+Follow this guide for a walkthrough explaining how the Spark SDK is used to add voice and video calling in this example application.
 
-- [Getting started](#gettingStarted)
-- [Observing a call](#observing)
-- [Audio routing](#audio)
-- [Adding video](#video)
-- [Building a call log](#history)
-
-
-
+* [Getting started](#gettingStarted)
+* [Observing a call](#observing)
+* [Audio routing](#audio)
+* [Adding video](#video)
+* [Building a call log](#history)
 
 ### <a name="gettingStarted"></a>Getting Started
 
-The Spark SDK makes it easy to add VOIP calling into your application. This tutorial will walk through the SoftPhone sample code to explain the voice and video APIs in the Spark SDK.
-
-
+The SDK makes it easy to add VOIP calling into your application. This tutorial will walk through the SoftPhone example code to explain the voice and video APIs in the SDK.
 
 #### Permissions for Voice and Video
 
@@ -89,11 +108,13 @@ To enable calling in our application we first have to add the required permissio
 <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 ```
 
-
-
 #### Starting a call
 
-Starting a call is as easy as using the [startCall()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#startCall-long-boolean-com.bbm.sdk.media.BBMECallCreationObserver-) method. If your application compiles with Android M+, we also need to ask for the RECORD_AUDIO permission before we can start a voice call. If you wish to start a video call directly we also need to ask for the CAMERA permission.
+Starting a call is as easy as using the
+[`startCall()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#startCall-long-boolean-com.bbm.sdk.media.BBMECallCreationObserver-)
+method. If your application compiles with Android M+, you also need to ask for
+the RECORD_AUDIO permission before we can start a voice call. If you wish to
+start a video call directly we also need to ask for the CAMERA permission.
 
 ```java
 /**
@@ -132,9 +153,7 @@ public static void makeCall(final Activity activity, Fragment fragment, final lo
 ```
 *CallUtils.java*
 
-
-
-We add a [BBMECallCreationObserver](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECallCreationObserver.html) to take action when the call has been created, or handle errors if the call could not be started. In this example we will launch our call activity when the call has been created.
+We add a [`BBMECallCreationObserver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECallCreationObserver.html) to take action when the call has been created, or handle errors if the call could not be started. In this example we will launch our call activity when the call has been created.
 
 ```java
 @SuppressWarnings("MissingPermission")
@@ -165,7 +184,7 @@ private static void startCall(final Activity activity, long regId) {
 
 #### Listen for incoming calls
 
-Now that we've started a call, what about when someone is calling us? To be notified of incoming calls we need to add a [BBMEIncomingCallObserver](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEIncomingCallObserver.html) with the media manager.
+Now that you have started a call, what about when someone is calling you? To be notified of incoming calls you need to add a [`BBMEIncomingCallObserver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEIncomingCallObserver.html) with the media manager.
 
 ```java
 //Add incoming call observer
@@ -175,7 +194,7 @@ addIncomingCallObserver(new IncomingCallObserver(SoftPhoneApplication.this));
 *SoftPhoneApplication.java*
 
 
-Our incoming call observer will launch an activity to prompt the user to answer or decline the call. Optionally, we can choose to [accept()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#acceptCall-int-l) an incoming call before answering. Accepting the call allows the Spark SDK to start negotiating the audio for the call early, which can help prevent any audio delay when the call is answered.
+Your incoming call observer will launch an activity to prompt the user to answer or decline the call. Optionally, you can choose to [`accept()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#acceptCall-int-l) an incoming call before answering. Accepting the call allows the SDK to start negotiating the audio for the call early, which can help prevent any audio delay when the call is answered.
 
 
 ```java
@@ -193,11 +212,9 @@ mContext.startActivity(incomingCallIntent);
 ```
 *IncomingCallObserver.java*
 
-
-
 #### Answer or decline an incoming call
 
-Before answering a call we need RECORD_AUDIO permission. To answer or decline a call, use [answer()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#answerCall-int-l) or [endCall()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#endCall-int-l).
+Before answering a call you need the RECORD_AUDIO permission. To answer or decline a call, use [`answer()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#answerCall-int-l) or [`endCall()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#endCall-int-l).
 
 ```java
 if (mediaManager.answerCall(getIncomingCall().getCallId()) == BBMEMediaManager.Error.NO_ERROR) {
@@ -221,7 +238,7 @@ getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
 
 #### Determine if a call is in progress
 
-To find out if a call is currently in progress, we get the id of the active call with [getActiveCallId()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#getActiveCallId--). Once we have the active call id we can fetch the [call](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html) object using [getCall()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#getCall-int-). The call state can be checked with [getCallState()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#getCallState--). This code will display a banner in the main activity allowing the user to reopen the call activity if a call is in progress.
+To find out if a call is currently in progress, you get the id of the active call with [`getActiveCallId()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#getActiveCallId--). Once you have the active call id you can fetch the [`call`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html) object using [`getCall()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#getCall-int-). The call state can be checked with [`getCallState()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#getCallState--). This code will display a banner in the main activity allowing the user to reopen the call activity if a call is in progress.
 
 
 ```java
@@ -250,7 +267,7 @@ private ObservableMonitor InACallMonitor = new ObservableMonitor() {
 
 ### <a name="observing"></a>Observing Calls
 
-You may find it useful to observe the state of an active call. We can add our [BBMECallObserver](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECallObserver.html) using [addObserver()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#addObserver-com.bbm.sdk.media.BBMECallObserver-). In this example we are using our observer to play a ringtone when the call starts ringing on the receivers device. The observer must be registered with each new call that is started.
+You may find it useful to observe the state of an active call. We can add our [`BBMECallObserver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECallObserver.html) using [`addObserver()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#addObserver-com.bbm.sdk.media.BBMECallObserver-). In this example we are using our observer to play a ringtone when the call starts ringing on the receivers device. The observer must be registered with each new call that is started.
 
 
 ```java
@@ -298,11 +315,11 @@ public void onOutgoingCallRinging(@NonNull BBMECall bbmeCall) {
 
 ### <a name="audio"></a>Audio Routing
 
-The Spark SDK allows you to choose the audio routing path for your call. The audio output can be routed to the handset speaker, speaker phone, wired headset or Bluetooth.
+The SDK allows you to choose the audio routing path for your call. The audio output can be routed to the handset speaker, speaker phone, wired headset or Bluetooth.
 
 #### Changing the audio routing
 
-To get the active audio device we can use [getActiveAudioDevice()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#getActiveAudioDevice--). We can also get the list of available audio devices using [getAvailableAudioDevices()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#getAvailableAudioDevices--) and set a new audio device with [setActiveAudioDevice()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#setActiveAudioDevice-com.bbm.sdk.media.BBMEMediaManager.AudioDevice-). You may wish to display the list of audio devices to the user, in our example we are looping through the audio devices one at a time.
+To get the active audio device you can use [`getActiveAudioDevice()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#getActiveAudioDevice--). You can also get the list of available audio devices using [`getAvailableAudioDevices()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#getAvailableAudioDevices--) and set a new audio device with [`setActiveAudioDevice()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#setActiveAudioDevice-com.bbm.sdk.media.BBMEMediaManager.AudioDevice-). You may wish to display the list of audio devices to the user, in our example we are looping through the audio devices one at a time.
 
 
 ```java
@@ -366,7 +383,7 @@ mediaManager.setActiveAudioDevice(devices.get(nextIndex));
 
 #### Muting the microphone
 
-To mute the local users microphone just use [muteMicrophone()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#muteMicrophone-int-boolean-).
+To mute the local users microphone just use [`muteMicrophone()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#muteMicrophone-int-boolean-).
 
 
 ```java
@@ -389,13 +406,13 @@ private View.OnClickListener mMuteClickListener = new View.OnClickListener() {
 
 ### <a name="video"></a>Video
 
-Calls in the Spark SDK can have video added at any point if both users support it. To support video both users must have a device with KitKat (API 19)+. Video may not be possible if the data connection is poor. To determine if a user supports video use [isVideoCapable()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#isVideoCapable--), to determine if the call supports video use [isVideoSupported()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#isVideoSupported--).
+Calls in the SDK can have video added at any point if both users support it. To support video both users must have a device with KitKat (API 19)+. Video may not be possible if the data connection is poor. To determine if a user supports video use [`isVideoCapable()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#isVideoCapable--), to determine if the call supports video use [`isVideoSupported()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#isVideoSupported--).
 
 
 
 #### Starting video
 
-Video is started on the call by enabling the camera with [setCameraEnabled()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#setCameraEnabled-boolean-com.bbm.sdk.media.BBMECameraOperationCallback-). Remember to get the CAMERA permission before attempting to start the camera. Stopping the camera is also done with setCameraEnabled. You can include a [BBMECameraOperationCallback](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECameraOperationCallback.html) to be notified when the operation has completed.
+Video is started on the call by enabling the camera with [`setCameraEnabled()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#setCameraEnabled-boolean-com.bbm.sdk.media.BBMECameraOperationCallback-). Remember to get the CAMERA permission before attempting to start the camera. Stopping the camera is also done with setCameraEnabled. You can include a [`BBMECameraOperationCallback`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECameraOperationCallback.html) to be notified when the operation has completed.
 
 ```java
 @SuppressWarnings("MissingPermission")
@@ -418,7 +435,7 @@ private void startStopCamera() {
 
 #### Displaying the video
 
-The call will be updated when video content is available or has been removed. The video is provided via the [BBMEVideoRenderer](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEVideoRenderer.html) class. You can get the video renderers by using [getLocalVideoRenderer()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#getLocalVideoRenderer--) and [getRemoteVideoRenderer()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#getRemoteVideoRenderer--). Each [BBMEVideoRenderer](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEVideoRenderer.html) includes a surface view where the video is drawn. The application can choose to add the surface view as desired to their layout hierarchy. The video surface view can be obtained with [getView()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEVideoRenderer.html#getView--).
+The call will be updated when video content is available or has been removed. The video is provided via the [`BBMEVideoRenderer`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEVideoRenderer.html) class. You can get the video renderers by using [`getLocalVideoRenderer()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#getLocalVideoRenderer--) and [`getRemoteVideoRenderer()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#getRemoteVideoRenderer--). Each [`BBMEVideoRenderer`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEVideoRenderer.html) includes a surface view where the video is drawn. The application can choose to add the surface view as desired to their layout hierarchy. The video surface view can be obtained with [`getView()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEVideoRenderer.html#getView--).
 
 ***Tip: if your surface views for local and remote video overlap (picture in picture) make sure to use setZOrderMediaOverlay(true) on the view being display above the other***
 
@@ -477,7 +494,7 @@ private final ObservableMonitor mVideoRenderersMonitor = new ObservableMonitor()
 
 #### Scaling video
 
-The Spark SDK supports several scaling types for the video content. The scaling types effect how the video is displayed within the view. You should decide which aspect scaling type best fits the needs of your UI. Changes to the video scaling will only take effect after a layout is preformed. The scaling can be changed for each video renderer by using [setScalingType()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEVideoRenderer.html#setScalingType-int-int-).
+The SDK supports several scaling types for the video content. The scaling types effect how the video is displayed within the view. You should decide which aspect scaling type best fits the needs of your UI. Changes to the video scaling will only take effect after a layout is preformed. The scaling can be changed for each video renderer by using [`setScalingType()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEVideoRenderer.html#setScalingType-int-int-).
 
 When setting the scaling you can choose a different scaling to use when the video orientation matches your layout orientation and when it doesn't match. For example you may wish to use SCALE_ASPECT_FILL if the orientation matches and SCALE_ASPECT_BALANCE if it does not.
 
@@ -516,7 +533,7 @@ public static final int SCALE_ASPECT_FIT = 2;
 
 #### Switching the camera
 
-You can swap between the available cameras using [switchCamera()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#switchCamera-com.bbm.sdk.media.BBMECameraOperationCallback-).
+You can swap between the available cameras using [`switchCamera()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#switchCamera-com.bbm.sdk.media.BBMECameraOperationCallback-).
 
 
 ```java
@@ -545,15 +562,16 @@ BBMEnterprise.getInstance().getMediaManager().switchCamera(new BBMECameraOperati
     }
 });
 ```
+
 *InCallActivity.java*
 
 ### <a name="history"></a> Building a call log
 
-When a call has completed [getCallLog()](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#getCallLog--) will be populated with the reason the call ended. For example [BBMECall.CallLog.ENDED](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.CallLog.html#ENDED) for calls that ended normally, or [BBMECall.CallLog.UNAVAILABLE](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.CallLog.html#UNAVAILABLE) for a  user that couldn't be reached. In this example we are using the call log values and the BBM chat to build a visual call log. When a call ends the caller will send a chat message with the time, duration and log reason. The caller and the callee can display those chat messages as a call history. This makes the call history cloud based instead of local, and identity based rather than tied to the device endpoint.
+When a call has completed [`getCallLog()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.html#getCallLog--) will be populated with the reason the call ended. For example [`BBMECall.CallLog.ENDED`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.CallLog.html#ENDED) for calls that ended normally, or [`BBMECall.CallLog.UNAVAILABLE`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECall.CallLog.html#UNAVAILABLE) for a  user that couldn't be reached. In this example we are using the call log values and the BBM chat to build a visual call log. When a call ends the caller will send a chat message with the time, duration and log reason. The caller and the callee can display those chat messages as a call history. This makes the call history cloud based instead of local, and identity based rather than tied to the device endpoint.
 
 #### Sending a Call log message
 
-When the call ends, we will generate a new CALL_EVENT_TAG type [chat message](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html). The [ChatMessage.data](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html#data) will hold the meta data about the call. The time, duration and log reason.
+When the call ends, we will generate a new CALL_EVENT_TAG type [`chat message`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html). The [`ChatMessage.data`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html#data) will hold the meta data about the call. The time, duration and log reason.
 
 
 ```java
@@ -592,7 +610,7 @@ ChatStartHelper.startNewChat(new long[]{bbmeCall.getRegId()}, "", new ChatStartH
 
 #### Building the combined call history
 
-To create our call log we need to find all of the call event messages matching our custom type CALL_EVENT_TAG. To do this we are going to compute a list by [asking](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/BbmdsProtocol.html#getChatMessageList-com.bbm.sdk.bbmds.ChatMessageCriteria-) for the chat messages with [ChatMessageCriteria](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessageCriteria.html) tag=CALL_EVENT_TAG. We are combining the messages from all of the chats into one single call history list.
+To create our call log we need to find all of the call event messages matching our custom type CALL_EVENT_TAG. To do this we are going to compute a list by [`asking`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/BbmdsProtocol.html#getChatMessageList-com.bbm.sdk.bbmds.ChatMessageCriteria-) for the chat messages with [`ChatMessageCriteria`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessageCriteria.html) tag=CALL_EVENT_TAG. We are combining the messages from all of the chats into one single call history list.
 
 
 ```java
@@ -652,7 +670,7 @@ private ObservableMonitor mCallHistoryEventMonitor = new ObservableMonitor() {
 
 #### Displaying the call log
 
-Displaying the call log is easy, we can observe the call history event list we've made and notify our adapter when items have changed in the list. Then all we need is a RecyclerView to display the call history list.
+Displaying the call log is easy, you can observe the call history event list we've made and notify our adapter when items have changed in the list. Then all you need is a `RecyclerView` to display the call history list.
 
 
 ```java
@@ -747,7 +765,7 @@ private RecyclerView.Adapter<CallHistoryEventViewHolder> mCallHistoryAdapter = n
 
 ## License
 
-These samples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
+These examples are released as Open Source and licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the [Creative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
 
