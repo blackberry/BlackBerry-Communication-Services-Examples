@@ -7,7 +7,7 @@ If you would like to learn more about the BlackBerry Spark Commmunication Servic
 
 ### BlackBerry Spark SDK Guide
 For more details see the
-[Quick Start Swift page in the BlackBerry Spark SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/QuickStartSwift/README.html).
+[iOS Getting Started page in the BlackBerry Spark SDK Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-ios.html).
 
 
 ### Screenshots
@@ -23,7 +23,7 @@ For more details see the
 These instructions will help you get this project up and running on your Rasberry Pi and iOS device. **Note that this project was built using the BlackBerry Spark SDK version 1.1.0.18 for iOS**
 
 ### Prerequisites
-**Important Note:** This project requires you have [this Node.js sample](https://github.com/blackberry/bbme-sdk-javascript-samples/raspberryPi_IoTSample) running on a Raspberry Pi 3. Refer to the Node.js sample [README.md](https://github.com/blackberry/bbme-sdk-javascript-samples/raspberryPi_IoTSample) for instructions on setting up the Raspberry Pi.
+**Important Note:** This project requires you have [this Node.js sample](https://github.com/blackberry/bb-spark-javascript-samples/tree/master/RaspberryPi_IoTSample) running on a Raspberry Pi 3. Refer to the Node.js sample [README.md](https://github.com/blackberry/bb-spark-javascript-samples/tree/master/RaspberryPi_IoTSample) for instructions on setting up the Raspberry Pi.
 
 This project also requires that you have the following:
 - Raspberry Pi 3 running Raspbian OS
@@ -47,7 +47,7 @@ If you have not already done so for the [Node.js sample]() for your Raspberry Pi
 
 Your Firebase database rules will need to be edited to allow the application the requireed access while keeping your data secure. Head to Database in your Firebase Console, then to Rules. Paste in the contents of rules.json (included in this repository).
 
-You can find your `SDK_SERVICE_DOMAIN` by logging into [BlackBerry PCE](http://account.good.com) and navigating to the application you are using for this project.
+You can find your `SDK_SERVICE_DOMAIN` by logging into [BlackBerry Application Portal](http://account.good.com) and navigating to the application you are using for this project.
 
 The final step to to retrieve the Reg ID of the user logged in on the peripheral device. To do so, monitor the console output from the Raspberry Pi the first time you run it. A line will appear that reads similar to:
 ```sh
