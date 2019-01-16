@@ -3,7 +3,7 @@
 
 The Raspberry Pi IoT Sample provides an example of how to interface with a hardware peripheral device that is running the Node.js BlackBerry Spark SDK. This sample reads the colour selected on a mobile application and displays it on an RGB LED connected to a Raspberry Pi.
 
-If you would like to learn more about the BlackBerry Spark Commmunication Platform, be sure to head over to our [website](https://us.blackberry.com/enterprise/bbm-enterprise-sdk).
+If you would like to learn more about the BlackBerry Spark Commmunication Services, be sure to head over to our [website](https://us.blackberry.com/enterprise/bbm-enterprise-sdk).
 
 ### BlackBerry Spark SDK Guide
 For more details see the
