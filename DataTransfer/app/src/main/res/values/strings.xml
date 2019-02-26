@@ -20,6 +20,7 @@
     <string name="connection_error">Connection Error: %1$s</string>
 
     <string name="my_registration_id">My RegId: %1$d</string>
+    <string name="my_user_name">User Name: %1$s</string>
 
     <string name="error_creating_connection">Unable creating data connection, %1$s</string>
     <string name="start_data_connection">Start Data Connection</string>

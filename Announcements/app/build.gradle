@@ -59,24 +59,22 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    signingConfigs {
-        common {
-            keyAlias appProperties['keyAlias']
-            keyPassword appProperties['keyPassword']
-            storeFile file(appProperties['storeFile'])
-            storePassword appProperties['storePassword']
-        }
-    }
-
     buildTypes {
         debug {
             debuggable true
-            signingConfig signingConfigs.common
         }
         release {
             multiDexEnabled false
             minifyEnabled true
-            signingConfig signingConfigs.common
+            signingConfigs {
+                release {
+                    keyAlias appProperties['keyAlias']
+                    keyPassword appProperties['keyPassword']
+                    storeFile file(appProperties['storeFile'])
+                    storePassword appProperties['storePassword']
+                }
+            }
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -88,23 +86,9 @@ dependencies {
     // BBM UI Utilities and helpers
     api project(':Support')
     // Other UI dependencies
-    // Include Google play services auth module to use Open ID.
-    //needed for firebase DB to store user management
-    //needed for firebase DB rules checking auth to work
     api 'com.google.guava:guava:25.1-android'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.google.android.gms:play-services-auth:16.0.0'
-
-    implementation ('com.google.firebase:firebase-core:16.0.1')
-    implementation 'com.google.firebase:firebase-database:16.0.2'
-    implementation 'com.google.firebase:firebase-auth:16.0.3'
 }
-// By applying the plugin below this will ensure the project will not compile
-// if google-services.json is missing. When setting up this example please
-// ensure you follow https://developers.google.com/identity/sign-in/android/start
-// and download the resulting google-services.json file.
-
-apply plugin: 'com.google.gms.google-services'

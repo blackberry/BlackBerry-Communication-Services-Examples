@@ -40,7 +40,7 @@ the SDK.
 instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 <p align="center">
-    <a href="http://www.youtube.com/watch?feature=player_embedded&v=310UDOFCLWM"
+    <a href="https://youtu.be/3OOJMNF7sjs"
       target="_blank"><img src="../QuickStart/screenShots/bbme-sdk-android-getting-started.jpg"
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>
@@ -73,6 +73,7 @@ the keys stored in the
 Notes:
 
 * To complete a release build you must create your own signing key. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html.
+  * After creating your signing key set the key store password, key password, key alias and path to the keystore file in the 'app.properties' file.
 * This application has been built using gradle 4.2.1 (newer versions have not been validated).
 
 ## Walkthrough

@@ -33,8 +33,8 @@ public class AuthProvider {
      */
     public static void initAuthProvider(final Context context) {
 
-        //Register for push and initialize the UserIdentityMapper
-        IdentityUtils.initIdentity(context, true);
+        //Initialize the UserIdentityMapper
+        IdentityUtils.initIdentity(context, false);
 
         //Mock IDP always uses KMS
         KeySource keySource = new BlackBerryKMSSource(new UserChallengePasscodeProvider(context));

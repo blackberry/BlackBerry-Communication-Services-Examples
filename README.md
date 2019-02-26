@@ -40,7 +40,7 @@ instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 
 <p align="center">
-    <a href="http://www.youtube.com/watch?feature=player_embedded&v=310UDOFCLWM"
+    <a href="https://youtu.be/3OOJMNF7sjs"
       target="_blank"><img src="QuickStart/screenShots/bbme-sdk-android-getting-started.jpg"
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>

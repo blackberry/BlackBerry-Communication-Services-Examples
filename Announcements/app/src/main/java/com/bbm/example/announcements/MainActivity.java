@@ -110,7 +110,7 @@ public final class MainActivity extends AppCompatActivity {
             }
 
             if (mDisplayName != null) {
-                mDisplayName.setText(name);
+                mDisplayName.setText(getString(R.string.my_user_name, name));
             }
         }
     };
@@ -211,7 +211,7 @@ public final class MainActivity extends AppCompatActivity {
         // Call changed to trigger our observer to run immediately
         mBbmSetupObserver.changed();
 
-        // Set this activity in case it is needed to prompt the user to sign in with their Google account
+        //Provide the activity to the Auth helper so it can prompt the user for credentials
         AuthIdentityHelper.setActivity(this);
 
         // Get the local users registration Id.
@@ -229,18 +229,6 @@ public final class MainActivity extends AppCompatActivity {
         // the view.
         mRegistrationIdObserver.changed();
         mLocalAppUserObserver.changed();
-    }
-
-    /**
-     * The authentication provider will send the results to this activity, this just passes to the helper to pass auth info to BBM SDK
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AuthIdentityHelper.TOKEN_REQUEST_CODE) {
-            //Handle an authentication result
-            AuthIdentityHelper.handleAuthenticationResult(this, requestCode, resultCode, data);
-        }
     }
 
     /**

@@ -55,8 +55,15 @@
             android:id="@+id/my_reg_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textSize="18dp" />
+            android:padding="8dp"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/my_user_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="18sp"/>
 
         <fragment
             android:id="@+id/call_history_fragment"

@@ -50,6 +50,8 @@ import com.bbm.sdk.service.BBMEnterpriseState;
 import com.bbm.sdk.service.ProtocolMessage;
 import com.bbm.sdk.service.ProtocolMessageConsumer;
 import com.bbm.sdk.support.identity.UserIdentityMapper;
+import com.bbm.sdk.support.identity.user.AppUser;
+import com.bbm.sdk.support.identity.user.UserManager;
 import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.Logger;
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private ObservableList<Chat> mChatList;
     //Keep a hard reference to these observers to prevent them from being gc'd
     private Observer mRegistrationIdObserver;
+    private Observer mAppUserObserver;
     private Observer mBbmSetupObserver;
 
     //This observer will be used to notify the adapter when chats have been changed or added.
@@ -250,6 +253,19 @@ public class MainActivity extends AppCompatActivity {
         BBMEnterprise.getInstance().getBbmdsProtocol().getGlobalLocalUri().addObserver(mRegistrationIdObserver);
         mRegistrationIdObserver.changed();
 
+        //Observe the local AppUser from the UserManager and display their user name
+        mAppUserObserver = new Observer() {
+            @Override
+            public void changed() {
+                AppUser appUser = UserManager.getInstance().getLocalAppUser().get();
+                if (appUser.getExists() == Existence.YES) {
+                    ((TextView)findViewById(R.id.my_user_id)).setText(getString(R.string.my_user_name, appUser.getName()));
+                }
+            }
+        };
+        UserManager.getInstance().getLocalAppUser().addObserver(mAppUserObserver);
+        mAppUserObserver.changed();
+
         //Get the chat list and keep a hard reference to it
         mChatList = BBMEnterprise.getInstance().getBbmdsProtocol().getChatList();
         //Add our incremental list observer to the chat list
@@ -259,18 +275,6 @@ public class MainActivity extends AppCompatActivity {
         final RecyclerView chatsRecyclerView = (RecyclerView) findViewById(R.id.chats_list);
         chatsRecyclerView.setAdapter(mAdapter);
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-    }
-
-    /**
-     * The authentication provider in will send the results to this activity, this just passes to the helper to pass auth info to BBM SDK
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AuthIdentityHelper.TOKEN_REQUEST_CODE) {
-            //Handle an authentication result
-            AuthIdentityHelper.handleAuthenticationResult(this, requestCode, resultCode, data);
-        }
     }
 
     /**

@@ -103,6 +103,19 @@ public class MainActivity extends AppCompatActivity  {
     };
 
     /**
+     * Track the local app user and display their user name
+     */
+    private ObservableMonitor mLocalUserObserver = new ObservableMonitor() {
+        @Override
+        public void run() {
+            AppUser localAppUser = UserManager.getInstance().getLocalAppUser().get();
+            if (localAppUser.getExists() == Existence.YES) {
+                ((TextView)findViewById(R.id.my_user_id)).setText(getString(R.string.my_user_name, localAppUser.getName()));
+            }
+        }
+    };
+
+    /**
      * Track if a call is currently in progress
      */
     private ObservableMonitor mInACallMonitor = new ObservableMonitor() {
@@ -139,7 +152,7 @@ public class MainActivity extends AppCompatActivity  {
         //Call changed to trigger our observer to run immediately
         mBbmSetupObserver.changed();
 
-        //set this activity in case it is needed to prompt the user to sign in with their Google account
+        //Provide the activity to the Auth helper so it can prompt the user for credentials
         AuthIdentityHelper.setActivity(this);
 
         //Set the click listener for the start call button
@@ -246,22 +259,11 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Logger.d("onActivityResult: requestCode="+requestCode+" resultCode="+resultCode+" data="+data);
-
-        if (requestCode == AuthIdentityHelper.TOKEN_REQUEST_CODE) {
-            //Handle an authentication result
-            AuthIdentityHelper.handleAuthenticationResult(this, requestCode, resultCode, data);
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         myRegistrationIdObserver.activate();
         mInACallMonitor.activate();
+        mLocalUserObserver.activate();
     }
 
     @Override
@@ -269,5 +271,6 @@ public class MainActivity extends AppCompatActivity  {
         super.onPause();
         myRegistrationIdObserver.dispose();
         mInACallMonitor.dispose();
+        mLocalUserObserver.activate();
     }
 }

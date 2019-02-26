@@ -61,7 +61,7 @@ android {
     }
 
     signingConfigs {
-        common {
+        release {
             keyAlias appProperties['keyAlias']
             keyPassword appProperties['keyPassword']
             storeFile file(appProperties['storeFile'])
@@ -72,12 +72,11 @@ android {
     buildTypes {
         debug {
             debuggable true
-            signingConfig signingConfigs.common
         }
         release {
             multiDexEnabled false
             minifyEnabled true
-            signingConfig signingConfigs.common
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -88,22 +87,18 @@ dependencies {
     implementation(name: 'bbm_sdk-release', ext: 'aar')
     implementation project(':Support')
     // Other UI dependencies
-    // Firebase Cloud Messaging dependencies
-    // Include Google play services auth module to use Open ID.
     implementation 'com.google.guava:guava:25.1-android'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
-
-    implementation ('com.google.firebase:firebase-core:16.0.3')
-    implementation 'com.google.firebase:firebase-messaging:17.3.2'
-    implementation 'com.google.android.gms:play-services-auth:16.0.0'
 }
+
 // By applying the plugin below this will ensure the project will not compile
-// if google-services.json is missing. When setting up this example please
-// ensure you follow https://developers.google.com/identity/sign-in/android/start
-// and download the resulting google-services.json file.
+// if the google-services.json file is missing.
+// A google-services.json file is required for Firebase Cloud Messaging to obtain a push token.
+// See https://firebase.google.com/docs/cloud-messaging/ for help on configuring Firebase Cloud Messaging
+// in your application.
 
 apply plugin: 'com.google.gms.google-services'

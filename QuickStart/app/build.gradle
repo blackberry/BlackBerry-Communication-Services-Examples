@@ -59,7 +59,7 @@ android {
         }
         release {
             signingConfigs {
-                common {
+                release {
                     keyAlias appProperties['keyAlias']
                     keyPassword appProperties['keyPassword']
                     storeFile file(appProperties['storeFile'])
@@ -67,7 +67,7 @@ android {
                 }
             }
             minifyEnabled true
-            signingConfig signingConfigs.common
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

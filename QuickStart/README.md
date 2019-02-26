@@ -24,7 +24,7 @@ instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/index.html)
 
 <p align="center">
-    <a href="http://www.youtube.com/watch?feature=player_embedded&v=310UDOFCLWM"
+    <a href="https://youtu.be/3OOJMNF7sjs"
       target="_blank"><img src="screenShots/bbme-sdk-android-getting-started.jpg"
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>
@@ -52,6 +52,7 @@ When you run Quick Start, it will prompt you for a user ID and a password. Since
 Notes:
 
 * To complete a release build you must create your own signing key. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html.
+  * After creating your signing key set the key store password, key password, key alias and path to the keystore file in the 'app.properties' file.
 * This application has been built using gradle 4.2.1 (newer versions have not been validated).
 
 ## Walkthrough
@@ -142,12 +143,11 @@ rand.nextBytes(bytes);
 String jti = Base64.encodeToString(bytes, base64Flags).substring(0, 18);
 
 JSONObject body = new JSONObject();
-body.put("iss", "NoIDP");
 body.put("jti", jti);
 body.put("sub", userId);
 body.put("iat", System.currentTimeMillis() / 1000);
 //Expires in one hour.
-body.put("exp", System.currentTimeMillis() + 1000 * 60 * 60);
+body.put("exp", System.currentTimeMillis() / 1000 + 60 * 60);
 
 String base64Header = Base64.encodeToString(header.toString().getBytes(), base64Flags);
 String base64Body = Base64.encodeToString(body.toString().getBytes(), base64Flags);

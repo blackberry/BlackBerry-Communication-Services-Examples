@@ -16,6 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.bbm.example.softphone">
 
     <!-- Voice and video calling -->
@@ -31,12 +32,13 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".SoftPhoneApplication">
+        android:name=".SoftPhoneApplication"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <!-- Update this with the value provided by the BBM Enterprise Team -->
         <meta-data android:name="com.bbm.sdk.UserDomain" android:value="@string/USER_DOMAIN"/>

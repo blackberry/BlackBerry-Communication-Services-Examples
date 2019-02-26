@@ -57,6 +57,8 @@ import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.reactive.SingleshotMonitor;
 import com.bbm.sdk.support.identity.UserIdentityMapper;
+import com.bbm.sdk.support.identity.user.AppUser;
+import com.bbm.sdk.support.identity.user.UserManager;
 import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.BbmUtils;
@@ -177,6 +179,19 @@ public class MainActivity extends AppCompatActivity implements BBMEDataChannelCr
         }
     };
 
+    /**
+     * Track the local app user and display their user name
+     */
+    private ObservableMonitor myLocalUserObserver = new ObservableMonitor() {
+        @Override
+        public void run() {
+            AppUser localAppUser = UserManager.getInstance().getLocalAppUser().get();
+            if (localAppUser.getExists() == Existence.YES) {
+                ((TextView)findViewById(R.id.my_user_id)).setText(getString(R.string.my_user_name, localAppUser.getName()));
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements BBMEDataChannelCr
         //Call changed to trigger our observer to run immediately
         mBbmSetupObserver.changed();
 
-        //set this activity in case it is needed to prompt the user to sign in with their Google account
+        //Provide the activity to the Auth helper so it can prompt the user for credentials
         AuthIdentityHelper.setActivity(this);
 
         mConnectionStatusTextView = (TextView)findViewById(R.id.connection_status);
@@ -393,10 +408,7 @@ public class MainActivity extends AppCompatActivity implements BBMEDataChannelCr
 
         Logger.d("onActivityResult: requestCode="+requestCode+" resultCode="+resultCode+" data="+data);
 
-        if (requestCode == AuthIdentityHelper.TOKEN_REQUEST_CODE) {
-            //Handle an authentication result
-            AuthIdentityHelper.handleAuthenticationResult(this, requestCode, resultCode, data);
-        } else if (requestCode == REQUEST_CODE_PICK_FILE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_PICK_FILE && resultCode == RESULT_OK) {
 
             final Uri fileUri = data.getData();
 
@@ -472,6 +484,7 @@ public class MainActivity extends AppCompatActivity implements BBMEDataChannelCr
         super.onResume();
         myRegistrationIdObserver.activate();
         mConnectionMonitor.activate();
+        myLocalUserObserver.activate();
         PermissionsUtil.checkOrPromptSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 PermissionsUtil.PERMISSION_WRITE_EXTERNAL_STORAGE_REQUEST_TO_ATTACH_FILES, R.string.rationale_write_external_storage, null);
     }
@@ -481,5 +494,6 @@ public class MainActivity extends AppCompatActivity implements BBMEDataChannelCr
         super.onPause();
         myRegistrationIdObserver.dispose();
         mConnectionMonitor.dispose();
+        myLocalUserObserver.dispose();
     }
 }

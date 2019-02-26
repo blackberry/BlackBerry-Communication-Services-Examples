@@ -19,6 +19,7 @@
     <string name="title_activity_chat">Chat Activity</string>
     <string name="new_chat">New Chat</string>
     <string name="my_registration_id">Registration Id: %1$d</string>
+    <string name="my_user_name">User Name: %1$s</string>
     <string name="enter_a_message">Enter a message</string>
     <string name="send">Send</string>
     <string name="subject">Subject</string>

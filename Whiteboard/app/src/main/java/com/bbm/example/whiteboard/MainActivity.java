@@ -16,7 +16,6 @@
 
 package com.bbm.example.whiteboard;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +24,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bbm.sdk.BBMEnterprise;
@@ -32,10 +32,13 @@ import com.bbm.sdk.bbmds.GlobalSetupState;
 import com.bbm.sdk.bbmds.inbound.ChatStartFailed;
 import com.bbm.sdk.bbmds.internal.Existence;
 import com.bbm.sdk.bbmds.outbound.SetupRetry;
+import com.bbm.sdk.reactive.ObservableMonitor;
 import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.reactive.SingleshotMonitor;
 import com.bbm.sdk.support.identity.UserIdentityMapper;
+import com.bbm.sdk.support.identity.user.AppUser;
+import com.bbm.sdk.support.identity.user.UserManager;
 import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
 import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.ChatStartHelper;
@@ -50,6 +53,19 @@ import com.bbm.sdk.support.util.SetupHelper;
  * For the BBM implementation see the Rich Chat app.
  */
 public class MainActivity extends AppCompatActivity {
+
+    /**
+     * Track the local app user and display their user name
+     */
+    ObservableMonitor mDisplayNameMonitor = new ObservableMonitor() {
+        @Override
+        protected void run() {
+            AppUser localAppUser = UserManager.getInstance().getLocalAppUser().get();
+            if (localAppUser.getExists() == Existence.YES) {
+                ((TextView)findViewById(R.id.my_user_id)).setText(getString(R.string.my_user_name, localAppUser.getName()));
+            }
+        }
+    };
 
     // Handle the setup events
     private Observer mBbmSetupObserver = new Observer() {
@@ -97,24 +113,15 @@ public class MainActivity extends AppCompatActivity {
         //Call changed to trigger our observer to run immediately
         mBbmSetupObserver.changed();
 
+        //Start monitor to show the display name
+        mDisplayNameMonitor.activate();
+
         AuthIdentityHelper.setActivity(this);
 
         //create the list of chats
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.chats_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new com.bbm.example.whiteboard.ChatRecyclerViewAdapter(this));
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Logger.d("onActivityResult: requestCode="+requestCode+" resultCode="+resultCode+" data="+data);
-
-        if (requestCode == AuthIdentityHelper.TOKEN_REQUEST_CODE) {
-            //Handle an authentication result
-            AuthIdentityHelper.handleAuthenticationResult(this, requestCode, resultCode, data);
-        }
     }
 
     @Override

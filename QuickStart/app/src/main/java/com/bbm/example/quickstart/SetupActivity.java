@@ -335,12 +335,12 @@ public class SetupActivity extends AppCompatActivity {
             String jti = Base64.encodeToString(bytes, base64Flags).substring(0, 18);
 
             JSONObject body = new JSONObject();
-            body.put("iss", "NoIDP");
             body.put("jti", jti);
             body.put("sub", userId);
-            body.put("iat", System.currentTimeMillis() / 1000);
+            //Intialized at the current time - 60 seconds, to allow for clock differences between the client and server
+            body.put("iat", System.currentTimeMillis() / 1000 - 60);
             //Expires in one hour.
-            body.put("exp", System.currentTimeMillis() + 1000 * 60 * 60);
+            body.put("exp", System.currentTimeMillis() / 1000 + 60 * 60);
 
             String base64Header = Base64.encodeToString(header.toString().getBytes(), base64Flags);
             String base64Body = Base64.encodeToString(body.toString().getBytes(), base64Flags);
