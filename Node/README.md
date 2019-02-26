@@ -9,7 +9,7 @@ generate responses.
 
 <p align="center">
 <br>
-    <a href="http://www.youtube.com/watch?feature=player_embedded&v=7idoN9YpGGc"
+    <a href="https://youtu.be/2K3y2UG0DE0"
       target="_blank"><img src="screenShots/bbme-sdk-node-chatbot.jpg" 
       alt=Integrate Chat Bots into your Apps" width="486" height="" border="364"/></a>
 </p>
@@ -44,7 +44,7 @@ instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
 <p align="center">
-    <a href="https://www.youtube.com/watch?v=LAbxok2EQtI"
+    <a href="https://youtu.be/CSXZT2perqE"
       target="_blank"><img src="../QuickStart/screenShots/bb-spark-web-sdk-getting-started.jpg"
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>

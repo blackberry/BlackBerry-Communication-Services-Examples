@@ -38,7 +38,7 @@ These samples require the Spark Communications SDK for JavaScript, which you can
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
 <p align="center">
-    <a href="https://www.youtube.com/watch?v=LAbxok2EQtI"
+    <a href="https://youtu.be/CSXZT2perqE"
       target="_blank"><img src="QuickStart/screenShots/bb-spark-web-sdk-getting-started.jpg"
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>

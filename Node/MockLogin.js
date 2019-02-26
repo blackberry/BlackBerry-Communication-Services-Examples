@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2019 BlackBerry.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,9 +44,10 @@ module.exports = {
       const tokenBody = BBMEnterprise.Util.base64urlEncode(JSON.stringify({
         jti: jti,
         sub: localUserInfo.userId,
-        iat: now,
-        // Expires in one hour.
-        exp: now + 3600
+        // Valid since 60 seconds ago to avoid clock skew issues.
+        iat: now - 60,
+        // Expires in one day.
+        exp: now + 86400
       }));
 
       return `${tokenHeader}.${tokenBody}.`;

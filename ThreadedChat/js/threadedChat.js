@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2019 BlackBerry.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,8 +85,16 @@ window.onload = async () => {
       userId: authUserInfo.userId,
       getToken: () => authManager.getBbmSdkToken(),
       description: navigator.userAgent,
-      messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher,
-      kmsArgonWasmUrl: KMS_ARGON_WASM_URL
+      kmsArgonWasmUrl: KMS_ARGON_WASM_URL,
+
+      // This example uses the bbm-chat-message-list web component to manage
+      // the message list.  It is a Polymer component that directly watches
+      // for changes to the message storage array in order to efficiently
+      // update the display.  To allow the bbm-chat-message-list to monitor
+      // changes in the SDK's stored messages, we configure the SDK to build
+      // its message storage array using the SpliceWatcher message storage
+      // factory.
+      messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher
     });
 
     // Setup is asynchronous.  Create a promise we can use to wait on
