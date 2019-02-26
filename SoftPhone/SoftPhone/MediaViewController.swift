@@ -21,7 +21,7 @@ import Foundation
 import UIKit
 import AVFoundation
 
-class MediaViewController : UIViewController, BBMEMediaDelegate, BBMMediaVideoPresenter
+class MediaViewController : UIViewController, BBMMediaDelegate, BBMMediaVideoPresenter
 {
     //MARK: Outlets
 
@@ -42,18 +42,18 @@ class MediaViewController : UIViewController, BBMEMediaDelegate, BBMMediaVideoPr
     var incomingVideoView : UIView?
     var callTimer : Timer!
 
-    let mediaManager : BBMEMediaManager = BBMEnterpriseService.shared().mediaManager()
+    let mediaManager : BBMMediaManager = BBMEnterpriseService.shared().mediaManager()
 
 
     override func viewWillAppear(_ animated: Bool) {
-        mediaManager.add(self as BBMEMediaDelegate)
+        mediaManager.add(self as BBMMediaDelegate)
         mediaManager.add(self as BBMMediaVideoPresenter)
         monitorControlStates()
         startCallTimer()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        mediaManager.remove(self as BBMEMediaDelegate)
+        mediaManager.remove(self as BBMMediaDelegate)
         mediaManager.remove(self as BBMMediaVideoPresenter)
 
         controlsMonitor.deActivate()
@@ -63,7 +63,7 @@ class MediaViewController : UIViewController, BBMEMediaDelegate, BBMMediaVideoPr
     private func startCallTimer() {
         //Update the call duration once per second
         callTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            if let call: BBMECall = BBMEnterpriseService.shared().mediaManager().currentCallInfo {
+            if let call: BBMCall = BBMEnterpriseService.shared().mediaManager().currentCallInfo {
                 let duration = NSDate().timeIntervalSince1970 - call.connectedTime;
                 self?.durationField.text = "Duration: " + BBMUtilities.duration(asString: duration)
             }
@@ -189,7 +189,7 @@ class MediaViewController : UIViewController, BBMEMediaDelegate, BBMMediaVideoPr
 
     //MARK: MediaDelegate
 
-    func callEnded(_ call: BBMECall!) {
+    func callEnded(_ call: BBMCall!) {
         //Dismiss ourselves once the call has ended
         dismiss(animated: true, completion: nil)
     }

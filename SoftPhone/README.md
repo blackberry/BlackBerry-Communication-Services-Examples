@@ -9,7 +9,7 @@ example.
 
 <p align="center">
 <br>
-    <a href="http://www.youtube.com/watch?feature=player_embedded&v=InEfjPafPas"
+    <a href="https://youtu.be/NT1-vcldMRc"
       target="_blank"><img src="screenShots/bbme-sdk-softphone.jpg" 
       alt=Integrate voice and video into your Apps" width="486" height="" border="364"/></a>
 </p>
@@ -48,7 +48,7 @@ instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
 <p align="center">
-    <a href="http://www.youtube.com/watch?feature=player_embedded&v=H1yiHSGsAIg"
+    <a href="https://youtu.be/tDfXsifzPA4"
       target="_blank"><img src="../QuickStart/screenShots/bbme-sdk-ios-getting-started.jpg" 
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>
@@ -101,7 +101,7 @@ in the
 - [Camera and Micphone Permissions](#camMicPerms)
 - [Calling and Push](#callingPush)
 - [Support Library](#supportLib)
-- [Configuring BBMEMediaManager](#configBBMEMediaManager)
+- [Configuring BBMEMediaManager](#configBBMMediaManager)
 - [Listening for Calls](#listeningForCalls)
 - [Starting a Call](#startingCall)
 - [Rendering a Call](#renderingCall)
@@ -112,12 +112,12 @@ To enable voice and video, you must include the privace usage descriptions for t
 * NSMicrophoneUsageDescription
 * NSCameraUsageDescription
 
-The [`BBMEMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_e_media_manager.html) will automatically request the required access from the user on first usage.
+The [`BBMEMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_media_manager.html) will automatically request the required access from the user on first usage.
 
 
 ### <a name="callingPush"></a> Calling & Push
 
-If you enable Voice and Video in your app, push should be implemented via PushKit.  When a PushKit message is received, it should be sent to [`BBMEntperiseService`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_enterprise_service.html) via `BBMEnteprirseService.shared().pushRecieved(pushJSON)`.  If the push includes call data, this will then invoke the incomignCallDidArrive(_ call:) callback on any delegates registered with [`BBMEMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_e_media_manager.html).  If the application is in the background state, you should prompt the user to answer the call with a `UILocalNotification`.
+If you enable Voice and Video in your app, push should be implemented via PushKit.  When a PushKit message is received, it should be sent to [`BBMEntperiseService`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_enterprise_service.html) via `BBMEnteprirseService.shared().pushRecieved(pushJSON)`.  If the push includes call data, this will then invoke the incomignCallDidArrive(_ call:) callback on any delegates registered with [`BBMMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_media_manager.html).  If the application is in the background state, you should prompt the user to answer the call with a `UILocalNotification`.
 
 For PushKit integration to work, you must enable the "Voice over IP" background mode under your projects capabilities.
 
@@ -132,9 +132,7 @@ Common code for authenticating users, synchronizing keys and performing common t
 
 `BBMAccess` provides wrappers around common outgoing messages and the SDK data model.
 
-### <a name="configBBMEMediaManager"></a> Configuring BBMEMediaManager
-
-The `SoftPhoneApp` class is the primary entry point for the application and owns an instance of a `BBMAuthController` and a `BBMKeyManager`.  These classes provide authentication via GoogleSignIn and key management via Firebase.  `SoftPhoneApp` uses ObservableMonitors to monitor the credential and service state on the `BBMAuthController` instance and syncronizes keys and/or configures services when the appropriate conditions are met.
+### <a name="configBBMMediaManager"></a> Configuring BBMMediaManager
 
 `SoftPhoneApp` is responsible for setting up the SDK media services.  To start the media services call `mediaManager.start(withLogPath: path)`.  You can optionally specify ring tone files that will play at the appropriate times if set.  You may opt to handle the ring tone notifications from your own code as well.
 
@@ -161,12 +159,12 @@ private func startMediaManager() {
 
 ###<a name="listeningForCalls"></a>Listening For Calls
 
-`CallListener` registers with the shared [`BBMEMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_e_media_manager.html) singleton as a [BBMMediaDelegate](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_e_media_delegate_01-p.html), listens for incoming and outgoing calls and presents the appropriate user interface(s).
+`CallListener` registers with the shared [`BBMMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_media_manager.html) singleton as a [BBMMediaDelegate](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_delegate_01-p.html), listens for incoming and outgoing calls and presents the appropriate user interface(s).
 
-To show the `MediaViewController` we listen for the [BBMMediaDelegate](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_e_media_delegate_01-p.html) callConnected(_ call:) callback:
+To show the `MediaViewController` we listen for the [BBMMediaDelegate](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_delegate_01-p.html) callConnected(_ call:) callback:
 
 ```swift
-func callConnected(_ call: BBMECall!) {
+func callConnected(_ call: BBMCall!) {
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
     let controller = storyboard.instantiateViewController(withIdentifier: "mediaViewController")
 
@@ -175,10 +173,10 @@ func callConnected(_ call: BBMECall!) {
 }
 ```
 
-To show the incoming call (which is done via an `UIAlertController`) we listen for the [`BBMMediaDelegate`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_e_media_delegate_01-p.html) `incomignCallDidArrive(_ call:)` callback.  In this case, we accept all incoming calls but you may wish to accept calls only from certain users, at certain times, etc. `mediaManager.acceptCall()` will begin the ringing phase.
+To show the incoming call (which is done via an `UIAlertController`) we listen for the [`BBMMediaDelegate`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_delegate_01-p.html) `incomignCallDidArrive(_ call:)` callback.  In this case, we accept all incoming calls but you may wish to accept calls only from certain users, at certain times, etc. `mediaManager.acceptCall()` will begin the ringing phase.
 
 ```swift
-func incomingCallDidArrive(_ call: BBMECall!) {
+func incomingCallDidArrive(_ call: BBMCall!) {
     //At this point we can either accept the call or silently decline it
     mediaManager.acceptCall()
     notifyOfIncomingCall(call)
@@ -217,12 +215,12 @@ The `MediaViewController` handles the presentation of the actual call.
 
 To update the UI components, we observe several properties on the call and the
 shared
-[`BBMEMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_e_media_manager.html)
+[`BBMMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_media_manager.html)
 and update the UI elements based on their values inside of an
 [`ObservableMonitor`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_observable_monitor.html).
 Note that it's not necessary, but improves the user experience to disable the
 buttons when they will have no effect.
-[`BBMEMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_e_media_manager.html)
+[`BBMMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_media_manager.html)
 exposes several observable properties you can use to determine if camera and
 video operations are currently possible.  Switching the camera (for example) can
 take a second or two, during which time mediaManager.toggleCameraAllowed will be
@@ -236,7 +234,7 @@ controlsMonitor = ObservableMonitor(activatedWithName: "controlsMonitor") {
     guard let weakSelf = self else { return }
 
     //Update the mute button based on the mute state of the call
-    if let call: BBMECall = BBMEnterpriseService.shared().mediaManager().currentCallInfo {
+    if let call: BBMCall = BBMEnterpriseService.shared().mediaManager().currentCallInfo {
         let isMuted = call.muted
         let muteTitle = isMuted ? "UNMUTE" : "MUTE"
         weakSelf.muteButton.setTitle(muteTitle, for: UIControlState.normal)
@@ -265,7 +263,7 @@ controlsMonitor = ObservableMonitor(activatedWithName: "controlsMonitor") {
 }
 ```
 
-The `MediaViewController` also registers as a [`BBMMediaVideoPresenter`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_video_presenter_01-p.html) with the shared [`BBMEMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_e_media_manager.html).  The [BBMMediaVideoPresenter](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_video_presenter_01-p.html) protocol is implemented as follows:
+The `MediaViewController` also registers as a [`BBMMediaVideoPresenter`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_video_presenter_01-p.html) with the shared [`BBMMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_media_manager.html).  The [BBMMediaVideoPresenter](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_video_presenter_01-p.html) protocol is implemented as follows:
 
 ```swift
 func incomingVideoContainer() -> UIView! {
@@ -319,7 +317,7 @@ func videoView(_ view: UIView!, didChangeVideoSize size: CGSize) {
     updateAspectRatioForView(view, size: size)
 }
 ```
-Multiple [`BBMMediaVideoPresenter`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_video_presenter_01-p.html)s may be registered simultaneously with shared [`BBMEMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_e_media_manager.html).  This allows you to implement something like a floating video window without having to worry about moving the views between containers.  You simply register and deregister presenters.  The presenter with the highest priority will be automatically assigned the video feeds.  Changing the priority of a previously registered presenter has no effect until you re-register the presenter.
+Multiple [`BBMMediaVideoPresenter`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_video_presenter_01-p.html)s may be registered simultaneously with shared [`BBMMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_media_manager.html).  This allows you to implement something like a floating video window without having to worry about moving the views between containers.  You simply register and deregister presenters.  The presenter with the highest priority will be automatically assigned the video feeds.  Changing the priority of a previously registered presenter has no effect until you re-register the presenter.
 
 It is up to the application to correctly fit the video feed into the container.  By default the video will fill the container.  You must update the video feed frame manually in order to ensure the aspect ratio is properly preserved.  This allows you to clip, letterbox or resize the feeds to any given preference.  `AVMakeRect(aspectRatio: size, insideRect: bounds)` is provided in `AVFoundation` to do this automatically for you for the simple aspect-fit case.
 
@@ -350,7 +348,7 @@ func updateAspectRatioForView(_ view: UIView!, size: CGSize) {
 }
 ```
 
-Manipulating the call is done via the shared [`BBMEMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_e_media_manager.html).  Enabling or disabling of the buttons is done above in an [`ObservableMonitor`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_observable_monitor.html) so no checking is required on any of these callbacks.:
+Manipulating the call is done via the shared [`BBMMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_media_manager.html).  Enabling or disabling of the buttons is done above in an [`ObservableMonitor`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_observable_monitor.html) so no checking is required on any of these callbacks.:
 
 ```swift
 @IBAction func switchCamPressed(_ sender: UIButton) {
@@ -367,7 +365,7 @@ Manipulating the call is done via the shared [`BBMEMediaManager`](https://develo
 }
 
 @IBAction func mutePressed(_ sender: UIButton) {
-    if let call: BBMECall = BBMEnterpriseService.shared().mediaManager().currentCallInfo {
+    if let call: BBMCall = BBMEnterpriseService.shared().mediaManager().currentCallInfo {
         mediaManager.setMutingEnabled(!call.muted)
     }
 }
@@ -379,7 +377,7 @@ Manipulating the call is done via the shared [`BBMEMediaManager`](https://develo
 
 ### Posting and Rendering Call Log Events
 
-When calls are ended, the party that originated the call places a message with the "Call_Event" tag into the 1-1 chat with the remote party.  The `CallLogViewContoller` uses criteria matching on chats to display a list of all calls that have taken place.  In this case, the call events include an end time, duration, and reason, but like all other [`BBMChatMessage`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message.html)s, may include any arbitrary data.  The [`BBMECall`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_e_call.html) object has a logType property that you can use to query the type of call log (ie: Ended, Missed, Disconnected, Busy) to add context to the call event messages.  The chat is shared, so you should ensure the call event is inserted by only one of the parties in the call.
+When calls are ended, the party that originated the call places a message with the "Call_Event" tag into the 1-1 chat with the remote party.  The `CallLogViewContoller` uses criteria matching on chats to display a list of all calls that have taken place.  In this case, the call events include an end time, duration, and reason, but like all other [`BBMChatMessage`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_chat_message.html)s, may include any arbitrary data.  The [`BBMCall`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_call.html) object has a logType property that you can use to query the type of call log (ie: Ended, Missed, Disconnected, Busy) to add context to the call event messages.  The chat is shared, so you should ensure the call event is inserted by only one of the parties in the call.
 
 To create a list of all call event messages, we can observe the list of chats inside an [`ObservableMonitor`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_observable_monitor.html):
 

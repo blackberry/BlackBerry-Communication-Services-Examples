@@ -12,7 +12,7 @@ application marks all of the the user's locations on a map with pins.
 
 <p align="center">
 <br>
-    <a href="http://www.youtube.com/watch?feature=player_embedded&v=2p_Kevkljj4"
+    <a href="https://youtu.be/rURmgpbWIbs"
       target="_blank"><img src="screenShots/bbme-sdk-ios-locationsharing.jpg" 
       alt=Integrate Location Sharing into your Apps" width="486" height="" border="364"/></a>
 </p>
@@ -50,7 +50,7 @@ instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
 <p align="center">
-    <a href="http://www.youtube.com/watch?feature=player_embedded&v=H1yiHSGsAIg"
+    <a href="https://youtu.be/tDfXsifzPA4"
       target="_blank"><img src="../QuickStart/screenShots/bbme-sdk-ios-getting-started.jpg" 
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>

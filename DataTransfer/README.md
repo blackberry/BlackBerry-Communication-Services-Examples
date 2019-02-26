@@ -22,7 +22,7 @@ and [Quick Start Swift](../QuickStartSwift/README.md) samples so it may utilize 
 <br>
 
 <p align="center">
-<a href="screenShots/DT_OpenConnection.pn"><img src="screenShots/DT_OpenConnection.png" width="25%" height="25%"></a>
+<a href="screenShots/DT_OpenConnection.png"><img src="screenShots/DT_OpenConnection.png" width="25%" height="25%"></a>
 <a href="(screenShots/DT_Transfer.png"><img src="screenShots/DT_Transfer.png" width="25%" height="25%"></a>
 </p>
 
@@ -38,7 +38,7 @@ instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
 <p align="center">
-    <a href="http://www.youtube.com/watch?feature=player_embedded&v=H1yiHSGsAIg"
+    <a href="https://youtu.be/tDfXsifzPA4"
       target="_blank"><img src="../QuickStart/screenShots/bbme-sdk-ios-getting-started.jpg" 
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>
@@ -89,7 +89,7 @@ in the
 ## Walk-through
 - [DataTransfers & Push](#dataTransferPush)
 - [Support Library](#supportLib)
-- [Configuring BBMEMediaManager](#configBBMEMediaManager)
+- [Configuring BBMMediaManager](#configBBMMediaManager)
 - [Listening for Data Connections](#listenDataConnections)
 - [Starting a Data Connection](#startingDataConnection)
 - [Sending Data](#sendingData)
@@ -117,7 +117,7 @@ Common code for authenticating users, synchronizing keys and performing common t
 
 `BBMAccess` provides wrappers around common outgoing messages and the SDK data model.
 
-### <a name="configBBMEMediaManager"></a>Configuring BBMEMediaManager
+### <a name="configBBMMediaManager"></a>Configuring BBMMediaManager
 
 The `DataTransferApp` class is the primary entry point for the application and owns an instance of a `BBMAuthController` and a `BBMKeyManager`.  These classes provide authentication via GoogleSignIn and key management via Firebase.  `DataTransferApp` uses ObservableMonitors to monitor the credential and service state on the `BBMAuthController` instance and syncronizes keys and/or configures services when the appropriate conditions are met.
 
@@ -125,9 +125,9 @@ Unlike voice and video, there is not explicit setup required for data calls.  In
 
 ### <a name="listenDataConnections"></a>Listening For Data Connections
 
-`DataConnectionListener` registers with the shared [BBMEMediaManager](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_e_media_manager.html) singleton as a [`BBMMediaDelegate`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_e_media_delegate_01-p.html), listens for incoming and outgoing data transfer requests and presents the appropriate user interface(s).
+`DataConnectionListener` registers with the shared [BBMMediaManager](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_media_manager.html) singleton as a [`BBMMediaDelegate`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_delegate_01-p.html), listens for incoming and outgoing data transfer requests and presents the appropriate user interface(s).
 
-To notify the user that a data connection has been requested we listen for the [BBMMediaDelegate](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_e_media_delegate_01-p.html) incomingDataConnectionOffered(_ connection: BBMDataConnection!) callback.
+To notify the user that a data connection has been requested we listen for the [BBMMediaDelegate](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_delegate_01-p.html) incomingDataConnectionOffered(_ connection: BBMDataConnection!) callback.
 
 ```swift
 func incomingDataConnectionOffered(_ connection: BBMDataConnection!) {
@@ -143,7 +143,7 @@ func incomingDataConnectionOffered(_ connection: BBMDataConnection!) {
 }
 ```
 
-Once we have indicated that the call setup is complete, we listen for the [`BBMMediaDelegate`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_e_media_delegate_01-p.html) `incomingDataConnectionAvailable(_ connection:)` callback. In this example, we present an alert view to the user, allowing them to accept or decline the connection.  This may also be done automatically.
+Once we have indicated that the call setup is complete, we listen for the [`BBMMediaDelegate`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/protocol_b_b_m_media_delegate_01-p.html) `incomingDataConnectionAvailable(_ connection:)` callback. In this example, we present an alert view to the user, allowing them to accept or decline the connection.  This may also be done automatically.
 ```swift
 func incomingDataConnectionAvailable(_ connection: BBMDataConnection!) {
     self.notifyOfIncomingDataConnection(regId: connection.peerRegId)

@@ -23,7 +23,7 @@ import CoreTelephony
 // The CallLister is an application-level object that listens for calls and presents the incoming
 // and/or outgoing call UI over the main application window.
 
-class CallListener : NSObject, BBMEMediaDelegate
+class CallListener : NSObject, BBMMediaDelegate
 {
     var incomingCallAlert : UIAlertController?
 
@@ -44,7 +44,7 @@ class CallListener : NSObject, BBMEMediaDelegate
 
     //If iOS CallKit is not supported, we will notify via an alert view.  A UILocalNotification
     //will also be required if the call is in the background
-    private func notifyOfIncomingCall(_ call: BBMECall!) {
+    private func notifyOfIncomingCall(_ call: BBMCall!) {
         let message = String(format: "Incoming Call From %@", call.peerRegId)
         incomingCallAlert = UIAlertController(title: "Incoming Call",
                                             message: message,
@@ -78,7 +78,7 @@ class CallListener : NSObject, BBMEMediaDelegate
 
     //When the call ends, post a call event message if necessary and dismiss the incoming alert
     //controller.  The in-call UI will dismiss itself.
-    func callEnded(_ call: BBMECall!) {
+    func callEnded(_ call: BBMCall!) {
         if let ac = incomingCallAlert {
             ac.dismiss(animated: true, completion: nil)
             incomingCallAlert = nil;
@@ -93,7 +93,7 @@ class CallListener : NSObject, BBMEMediaDelegate
         }
     }
 
-    func callDidFail(_ call: BBMECall!) {
+    func callDidFail(_ call: BBMCall!) {
         if let ac = incomingCallAlert {
             ac.dismiss(animated: true, completion: nil)
             incomingCallAlert = nil;
@@ -102,16 +102,16 @@ class CallListener : NSObject, BBMEMediaDelegate
         self.callKitManager?.updateCall(call, state: .Failed)
     }
 
-    func outgoingCallInitiated(_ call: BBMECall!) {
+    func outgoingCallInitiated(_ call: BBMCall!) {
         self.callKitManager?.reportOutgoingCall(call)
     }
 
-    func outgoingCallRinging(_ call: BBMECall!) {
+    func outgoingCallRinging(_ call: BBMCall!) {
         self.callKitManager?.updateCall(call, state: .Connecting)
     }
 
     //A call has been connected.  Show the internal call UI
-    func callConnected(_ call: BBMECall!) {
+    func callConnected(_ call: BBMCall!) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "mediaViewController")
 
@@ -123,7 +123,7 @@ class CallListener : NSObject, BBMEMediaDelegate
 
 
     //A new incoming call has arrived.  Accept it to start the ringers and show our incoming call UI
-    func incomingCallDidArrive(_ call: BBMECall!) {
+    func incomingCallDidArrive(_ call: BBMCall!) {
         self.mediaManager.acceptCall()
 
         //Use the native call UI if it's available
@@ -143,7 +143,7 @@ class CallListener : NSObject, BBMEMediaDelegate
 
     //On the completion of an outgoing call, we'll post a message with the "CallEvent" tag to the
     //1-1 chat with the other party.  The chat will be created if it doesn't already exist
-    private func postCallEventMessage(_ call:BBMECall!) {
+    private func postCallEventMessage(_ call:BBMCall!) {
         guard let regIdInt = CLongLong(call.peerRegId) else {
             NSLog("Invalid RegId when posting call Event")
             return;
@@ -151,7 +151,8 @@ class CallListener : NSObject, BBMEMediaDelegate
 
         let regId = NSNumber(value: regIdInt)
         let endTime = NSDate().timeIntervalSince1970
-        let duration = endTime - call.connectedTime
+        var duration = endTime - call.connectedTime
+        if(duration < 1.0 || call.missed || call.declined || call.connectedTime == 0) { duration = 0 }
 
         self.chatCreator.startChat(withRegId: regId , subject: "") {
             (chatId, failReason) -> Void in

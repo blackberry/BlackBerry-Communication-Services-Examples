@@ -21,7 +21,7 @@
 import Foundation
 
 class DataSendViewController : UIViewController,
-                               BBMEMediaDelegate,
+                               BBMMediaDelegate,
                                UIDocumentInteractionControllerDelegate,
                                UITextFieldDelegate
 {

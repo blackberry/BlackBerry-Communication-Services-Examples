@@ -20,7 +20,7 @@ instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/index.html)
 
 <p align="center">
-    <a href="http://www.youtube.com/watch?feature=player_embedded&v=H1yiHSGsAIg"
+    <a href="https://youtu.be/tDfXsifzPA4"
       target="_blank"><img src="screenShots/bbme-sdk-ios-getting-started.jpg" 
       alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
 </p>
@@ -218,7 +218,7 @@ The callback will be invoked multiple times as the `setupState` and authState of
 
 #### <a name="observableMonitor"></a>Note on ObservableMontitor
 
-To make a property on a class observable via an `ObservableMonitor` you must call `ObservableTracker` `getterCalledForObject:propertyName:` from the property setter.  Usage of `ObservableMonitors` 
+To make a property on a class observable via an `ObservableMonitor` you must call `ObservableTracker` `getterCalledForObject:propertyName:` from the property getter.  Usage of `ObservableMonitors` 
 is entirely optional, but is implemented for all properties on SDK model objects and can be leveraged in your code in lieu of directly using KVO.  See [Rich Chat](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples/ios/RichChat/README.html) or [Simple Chat](../SimpleChat/README.md) for examples.  `ObservableMonitors` and observable properties are not thread safe.  See the [ObservableMonitor](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_observable_monitor.html) documentation for additional details.
 ```objective-c
 - (BBMAuthState *)authState

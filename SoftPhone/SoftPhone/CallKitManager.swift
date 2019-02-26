@@ -54,7 +54,7 @@ class CallKitManager : NSObject, CXProviderDelegate
         self.provider.setDelegate(self, queue: DispatchQueue.main)
     }
 
-    public func reportOutgoingCall(_ call: BBMECall!)
+    public func reportOutgoingCall(_ call: BBMCall!)
     {
         let callId = UUID.init()
         self.activeCallId = callId
@@ -72,7 +72,7 @@ class CallKitManager : NSObject, CXProviderDelegate
         }
     }
 
-    public func showIncomingCall(call: BBMECall!, completion: @escaping CKManagerCompletion)
+    public func showIncomingCall(call: BBMCall!, completion: @escaping CKManagerCompletion)
     {
         let regId : String = call.peerRegId
 
@@ -106,7 +106,7 @@ class CallKitManager : NSObject, CXProviderDelegate
         return update
     }
 
-    public func updateCall(_ call:BBMECall?, state:CallState)
+    public func updateCall(_ call:BBMCall?, state:CallState)
     {
         guard let callId = self.activeCallId, let call = call else {
             return;

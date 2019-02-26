@@ -22,7 +22,7 @@ import UIKit
 
 // The CallLister is an application-level object that listens for data transfers and notifies
 //the user
-class DataConnectionListener : NSObject, BBMEMediaDelegate
+class DataConnectionListener : NSObject, BBMMediaDelegate
 {
     var incomingCallAlert : UIAlertController?
     let mediaManager = BBMEnterpriseService.shared().mediaManager()!

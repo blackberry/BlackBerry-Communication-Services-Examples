@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>authProvider</key>
-	<string>set to one of the configurations listed below (testAuth, googleSignIn, etc). </string>
+	<string>testAuth</string>
 	<key>useBlackBerryKMS</key>
 	<true/>
 	<key>testAuth</key>

@@ -84,10 +84,6 @@
 
         NSArray *chats = [BBMAccess getChats];
         for (BBMChat *chat in chats) {
-            BBMChatMessage *lastMessage = [BBMAccess resolvedLastMessageForChat:chat];
-            if(lastMessage && lastMessage.bbmState == kBBMStatePending) {
-                allMessagesAreCurrent = NO;
-            }
             NSArray *participants = [BBMAccess participantsForChat:chat].array;
             for (BBMChatParticipant *chatParticipant in participants) {
                 BBMUser *chatUser = chatParticipant.resolvedUserUri;

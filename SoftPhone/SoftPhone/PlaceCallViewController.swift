@@ -21,7 +21,7 @@ import Foundation
 import UIKit
 
 
-class PlaceCallViewController : UIViewController, BBMEMediaDelegate
+class PlaceCallViewController : UIViewController, BBMMediaDelegate
 {
     @IBOutlet weak var userIdField: UITextField!
     @IBOutlet weak var callButton: UIButton!
@@ -110,7 +110,7 @@ class PlaceCallViewController : UIViewController, BBMEMediaDelegate
     //We're only monitoring the call state to update our UI here.  The CallListener will handle
     //presenting the various modal UI elements as needed.  
 
-    func callEnded(_ call: BBMECall!) {
+    func callEnded(_ call: BBMCall!) {
         //If the call failed, we don't want to update the UI here, we'll update in in call callDidFail
         if(!call.failed) {
             statusLabel.text = "Call Ended"
@@ -118,7 +118,7 @@ class PlaceCallViewController : UIViewController, BBMEMediaDelegate
         resetCallButton()
     }
 
-    func callDidFail(_ call: BBMECall!) {
+    func callDidFail(_ call: BBMCall!) {
         statusLabel.text = "Call Failed"
         resetCallButton()
     }
