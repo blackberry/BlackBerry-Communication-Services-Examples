@@ -39,7 +39,7 @@ with related resources at the locations below.
 * Instructions to
 [Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
 the SDK.
-* [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html)
+* [Getting Started with Node.js](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-node.html)
 instructions in the Developer Guide.
 * [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
 
