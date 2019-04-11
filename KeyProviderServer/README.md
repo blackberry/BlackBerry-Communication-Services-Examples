@@ -34,26 +34,6 @@ public keys of others.  This example provides the following functionality:
 
 ## Getting Started
 
-This example requires the Spark Communications SDK, which you can find along
-with related resources at the locations below.
-
-* Instructions to
-[Download and Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
-the SDK.
-* [Getting Started with Web](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html)
-instructions in the Developer Guide.
-* [API Reference](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/index.html)
-This sample requires the Spark Communications SDK for JavaScript, which you can find along with related resources at the location below.
-
-<p align="center">
-    <a href="https://youtu.be/CSXZT2perqE"
-      target="_blank"><img src="../QuickStart/screenShots/bb-spark-web-sdk-getting-started.jpg"
-      alt="YouTube Getting Started Video" width="486" height="" border="364"/></a>
-</p>
-<p align="center">
- <b>Getting started video</b>
-</p>
-
 This example uses the popular cloud storage solution, [Azure Cosmos
 DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction).  Please
 refer to the Developer Guide for more information about setting up [Azure
