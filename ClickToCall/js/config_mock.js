@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2019 BlackBerry.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,14 @@
 // BlackBerry recommends for most applications. See
 // https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html
 
-// The ID of the domain assigned to this application.  Refer to the Developer
-// Guide for more information on setting up your domain:
-// https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html#domain
-const DOMAIN_ID = 'your_domain_id';
+// This object will be used to override parts of SDK configuration used by the
+// example application.
+const SDK_CONFIG = {
+  // The ID of the domain assigned to this application.  Refer to the Developer
+  // Guide for more information on setting up your domain:
+  // https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html#domain
+  domain: 'your_domain_id'
+};
 
 // The identity of the user to call, as assigned by your identity provider.
 const AGENT_USER_ID = 'user_id_to_call';
@@ -36,23 +40,3 @@ const AGENT_USER_ID = 'user_id_to_call';
 // recommended practice.  Please refer to the RichChat application, which will
 // prompt the logged in user for their passcode.
 const KEY_PASSCODE = 'passcode';
-
-// ===========================================================================
-// The default values provided below configure ClickToCall to work as
-// described in the Developer Guide.
-
-// This configuration will only work in the sandbox environment.
-const ENVIRONMENT = 'Sandbox';
-
-// Authentication is disabled for this configuration.
-const AUTH_CONFIGURATION = {};
-
-// The URL or relative path of the Argon2 WASM file.
-const KMS_ARGON_WASM_URL = '../../sdk/argon2.wasm';
-
-// The function ClickToCall will use to create its user manager.  This
-// configuration uses the MockUserManager.
-const createUserManager = (userRegId, authManager, getIdentities) =>
-  Promise.resolve(
-    new MockUserManager(userRegId, authManager, getIdentities, DOMAIN_ID)
-  );

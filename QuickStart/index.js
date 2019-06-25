@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2019 BlackBerry.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,27 +24,31 @@ window.onload = async () => {
     // Immediately display the configured information.  We don't display the
     // user ID here even though it is configured when we aren't using a real
     // identity provider.  That will wait until we are authenticated.
-    $('#domain').text(DOMAIN_ID);
-    $('#environment').text(ENVIRONMENT);
+    $('#domain').text(SDK_CONFIG.domain);
+    $('#environment').text('Sandbox');
+
+    // Set the Argon2 WASM file location if it has not already been set.
+    // If you have put the argon2.wasm file in a custom location, you can
+    // override this option in the imported SDK_CONFIG.
+    const kmsArgonWasmUrl =
+      SDK_CONFIG.kmsArgonWasmUrl || '../../sdk/argon2.wasm';
 
     // Make sure that the browser supports all of the necessary functionality,
     // including support for interacting with the BlackBerry Key Management
     // Service (KMS).
     await BBMEnterprise.validateBrowser({
-      kms: { argonWasmUrl: KMS_ARGON_WASM_URL }
+      kms: { argonWasmUrl: kmsArgonWasmUrl }
     });
 
     // Setup the authentication manager for the application.
-    const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
-    if (AuthenticationManager.name === 'MockAuthManager') {
-      // We are using the MockAuthmanager, so we need to override how it
-      // acquires the local user's user ID.
-      authManager.getUserId = () => (
-        USER_ID
-        ? Promise.resolve(USER_ID)
-        : Promise.reject(new Error('USER_ID is not defined'))
-      );
-    }
+    const authManager = new MockAuthManager();
+    // We are using the MockAuthManager, so we need to override how it
+    // acquires the local user's user ID.
+    authManager.getUserId = () => (
+      USER_ID
+      ? Promise.resolve(USER_ID)
+      : Promise.reject(new Error('USER_ID is not defined'))
+    );
 
     // Authenticate the user.  Configurations that use a real identity
     // provider (IDP) will redirect the browser to the IDP's authentication
@@ -73,26 +77,40 @@ window.onload = async () => {
 
       try {
         // Instantiate the SDK.
-        const sdk = new BBMEnterprise({
-          // Let the SDK know the domain and environment it will be operating
-          // within.
-          domain: DOMAIN_ID,
-          environment: ENVIRONMENT,
+        //
+        // We use the SDK_CONFIG imported from the example's configuration
+        // file to override some of the options used to configure the SDK.
+        //
+        // This example might not work if your SDK_CONFIG specifies any of the
+        // parameters assigned below.
+        const sdk = new BBMEnterprise(Object.assign(
+          {
+            // You must specify your domain in the SDK_CONFIG.
 
-          // The identity provider assigned user ID for the logged in user.
-          userId: authUserInfo.userId,
+            // This example requires user authentication to be disabled, which
+            // is not supported in production.
+            sandbox: true,
 
-          // The user's access token for accessing the Spark Communications
-          // Services.
-          getToken: () => authManager.getBbmSdkToken(),
+            // The user ID to use when connecting to the BlackBerry
+            // Infrastructure.  We use the value returned by our identity
+            // provider.
+            userId: authUserInfo.userId,
 
-          // A description of the client being set up.
-          description: navigator.userAgent,
+            // The access token to use when connecting to the BlackBerry
+            // Infrastructure.  We use the value returned by our identity
+            // provider.
+            getToken: () => authManager.getBbmSdkToken(),
 
-          // Were to find the WASM module that supports the BlackBerry Key
-          // Management Service.
-          kmsArgonWasmUrl: KMS_ARGON_WASM_URL
-        });
+            // We just use the browser's userAgent string to describe this
+            // endpoint.
+            description: navigator.userAgent,
+
+            // Use the same kmsArgonWasmUrl that was used to to validate our
+            // browser environment above.
+            kmsArgonWasmUrl
+          },
+          SDK_CONFIG
+        ));
 
         // Setup is asynchronous.  Create a promise we can use to wait on
         // until the SDK setup has completed.

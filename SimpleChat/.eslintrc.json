@@ -11,14 +11,11 @@
   "globals":
   {
     "BBMEnterprise": false,
-    "DOMAIN_ID": false,
-    "ENVIRONMENT": false,
+    "SDK_CONFIG": false,
     "GenericUserInfo": false,
     "HTMLImports": false,
     "KEY_PASSCODE": false,
-    "KMS_ARGON_WASM_URL": false,
-    "AUTH_CONFIGURATION": false,
-    "AuthenticationManager": false
+    "MockAuthManager": false
   },
 
   "rules":
@@ -28,7 +25,7 @@
     [
       "error",
       {
-        "varsIgnorePattern": "AUTH_CONFIGURATION|DOMAIN_ID|KMS_ARGON_WASM_URL|ENVIRONMENT|KEY_PASSCODE|enterChat|leaveChat"
+        "varsIgnorePattern": "SDK_CONFIG|KEY_PASSCODE|enterChat|leaveChat"
       }
     ]
   }

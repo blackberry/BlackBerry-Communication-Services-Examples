@@ -44,9 +44,9 @@ instructions in the Developer Guide.
   <b>Getting started video</b>
 </p>
 
-By default, this example application is configured to work in a domain with
-user authentication disabled and the BlackBerry Key Management Service
-enabled.  See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+This example application works in a sandbox domain with user authentication
+disabled and the BlackBerry Key Management Service enabled.  See the
+[Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
 section of the Developer Guide to get started configuring a
 [domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
 in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
@@ -55,10 +55,12 @@ When you have a domain in the sandbox, edit Click to Call's `config_mock.js`
 file to configure the example with your domain ID, your agent's user ID, and a
 key passcode.
 
-Set the `DOMAIN_ID` parameter to your sandbox domain ID.
+Set the `SDK_CONFIG.domain` parameter to your sandbox domain ID.
 
 ```javascript
-const DOMAIN_ID = 'your_domain_id';
+const SDK_CONFIG = {
+  domain: 'your_domain_id'
+};
 ```
 
 Set the `AGENT_USER_ID` parameter to the user ID of the agent that will
