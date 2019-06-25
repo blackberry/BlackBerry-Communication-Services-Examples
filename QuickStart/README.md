@@ -40,9 +40,9 @@ instructions in the Developer Guide.
   <b>Getting started video</b>
 </p>
 
-This example application works in a sandbox domain with user authentication
-disabled and the BlackBerry Key Management Service enabled.  See the
-[Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+By default, this example application is configured to work in a domain with
+user authentication disabled and the BlackBerry Key Management Service
+enabled.  See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
 section of the Developer Guide to get started configuring a
 [domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
 in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
@@ -50,12 +50,10 @@ in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents
 When you have a domain in the sandbox, edit Quick Starts's `config_mock.js`
 file to configure the example with your domain ID and a key passcode.
 
-Set the `SDK_CONFIG.domain` parameter to your sandbox domain ID.
+Set the `DOMAIN_ID` parameter to your sandbox domain ID.
 
 ```javascript
-const SDK_CONFIG = {
-  domain: 'your_domain_id'
-};
+const DOMAIN_ID = 'your_domain_id';
 ```
 
 Set the `USER_ID` parameter to the user ID that will be associated with the
@@ -104,17 +102,11 @@ instantiate or set up the SDK.
 
 ```javascript
   try {
-    // Set the Argon2 WASM file location if it has not already been set.
-    // If you have put the argon2.wasm file in a custom location, you can
-    // override this option in the imported SDK_CONFIG.
-    const kmsArgonWasmUrl =
-      SDK_CONFIG.kmsArgonWasmUrl || '../../sdk/argon2.wasm';
-
     // Make sure that the browser supports all of the necessary functionality,
     // including support for interacting with the BlackBerry Key Management
     // Service (KMS).
     await BBMEnterprise.validateBrowser({
-      kms: { argonWasmUrl: kmsArgonWasmUrl }
+      kms: { argonWasmUrl: KMS_ARGON_WASM_URL }
     });
   }
   catch(error) {
@@ -126,10 +118,10 @@ instantiate or set up the SDK.
 
 ### <a name="authentication"></a>Authentication and access tokens
 
-The `AuthenticationManager` in this example is the `MockAuthManager` from the
-support library.  The `MockAuthManager` does not interact with a real identity
-provider, and so, has a function that can be overridden to provide the user's
-ID.
+By default, the `AuthenticationManager` in this example is the
+`MockAuthManager` from the support library.  The `MockAuthManager` does not
+interact with a real identity provider, and so, has a function that can be
+overridden to provide the user's ID.
 
 When `AuthManager.authenticate()` is called, asynchronous interaction with the
 identity provider is started.  When control is returned to the example
@@ -175,9 +167,9 @@ The support library also provides the `GoogleAuthManager` and the
   }
 ```
 
-The authentication manager provides a `getBbmSdkToken()` API that will perform
-the necessary interaction with the identity provider to get an access token
-suitable for use with the SDK.
+Each of the authentication managers provide a `getBbmSdkToken()` API that will
+perform the necessary interaction with the identity provider to get an access
+token suitable for use with the SDK.
 
 ### <a name="instantiation"></a>Instantiate the SDK
 
@@ -202,45 +194,31 @@ The `kmsArgonWasmUrl` property is only required if the `argon2.wasm` module is
 not in the same directory as your application.  If you followed the [Exploring
 the
 Examples](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted-web.html#exploring-the-examples)
-section of the Developer Guide, then the default value set by the example will
-already be set correctly.
+section of the Developer Guide, then the `KMS_ARGON_WASM_URL` value from the
+example's configuration file will already be set correctly.
 
 ```javascript
   // Instantiate the SDK.
-  //
-  // We use the SDK_CONFIG imported from the example's configuration
-  // file to override some of the options used to configure the SDK.
-  //
-  // This example might not work if your SDK_CONFIG specifies any of the
-  // parameters assigned below.
-  const sdk = new BBMEnterprise(Object.assign(
-    {
-      // You must specify your domain in the SDK_CONFIG.
+  const sdk = new BBMEnterprise({
+    // Let the SDK know the domain and environment it will be operating
+    // within.
+    domain: DOMAIN_ID,
+    environment: ENVIRONMENT,
 
-      // This example requires user authentication to be disabled, which is
-      // not supported in production.
-      sandbox: true,
+    // The identity provider assigned user ID for the logged in user.
+    userId: authUserInfo.userId,
 
-      // The user ID to use when connecting to the BlackBerry
-      // Infrastructure.  We use the value returned by our identity
-      // provider.
-      userId: authUserInfo.userId,
+    // The user's access token for accessing the Spark Communications
+    // Services.
+    getToken: () => authManager.getBbmSdkToken(),
 
-      // The access token to use when connecting to the BlackBerry
-      // Infrastructure.  We use the value returned by our identity
-      // provider.
-      getToken: () => authManager.getBbmSdkToken(),
+    // A description of the client being set up.
+    description: navigator.userAgent,
 
-      // We just use the browser's userAgent string to describe this
-      // endpoint.
-      description: navigator.userAgent,
-
-      // Use the same kmsArgonWasmUrl that was used to to validate our
-      // browser environment above.
-      kmsArgonWasmUrl
-    },
-    SDK_CONFIG
-  ));
+    // Were to find the WASM module that supports the BlackBerry Key
+    // Management Service.
+    kmsArgonWasmUrl: KMS_ARGON_WASM_URL
+  });
 ```
 
 ### <a name="monitorSetup"></a>Monitor the setup state

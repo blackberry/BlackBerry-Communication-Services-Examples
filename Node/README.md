@@ -52,9 +52,9 @@ instructions in the Developer Guide.
  <b>Getting started video</b>
 </p>
 
-This example application works in a sandbox domain with user authentication
-disabled and the BlackBerry Key Management Service enabled.  See the
-[Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
+By default, this example application is configured to work in a domain with
+user authentication disabled and the BlackBerry Key Management Service
+enabled.  See the [Download & Configure](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html)
 section of the Developer Guide to get started configuring a
 [domain](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#domain)
 in the [sandbox](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/faq.html#sandbox).
@@ -72,12 +72,10 @@ When you have a domain in the sandbox and a Bot Libre chat bot setup, edit
 BBMBot's `config_mock.js` file to configure the example with your domain ID,
 a key passcode, and your Bot Libre chat bot's information.
 
-Set the `sdkConfig.domain` parameter to your sandbox domain ID.
+Set the `domain_id` property to your sandbox domain ID.
 
 ```javascript
-  sdkConfig: {
-    domain: 'your_domain_id'
-  },
+  domain_id: 'your_domain_id',
 ```
 
 Set the `key_passcode` property to a passcode of your choosing.  The passcode

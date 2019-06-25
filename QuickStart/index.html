@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 
 <!--
-  Copyright (c) 2019 BlackBerry.  All Rights Reserved.
+  Copyright (c) 2018 BlackBerry.  All Rights Reserved.
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -25,8 +25,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="../support/identity/GenericUserInfo.js"></script>
 
+    <!-- Select one of the following configurations (mutually exclusive): -->
+
+    <!-- 1. Simplified: Use below .js to configure your app to work without authentication (no identity provider) -->
     <script src="../support/auth/MockAuthManager.js"></script>
     <script src="config_mock.js"></script>
+
+    <!-- 2. Google: Use below .js files to configure application to work with Google -->
+    <!--
+    <script src="../support/auth/GoogleAuthManager.js"></script>
+    <script src="config_google.js"></script>
+    -->
+
+    <!-- 3. Microsoft: Use below .js files to configure application to work with Azure -->
+    <!--
+    <script src="../support/auth/AzureAuthManager.js"></script>
+    <script src="config_azure.js"></script>
+    -->
 
     <style>
       #sdkSetupButton{

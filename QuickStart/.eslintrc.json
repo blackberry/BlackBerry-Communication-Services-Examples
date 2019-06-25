@@ -12,10 +12,13 @@
   {
     "$": false,
     "BBMEnterprise": false,
-    "SDK_CONFIG": false,
+    "DOMAIN_ID": false,
+    "ENVIRONMENT": false,
     "USER_ID": false,
     "KEY_PASSCODE": false,
-    "MockAuthManager": false
+    "KMS_ARGON_WASM_URL": false,
+    "AUTH_CONFIGURATION": false,
+    "AuthenticationManager": false
   },
   "rules":
   {
@@ -24,7 +27,7 @@
     [
       "error",
       {
-        "varsIgnorePattern": "SDK_CONFIG|KEY_PASSCODE|USER_ID"
+        "varsIgnorePattern": "AUTH_CONFIGURATION|DOMAIN_ID|KMS_ARGON_WASM_URL|ENVIRONMENT|KEY_PASSCODE|USER_ID"
       }
     ]
   }

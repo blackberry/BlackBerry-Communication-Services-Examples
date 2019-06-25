@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,35 +21,31 @@
 
 window.onload = async () => {
   try {
-    // Set the Argon2 WASM file location if it has not already been set.
-    // If you have put the argon2.wasm file in a custom location, you can
-    // override this option in the imported SDK_CONFIG.
-    const kmsArgonWasmUrl =
-      SDK_CONFIG.kmsArgonWasmUrl || '../../sdk/argon2.wasm';
-
     // Make sure that the browser supports all of the necessary functionality,
     // including support for interacting with the BlackBerry Key Management
     // Service (KMS).
     await BBMEnterprise.validateBrowser({
-      kms: { argonWasmUrl: kmsArgonWasmUrl }
+      kms: { argonWasmUrl: KMS_ARGON_WASM_URL }
     });
 
     // Setup the authentication manager for the application.
-    const authManager = new MockAuthManager();
-    // We are using the MockAuthManager, so we need to override how it
-    // acquires the local user's user ID.
-    authManager.getUserId = () => new Promise((resolve, reject) => {
-      const userEmailDialog = document.createElement('bbm-user-email-dialog');
-      document.body.appendChild(userEmailDialog);
-      userEmailDialog.addEventListener('Ok', e => {
-        userEmailDialog.parentNode.removeChild(userEmailDialog);
-        resolve(e.detail.userEmail);
+    const authManager = new AuthenticationManager(AUTH_CONFIGURATION);
+    if (AuthenticationManager.name === 'MockAuthManager') {
+      // We are using the MockAuthmanager, so we need to override how it
+      // acquires the local user's user ID.
+      authManager.getUserId = () => new Promise((resolve, reject) => {
+        const userEmailDialog = document.createElement('bbm-user-email-dialog');
+        document.body.appendChild(userEmailDialog);
+        userEmailDialog.addEventListener('Ok', e => {
+          userEmailDialog.parentNode.removeChild(userEmailDialog);
+          resolve(e.detail.userEmail);
+        });
+        userEmailDialog.addEventListener('Cancel', () => {
+          userEmailDialog.parentNode.removeChild(userEmailDialog);
+          reject('Failed to get user email.');
+        });
       });
-      userEmailDialog.addEventListener('Cancel', () => {
-        userEmailDialog.parentNode.removeChild(userEmailDialog);
-        reject('Failed to get user email.');
-      });
-    });
+    }
 
     // Authenticate the user.  Configurations that use a real identity
     // provider (IDP) will redirect the browser to the IDP's authentication
@@ -61,40 +57,14 @@ window.onload = async () => {
     }
 
     // Instantiate the SDK.
-    //
-    // We use the SDK_CONFIG imported from the example's configuration file to
-    // override some of the options used to configure the SDK.
-    //
-    // This example might not work if your SDK_CONFIG specifies any of the
-    // parameters assigned below.
-    const sdk = new BBMEnterprise(Object.assign(
-      {
-        // You must specify your domain in the SDK_CONFIG.
-
-        // This example requires user authentication to be disabled, which is
-        // not supported in production.
-        sandbox: true,
-
-        // The user ID to use when connecting to the BlackBerry
-        // Infrastructure.  We use the value returned by our identity
-        // provider.
-        userId: authUserInfo.userId,
-
-        // The access token to use when connecting to the BlackBerry
-        // Infrastructure.  We use the value returned by our identity
-        // provider.
-        getToken: () => authManager.getBbmSdkToken(),
-
-        // We just use the browser's userAgent string to describe this
-        // endpoint.
-        description: navigator.userAgent,
-
-        // Use the same kmsArgonWasmUrl that was used to to validate our
-        // browser environment above.
-        kmsArgonWasmUrl
-      },
-      SDK_CONFIG
-    ));
+    const sdk = new BBMEnterprise({
+      domain: DOMAIN_ID,
+      environment: ENVIRONMENT,
+      userId: authUserInfo.userId,
+      getToken: authManager.getBbmSdkToken,
+      description: navigator.userAgent,
+      kmsArgonWasmUrl: KMS_ARGON_WASM_URL
+    });
 
     // Setup is asynchronous.  Create a promise we can use to wait on until
     // the SDK setup has completed.
@@ -164,11 +134,10 @@ window.onload = async () => {
     // to act on any issue that causes the SDK's state to regress.
 
     // Create and initialize the user manager.
-    const userManager = new MockUserManager(
+    const userManager = await createUserManager(
       sdk.getRegistrationInfo().regId,
       authManager,
-      (...args) => sdk.getIdentitiesFromAppUserIds(...args),
-      SDK_CONFIG.domain
+      (...args) => sdk.getIdentitiesFromAppUserIds(...args)
     );
     await userManager.initialize();
 

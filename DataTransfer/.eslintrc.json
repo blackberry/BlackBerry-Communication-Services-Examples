@@ -11,10 +11,17 @@
   "globals":
   {
     "BBMEnterprise": false,
-    "SDK_CONFIG": false,
+    "DOMAIN_ID": false,
+    "ENVIRONMENT": false,
+    "createUserManager": false,
+    "GenericUserInfo": false,
     "Polymer": false,
     "KEY_PASSCODE": false,
-    "MockAuthManager": false
+    "KMS_ARGON_WASM_URL": false,
+    "AUTH_CONFIGURATION": false,
+    "AuthenticationManager": false,
+    "MockUserManager": false,
+    "AzureUserManager": false
   },
 
   "rules":
@@ -24,7 +31,7 @@
     [
       "error",
       {
-        "varsIgnorePattern": "SDK_CONFIG|KEY_PASSCODE"
+        "varsIgnorePattern": "AUTH_CONFIGURATION|DOMAIN_ID|KMS_ARGON_WASM_URL|ENVIRONMENT|KEY_PASSCODE|createUserManager"
       }
     ]
   }

@@ -12,14 +12,19 @@
   {
     "AGENT_USER_ID": false,
     "BBMEnterprise": false,
-    "SDK_CONFIG": false,
+    "DOMAIN_ID": false,
+    "ENVIRONMENT": false,
+    "createUserManager": false,
     "GenericUserInfo": false,
     "TimeRangeFormatter": false,
     "MessageFormatter": false,
     "KEY_PASSCODE": false,
+    "KMS_ARGON_WASM_URL": false,
+    "GooglePeopleUserManager": false,
     "AUTH_CONFIGURATION": false,
-    "MockAuthManager": false,
+    "AuthenticationManager": false,
     "MockUserManager": false,
+    "AzureUserManager": false,
     "Polymer": false
   },
 
@@ -30,7 +35,7 @@
     [
       "error",
       {
-        "varsIgnorePattern": "startChat|AGENT_USER_ID|SDK_CONFIG|KEY_PASSCODE"
+        "varsIgnorePattern": "AUTH_CONFIGURATION|startChat|KMS_ARGON_WASM_URL|AGENT_USER_ID|DOMAIN_ID|KEY_PASSCODE|ENVIRONMENT|createUserManager"
       }
     ]
   }

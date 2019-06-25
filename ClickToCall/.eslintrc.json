@@ -12,11 +12,17 @@
   {
     "AGENT_USER_ID": false,
     "BBMEnterprise": false,
-    "SDK_CONFIG": false,
+    "DOMAIN_ID": false,
+    "ENVIRONMENT": false,
+    "createUserManager": false,
     "GenericUserInfo": false,
     "KEY_PASSCODE": false,
-    "MockAuthManager": false,
-    "MockUserManager": false
+    "KMS_ARGON_WASM_URL": false,
+    "GooglePeopleUserManager": false,
+    "AUTH_CONFIGURATION": false,
+    "AuthenticationManager": false,
+    "MockUserManager": false,
+    "AzureUserManager": false
   },
 
   "rules":
@@ -26,7 +32,7 @@
     [
       "error",
       {
-        "varsIgnorePattern": "makeCall|AGENT_USER_ID|SDK_CONFIG|KEY_PASSCODE"
+        "varsIgnorePattern": "AUTH_CONFIGURATION|makeCall|KMS_ARGON_WASM_URL|AGENT_USER_ID|DOMAIN_ID|KEY_PASSCODE|ENVIRONMENT|createUserManager"
       }
     ]
   }

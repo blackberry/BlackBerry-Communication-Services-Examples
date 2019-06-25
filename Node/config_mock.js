@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,15 +23,14 @@
 // https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/security.html
 
 module.exports = {
+  // The ID of the domain assigned to this application.  Refer to the
+  // Developer Guide for more information on setting up your domain:
+  // https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html#domain
+  domain_id: 'your_domain_id',
 
-  // This object will be used to override parts of SDK configuration used by the
-  // example application.
-  sdkConfig: {
-    // The ID of the domain assigned to this application.  Refer to the
-    // Developer Guide for more information on setting up your domain:
-    // https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html#domain
-    domain_id: 'your_domain_id'
-  },
+  // The environment in which the domain has been defined.  This configuration
+  // will only work in the sandbox environment.
+  environment: 'Sandbox',
 
   // Configure the Mock IDP client.
   mockConfig: {

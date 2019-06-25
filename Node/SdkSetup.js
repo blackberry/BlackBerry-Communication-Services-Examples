@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,35 +27,13 @@ module.exports = {
       console.log('Setting up the Spark Communications SDK');
 
       // Instantiate the SDK.
-      //
-      // We use the 'sdkConfig' imported from the example's configuration file
-      // to override some of the options used to configure the SDK.
-      //
-      // This example might not work if your 'sdkConfig' specifies any of the
-      // parameters assigned below.
-      const sdk = new BBMEnterprise(Object.assign(
-        {
-          // You must specify your domain in the SDK_CONFIG.
-
-          // This example requires user authentication to be disabled, which
-          // is not supported in production.
-          sandbox: true,
-
-          // The user ID to use when connecting to the BlackBerry
-          // Infrastructure.  We use the value returned by our identity
-          // provider.
-          userId: authManager.getLocalUserInfo().userId,
-
-          // The access token to use when connecting to the BlackBerry
-          // Infrastructure.  We use the value returned by our identity
-          // provider.
-          getToken: () => authManager.getBbmSdkToken(),
-
-          // We just use the node version string to describe this endpoint.
-          description: `node ${process.version}`
-        },
-        config.sdkConfig
-      ));
+      const sdk = new BBMEnterprise({
+        domain: config.domain_id,
+        environment: config.environment,
+        userId: authManager.getLocalUserInfo().userId,
+        getToken: authManager.getBbmSdkToken,
+        description: `node ${process.version}`
+      });
 
       // Handle changes of BBM Enterprise setup state.
       sdk.on('setupState', state => {
