@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2019 BlackBerry.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,39 +20,11 @@
 // message which starts with '@bbmbot'.
 //
 
-// Usage: node ./BBMBot.js [idp]
-//   Where idp is the identity provider of choice.   Valid values are:
-//
-//     * google:  Google will be used as the identity provide.  Only valid
-//                Google identities can be used.
-//
-//     * mock:    No identity provider is to be used.  Only stubbed tokens and
-//                identity will be provided.
-//
-//   If no idp value is supplied, the default idp is 'mock'.
-//
-const idp = process.argv.length === 3 ? process.argv[2] : 'mock';
+// Usage: node ./BBMBot.js
 
 // Try to load the configuration for the IDP.
-let config;
-let login;
-switch(idp) {
-case 'google':
-  console.log('Loading configuration from: ./config_google.js');
-  config = require('./config_google');
-  login = require('./GoogleLogin');
-  break;
-
-case 'mock':
-  console.log('Loading configuration from: ./config_mock.js');
-  config = require('./config_mock');
-  login = require('./MockLogin');
-  break;
-
-default:
-  throw new Error(
-    `Invalid idp argument: ${idp}; supported IDP: google, mock`);
-}
+const config = require('./config_mock');
+const login = require('./MockLogin');
 
 const bot = require('./botlibre')(config.botLibre.application,
                                   config.botLibre.instance);
@@ -133,12 +105,7 @@ login.login(config)
       // though we may not have. The bot only responds to online messages.
       if(addedEvent.chat.state === BBMEnterprise.Messenger.Chat.State.Waiting) {
         // The chat is not ready. Get it ready first, then reply.
-        messenger.fetchChatMessages(
-          message.chatId,
-          {
-            minFetchCount: 0,
-            syncMode: BBMEnterprise.Messenger.NoSync
-          })
+        messenger.fetchChatMessages(message.chatId, { minFetchCount: 0 })
         .then(sendResponse);
       } else {
         // The chat is ready, just reply.
