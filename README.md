@@ -25,7 +25,6 @@ This repository contains code for JavaScript example applications that you can u
 |[ThreadedChat](ThreadedChat/README.md) | Build an application that demonstrates how a user can post comments on a chat to build a threaded conversation|
 |[KeyProviderServer](KeyProviderServer/README.md) | Build a Node.js server that demonstrates how your application can enforce access control to a cloud storage solution|
 |[Data Transfer](DataTransfer/README.md) | Build an application to send files over a secure peer-to-peer connection |
-|[Raspberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) | Build an application that securely communicates with an IoT device (LED controlled by a Raspberry Pi)|
 
 For more details on all the Spark Communications Services examples see the online [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).
 
