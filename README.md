@@ -25,7 +25,6 @@ help build your messaging solution with Spark Communications.
 | [SoftPhone](SoftPhone/README.md) | 	Build an application with voice and video calling|
 | [Data Transfer](DataTransfer/README.md) | Build an application to send files over a secure peer-to-peer connection|
 | [Chat Poll](ChatPoll/README.md) | Build an application that allows users to post polls within custom chat messages|
-| [Raspberry Pi IoT Sample](RaspberryPi_IoTSample/README.md) |Build an iOS application that securely communicates with an IoT device (LED controlled by a Raspberry Pi |
 
 For more details on all the Spark Communications examples see the online [Developer Guide](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/examples.html).
 
