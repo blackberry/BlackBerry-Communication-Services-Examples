@@ -1,0 +1,37 @@
+{
+  // Disable the node environment since this module doesn't support it.  This
+  // will inhibit the node plugin's rules from running and will remove the
+  // node environment's global variables from the global scope.
+  "env":
+  {
+    "node": false
+  },
+  
+  // Ignore unknown variables that will be available at runtime.
+  "globals":
+  {
+    "AGENT_USER_ID": false,
+    "BBMEnterprise": false,
+    "SDK_CONFIG": false,
+    "GenericUserInfo": false,
+    "TimeRangeFormatter": false,
+    "MessageFormatter": false,
+    "KEY_PASSCODE": false,
+    "AUTH_CONFIGURATION": false,
+    "MockAuthManager": false,
+    "MockUserManager": false,
+    "Polymer": false
+  },
+
+  "rules":
+  {
+    // Ignore certain unused identifiers.
+    "no-unused-vars":
+    [
+      "error",
+      {
+        "varsIgnorePattern": "startChat|AGENT_USER_ID|SDK_CONFIG|KEY_PASSCODE"
+      }
+    ]
+  }
+}

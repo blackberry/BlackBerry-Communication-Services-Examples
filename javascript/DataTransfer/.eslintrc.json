@@ -1,0 +1,31 @@
+{
+  // Disable the node environment since this module doesn't support it.  This
+  // will inhibit the node plugin's rules from running and will remove the
+  // node environment's global variables from the global scope.
+  "env":
+  {
+    "node": false
+  },
+  
+  // Ignore unknown variables that will be available at runtime.
+  "globals":
+  {
+    "BBMEnterprise": false,
+    "SDK_CONFIG": false,
+    "Polymer": false,
+    "KEY_PASSCODE": false,
+    "MockAuthManager": false
+  },
+
+  "rules":
+  {
+    // Ignore certain unused identifiers.
+    "no-unused-vars":
+    [
+      "error",
+      {
+        "varsIgnorePattern": "SDK_CONFIG|KEY_PASSCODE"
+      }
+    ]
+  }
+}

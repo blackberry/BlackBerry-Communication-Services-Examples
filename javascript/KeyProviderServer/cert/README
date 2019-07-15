@@ -1,0 +1,9 @@
+This folder contains placeholders for the certificate and private key. Replace
+these files with PEM encoded files suitable for use in establishing a TLS
+context as per the key and cert options described here:
+https://nodejs.org/docs/latest-v6.x/api/tls.html#tls_tls_createsecurecontext_options
+
+Include the full path to these files in config.js.
+
+If you want to start KeyProviderServer in http mode, then set 'useSsl' to false
+in config.js file.
