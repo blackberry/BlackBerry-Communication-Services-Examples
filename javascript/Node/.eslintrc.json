@@ -1,0 +1,29 @@
+{
+  // Ignore unknown variables that will be available at runtime.
+  "globals":
+  {
+    "BBMEnterprise": false
+  },
+  "rules":
+  {
+    // Ignore certain missing required modules.
+    "node/no-missing-require":
+    [
+      "error",
+      {
+        "allowModules":
+        [
+          "bbm-enterprise",
+          "bbm-enterprise/examples/support/identity/FirebaseUserManager.js",
+          "bbm-enterprise/examples/support/identity/GenericUserInfo.js",
+          "bbm-enterprise/examples/support/protect/firebase/FirebaseKeyProvider.js",
+          "bbm-enterprise/examples/support/protect/encryption/KeyProtect.js",
+          "googleapis",
+          "google-auth-library",
+          "xml",
+          "xml2js"
+        ]
+      }
+    ]
+  }
+}

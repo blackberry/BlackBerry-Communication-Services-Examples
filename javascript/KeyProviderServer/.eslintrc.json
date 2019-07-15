@@ -1,0 +1,19 @@
+{
+  "rules":
+  {
+    // Ignore certain missing required modules.
+    "node/no-missing-require":
+    [
+      "error",
+      {
+        "allowModules":
+        [
+          "express",
+          "azure-storage",
+          "jsonwebtoken"
+        ]
+      }
+    ]
+  }
+}
+

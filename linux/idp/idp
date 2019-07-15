@@ -1,0 +1,282 @@
+#!/usr/bin/make -f
+#*****************************************************************************
+# Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#------------------------------------------------------------------------------
+#
+# WARNING: For demonstration purposes only.  Do not use this in production.
+#
+#------------------------------------------------------------------------------
+#
+# See README.md for instructions on using this simulated Identity Provider
+# (IDP).
+#
+# This uses the signing algorithm that JWT calls "ES256".
+#
+# This generates a ECDSA key pair in the "public.pem" and "private.pem" files
+# and creates a JWK form of the public key in "public.jwk".
+#
+# This emits the user ID and auth token values in BBMDS "authToken" form to a
+# re-used file called "token" and prints that file to the screen.
+#
+# All output files are placed in the same directory as this tool.
+#
+#------------------------------------------------------------------------------
+# Important Targets
+#
+# token | all
+#
+#   If there is no current key pair, make one, including the JWK form of the
+#   public key.  Then, generate a new auth token for a randomly generated user
+#   ID.  See the SUB and other arguments, below, to modify this behaviour.
+#
+# clean
+#
+#   Delete all generated files to start from scratch with a new IDP.  After
+#   running this, you will no longer be able to generate auth tokens for the
+#   previous set of keys.
+#
+#------------------------------------------------------------------------------
+# Important Arguments
+#
+# SUB
+#
+#   If set, this is the user identity (the JWT "sub" field) to use within any
+#   generated auth token.  If not set, a random user identity will be
+#   generated.
+#
+#   For example:
+#
+#     ./idp token SUB=user@example.org
+#
+# EXPIRY
+#
+#   If set, this is the number of seconds after which the generated auth token
+#   will expire (via the JWT "exp" field).  If not set, the token will be good
+#   for one year.
+#
+#   For example, to use a five-minute (300 second) expiry duration:
+#
+#     ./idp EXPIRY=300
+#
+# AUD
+#
+#   If set, this is the string to use for the JWT "aud" field.  The default is
+#   "SampleApplication".
+#
+#==============================================================================
+# Computed Configuration
+
+# What's this tool called?
+TOOL := $(lastword $(MAKEFILE_LIST))
+
+# The private key PEM filename.
+PRIVATE := private.pem
+
+# The public key PEM filename.
+PUBLIC := public.pem
+
+# The file that stores the JWK key id.
+KEY_ID_FILE := kid
+
+# The public key JWK filename
+JWK := public.jwk
+
+# The file that contains the most recently generated auth token.
+TOKEN_FILE := token
+
+#------------------------------------------------------------------------------
+# Setup
+
+# Set the shell.
+SHELL := /bin/bash
+
+# Set default goal.
+.DEFAULT_GOAL := all
+.PHONY: all clean
+
+# Delete on error.
+.DELETE_ON_ERROR:
+
+# Disable Unused Built-in Rules
+.SUFFIXES:
+%:: %,v
+%:: RCS/%,v
+%:: RCS/%
+%:: s.%
+%:: SCCS/s.%
+
+# Hide commands?
+hide := $(if $(V),,@)
+
+# Summarize commands.  Evaluates to a shell command.  $1 is the summary verb
+# and $2 is "the rest".
+ifneq ($(V),)
+  summary :=
+else
+  summary = printf '%-10s %s\n' '[$1]' '$2'
+endif
+
+#------------------------------------------------------------------------------
+# Sanity Check
+
+# Ensure we're run in the same directory as the tool.
+ifneq ($(realpath $(CURDIR)),$(realpath $(dir $(TOOL))))
+  $(error Run this tool from the direcorty in which it exists: $(realpath $(dir $(TOOL))))
+endif
+
+# If they didn't specify an identity, generate a random one.
+ifeq ($(SUB),)
+  # Just use OpenSSL's random utility to generate a base64url paddingless id.
+  SUB := $(shell set -eo pipefail; openssl rand -base64 18 |tr '+/' '-_')
+endif
+ifeq ($(SUB),)
+  $(error No SUB specified and could not generate one.)
+endif
+
+# Default expiry is 1 year (in seconds).
+EXPIRY ?= 31536000
+
+# Default "aud" is "SampleApplication".
+AUD ?= SampleApplication
+
+#------------------------------------------------------------------------------
+# Functions
+
+# A double-quote character
+quote := "
+#" # End the quotes for editors :)
+
+# Escape for JSON (inside shell commands where the value is protected by
+# double-quotes).
+escape = $(subst $(quote),\\\$(quote),$(subst \,\\\\,$1))
+
+#------------------------------------------------------------------------------
+# Rules
+
+# What do we do by default?
+all: $(JWK) $(TOKEN_FILE)
+
+# For convenience, print the help at the top of this file when they say "idp
+# help".
+.PHONY:
+help:
+	@sed -re '/^#\*/,/^#=/!d;//d' $(TOOL)
+
+# Generate a new private key.
+$(PRIVATE):
+	-@$(call summary,generate,$@)
+	$(hide) openssl ecparam -genkey -name prime256v1 -noout -out $@
+
+# Generate a new public key.
+$(PUBLIC): $(PRIVATE)
+	-@$(call summary,generate,$@)
+	$(hide) set -eo pipefail; \
+	  openssl ec -in $< -pubout -out $@ \
+	    2> >(egrep -v '^(read|writing) EC key$$' 1>&2)
+
+# Generate a new key id every time the public key changes.  It never needs to
+# be JSON escaped.
+$(KEY_ID_FILE): $(PUBLIC)
+	$(hide) set -eo pipefail; openssl rand -base64 18 |tr '+/' '-_' >$@
+
+# Generate the JWK form of the public key.
+$(JWK): $(PUBLIC) $(KEY_ID_FILE)
+	-@$(call summary,generate,$@)
+	$(hide) set -eo pipefail; \
+	  function b64() { cat |base64 -w 0 |tr -d = |tr '+/' '-_'; }; \
+	  xy=$$( \
+	    openssl ec -in $(PUBLIC) -pubin -text -noout \
+	      2> >(egrep -v '^(read|writing) EC key$$' 1>&2) \
+	      |grep '^  ' \
+	      |tr -d ' \n:' \
+	  ); \
+	  egrep -q '^04[0-9a-f]*{128}$$' <<<$$xy; \
+	  xy=$$(cut -b3- <<<$$xy); \
+	  { \
+	    echo '{'; \
+	    echo '  "keys":'; \
+	    echo '  ['; \
+	    echo '    {'; \
+	    echo '      "kid": "'$$(<$(KEY_ID_FILE))'",'; \
+	    echo '      "kty": "EC",'; \
+	    echo '      "use": "sig",'; \
+	    echo '      "crv": "P-256",'; \
+	    echo '      "alg": "ES256",'; \
+	    echo '      "x": "'$$(cut -b-64 <<<$$xy |xxd -r -p |b64)'",'; \
+	    echo '      "y": "'$$(cut -b65- <<<$$xy |xxd -r -p |b64)'"'; \
+	    echo '    }'; \
+	    echo '  ]';\
+	    echo '}'; \
+	  } >$@
+
+# Issue a new auth token to the user identified by $(SUB) every time this is
+# run, even if there is an existing "token" file.
+.PHONY: $(TOKEN_FILE)
+$(TOKEN_FILE): $(PUBLIC) $(KEY_ID_FILE)
+	-@$(call summary,generate,$@)
+	$(hide) set -eo pipefail; token=$$( \
+	  function b64() { cat |base64 -w 0 |tr -d = |tr '+/' '-_'; }; \
+	  h=$$( \
+	    { \
+	      echo -n '{'; \
+	      echo -n '"alg":"ES256",'; \
+	      echo -n '"typ":"JWT",'; \
+	      echo -n '"kid":"'$$(<$(KEY_ID_FILE))'"'; \
+	      echo -n '}'; \
+	    } \
+	    |b64); \
+	  p=$$( \
+	    { \
+	      echo -n '{'; \
+	      echo -n '"iss":"SimulatedIDP",'; \
+	      echo -n '"aud":"'"$(call escape,$(AUD))"'",'; \
+	      echo -n '"jti":"'; \
+	        openssl rand -base64 18 |tr '+/' '-_' |tr -d '\n'; \
+	        echo -n '",'; \
+	      echo -n '"sub":"'"$(call escape,$(SUB))"'",'; \
+	      echo -n '"iat":'$$(date +%s)','; \
+	      echo -n '"exp":'$$(expr $$(date +%s) + $(EXPIRY)); \
+	      echo -n '}'; \
+	    } \
+	    |b64); \
+	  echo -n "$$h.$$p."; \
+	  echo -n "$$h.$$p" \
+	    |openssl dgst -sha256 -sign $(PRIVATE) \
+	    |openssl asn1parse -inform der \
+	    |egrep -o 'INTEGER.*' \
+	    |awk -F: '{print $$2}' \
+	    |xxd -r -p \
+	    |b64 \
+	  ); \
+	  { \
+	    echo '{'; \
+	    echo '  "authToken":'; \
+	    echo '  {'; \
+	    echo '    "userId": "'"$(call escape,$(SUB))"'",'; \
+	    echo '    "authToken": "'"$$token"'"'; \
+	    echo '  }'; \
+	    echo '}'; \
+	  } >$@
+	$(hide) cat $@
+
+#------------------------------------------------------------------------------
+# Clean
+
+clean:
+	-@$(call summary,clean,Removing generated files)
+	$(hide) rm -f $(PUBLIC) $(PRIVATE) $(KEY_ID_FILE) $(JWK) $(TOKEN_FILE)
+
+#*****************************************************************************

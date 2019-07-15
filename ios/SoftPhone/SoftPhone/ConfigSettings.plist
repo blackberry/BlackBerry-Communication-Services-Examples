@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>authProvider</key>
+	<string>testAuth</string>
+	<key>useBlackBerryKMS</key>
+	<true/>
+	<key>testAuth</key>
+	<dict>
+		<key>clientId</key>
+		<string>not_used</string>
+		<key>domain</key>
+		<string>YOUR_DOMAIN</string>
+		<key>environment</key>
+		<string>sandbox</string>
+	</dict>
+</dict>
+</plist>

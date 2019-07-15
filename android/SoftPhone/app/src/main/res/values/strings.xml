@@ -1,0 +1,67 @@
+<!--
+  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">SoftPhone</string>
+    <string name="incoming_call">Incoming Call</string>
+    <string name="error_starting_call">Unable to create call %1s</string>
+    <string name="call_failure">Call failure %1s</string>
+    <string name="incoming_call_accept">Accept</string>
+    <string name="incoming_call_decline">Decline</string>
+    <string name="voicecall_status_calling">Calling</string>
+    <string name="voicecall_status_connecting">Connecting</string>
+    <string name="voicecall_status_duration">Call %1$s</string>
+    <string name="call_recovery">Recovering Call</string>
+    <string name="video_chat_cannot_enable_camera">Unable to start your camera.</string>
+    <string name="video_chat_cannot_switch_cameras">Unable to switch camera.</string>
+    <string name="call_audio_selector">Audio Selector</string>
+    <string name="switch_camera">Switch Camera</string>
+    <string name="start_call">Start Call</string>
+    <string name="button_send_log_files">Send Log Files</string>
+
+    <!-- Rationale for why call cannot continue without the RECORD_AUDIO permission -->
+    <string name="rationale_record_audio_denied">You can\'t make voice calls without the microphone permission. You can change the permissions in the device settings.</string>
+    <!-- Rationale for why we need the RECORD_AUDIO permission -->
+    <string name="rationale_record_audio">SoftPhone requires access to the microphone to make voice calls.</string>
+    <string name="unlock_for_microphone_permission">To accept a call, unlock your device and turn on the Microphone permission.</string>
+    <string name="unlock_for_permission">Unlock</string>
+    <string name="unlock_for_camera_permission">To add video to this call, unlock your device and turn on the Camera permission.</string>
+    <string name="call_error_unable_to_connect">Unable to connect your call.</string>
+
+    <!-- Rationale for why BBM needs the CAMERA permission -->
+    <string name="rationale_camera">SoftPhone requires access to the camera to share video in a call.</string>
+
+    <!-- Call log format "Duration" - "Time of Call" ex. 1:30s - 10 minutes ago -->
+    <string name="call_log_formatting">%1$s - %2$s</string>
+    <string name="missed_call">Missed call - %1$s</string>
+    <string name="unavailable">Unavailable - %1$s</string>
+    <string name="cancelled">Cancelled - %1$s</string>
+    <string name="declined">Declined - %1$s</string>
+    <string name="connection_error">Connection error - %1$s</string>
+    <string name="unknown_reason">Unknown - %1$s</string>
+
+    <string name="in_active_call">In a call with %1$s</string>
+
+    <string name="my_registration_id">My RegId: %1$d</string>
+    <string name="my_user_name">User Name: %1$s</string>
+
+    <string name="call_quality_poor">Limited Network Connection</string>
+
+    <string name="error_no_regid">No regId</string>
+
+    <string name="rationale_write_external_storage">BBM Enterprise requires access to your device storage to save files from the camera and save images and files sent by your contacts.</string>
+    <string name="user_id_not_found">Unable to find user %1$s</string>
+</resources>
