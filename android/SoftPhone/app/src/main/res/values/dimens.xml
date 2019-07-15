@@ -1,0 +1,39 @@
+<!--
+  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <!-- Call activity dimensions -->
+    <dimen name="in_call_margin_top">45dp</dimen>
+    <dimen name="in_call_details_margin">30dp</dimen>
+    <dimen name="in_call_bottom_title_spacing">20dp</dimen>
+    <dimen name="in_call_subtitle_left_margin">34dp</dimen>
+    <dimen name="in_call_secondary_text_size">18sp</dimen>
+    <dimen name="in_call_end_call_margin_bottom">20dp</dimen>
+    <dimen name="in_call_action_item_padding_lr">28dp</dimen>
+    <dimen name="in_call_title_text_margin">30dp</dimen>
+    <dimen name="in_call_primary_text_size">26sp</dimen>
+    <dimen name="in_call_quality_text_size">16sp</dimen>
+    <dimen name="call_quality_drawable_padding">3dp</dimen>
+    <dimen name="call_quality_negative_margin">-2dp</dimen>
+    <dimen name="in_call_minimize_icon_spacing">40dp</dimen>
+    <dimen name="in_call_title_spacing">6dp</dimen>
+    <dimen name="in_call_outer_padding">15dp</dimen>
+    <dimen name="in_call_separator_height">3dp</dimen>
+    <dimen name="in_call_button_progress_overlay">14dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+
+</resources>
