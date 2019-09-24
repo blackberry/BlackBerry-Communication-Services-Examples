@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ package com.bbm.example.softphone;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,10 +42,10 @@ import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.reactive.SingleshotMonitor;
 import com.bbm.sdk.support.identity.UserIdentityMapper;
+import com.bbm.sdk.support.identity.auth.MockTokenProvider;
 import com.bbm.sdk.support.identity.user.AppUser;
 import com.bbm.sdk.support.identity.user.UserManager;
 import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
-import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.BbmUtils;
 import com.bbm.sdk.support.util.Logger;
 import com.bbm.sdk.support.util.PermissionsUtil;
@@ -152,8 +152,8 @@ public class MainActivity extends AppCompatActivity  {
         //Call changed to trigger our observer to run immediately
         mBbmSetupObserver.changed();
 
-        //Provide the activity to the Auth helper so it can prompt the user for credentials
-        AuthIdentityHelper.setActivity(this);
+        //Provide the activity to the MockTokenProvider so it can prompt the user for credentials
+        MockTokenProvider.challengeAuthentication(this);
 
         //Set the click listener for the start call button
         FloatingActionButton startCallFloatingButton = (FloatingActionButton)findViewById(R.id.start_call_fab);
@@ -271,6 +271,6 @@ public class MainActivity extends AppCompatActivity  {
         super.onPause();
         myRegistrationIdObserver.dispose();
         mInACallMonitor.dispose();
-        mLocalUserObserver.activate();
+        mLocalUserObserver.dispose();
     }
 }

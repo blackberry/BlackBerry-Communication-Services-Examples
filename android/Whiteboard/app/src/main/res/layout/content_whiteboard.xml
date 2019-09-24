@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~ Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@
                 android:layout_height="32dp"
                 android:background="@color/white"
                 android:scaleType="fitCenter"
-                android:src="@drawable/stroke_color" />
+                app:srcCompat="@drawable/stroke_color" />
 
             <Space
                 android:layout_width="0dp"
@@ -60,7 +60,7 @@
                 android:layout_height="32dp"
                 android:background="@color/white"
                 android:scaleType="fitCenter"
-                android:src="@drawable/stroke_medium" />
+                app:srcCompat="@drawable/stroke_medium" />
 
             <Space
                 android:layout_width="0dp"
@@ -73,7 +73,7 @@
                 android:layout_height="32dp"
                 android:background="@color/white"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_add_picture" />
+                app:srcCompat="@drawable/ic_add_picture" />
 
             <Space
                 android:layout_width="0dp"
@@ -86,7 +86,7 @@
                 android:layout_height="32dp"
                 android:background="@color/white"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_delete" />
+                app:srcCompat="@drawable/ic_delete" />
 
             <Space
                 android:layout_width="0dp"
@@ -99,7 +99,7 @@
                 android:layout_height="32dp"
                 android:background="@color/white"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_send" />
+                app:srcCompat="@drawable/ic_send" />
         </LinearLayout>
 
     </LinearLayout>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,14 @@
 package com.bbm.example.softphone;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -38,7 +33,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.bbm.sdk.BBMEnterprise;
 import com.bbm.sdk.bbmds.internal.Existence;
@@ -50,23 +44,17 @@ import com.bbm.sdk.support.identity.user.UserManager;
 import com.bbm.sdk.support.util.Logger;
 import com.bbm.sdk.support.util.PermissionsUtil;
 
-import java.io.IOException;
-
 
 /**
  * Displays an activity that allows a user to accept or reject an incoming call
  */
-public class IncomingCallActivity extends Activity {
-
-    private final long[] VIBRATE_RING_PATTERN = new long[]{1000, 1000};
+public class IncomingCallActivity extends AppCompatActivity {
 
     public static final String INCOMING_CALL_ID = "IncomingCallActivity.INCOMING_CALL_ID";
+    public static final String ACCEPT_AND_REQUEST_PERMISSIONS = "IncomingCallActivity.ACCEPT_AND_REQUEST_PERMISSIONS";
 
     private boolean mCallAccepted = false;
     private boolean mRequestingPermissions = false;
-
-    private MediaPlayer mPlayer = null;
-    private Vibrator mVibrator;
 
     private int mCallId = -1;
 
@@ -140,11 +128,14 @@ public class IncomingCallActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        boolean acceptAndRequestPermissions = false;
+
         //Find the saved call id
         if (savedInstanceState != null) {
             mCallId = savedInstanceState.getInt(INCOMING_CALL_ID);
         } else if (getIntent() != null) {
             mCallId = getIntent().getIntExtra(INCOMING_CALL_ID, -1);
+            acceptAndRequestPermissions = getIntent().getBooleanExtra(ACCEPT_AND_REQUEST_PERMISSIONS, false);
         }
 
         BBMECall call = getIncomingCall();
@@ -176,6 +167,12 @@ public class IncomingCallActivity extends Activity {
                 onCallRejected();
             }
         });
+
+        // If the acceptAndRequestPermissions flag was set immediately answer the call.
+        // The user will be prompted to provide permission to access the microphone.
+        if (acceptAndRequestPermissions) {
+            onCallAccepted();
+        }
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -191,63 +188,6 @@ public class IncomingCallActivity extends Activity {
         //Start call monitor
         mCallMonitor.activate();
         mUserMonitor.activate();
-        startRingback();
-    }
-
-    private void startRingback() {
-
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        final int ringerMode = audioManager.getRingerMode();
-        if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-            try {
-                mPlayer = new MediaPlayer();
-                mPlayer.setAudioStreamType(AudioManager.STREAM_RING);
-                AssetFileDescriptor afd = SoftPhoneApplication.getInstance().getResources().openRawResourceFd(R.raw.bbm_incoming_call);
-                if (afd == null) {
-                    return;
-                }
-                mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                mPlayer.setLooping(true);
-                mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        mPlayer.start();
-                    }
-                });
-                mPlayer.prepare();
-            } catch (final IOException ioe) {
-                Logger.e(ioe, "Error playing incoming call ringtone");
-                mPlayer = null;
-            } catch (final Resources.NotFoundException nfe) {
-                Logger.e(nfe, "Error loading incoming call ringtone");
-                mPlayer = null;
-            }
-        } else if (AudioManager.RINGER_MODE_VIBRATE == ringerMode) {
-            mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            if (mVibrator != null && mVibrator.hasVibrator()) {
-                Logger.d("Notification profile vibrate - starting vibrate", IncomingCallActivity.class);
-                mVibrator.vibrate(VIBRATE_RING_PATTERN, 0);
-            }
-        }
-    }
-
-    private void stopRingback() {
-        if (mPlayer != null) {
-            Logger.d("stopRingback", IncomingCallActivity.class);
-            //Only stop playing if the audio is playing
-            if(mPlayer.isPlaying()) {
-                mPlayer.stop();
-            }
-            mPlayer.release();
-        }
-
-        if (mVibrator != null && mVibrator.hasVibrator()) {
-            Logger.d("stopping vibrate", IncomingCallActivity.class);
-            mVibrator.cancel();
-        }
-
-        mPlayer = null;
-        mVibrator = null;
     }
 
     @Override
@@ -291,9 +231,13 @@ public class IncomingCallActivity extends Activity {
         //Stop the call state monitor, we don't need to act on any changes when the activity is not active
         mCallMonitor.dispose();
         mUserMonitor.dispose();
-        stopRingback();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopNotification();
+    }
 
     /**
      * Monitor for key events to reject the call if the user dismisses the activity
@@ -340,6 +284,7 @@ public class IncomingCallActivity extends Activity {
 
     private void onCallAccepted() {
 
+        stopNotification();
         boolean hasMicrophonePermission = PermissionsUtil.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
 
         //If we don't have a permission to access the microphone we need to ask
@@ -391,6 +336,11 @@ public class IncomingCallActivity extends Activity {
         //Ask the media call service to end the call
         BBMEMediaManager mediaManager = BBMEnterprise.getInstance().getMediaManager();
         mediaManager.endCall(getIncomingCall().getCallId());
+        stopNotification();
         finish();
+    }
+
+    private void stopNotification() {
+        IncomingCallObserver.stopNotification(this);
     }
 }

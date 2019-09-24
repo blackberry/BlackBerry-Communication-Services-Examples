@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package com.bbm.example.simplechat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,14 +30,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bbm.example.simplechat.utils.AuthProvider;
 import com.bbm.sdk.BBMEnterprise;
 import com.bbm.sdk.bbmds.BbmdsProtocol;
 import com.bbm.sdk.bbmds.Chat;
 import com.bbm.sdk.bbmds.GlobalLocalUri;
 import com.bbm.sdk.bbmds.GlobalSetupState;
 import com.bbm.sdk.bbmds.User;
-import com.bbm.sdk.bbmds.inbound.ChatStartFailed;
 import com.bbm.sdk.bbmds.internal.Existence;
 import com.bbm.sdk.bbmds.internal.lists.IncrementalListObserver;
 import com.bbm.sdk.bbmds.internal.lists.ObservableList;
@@ -50,10 +48,15 @@ import com.bbm.sdk.service.BBMEnterpriseState;
 import com.bbm.sdk.service.ProtocolMessage;
 import com.bbm.sdk.service.ProtocolMessageConsumer;
 import com.bbm.sdk.support.identity.UserIdentityMapper;
+import com.bbm.sdk.support.identity.auth.MockTokenProvider;
 import com.bbm.sdk.support.identity.user.AppUser;
 import com.bbm.sdk.support.identity.user.UserManager;
+import com.bbm.sdk.support.kms.BlackBerryKMSSource;
+import com.bbm.sdk.support.protect.KeySource;
+import com.bbm.sdk.support.protect.UserChallengePasscodeProvider;
+import com.bbm.sdk.support.support.identity.user.MockUserSource;
 import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
-import com.bbm.sdk.support.util.AuthIdentityHelper;
+import com.bbm.sdk.support.util.KeySourceManager;
 import com.bbm.sdk.support.util.Logger;
 import com.bbm.sdk.support.util.SetupHelper;
 import com.google.common.collect.Lists;
@@ -103,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
             new SetupHelper.EndpointDeregisteredListener() {
         @Override
         public void onEndpointDeregistered() {
-            //Handle any required work (ex sign-out) from the auth service and wipe BBME
-            AuthIdentityHelper.handleEndpointDeregistered(getApplicationContext());
+            // Clear any saved tokens
+            MockTokenProvider.clearSavedToken(getApplicationContext());
 
             SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
                 private BBMEnterpriseState prevState;
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 public boolean run() {
                     BBMEnterpriseState state = BBMEnterprise.getInstance().getState().get();
                     if (prevState != null && prevState != BBMEnterpriseState.STARTED && state == BBMEnterpriseState.STARTED) {
-                        AuthProvider.initAuthProvider(getApplicationContext());
+                        initializeConfiguration();
                         return true;
                     }
                     prevState = state;
@@ -187,9 +190,10 @@ public class MainActivity extends AppCompatActivity {
         //Trigger our observer to run once
         bbmeStateObserver.changed();
 
-        //Init the auth provider (get authentication token, start protected manager, sync users)
-        AuthProvider.initAuthProvider(getApplicationContext());
-        AuthIdentityHelper.setActivity(this);
+        //Initialize the "no authentication" configuration
+        initializeConfiguration();
+        //Challenge the user to provide a username and password
+        MockTokenProvider.challengeAuthentication(this);
 
         //Listen to the setup events
         final ObservableValue<GlobalSetupState> globalSetupState = BBMEnterprise.getInstance().getBbmdsProtocol().getGlobalSetupState();
@@ -278,6 +282,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Initialize this application to use "No Authentication" and BlackBerry KMS
+     */
+    public void initializeConfiguration() {
+        //Initialize a MockUserSource.
+        //The MockUserSource will create a contact list that includes any users found by mapping userIds or regIds.
+        MockUserSource userSource = new MockUserSource();
+        UserManager.getInstance().setAppUserSource(userSource);
+        userSource.addListener(UserManager.getInstance());
+
+        //Mock IDP always uses KMS
+        KeySource keySource = new BlackBerryKMSSource(new UserChallengePasscodeProvider(getApplicationContext()));
+        KeySourceManager.setKeySource(keySource);
+        keySource.start();
+    }
+
+    /**
      * Create a simple menu with a menu item to create a new chat
      */
     @Override
@@ -351,21 +371,7 @@ public class MainActivity extends AppCompatActivity {
                     BBMEnterprise.getInstance().getBbmdsProtocolConnector().removeMessageConsumer(this);
 
                     String chatId = null;
-                    if ("chatStartFailed".equals(message.getType())) {
-                        ChatStartFailed chatStartFailed = new ChatStartFailed().setAttributes(message.getJSON());
-                        //If the message type is chatStartFailed the BBM Enterprise SDK was unable to create the chat
-                        if (chatStartFailed.reason == ChatStartFailed.Reason.AlreadyExists) {
-                            //If the reason is AlreadyExists we can open the existing chat.
-                            chatId = chatStartFailed.chatId;
-                        } else {
-                            //If the reason wasn't AlreadyExists then display an error toast to the user
-                            Logger.i("Failed to create chat with " + regId);
-                            Toast.makeText(MainActivity.this,
-                                    "Failed to create chat for reason " + chatStartFailed.reason.toString(),
-                                    Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    } else if ("listAdd".equals(message.getType())) {
+                    if ("listAdd".equals(message.getType())) {
                         //The chat was created successfully
                         try {
                             final JSONArray elementsArray = json.getJSONArray("elements");

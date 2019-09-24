@@ -17,6 +17,10 @@
 # Signature - Keep the generic signature of a class, field or method.
 -keepattributes SourceFile,LineNumberTable,InnerClasses,EnclosingMethod,Signature
 
+-keep class androidx.**{ *; }
+-keep interface androidx.**{ *; }
+-keep class com.google.android.material.** { *; }
+
 # Checker framework
 -dontwarn afu.org.checkerframework.**
 -dontwarn org.checkerframework.**

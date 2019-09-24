@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~ Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -79,14 +79,14 @@
             android:background="@android:color/black"
             android:alpha="0.7"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/transfer_list"/>
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/send_file_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

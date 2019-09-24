@@ -117,7 +117,7 @@ The [`BBMEMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/d
 
 ### <a name="callingPush"></a> Calling & Push
 
-If you enable Voice and Video in your app, push should be implemented via PushKit.  When a PushKit message is received, it should be sent to [`BBMEntperiseService`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_enterprise_service.html) via `BBMEnteprirseService.shared().pushRecieved(pushJSON)`.  If the push includes call data, this will then invoke the incomignCallDidArrive(_ call:) callback on any delegates registered with [`BBMMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_media_manager.html).  If the application is in the background state, you should prompt the user to answer the call with a `UILocalNotification`.
+If you enable Voice and Video in your app, push should be implemented via PushKit.  When a PushKit message is received, it should be sent to [`BBMEntperiseService`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_enterprise_service.html) via `BBMEnteprirseService.shared().pushRecieved(pushJSON)`.  If the push includes call data, this will then invoke the incomignCallDidArrive(_ call:) callback on any delegates registered with [`BBMMediaManager`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/ios/interface_b_b_m_media_manager.html).  If the application is in the background state, you should prompt the user to answer the call with a `UNNotificationRequest`.
 
 For PushKit integration to work, you must enable the "Voice over IP" background mode under your projects capabilities.
 

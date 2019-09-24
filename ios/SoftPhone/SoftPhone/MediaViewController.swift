@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+/* Copyright (c) 2019 BlackBerry Limited.  All Rights Reserved.
 * 
 * Licensed under the Apache License, Version 2.0 (the "License"); 
 * you may not use this file except in compliance with the License. 
@@ -194,6 +194,13 @@ class MediaViewController : UIViewController, BBMMediaDelegate, BBMMediaVideoPre
         dismiss(animated: true, completion: nil)
     }
 
+    func cameraOperationFailed(_ operation: CameraOperation, call: BBMCall!) {
+        NSLog("Camera operation failed: \(operation)")
+    }
+
+    func cameraOperationSuccess(_ operation: CameraOperation, call: BBMCall!) {
+        NSLog("Camera operation success: \(operation)")
+    }
 
     //MARK: Actions
 

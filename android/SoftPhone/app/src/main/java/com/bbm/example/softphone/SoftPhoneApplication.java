@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,17 @@ package com.bbm.example.softphone;
 
 import android.app.Application;
 
-import com.bbm.example.softphone.utils.AuthProvider;
 import com.bbm.sdk.BBMEnterprise;
 import com.bbm.sdk.reactive.SingleshotMonitor;
 import com.bbm.sdk.service.BBMEnterpriseState;
-import com.bbm.sdk.support.util.AuthIdentityHelper;
+import com.bbm.sdk.support.identity.auth.MockTokenProvider;
+import com.bbm.sdk.support.identity.user.UserManager;
+import com.bbm.sdk.support.kms.BlackBerryKMSSource;
+import com.bbm.sdk.support.protect.KeySource;
+import com.bbm.sdk.support.protect.UserChallengePasscodeProvider;
+import com.bbm.sdk.support.push.PushHelper;
+import com.bbm.sdk.support.support.identity.user.MockUserSource;
+import com.bbm.sdk.support.util.KeySourceManager;
 import com.bbm.sdk.support.util.SetupHelper;
 
 
@@ -43,9 +49,9 @@ public class SoftPhoneApplication extends Application {
         mApp = this;
 
         //Init the auth provider (get authentication token, start protected manager, sync users)
-        AuthProvider.initAuthProvider(getApplicationContext());
+        initializeConfiguration();
 
-        // Initialize BBMEnterprise SDK then start it
+        //Initialize the "no authentication" configuration
         BBMEnterprise.getInstance().initialize(this);
         BBMEnterprise.getInstance().start();
 
@@ -57,8 +63,8 @@ public class SoftPhoneApplication extends Application {
         SetupHelper.listenForAndHandleDeregistered(new SetupHelper.EndpointDeregisteredListener() {
             @Override
             public void onEndpointDeregistered() {
-                //Handle any required work (ex sign-out) from the auth service and wipe BBME
-                AuthIdentityHelper.handleEndpointDeregistered(getApplicationContext());
+                //Clear any saved tokens
+                MockTokenProvider.clearSavedToken(getApplicationContext());
 
                 SingleshotMonitor.run(new SingleshotMonitor.RunUntilTrue() {
                     private BBMEnterpriseState prevState;
@@ -66,7 +72,7 @@ public class SoftPhoneApplication extends Application {
                     public boolean run() {
                         BBMEnterpriseState state = BBMEnterprise.getInstance().getState().get();
                         if (prevState != null && prevState != BBMEnterpriseState.STARTED && state == BBMEnterpriseState.STARTED) {
-                            AuthProvider.initAuthProvider(getApplicationContext());
+                            initializeConfiguration();
                             return true;
                         }
                         prevState = state;
@@ -75,6 +81,25 @@ public class SoftPhoneApplication extends Application {
                 });
             }
         });
+    }
+
+    /**
+     * Initialize this application to use "No Authentication" and BlackBerry KMS
+     */
+    public void initializeConfiguration() {
+        //Initialize a MockUserSource.
+        //The MockUserSource will create a contact list that includes any users found by mapping userIds or regIds.
+        MockUserSource userSource = new MockUserSource();
+        UserManager.getInstance().setAppUserSource(userSource);
+        userSource.addListener(UserManager.getInstance());
+
+        //Provide a push token to the Spark SDK
+        PushHelper.updatePushToken();
+
+        //Mock IDP always uses KMS
+        KeySource keySource = new BlackBerryKMSSource(new UserChallengePasscodeProvider(getApplicationContext()));
+        KeySourceManager.setKeySource(keySource);
+        keySource.start();
     }
 
 }

@@ -71,7 +71,6 @@ Notes:
 
 * To complete a release build you must create your own signing key. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html.
   * After creating your signing key set the key store password, key password, key alias and path to the keystore file in the 'app.properties' file.
-* To successfully register for push notifications a google-services.json file must be included in the application. See https://firebase.google.com/docs/cloud-messaging/ for help on configuring Firebase Cloud Messaging.
 * This application has been built using gradle 4.2.1 (newer versions have not been validated).
 
 ## Walkthrough

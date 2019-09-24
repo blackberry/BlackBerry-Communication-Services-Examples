@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~ Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@
         <meta-data android:name="com.bbm.sdk.LogToFiles" android:value="true" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -74,22 +74,12 @@
             android:excludeFromRecents="true">
         </activity>
 
-        <!-- [Start] Firebase Cloud Messaging -->
         <!-- Listener for push notifications-->
-        <service
-            android:name=".DataTransferFirebaseMessagingService">
+        <service android:name="com.bbm.sdk.support.push.SupportFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!-- Listener for push tokens -->
-        <service
-            android:name=".DataTransferFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
-        <!-- [END] Firebase Cloud Messaging -->
 
     </application>
 

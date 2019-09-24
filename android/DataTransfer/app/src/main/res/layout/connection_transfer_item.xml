@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~ Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
   -->
 
 <!-- A CardView that contains a TextView -->
-<android.support.v7.widget.CardView
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
@@ -36,7 +36,7 @@
             android:id="@+id/transfer_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_file_upload_black_24dp"
+            card_view:srcCompat="@drawable/ic_file_upload_black_24dp"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="5dp"
@@ -73,4 +73,4 @@
 
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

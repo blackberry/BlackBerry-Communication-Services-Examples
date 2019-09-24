@@ -23,7 +23,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>INSERT_MSAL_REDIRECT_SCHEME</string>
+				<string>msal48ce84fb-650c-4660-83c6-71a075f4357f</string>
 			</array>
 		</dict>
 		<dict>
@@ -31,7 +31,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>INSERT_GOOGLE_REVERSED_CLIENT_ID</string>
+				<string>com.googleusercontent.apps.803640867596-6g8ob3hqdc7a6cbir5rhh5ficms2fcq7</string>
 			</array>
 		</dict>
 	</array>
@@ -63,5 +63,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 </dict>
 </plist>

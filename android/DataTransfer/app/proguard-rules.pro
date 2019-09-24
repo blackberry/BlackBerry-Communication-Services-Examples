@@ -56,6 +56,10 @@
 -dontnote com.google.common.util.concurrent.**
 -dontwarn com.google.errorprone.**
 
+-keep class androidx.**{ *; }
+-keep interface androidx.**{ *; }
+-keep class com.google.android.material.** { *; }
+
 # Checker framework
 -dontwarn afu.org.checkerframework.**
 -dontwarn org.checkerframework.**

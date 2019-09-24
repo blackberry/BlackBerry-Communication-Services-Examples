@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,18 +32,18 @@ def appProperties = new Properties()
 appProperties.load(new FileInputStream(appPropertiesFile))
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdkVersion 29
+    buildToolsVersion "29.0.0"
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
     defaultConfig {
         applicationId "com.bbm.example.datatransfer"
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdkVersion 22
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         //Use the mockProvider flavor
         missingDimensionStrategy "authProvider", "_mockProvider"
@@ -88,12 +88,12 @@ dependencies {
     implementation(name: 'bbm_sdk-release', ext: 'aar')
     implementation project(path: ':Support')
     // Other UI dependencies
-    implementation 'com.google.guava:guava:25.1-android'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.google.guava:guava:27.1-android'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
 }
 
 // By applying the plugin below this will ensure the project will not compile
