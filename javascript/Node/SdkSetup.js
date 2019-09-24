@@ -15,16 +15,31 @@
  *
  */
 
-// Instantiate an SDK instance and returns a promise of the SDK instance that
-// has already been setup.
-
-const BBMEnterprise = require('bbm-enterprise');
+const SparkCommunications = require('bbm-enterprise');
 
 module.exports = {
+  /**
+   * Uses the given configuration and auth manager to create an SDK endpoint
+   * and set it up.
+   *
+   * @param {Object} config
+   *   The configuration used by the example application.
+   *
+   * @param {SparkCommunications.Configuration} config.sdkConfig
+   *   The configuration object used to configure the endpoint used in this
+   *   example.
+   *
+   * @param {Object} authManager
+   *   The authentication manager returned from the login() promise.
+   *
+   * @returns {SparkCommunications}
+   *   The promise of an endpoint that has already been setup.  The promise
+   *   will be rejected if setting up of the endpoint fails for any reason.
+   */
   sdkSetup: (config, authManager) => {
     return new Promise((resolve, reject) => {
       let isSyncStarted = false;
-      console.log('Setting up the Spark Communications SDK');
+      console.log('Setting up an endpoint');
 
       // Instantiate the SDK.
       //
@@ -33,7 +48,7 @@ module.exports = {
       //
       // This example might not work if your 'sdkConfig' specifies any of the
       // parameters assigned below.
-      const sdk = new BBMEnterprise(Object.assign(
+      const sdk = new SparkCommunications(Object.assign(
         {
           // You must specify your domain in the SDK_CONFIG.
 
@@ -59,17 +74,20 @@ module.exports = {
 
       // Handle changes of BBM Enterprise setup state.
       sdk.on('setupState', state => {
-        console.log(`BBMEnterprise setup state: ${state.value}`);
+        console.log(`Endpoint setup state: ${state.value}`);
         switch (state.value) {
-          case BBMEnterprise.SetupState.Success: {
+          case SparkCommunications.SetupState.Success: {
             // Setup was successful.
             const userRegId = sdk.getRegistrationInfo().regId;
-            console.log(`SDK setup complete; regId= ${userRegId}`);
+            console.log(
+              `Endpoint setup complete; regId=${userRegId}; endpointId=`
+              + sdk.endpointId
+            );
             resolve(sdk);
           }
           return;
 
-          case BBMEnterprise.SetupState.SyncRequired: {
+          case SparkCommunications.SetupState.SyncRequired: {
             if (isSyncStarted) {
               // We have already tried to sync the user's keys using the
               // given passcode.  For simplicity in this example, we don't
@@ -86,17 +104,17 @@ module.exports = {
               config.key_passcode,
 
               // Does the user have existing keys?
-              sdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New
+              sdk.syncPasscodeState === SparkCommunications.SyncPasscodeState.New
               // No, we must create new keys.  The key passcode will be
               // used to protect the new keys.
-              ? BBMEnterprise.SyncStartAction.New
+              ? SparkCommunications.SyncStartAction.New
               // Yes, we have existing keys.  The key passcode will be
               // used to unprotect the keys.
-              : BBMEnterprise.SyncStartAction.Existing
+              : SparkCommunications.SyncStartAction.Existing
             );
             break;
           }
-          case BBMEnterprise.SetupState.SyncStarted:
+          case SparkCommunications.SetupState.SyncStarted:
             // Syncing of the user's keys has started.  Remember this so
             // that we can tell if the setup state regresses.
             isSyncStarted = true;
@@ -106,7 +124,7 @@ module.exports = {
 
       // Handle setup error.
       sdk.on('setupError', error => {
-        console.error(`SDK setup failed; error=${error}`);
+        console.error(`Endpoint setup failed; error=${error}`);
         reject(error.value);
       });
 

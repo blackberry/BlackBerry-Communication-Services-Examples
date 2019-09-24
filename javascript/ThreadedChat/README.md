@@ -239,7 +239,7 @@ Please refer to the Developer Guide for an overview of [Chat Message
 References](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/messages.html#references).
 
 Each
-[`BBMEnterprise.Messenger.ChatMessage`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.ChatMessage.html)
+[`SparkCommunications.Messenger.ChatMessage`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Messenger.ChatMessage.html)
 instance contains a list of
 outgoing and incoming references.
 
@@ -247,7 +247,7 @@ All top-level messages that are not referenced will be displayed in their own
 message bubble.
 
 The
-[`BBMEnterprise.Messenger.ChatMessage.ref`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.ChatMessage.html#ref)
+[`SparkCommunications.Messenger.ChatMessage.ref`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Messenger.ChatMessage.html#ref)
 property, when present, indicates that the message references another message
 in the chat.  In this example, the reference will be for one of the top-level
 messages.  When a message arrives that references a top-level message, a
@@ -276,7 +276,7 @@ the `format` function of the threaded chat message list component.
 </p>
 
 The
-[`BBMEnterprise.Messenger.ChatMessage.refBy`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.ChatMessage.html#refBy)
+[`SparkCommunications.Messenger.ChatMessage.refBy`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Messenger.ChatMessage.html#refBy)
 property, when present, indicates that the message is referenced by another
 message in the chat.  In this example, only top-level messages are referenced
 by other messages.  So, the messageIds of the comments associated with a

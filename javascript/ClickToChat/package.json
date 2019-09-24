@@ -1,10 +1,17 @@
 {
   "name": "click-to-chat",
   "description": "Shows you how to integrate a chat experience into your website using BlackBerry Spark Communications Services",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "main": "index.html",
   "dependencies": {
-    "bbmChat": "file:../support/ui/widgets/bbmChat",
-    "bbmUserEmailDialog": "file:../support/ui/widgets/bbmUserEmailDialog"
+    "bbmChat": "file:../support/ui/widgets/bbmChat"
+  },
+  "devDependencies": {
+    "file-loader": "^4.0.0",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.3.4"
+  },
+  "scripts": {
+    "postinstall": "npx webpack"
   }
 }

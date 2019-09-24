@@ -23,34 +23,35 @@
 
     <script src="../../sdk/bbm_sdk_web.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="../support/identity/GenericUserInfo.js"></script>
 
     <script src="../support/auth/MockAuthManager.js"></script>
     <script src="config_mock.js"></script>
 
     <style>
-      #sdkSetupButton{
-        margin:0px auto;
-        display: block;
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: medium;
       }
-      table, td {
-        border: 2px;
-      }
-      table {
-        border-style: groove;
-      }
-      td {
-        border-style: inset;
-      }
-      td:nth-child(2) {
+
+      td { border: none; }
+
+      tr:nth-child(odd) { background-color: #f2f2f2; }
+
+      td:nth-child(even) {
         text-align:right;
         width: 50%;
+      }
+
+      button {
+        display: block;
+        margin: auto;
+        width: 150px;
+        height: 30px;
       }
     </style>
   </head>
   <body>
     <h1>QuickStart</h1>
-    <button id="sdkSetupButton">SDK Setup</button>
     <table>
       <tr>
         <td>Error</td>
@@ -61,7 +62,7 @@
         <td id="domain"></td>
       </tr>
       <tr>
-        <td>environment</td>
+        <td>Environment</td>
         <td id="environment"></td>
       </tr>
       <tr>
@@ -89,6 +90,7 @@
         <td id="regId"></td>
       </tr>
     </table>
+    <button id="sdkSetupButton">SDK Setup</button>
     <script src="index.js"> </script>
   </body>
 </html>

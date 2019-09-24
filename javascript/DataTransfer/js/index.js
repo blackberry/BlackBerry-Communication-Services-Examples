@@ -15,43 +15,28 @@
  */
 
 /**
- * This is the example application, which displays basic implementation of file
- * transfer functionality using BBMEnterprise SDK for JavaScript.
- * 
+ * This is the example application, which displays basic implementation of
+ * file transfer functionality using the Spark Communications Services SDK for
+ * JavaScript.
+ *
  * @class DataTransfer
  * @memberof Examples
  */
 
 window.onload = async () => {
   try {
-    // Set the Argon2 WASM file location if it has not already been set.
-    // If you have put the argon2.wasm file in a custom location, you can
-    // override this option in the imported SDK_CONFIG.
-    const kmsArgonWasmUrl =
-      SDK_CONFIG.kmsArgonWasmUrl || '../../sdk/argon2.wasm';
-
-    // Make sure that the browser supports all of the necessary functionality,
-    // including support for interacting with the BlackBerry Key Management
-    // Service (KMS).
-    await BBMEnterprise.validateBrowser({
-      kms: { argonWasmUrl: kmsArgonWasmUrl }
-    });
-
     // Setup the authentication manager for the application.
     const authManager = new MockAuthManager();
     // We are using the MockAuthManager, so we need to override how it
     // acquires the local user's user ID.
     authManager.getUserId = () => new Promise((resolve, reject) => {
-      const userEmailDialog = document.createElement('bbm-user-email-dialog');
-      document.body.appendChild(userEmailDialog);
-      userEmailDialog.addEventListener('Ok', e => {
-        userEmailDialog.parentNode.removeChild(userEmailDialog);
-        resolve(e.detail.userEmail);
-      });
-      userEmailDialog.addEventListener('Cancel', () => {
-        userEmailDialog.parentNode.removeChild(userEmailDialog);
-        reject('Failed to get user email.');
-      });
+      const userId = prompt('Enter your user ID');
+      if (userId && userId.trim()) {
+        resolve(userId.trim());
+      }
+      else {
+        reject('Failed to get user ID');
+      }
     });
 
     // Authenticate the user.  Configurations that use a real identity
@@ -70,7 +55,7 @@ window.onload = async () => {
     //
     // This example might not work if your SDK_CONFIG specifies any of the
     // parameters assigned below.
-    const sdk = new BBMEnterprise(Object.assign(
+    const sdk = new SparkCommunications(Object.assign(
       {
         // You must specify your domain in the SDK_CONFIG.
 
@@ -92,9 +77,10 @@ window.onload = async () => {
         // endpoint.
         description: navigator.userAgent,
 
-        // Use the same kmsArgonWasmUrl that was used to to validate our
-        // browser environment above.
-        kmsArgonWasmUrl
+        // Set the Argon2 WASM file location if it has not already been set.
+        // If you have put the argon2.wasm file in a custom location, you can
+        // override this option in the imported SDK_CONFIG.
+        kmsArgonWasmUrl: SDK_CONFIG.kmsArgonWasmUrl || '../../sdk/argon2.wasm'
       },
       SDK_CONFIG
     ));
@@ -105,15 +91,14 @@ window.onload = async () => {
       // Handle changes to the SDK's setup state.
       let isSyncStarted = false;
       sdk.on('setupState', (state) => {
-        console.log(
-          `DataTransfer: BBMEnterprise setup state: ${state.value}`);
+        console.log(`DataTransfer: Endpoint setup state: ${state.value}`);
         switch (state.value) {
-          case BBMEnterprise.SetupState.Success: {
+          case SparkCommunications.SetupState.Success: {
             // Setup was successful.
             resolve();
             break;
           }
-          case BBMEnterprise.SetupState.SyncRequired: {
+          case SparkCommunications.SetupState.SyncRequired: {
             if (isSyncStarted) {
               // We have already tried to sync the user's keys using the
               // given passcode.  For simplicity in this example, we don't
@@ -131,17 +116,17 @@ window.onload = async () => {
               KEY_PASSCODE,
 
               // Does the user have existing keys?
-              sdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New
+              sdk.syncPasscodeState === SparkCommunications.SyncPasscodeState.New
               // No, we must create new keys.  The key passcode will be
               // used to protect the new keys.
-              ? BBMEnterprise.SyncStartAction.New
+              ? SparkCommunications.SyncStartAction.New
               // Yes, we have existing keys.  The key passcode will be
               // used to unprotect the keys.
-              : BBMEnterprise.SyncStartAction.Existing
+              : SparkCommunications.SyncStartAction.Existing
             );
             break;
           }
-          case BBMEnterprise.SetupState.SyncStarted: {
+          case SparkCommunications.SetupState.SyncStarted: {
             // Syncing of the user's keys has started.  Remember this so
             // that we can tell if the setup state regresses.
             isSyncStarted = true;
@@ -152,8 +137,7 @@ window.onload = async () => {
 
       // Any setup error received will fail the SDK setup promise.
       sdk.on('setupError', error => {
-       reject(new Error(
-         `Endpoint setup failed: ${error.value}`));
+       reject(new Error(`Endpoint setup failed: ${error.value}`));
       });
 
       // Start the SDK setup.
@@ -170,8 +154,7 @@ window.onload = async () => {
 
     // Allow the dataTransferElement to interact with the SDK to perform
     // peer-to-peer data transfers.
-    const dataTransferElement =
-      Polymer.dom(document.body).querySelector('#data-transfer');
+    const dataTransferElement = document.querySelector('#data-transfer');
     dataTransferElement.setBbmSdk(sdk);
   }
   catch(error) {

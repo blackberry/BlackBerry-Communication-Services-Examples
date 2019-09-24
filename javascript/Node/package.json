@@ -1,13 +1,13 @@
 {
   "name": "Node",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A set of example applications for using BlackBerry Spark Communications Services",
   "main": "Repl",
   "keywords": [],
   "author": "",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "dependencies": {
     "bbm-enterprise": "file:./../../",

@@ -9,7 +9,14 @@
   "dependencies": {
     "bbmChatInput": "file:../support/ui/widgets/bbmChatInput",
     "bbmChatList": "file:../support/ui/widgets/bbmChatList",
-    "bbmChatMessageList": "file:../support/ui/widgets/bbmChatMessageList",
-    "bbmUserEmailDialog": "file:../support/ui/widgets/bbmUserEmailDialog"
+    "bbmChatMessageList": "file:../support/ui/widgets/bbmChatMessageList"
+  },
+  "devDependencies": {
+    "file-loader": "^4.0.0",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.3.4"
+  },
+  "scripts": {
+    "postinstall": "npx webpack"
   }
 }

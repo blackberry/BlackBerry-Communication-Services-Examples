@@ -21,16 +21,19 @@
     <meta charset="utf-8">
     <title>Data Transfer</title>
     <link rel="icon" type="image/png" href="img/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="css/dataTransfer.css"/>
+    <style>
+      body {
+        font-family: sans-serif;
+        font-size: medium;
+        background: #087099
+      }
+    </style>
 
-    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../support/identity/GenericUserInfo.js"></script>
+    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../../sdk/bbm_sdk_web.js"></script>
 
     <!-- Import custom controls -->
-    <link rel="import" href="html/dataTransferElement.html">
-    <!-- import bbm-user-email-dialog control -->
-    <link rel="import" href="node_modules/bbmUserEmailDialog/bbmUserEmailDialog.html"/>
+    <script type="module" src="js/dataTransferElement.js" crossorigin></script>
 
     <script src="../support/auth/MockAuthManager.js"></script>
     <script src="js/config_mock.js"></script>

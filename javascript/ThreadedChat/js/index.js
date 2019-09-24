@@ -16,89 +16,42 @@
 
 'use strict';
 
-import '../../support/util/TimeRangeFormatter.js';
 import '../../support/util/MessageFormatter.js';
+import '../../support/util/TimeRangeFormatter.js';
+import '../../support/util/Observer.js';
+
+import "../node_modules/bbmChatInput/bbmChatInput.js";
+import "../node_modules/bbmChatList/bbmChatList.js";
+import "../node_modules/bbmChatMessageList/bbmChatMessageList.js";
+import './threaded-chat-message-list.js';
+
+// Declare local variables used by the HTML functions below.
+let title;
+let chatInput;
+let chatMessageList;
+let chatListDiv;
+let leaveButton;
 
 /**
- * This is the example application, which displays a very basic implementation
- * of how to implement generic Click To Chat functionality using the bbm-chat UI
- * widget.
+ * A threaded chat program.
  *
- * When the user clicks "Start Secure Chat" button, the application will start a
- * chat with the hard coded user RegId (CONTACT_REG_ID).
- *
- * @class ClickToChat
+ * @class ThreadedChat
  * @memberof Examples
  */
 
 window.onload = async () => {
+  // Find the necessary HTMLElements and cache them.
+  title = document.getElementById('title');
+  chatInput = document.getElementById('chatInput');
+  chatMessageList = document.getElementById('chatMessageList');
+  chatListDiv = document.getElementById('chatListDiv');
+  leaveButton = document.getElementById('leaveButton');
+  const status = document.getElementById('status');
+  const chatList = document.getElementById('chatList');
 
-  // There are several asynchronous actions that must occur before we can use
-  // the bbmChat component.  These are completed below.
-  //
-  // On successful completion, this promise will resolve with an object
-  // containing the setup SDK and the identity of the configured user ID.  On
-  // failure, this promise will be rejected with an Error.
-  const bbmChatIsReady = new (function() {
-    this.promise = new Promise((resolve, reject) => {
-      this.resolve = resolve;
-      this.reject = reject;
-    });
-  })();
-
-  // Define the startChat function so that it is available right away.  This
-  // function will only do something if the user is not yet chatting with
-  // the configured user.
-  let isChatting = false;
-
-  window.startChat = async () => {
-    // If we are already chatting, don't do anything.
-    if (isChatting) {
-      console.log('ClickToChat: chat is already in progress');
-      return;
-    }
-
-    // Remember that we've tried to start a chat.
-    isChatting = true;
-
-    try {
-      // Before we can start a chat, we must wait for all of the chat
-      // creation dependencies to have completed.  This includes the SDK
-      // setup and the identity lookup for the user that we will be starting
-      // a chat with.
-      const { sdk, identity } = await bbmChatIsReady.promise;
-
-      // Begin a 1:1 chat with the configured user.
-      const newChat = await sdk.messenger.chatStart({
-        // This is a one-to-one chat with the configured user.
-        isOneToOne: true,
-        invitees: identity.regId
-      });
-
-      // Let the bbmChat component handle the chat interactions.
-      const bbmChat = document.querySelector('#bbm-chat');
-      bbmChat.setChatId(newChat.chat.chatId);
-
-      // Show the chat window.
-      document.querySelector('#chat-pane').style.display = 'block';
-
-      // Listen for the chatDefunct event which indicates that the chat is
-      // no longer active.  We use this event hide the bbmChat component
-      // and indicate that the user is no longer chatting.
-      bbmChat.addEventListener('chatDefunct', () => {
-        document.querySelector('#chat-pane').style.display = 'none';
-        isChatting = false;
-      });
-    }
-    catch(error) {
-      alert(`ClickToChat failed to start chat; error=${error}`);
-      isChatting = false;
-    }
-  };
-
-  // Do all of the asynchronous actions that are needed to prepare the bbmChat
-  // component for use.
   try {
+    // Notify the user that we are authenticating.
+    status.innerHTML = 'Authenticating';
     // Setup the authentication manager for the application.
     const authManager = new MockAuthManager();
     // We are using the MockAuthManager, so we need to override how it
@@ -121,6 +74,9 @@ window.onload = async () => {
       console.warn('Redirecting for authentication.');
       return;
     }
+
+    // Notify the user that we are working the SDK setup.
+    status.innerHTML = 'Setting up your endpoint';
 
     // Instantiate the SDK.
     //
@@ -173,8 +129,9 @@ window.onload = async () => {
     const sdkSetup = new Promise((resolve, reject) => {
       // Handle changes to the SDK's setup state.
       let isSyncStarted = false;
-      sdk.on('setupState', state => {
-        console.log(`ClickToChat: Endpoint setup state: ${state.value}`);
+      sdk.on('setupState', (state) => {
+        console.log(
+          `ThreadedChat: Endpoint setup state: ${state.value}`);
         switch (state.value) {
           case SparkCommunications.SetupState.Success: {
             // Setup was successful.
@@ -197,6 +154,7 @@ window.onload = async () => {
               // For simplicity in this example, we always use the
               // configured passcode.
               KEY_PASSCODE,
+
               // Does the user have existing keys?
               sdk.syncPasscodeState === SparkCommunications.SyncPasscodeState.New
               // No, we must create new keys.  The key passcode will be
@@ -219,7 +177,8 @@ window.onload = async () => {
 
       // Any setup error received will fail the SDK setup promise.
       sdk.on('setupError', error => {
-        reject(new Error(`Endpoint setup failed: ${error.value}`));
+       reject(new Error(
+         `Endpoint setup failed: ${error.value}`));
       });
 
       // Start the SDK setup.
@@ -234,7 +193,11 @@ window.onload = async () => {
     // It also doesn't setup new listeners to monitor these events going
     // forward to act on any issue that causes the SDK's state to regress.
 
-    // Create and initialize the user manager.
+    // The SDK is now setup.  Remember the local user's regId.
+    const regId = sdk.getRegistrationInfo().regId;
+
+    // Create and initialize the user manager.  This will be used by the
+    // bbmChatMessageList component for displaying user information.
     const userManager = new MockUserManager(
       sdk.getRegistrationInfo().regId,
       authManager,
@@ -244,28 +207,109 @@ window.onload = async () => {
     );
     await userManager.initialize();
 
-    // Setup the bbmChat component to use the SDK and contact manager that
-    // we've created for it to use.  We also disable the media
-    // capabilities of the component.
-    const bbmChat = document.querySelector('#bbm-chat');
-    bbmChat.setBbmSdk(sdk);
-    bbmChat.setContactManager(userManager);
-    bbmChat.getChatHeader().set('isMediaEnabled', false);
+    // Wait for the custom components to be upgraded before we configure them.
+    await Promise.all([
+      window.customElements.whenDefined(chatList.localName),
+      window.customElements.whenDefined(chatMessageList.localName),
+      window.customElements.whenDefined(chatInput.localName)
+    ]);
 
-    // Customize the look and feel of the messages displayed in the chat.
-    bbmChat.setTimeRangeFormatter(new TimeRangeFormatter());
-    bbmChat.setMessageFormatter(new MessageFormatter(userManager));
+    // Configure the chatList component.  It needs a handle to the SDK's
+    // messenger object.  We also setup a context for the element that defines
+    // how it will behave.
+    chatList.setBbmMessenger(sdk.messenger);
+    chatList.setContext({
+      /**
+       * Get the name to use for the chat.
+       *
+       * @param {SparkCommunications.Messenger.Chat} chat
+       *   The chat whose name is to be returned.
+       *
+       * @returns {string}
+       *   The name to be used for the chat.
+       */
+      getChatName: (chat) => {
+        if (chat.isOneToOne) {
+          // We have a 1:1 chat.  We will be returning the regId of the other
+          // participant as the chat name.
+          return (chat.participants[0].regId === regId)
+            ? chat.participants[1].regId : chat.participants[0].regId;
+        }
+        // Otherwise, return the chat's subject.
+        return chat.subject;
+      }
+    });
 
-    // We need to lookup the regId of the configured user that we will be
-    // starting a chat with.
-    const identity = await sdk.getIdentitiesFromAppUserId(AGENT_USER_ID);
+    // Configure the chatMessageList component.  It needs a handle to the
+    // SDK's messenger object.  We also setup formatters for the Message and
+    // its timestamp.   The user manager is used to get information about
+    // the message sender.
+    chatMessageList.setBbmMessenger(sdk.messenger);
+    chatMessageList.setMessageFormatter(new MessageFormatter(userManager));
+    chatMessageList.setTimeRangeFormatter(new TimeRangeFormatter());
 
-    // The bbmChat component is now ready for use.
-    bbmChatIsReady.resolve({ sdk, identity });
+    // When a message is referenced, we will show the referenced message
+    // information in the bbmChatInput component.
+    chatMessageList.addEventListener('messageReference', e => {
+      chatInput.showRefField(e);
+    });
+
+    // Configure the chatInput component.  It needs a handle to the SDK's
+    // messenger object.
+    chatInput.setBbmMessenger(sdk.messenger);
+
+    // Everything is setup.  Report our regId as the status.
+    status.innerHTML = `regId: ${regId}`;
   }
   catch (error) {
-    console.error(`ClickToChat encountered an error; error=${error}`);
-    console.error(error);
-    bbmChatIsReady.reject(error);
+    const message = `ThreadedChat encountered an error: ${error}`;
+    console.log(message);
+    document.getElementById('status').innerHTML = message;
   }
+};
+
+//============================================================================
+// :: HTML functions
+//
+// The remaining functions are called from the HTML code
+
+/**
+ * Enter the message list for a chat.
+ *
+ * @param {HTMLElement} element
+ *   The list element of the chat to enter.
+ */
+window.enterChat = element => {
+  var chatId = element.id;
+
+  // Initialize the component.
+  chatMessageList.setChatId(chatId);
+  chatInput.setChatId(chatId);
+  chatInput.set('isPriorityEnabled', false);
+
+  // Make the right things visible.
+  chatListDiv.style.display = "none";
+  chatMessageList.style.display = "block";
+  chatInput.style.display = "block";
+  leaveButton.style.display = "block";
+
+  // Set the title
+  title.innerHTML = 'Threaded Chat: ' + element.innerHTML;
+};
+
+/**
+ * Leave the active chat. This takes us back to the chat list.
+ */
+window.leaveChat = () => {
+  // Uninitialize the components.
+  chatMessageList.setChatId(undefined);
+
+  // Make the right things visible.
+  chatListDiv.style.display = "block";
+  chatMessageList.style.display = "none";
+  chatInput.style.display = "none";
+  leaveButton.style.display = "none";
+
+  // Set the title
+  title.innerHTML = 'Threaded Chat';
 };

@@ -10,7 +10,7 @@
   // Ignore unknown variables that will be available at runtime.
   "globals":
   {
-    "BBMEnterprise": false,
+    "SparkCommunications": false,
     "SDK_CONFIG": false,
     "Polymer": false,
     "KEY_PASSCODE": false,

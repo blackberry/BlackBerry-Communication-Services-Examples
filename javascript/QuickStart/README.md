@@ -78,51 +78,11 @@ const KEY_PASSCODE = 'passcode';
 
 Follow this guide for a walkthrough showing how to authenticate with the SDK using Google Sign-in for Web.
 
-- [Verify the JavaScript environment can run the SDK](#verifyEnvironment)
 - [Authentication and access tokens](#authentication)
 - [Instantiate the SDK](#instatiation)
 - [Monitor the setup state](#monitorSetup)
 - [Monitor for setup errors](#monitorSetupErrors)
 - [Start setup](#startSetup)
-
-
-### <a name="verifyEnvironment"></a>Verify the JavaScript environment can run the SDK
-
-You can call
-[`BBMEnterprise.validateBrowser()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.html#.validateBrowser)
-to verify that the JavaScript environment supports the necessary functionality
-to run the SDK.
-
-There are some asynchronous checks performed as part of this validation, so
-you must wait for those to complete before proceeding.
-
-When validation fails, an error will be thrown.  Errors may be thrown
-synchronously or asynchronously.
-
-If your JavaScript environment cannot run the SDK, you may not be able to
-instantiate or set up the SDK.
-
-```javascript
-  try {
-    // Set the Argon2 WASM file location if it has not already been set.
-    // If you have put the argon2.wasm file in a custom location, you can
-    // override this option in the imported SDK_CONFIG.
-    const kmsArgonWasmUrl =
-      SDK_CONFIG.kmsArgonWasmUrl || '../../sdk/argon2.wasm';
-
-    // Make sure that the browser supports all of the necessary functionality,
-    // including support for interacting with the BlackBerry Key Management
-    // Service (KMS).
-    await BBMEnterprise.validateBrowser({
-      kms: { argonWasmUrl: kmsArgonWasmUrl }
-    });
-  }
-  catch(error) {
-    // Display any error that was encountered.
-    $('#error').text(error);
-    console.error(`QuickStart encountered an error; error=${error}`);
-  }
-```
 
 ### <a name="authentication"></a>Authentication and access tokens
 
@@ -181,8 +141,8 @@ suitable for use with the SDK.
 
 ### <a name="instantiation"></a>Instantiate the SDK
 
-To create an instance of the BBMEnterprise object, you must call its
-[`constructor`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.html)
+To create an instance of the SparkCommunications object, you must call its
+[`constructor`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.html)
 and specify the `configuration` to be used.
 
 The `domain` and `environment` properties are taken directly from the
@@ -213,7 +173,7 @@ already be set correctly.
   //
   // This example might not work if your SDK_CONFIG specifies any of the
   // parameters assigned below.
-  const sdk = new BBMEnterprise(Object.assign(
+  const sdk = new SparkCommunications(Object.assign(
     {
       // You must specify your domain in the SDK_CONFIG.
 
@@ -235,9 +195,10 @@ already be set correctly.
       // endpoint.
       description: navigator.userAgent,
 
-      // Use the same kmsArgonWasmUrl that was used to to validate our
-      // browser environment above.
-      kmsArgonWasmUrl
+      // Set the Argon2 WASM file location if it has not already been set.  If
+      // you have put the argon2.wasm file in a custom location, you can
+      // override this option in the imported SDK_CONFIG.
+      kmsArgonWasmUrl: SDK_CONFIG.kmsArgonWasmUrl || '../../sdk/argon2.wasm'
     },
     SDK_CONFIG
   ));
@@ -246,9 +207,9 @@ already be set correctly.
 ### <a name="monitorSetup"></a>Monitor the setup state
 
 When setup is started, the SDK will emit the
-[`setupState`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.html#event:setupState)
+[`setupState`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.html#event:setupState)
 event when ever the
-[`BBMEnterprise.setupState`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.html#setupState)
+[`SparkCommunications.setupState`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.html#setupState)
 property changes.  Use this event to track the SDK's progress through setup.
 
 When using the the [BlackBerry Key Management
@@ -260,12 +221,12 @@ keys.
 
 You can tell if the user needs to generate new keys or if they have existing
 keys by looking at the
-[`BBMEnterprise.syncPasscodeState`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.html#syncPasscodeState)
+[`SparkCommunications.syncPasscodeState`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.html#syncPasscodeState)
 while the `setupState` is `SyncRequired`.
 
 Once in the `SyncRequired` setup state, you must tell the SDK how to proceed
 by calling
-[`BBMEnterprise.syncStart()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.html#syncStart).
+[`SparkCommunications.syncStart()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.html#syncStart).
 When `syncStart()` is called, the `setupState` will advance to to
 `SyncStarted`.  The followign table describes the behavior of `syncStart()`
 based on the different possible combinations of `SyncPasscodeState` and
@@ -283,7 +244,7 @@ After this has occurred, you can begin using the SDK's messaging and media
 APIs.
 
 When setup has completed, the SDK will remain setup until
-[`BBMEnterprise.shutdown()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.html#shutdown)
+[`SparkCommunications.shutdown()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.html#shutdown)
 is called or a fatal error occurs.  When the SDK is shutdown or encounters a
 fatal error, the `setupState` will regress to `NotInitiated`.  You can monitor
 for `setupState` events after setup has completed to learn when the SDK is no
@@ -296,15 +257,15 @@ longer set up.
     // As setup progresses, update the display with the current setup
     // state.
     $('#setupState').text(state.value);
-    console.log(`QuickStart: BBMEnterprise setup state: ${state.value}`);
+    console.log(`QuickStart: Endpoint setup state: ${state.value}`);
 
     switch (state.value) {
-      case BBMEnterprise.SetupState.Success: {
+      case SparkCommunications.SetupState.Success: {
         // Setup was successful.
         resolve();
         break;
       }
-      case BBMEnterprise.SetupState.SyncRequired: {
+      case SparkCommunications.SetupState.SyncRequired: {
         if (isSyncStarted) {
           // We have already tried to sync the user's keys using the
           // given passcode.  For simplicity in this example, we don't
@@ -322,17 +283,17 @@ longer set up.
           KEY_PASSCODE,
 
           // Does the user have existing keys?
-          sdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New
+          sdk.syncPasscodeState === SparkCommunications.SyncPasscodeState.New
           // No, we must create new keys.  The key passcode will be
           // used to protect the new keys.
-          ? BBMEnterprise.SyncStartAction.New
+          ? SparkCommunications.SyncStartAction.New
           // Yes, we have existing keys.  The key passcode will be
           // used to unprotect the keys.
-          : BBMEnterprise.SyncStartAction.Existing
+          : SparkCommunications.SyncStartAction.Existing
         );
         break;
       }
-      case BBMEnterprise.SetupState.SyncStarted: {
+      case SparkCommunications.SetupState.SyncStarted: {
         // Syncing of the user's keys has started.  We remember this so
         // that we can tell if the setup state regresses.
         isSyncStarted = true;
@@ -345,7 +306,7 @@ longer set up.
 ### <a name="monitorSetupErrors"></a>Monitor for setup errors
 
 When an error occurs that will cause the SDK setup to fail, a
-[`setupError`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.html#event:setupError)
+[`setupError`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.html#event:setupError)
 event will be emitted.
 
 When setup has completed, the SDK may still emit a `setupError` event if a
@@ -365,7 +326,7 @@ When a setup error occurs, whether before or after setup completes, the
 ### <a name="startSetup"></a>Start setup
 
 Call
-[`BBMEnterprise.setupStart()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.html#setupStart)
+[`SparkCommunications.setupStart()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.html#setupStart)
 to begin setting up the SDK.
 
 ```javascript

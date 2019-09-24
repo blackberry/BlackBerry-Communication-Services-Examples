@@ -2,7 +2,7 @@
   // Ignore unknown variables that will be available at runtime.
   "globals":
   {
-    "BBMEnterprise": false
+    "SparkCommunications": false
   },
   "rules":
   {
