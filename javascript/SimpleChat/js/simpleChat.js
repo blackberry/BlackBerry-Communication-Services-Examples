@@ -43,21 +43,6 @@ window.onload = async () => {
   leaveButton = document.getElementById('leaveButton');
 
   try {
-    // Wait for the custom web components to load.
-    await new Promise((resolve) => { HTMLImports.whenReady(resolve); });
-
-    // Set the Argon2 WASM file location if it has not already been set.
-    // If you have put the argon2.wasm file in a custom location, you can
-    // override this option in the imported SDK_CONFIG.
-    const kmsArgonWasmUrl =
-      SDK_CONFIG.kmsArgonWasmUrl || '../../sdk/argon2.wasm';
-
-    // Make sure that the browser supports all of the necessary functionality,
-    // including support for interacting with the BlackBerry Key Management
-    // Service (KMS).
-    await BBMEnterprise.validateBrowser({
-      kms: { argonWasmUrl: kmsArgonWasmUrl }
-    });
 
     // Notify the user that we are authenticating.
     status.innerHTML = 'Authenticating';
@@ -67,16 +52,13 @@ window.onload = async () => {
     // We are using the MockAuthManager, so we need to override how it
     // acquires the local user's user ID.
     authManager.getUserId = () => new Promise((resolve, reject) => {
-      const userEmailDialog = document.createElement('bbm-user-email-dialog');
-      document.body.appendChild(userEmailDialog);
-      userEmailDialog.addEventListener('Ok', e => {
-        userEmailDialog.parentNode.removeChild(userEmailDialog);
-        resolve(e.detail.userEmail);
-      });
-      userEmailDialog.addEventListener('Cancel', () => {
-        userEmailDialog.parentNode.removeChild(userEmailDialog);
-        reject('Failed to get user email.');
-      });
+      const userId = prompt('Enter your user ID');
+      if (userId && userId.trim()) {
+        resolve(userId.trim());
+      }
+      else {
+        reject('Failed to get user ID');
+      }
     });
 
     // Authenticate the user.  Configurations that use a real identity
@@ -98,7 +80,7 @@ window.onload = async () => {
     //
     // This example might not work if your SDK_CONFIG specifies any of the
     // parameters assigned below.
-    const sdk = new BBMEnterprise(Object.assign(
+    const sdk = new SparkCommunications(Object.assign(
       {
         // You must specify your domain in the SDK_CONFIG.
 
@@ -120,9 +102,10 @@ window.onload = async () => {
         // endpoint.
         description: navigator.userAgent,
 
-        // Use the same kmsArgonWasmUrl that was used to to validate our
-        // browser environment above.
-        kmsArgonWasmUrl,
+        // Set the Argon2 WASM file location if it has not already been set.
+        // If you have put the argon2.wasm file in a custom location, you can
+        // override this option in the imported SDK_CONFIG.
+        kmsArgonWasmUrl: SDK_CONFIG.kmsArgonWasmUrl || '../../sdk/argon2.wasm',
 
         // This example uses the bbm-chat-message-list web component to manage
         // the message list.  It is a Polymer component that directly watches
@@ -131,7 +114,7 @@ window.onload = async () => {
         // changes in the SDK's stored messages, we configure the SDK to build
         // its message storage array using the SpliceWatcher message storage
         // factory.
-        messageStorageFactory: BBMEnterprise.StorageFactory.SpliceWatcher
+        messageStorageFactory: SparkCommunications.StorageFactory.SpliceWatcher
       },
       SDK_CONFIG
     ));
@@ -143,14 +126,14 @@ window.onload = async () => {
       let isSyncStarted = false;
       sdk.on('setupState', (state) => {
         console.log(
-          `SimpleChat: BBMEnterprise setup state: ${state.value}`);
+          `SimpleChat: Endpoint setup state: ${state.value}`);
         switch (state.value) {
-          case BBMEnterprise.SetupState.Success: {
+          case SparkCommunications.SetupState.Success: {
             // Setup was successful.
             resolve();
             break;
           }
-          case BBMEnterprise.SetupState.SyncRequired: {
+          case SparkCommunications.SetupState.SyncRequired: {
             if (isSyncStarted) {
               // We have already tried to sync the user's keys using the
               // given passcode.  For simplicity in this example, we don't
@@ -168,17 +151,17 @@ window.onload = async () => {
               KEY_PASSCODE,
 
               // Does the user have existing keys?
-              sdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New
+              sdk.syncPasscodeState === SparkCommunications.SyncPasscodeState.New
               // No, we must create new keys.  The key passcode will be
               // used to protect the new keys.
-              ? BBMEnterprise.SyncStartAction.New
+              ? SparkCommunications.SyncStartAction.New
               // Yes, we have existing keys.  The key passcode will be
               // used to unprotect the keys.
-              : BBMEnterprise.SyncStartAction.Existing
+              : SparkCommunications.SyncStartAction.Existing
             );
             break;
           }
-          case BBMEnterprise.SetupState.SyncStarted: {
+          case SparkCommunications.SetupState.SyncStarted: {
             // Syncing of the user's keys has started.  Remember this so
             // that we can tell if the setup state regresses.
             isSyncStarted = true;
@@ -223,7 +206,7 @@ window.onload = async () => {
       /**
        * Get the name to use for the chat.
        *
-       * @param {BBMEnterprise.Messenger.Chat} chat
+       * @param {SparkCommunications.Messenger.Chat} chat
        *   The chat whose name is to be returned.
        *
        * @returns {string}
@@ -250,7 +233,7 @@ window.onload = async () => {
        * A function to retrieve the status indicator to use for an outgoing
        * message.
        *
-       * @param {BBMEnterprise.ChatMessage} message
+       * @param {SparkCommunications.Messenger.ChatMessage} message
        *   The message to retrieve status for.
        *
        * @returns {string}
@@ -280,7 +263,7 @@ window.onload = async () => {
       /**
        * A function to retrieve the content to use for a message.
        *
-       * @param {BBMEnterprise.Messenger.ChatMessage} message
+       * @param {SparkCommunications.Messenger.ChatMessage} message
        *   The message to retrieve content for.
        *
        * @returns {string}
@@ -293,7 +276,7 @@ window.onload = async () => {
       /**
        * A function to retrieve the alignment to use for a message.
        *
-       * @param {BBMEnterprise.ChatMessage} message
+       * @param {SparkCommunications.Messenger.ChatMessage} message
        *   The message to retrieve alignment for.
        *
        * @returns {string}

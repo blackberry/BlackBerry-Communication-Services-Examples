@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2019 BlackBerry Limited.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,13 +51,19 @@ module.exports = function() {
   // This value is populated by calling getAzureOpenIdConfig().
   let commonTidConfigPromise = null;
 
-  // The array of issuers that will be constructed based on the issuer URL
+  // The array of issuers that match the set of tenants from whom we will
+  // accept tokens.  We will also add to this array using the issuer URL
   // returned in the OpenID config for the 'common' tenant and the configured
   // tenant IDs.
   //
   // This will be set once on resolution of the promise created by
   // getAzureOpenIdConfig().
-  const issuers = [];
+  //
+  // See the following reference for more details on validating the issuer:
+  // https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-convert-app-to-be-multi-tenant
+  const issuers = (
+    typeof config.tenantIds === 'string' ? [ config.tenantIds ] : config.tenantIds
+  ).map((tenantId) => `https://sts.windows.net/${tenantId}/`);
 
   // The cache of public signing keys indexed by key ID.  This will be fetched
   // once at startup and refreshed whenever a token with an unknown key ID is

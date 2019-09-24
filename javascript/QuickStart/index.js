@@ -27,19 +27,6 @@ window.onload = async () => {
     $('#domain').text(SDK_CONFIG.domain);
     $('#environment').text('Sandbox');
 
-    // Set the Argon2 WASM file location if it has not already been set.
-    // If you have put the argon2.wasm file in a custom location, you can
-    // override this option in the imported SDK_CONFIG.
-    const kmsArgonWasmUrl =
-      SDK_CONFIG.kmsArgonWasmUrl || '../../sdk/argon2.wasm';
-
-    // Make sure that the browser supports all of the necessary functionality,
-    // including support for interacting with the BlackBerry Key Management
-    // Service (KMS).
-    await BBMEnterprise.validateBrowser({
-      kms: { argonWasmUrl: kmsArgonWasmUrl }
-    });
-
     // Setup the authentication manager for the application.
     const authManager = new MockAuthManager();
     // We are using the MockAuthManager, so we need to override how it
@@ -83,7 +70,7 @@ window.onload = async () => {
         //
         // This example might not work if your SDK_CONFIG specifies any of the
         // parameters assigned below.
-        const sdk = new BBMEnterprise(Object.assign(
+        const sdk = new SparkCommunications(Object.assign(
           {
             // You must specify your domain in the SDK_CONFIG.
 
@@ -105,9 +92,12 @@ window.onload = async () => {
             // endpoint.
             description: navigator.userAgent,
 
-            // Use the same kmsArgonWasmUrl that was used to to validate our
-            // browser environment above.
-            kmsArgonWasmUrl
+            // Set the Argon2 WASM file location if it has not already been
+            // set.  If you have put the argon2.wasm file in a custom
+            // location, you can override this option in the imported
+            // SDK_CONFIG.
+            kmsArgonWasmUrl:
+              SDK_CONFIG.kmsArgonWasmUrl || '../../sdk/argon2.wasm'
           },
           SDK_CONFIG
         ));
@@ -121,15 +111,15 @@ window.onload = async () => {
             // As setup progresses, update the display with the current setup
             // state.
             $('#setupState').text(state.value);
-            console.log(`QuickStart: BBMEnterprise setup state: ${state.value}`);
+            console.log(`QuickStart: Endpoint setup state: ${state.value}`);
 
             switch (state.value) {
-              case BBMEnterprise.SetupState.Success: {
+              case SparkCommunications.SetupState.Success: {
                 // Setup was successful.
                 resolve();
                 break;
               }
-              case BBMEnterprise.SetupState.SyncRequired: {
+              case SparkCommunications.SetupState.SyncRequired: {
                 if (isSyncStarted) {
                   // We have already tried to sync the user's keys using the
                   // given passcode.  For simplicity in this example, we don't
@@ -147,17 +137,17 @@ window.onload = async () => {
                   KEY_PASSCODE,
 
                   // Does the user have existing keys?
-                  sdk.syncPasscodeState === BBMEnterprise.SyncPasscodeState.New
+                  sdk.syncPasscodeState === SparkCommunications.SyncPasscodeState.New
                   // No, we must create new keys.  The key passcode will be
                   // used to protect the new keys.
-                  ? BBMEnterprise.SyncStartAction.New
+                  ? SparkCommunications.SyncStartAction.New
                   // Yes, we have existing keys.  The key passcode will be
                   // used to unprotect the keys.
-                  : BBMEnterprise.SyncStartAction.Existing
+                  : SparkCommunications.SyncStartAction.Existing
                 );
                 break;
               }
-              case BBMEnterprise.SetupState.SyncStarted: {
+              case SparkCommunications.SetupState.SyncStarted: {
                 // Syncing of the user's keys has started.  We remember this
                 // so that we can tell if the setup state regresses.
                 isSyncStarted = true;
@@ -168,7 +158,7 @@ window.onload = async () => {
 
           // Any setup error received will fail the SDK setup promise.
           sdk.on('setupError', error => {
-           reject(new Error(`Endpoint setup failed: ${error.value}`));
+            reject(new Error(`Endpoint setup failed: ${error.value}`));
           });
 
           // Start the SDK setup.

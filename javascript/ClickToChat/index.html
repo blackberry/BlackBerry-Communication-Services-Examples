@@ -22,20 +22,15 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>Click To Chat</title>
     <link rel="icon" type="image/png" href="img/favicon.ico">
-    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../support/identity/GenericUserInfo.js"></script>
-    <script src="../support/util/TimeRangeFormatter.js"></script>
-    <script src="../support/util/MessageFormatter.js"></script>
-    <script src="../../sdk/bbm_sdk_web.js"></script>
     <link rel="stylesheet" type="text/css" href="css/clickToChat.css"/>
-    <!-- import bbm-chat into your application -->
-    <link rel="import" href="node_modules/bbmChat/bbmChat.html">
-    <!-- import bbm-user-email-dialog control -->
-    <link rel="import" href="node_modules/bbmUserEmailDialog/bbmUserEmailDialog.html"/>
 
-    <script src="js/config_mock.js"></script>
     <script src="../support/auth/MockAuthManager.js"></script>
     <script src="../support/identity/MockUserManager.js"></script>
+    <script src="../../sdk/bbm_sdk_web.js"></script>
+    <script src="js/config_mock.js"></script>
+
+    <!-- import bbm-chat into your application -->
+    <script src="widget.bundle.js"></script>
   </head>
   <body>
     <div id="v-card">
@@ -60,5 +55,5 @@
       </bbm-chat>
     </div>
   </body>
-  <script src="js/index.js"></script>
+  <script src="app.bundle.js"></script>
 </html>

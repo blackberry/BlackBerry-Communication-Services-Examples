@@ -11,7 +11,7 @@
   "globals":
   {
     "AGENT_USER_ID": false,
-    "BBMEnterprise": false,
+    "SparkCommunications": false,
     "SDK_CONFIG": false,
     "GenericUserInfo": false,
     "KEY_PASSCODE": false,

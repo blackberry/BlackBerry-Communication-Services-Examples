@@ -4,7 +4,14 @@
   "version": "1.0.0",
   "main": "index.html",
   "dependencies": {
-    "bbmCall": "file:../support/ui/widgets/bbmCall",
-    "bbmUserEmailDialog": "file:../support/ui/widgets/bbmUserEmailDialog"
+    "bbmCall": "file:../support/ui/widgets/bbmCall"
+  },
+  "devDependencies": {
+    "file-loader": "^4.0.0",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.3.4"
+  },
+  "scripts": {
+    "postinstall": "npx webpack"
   }
 }

@@ -32,7 +32,7 @@ const bot = require('./botlibre')(config.botLibre.application,
 // Load the module we use to setup the SDK.
 const sdkSetup = require('./SdkSetup');
 
-const BBMEnterprise = require('bbm-enterprise');
+const SparkCommunications = require('bbm-enterprise');
 
 // Create an SDK instance.
 login.login(config)
@@ -41,76 +41,94 @@ login.login(config)
   // Cache the messenger for simplicity.
   const messenger = sdk.messenger;
 
-  // A helper function to say what to do with a message. We will send it off
-  // to the bot web service, and then post a message in reply with either the
-  // answer, or the error if we couldn't get an answer.
-  const reply = (chatId, message) => {
+  // This example doesn't need any chat history to function, however we
+  // restore at least 1 messages so that we can mark all messages up until the
+  // last message in the chat as read as soon as we know about the chat.
+  const restoreChat = async (chatId) => {
+    let messages;
     try {
-      // Then send the message to a chatbot service.
-      bot(message)
-      .then(response => {
-        // And post a message with the response.
-        messenger.chatMessageSend(chatId, {
-          tag: 'Text',
-          content: response
-        });
-      })
-      .catch(error => {
-        messenger.chatMessageSend(chatId, {
-          tag: 'Text',
-          content: error.toString()
-        });
-      });
-    } catch(error) {
-      messenger.chatMessageSend(chatId, {
-        tag: 'Text',
-        content: error.toString()
-      });
+      messages = await messenger.fetchChatMessages(chatId,
+                                                   { minFetchCount: 1 });
+
+      // If any messages were restored, mark them all as read, but don't
+      // reply to anything.
+      if (messages.length > 0) {
+        const message = messages[messages.length - 1];
+        await messenger.chatMessageRead(chatId, message.messageId);
+      }
+    }
+    catch(error) {
+      console.error(
+        messages === undefined
+        ? `Cannot restore chat messages in chat=${chatId}: ${error}`
+        : `Failed to mark last message in chat=${chatId} as read: ${error}`
+      );
     }
   };
 
-  // Look at messages.
-  sdk.messenger.on('chatMessageAdded', addedEvent => {
-    const message = addedEvent.message;
+  // We will restore at least 1 message for all chats that we know about
+  // on setup completion and for each new chat we learn about.
+  messenger.getChats().map((chat) => restoreChat(chat.chatId));
+  sdk.messenger.on('chatAdded', async (chatAddedEvent) => {
+    if(chatAddedEvent.chat.state
+       === SparkCommunications.Messenger.Chat.State.Waiting)
+    {
+      restoreChat(chatAddedEvent.chat.chatId);
+    }
+  });
 
-    // Only respond if the message is incoming.
-    if(message.isIncoming) {
-      // A function to respond to an incoming message. Mark the message as read,
-      // then reply to the message if necessary. Reply to all messages in a 1:1
-      // chat, and to those prefixed with @bbmbot in a multiparty chat.
-      const sendResponse = () => {
-        // Mark the message as read.
-        messenger.chatMessageRead(message.chatId, message.messageId)
-        .catch(error => console.error(
-          'bbm-chat-message-list: Cannot send message read notification for '
-          + 'messageId=' + message.messageId + ' in chat=' + message.chatId
-          + ': ' + error
-        ));
+  // When a new chat message arrives, we will mark the message as read and
+  // respond if it's appropriate for us to do so.
+  sdk.messenger.on('chatMessageAdded', async ({ chat, message }) => {
+    // We only automatically respond when we have an incoming text message for
+    // a chat that is in the Ready state.
+    if (! message.isIncoming || message.tag !== 'Text' ||
+        chat.state !== SparkCommunications.Messenger.Chat.State.Ready)
+    {
+      return;
+    }
 
-        // If the conversation is 1:1, always reply.
-        if(messenger.getChat(message.chatId).isOneToOne) {
-          reply(message.chatId, message.content);
-        } else {
-          // Or the message is prefixed with '@bbmbot' in a multiparty chat,
-          // then reply.
-          var match = /@bbmbot (.*)/.exec(message.content);
-          if(match) {
-            reply(message.chatId, match[1]);
-          }
-        }
-      };
+    // Mark the message as read.
+    try {
+      await messenger.chatMessageRead(message.chatId, message.messageId);
+    }
+    catch(error) {
+      console.error(
+        'Cannot send message read notification for messageId='
+        + `${message.messagId} in chat=${message.chatId}: ${error}`
+      );
+    }
 
-      // If the chat is not Ready, then fetch no messages with NoSync, to lie
-      // to the recipient and say we have read all of their messages even
-      // though we may not have. The bot only responds to online messages.
-      if(addedEvent.chat.state === BBMEnterprise.Messenger.Chat.State.Waiting) {
-        // The chat is not ready. Get it ready first, then reply.
-        messenger.fetchChatMessages(message.chatId, { minFetchCount: 0 })
-        .then(sendResponse);
-      } else {
-        // The chat is ready, just reply.
-        sendResponse();
+    // If the message is received in a multi-party chat, we will only reply
+    // when the message is prefixed with '@bbmbot'.
+    let content = message.content;
+    if (! chat.isOneToOne) {
+      const match = /@bbmbot (.*)/.exec(content);
+      if (! match) {
+        // We are in a multi-party chat but the message was not directed at
+        // the bot, so there is nothing further for us to do.
+        return;
       }
+
+      // Just remember the part after the '@bbmbot' prefix as the message.
+      content = match[1];
+    }
+
+    // Reply the message using the bot web service.  If we encounter an error,
+    // we ill respond with the error.
+    let response;
+    try { response = await bot(content); }
+    catch(error) { response = `Failed to generate reply; error=${error}`; }
+
+    try {
+      messenger.chatMessageSend(chat.chatId,
+                                { tag: 'Text', content: response });
+    }
+    catch(error) {
+      console.error(
+        `Failed to reply to messageId=${message.messageId} in chat=`
+        + `${chat.chatId}: ${error}`
+      );
     }
   });
 });

@@ -101,14 +101,14 @@ provided by the `data-transfer-element` component, which can be found in
 ### <a name="create"></a> Creating a connection
 
 The `onConnectClicked()` event handler starts a new data connection using
-[`BBMEnterprise.Media.createDataConnection()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.html#createDataConnection).
+[`SparkCommunications.Media.createDataConnection()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.html#createDataConnection).
 When starting a data connection, the metadata object will be sent to the
 callee to describe the intent or content of the connection.
 
 ```javascript
   // Create connection to the specified regId.
   this.bbmSdk.media.createDataConnection(
-    new BBMEnterprise.Media.Callee(this.contactRegId), metaData)
+    new SparkCommunications.Media.Callee(this.contactRegId), metaData)
   .then(connection => {
     connection.on('connected', () => {
       this.connection = connection;
@@ -121,15 +121,15 @@ callee to describe the intent or content of the connection.
 
 When the `setBbmSdk()` function is called, the component will use the SDK
 instance to monitor for incoming data connections by subscribing to the
-[`incomingDataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.html#event:incomingDataConnection)
+[`incomingDataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.html#event:incomingDataConnection)
 event. This event is triggered each time a new incoming data connection
 request arrives. The event given to the event handler provides the application
 with the incoming
-[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html)
+[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html)
 instance which can be
-[`accepted`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html#accept)
+[`accepted`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html#accept)
 or
-[`declined`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html#end).
+[`declined`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html#end).
 
 ```javascript
   this.bbmSdk.media.on('incomingDataConnection', connection => {
@@ -148,7 +148,7 @@ or
       });
     }
     else {
-      connection.end(BBMEnterprise.Media.CallEndReason.REJECT_CALL);
+      connection.end(SparkCommunications.Media.CallEndReason.REJECT_CALL);
     }
   });
 ```
@@ -156,20 +156,20 @@ or
 ### <a name="receiveFile"></a> Receiving a file
 
 To receive data using the established
-[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html),
+[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html),
 the application must subscribe to the
-[`dataReceived`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html#event:dataReceived)
+[`dataReceived`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html#event:dataReceived)
 event. The event handler for this event will receive the
-[`DataReceiver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.DataReceiver.html)
+[`DataReceiver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.DataReceiver.html)
 instance that will handle all incoming data over the
-[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html).
+[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html).
 
 To receive a notification that the
-[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html)
+[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html)
 has been closed, subscribe to the
-[`disconnected`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html#event:disconnected)
+[`disconnected`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html#event:disconnected)
 event. The event handler will receive the
-[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html)
+[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html)
 that was closed and a status that indicates why the connection was closed.
 
 The context for this snippet can be found in the `onConnectionChanged()`
@@ -182,9 +182,9 @@ callback.
 ```
 
 To specify the receiving mode, the
-[`DataReceiver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.DataReceiver.html)
+[`DataReceiver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.DataReceiver.html)
 must be configured within the
-[`dataReceived`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html#event:dataReceived)
+[`dataReceived`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html#event:dataReceived)
 event handler. The Data Transfer application only operates on the complete
 data, so the `DATA_FULL` mode is used.
 
@@ -193,13 +193,13 @@ callback.
 
 ```javascript
   newReceiver.configure({
-    mode: BBMEnterprise.Media.DataConnection.DataReceiver.Mode.DATA_FULL
+    mode: SparkCommunications.Media.DataConnection.DataReceiver.Mode.DATA_FULL
   });
 ```
 
 To receive notification that all of the incoming data has been received,
 subscribe to the
-[`done`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.DataReceiver.html#event:done)
+[`done`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.DataReceiver.html#event:done)
 event.
 
 The context for this snippet can be found in the `onReceiverChanged()` callback.
@@ -210,9 +210,9 @@ The context for this snippet can be found in the `onReceiverChanged()` callback.
 ```
 
 The
-[`deplete`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.DataReceiver.html#deplete)
+[`deplete`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.DataReceiver.html#deplete)
 method is used to consume the data that has been buffered within the
-[`DataReceiver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.DataReceiver.html).
+[`DataReceiver`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.DataReceiver.html).
 The Data Transfer example creates a blob from the received data, which is used
 by the UI to show the received data.
 
@@ -237,9 +237,9 @@ callback.
 ### <a name="sendFile"></a> Sending a file
 
 To send a file, call the
-[`sendFile`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html#sendFile)
+[`sendFile`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html#sendFile)
 method on an established
-[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Media.DataConnection.html)
+[`DataConnection`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Media.DataConnection.html)
 instance. The Data Transfer example shows the progress of the file transfer by
 providing a progress callback.
 

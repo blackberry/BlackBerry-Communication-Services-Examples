@@ -178,7 +178,7 @@ that it can manage the chat your application will create.
 
 The SDK can only start a chat with an identity if they have a `regId`.  You
 can use
-[`BBMEnterprise.getIdentitiesFromAppUserId()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.html#getIdentitiesFromAppUserId)
+[`SparkCommunications.getIdentitiesFromAppUserId()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.html#getIdentitiesFromAppUserId)
 to lookup the identity details for the configured user.
 
 ```javascript
@@ -187,7 +187,7 @@ to lookup the identity details for the configured user.
 
 ### <a name="startChat"></a>Start a chat with the configured user
 To start a chat, you must call
-[`BBMEnterprise.Messenger.chatStart()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.html#chatStart).
+[`SparkCommunications.Messenger.chatStart()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Messenger.html#chatStart).
 When the chat with the configured user identity has been started, control over
 the chat interaction can be handed over to the `bbmChat` component.  Listening
 for the `chatDefunct` event will allow you to handle any necessary cleanup

@@ -18,7 +18,7 @@
 // This module implements a stubbed out login process using a mock auth token
 // generator.
 
-const BBMEnterprise = require('bbm-enterprise');
+const SparkCommunications = require('bbm-enterprise');
 const crypto = require('crypto');
 
 module.exports = {
@@ -28,12 +28,12 @@ module.exports = {
 
     // Create an unsigned JWT.
     function createToken() {
-      const jti = BBMEnterprise.Util.base64urlEncode(
+      const jti = SparkCommunications.Util.base64urlEncode(
         new Uint8Array(crypto.randomBytes(20))
       ).substring(0, 18);
 
       // Create the JWT header.
-      const tokenHeader = BBMEnterprise.Util.base64urlEncode(JSON.stringify({
+      const tokenHeader = SparkCommunications.Util.base64urlEncode(JSON.stringify({
         alg: 'none'
       }));
 
@@ -41,7 +41,7 @@ module.exports = {
       const now = (Date.now() / 1000) | 0;
 
       // Create the JWT body.
-      const tokenBody = BBMEnterprise.Util.base64urlEncode(JSON.stringify({
+      const tokenBody = SparkCommunications.Util.base64urlEncode(JSON.stringify({
         jti: jti,
         sub: localUserInfo.userId,
         // Valid since 60 seconds ago to avoid clock skew issues.

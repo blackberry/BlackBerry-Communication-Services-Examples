@@ -137,7 +137,7 @@ messages in the chat.
 ```
 
 The `bbmChatList` component only requires a setup instance
-[`BBMEnterprise.Messenger`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.html)
+[`SparkCommunications.Messenger`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Messenger.html)
 it will do the rest.  In this example, the function used for displaying the
 chat name in the template are defined as part of the component's context.
 
@@ -150,7 +150,7 @@ chat name in the template are defined as part of the component's context.
     /**
      * Get the name to use for the chat.
      *
-     * @param {BBMEnterprise.Messenger.Chat} chat
+     * @param {SparkCommunications.Messenger.Chat} chat
      *   The chat whose name is to be returned.
      *
      * @returns {string}
@@ -194,7 +194,7 @@ represents its current status.
 ```
 
 The `bbmChatMessageList` component only requires a setup instance
-[`BBMEnterprise.Messenger`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.html)
+[`SparkCommunications.Messenger`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Messenger.html)
 it will do the rest.  In this example, the functions used for display in the
 template are defined as part the component's context.
 
@@ -208,7 +208,7 @@ template are defined as part the component's context.
      * A function to retrieve the status indicator to use for an outgoing
      * message.
      *
-     * @param {BBMEnterprise.ChatMessage} message
+     * @param {SparkCommunications.ChatMessage} message
      *   The message to retrieve status for.
      *
      * @returns {string}
@@ -238,7 +238,7 @@ template are defined as part the component's context.
     /**
      * A function to retrieve the content to use for a message.
      *
-     * @param {BBMEnterprise.Messenger.ChatMessage} message
+     * @param {SparkCommunications.Messenger.ChatMessage} message
      *   The message to retrieve content for.
      *
      * @returns {string}
@@ -251,7 +251,7 @@ template are defined as part the component's context.
     /**
      * A function to retrieve the alignment to use for a message.
      *
-     * @param {BBMEnterprise.ChatMessage} message
+     * @param {SparkCommunications.ChatMessage} message
      *   The message to retrieve alignment for.
      *
      * @returns {string}
@@ -272,7 +272,7 @@ currently being displayed.
 ```
 
 The `bbmChatInput` component only requires a setup instance
-[`BBMEnterprise.Messenger`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/BBMEnterprise.Messenger.html)
+[`SparkCommunications.Messenger`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/javascript/SparkCommunications.Messenger.html)
 it will do the rest.
 
 ```javascript

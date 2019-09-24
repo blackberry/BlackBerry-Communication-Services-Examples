@@ -30,7 +30,7 @@ module.exports = {
     // The ID of the domain assigned to this application.  Refer to the
     // Developer Guide for more information on setting up your domain:
     // https://developer.blackberry.com/files/bbm-enterprise/documents/guide/html/gettingStarted.html#domain
-    domain_id: 'your_domain_id'
+    domain: 'your_domain_id'
   },
 
   // Configure the Mock IDP client.
