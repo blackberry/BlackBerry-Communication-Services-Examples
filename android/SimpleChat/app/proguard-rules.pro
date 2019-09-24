@@ -17,6 +17,11 @@
 # Signature - Keep the generic signature of a class, field or method.
 -keepattributes SourceFile,LineNumberTable,InnerClasses,EnclosingMethod,Signature
 
+-keep class androidx.**{ *; }
+-keep interface androidx.**{ *; }
+-keep class com.google.android.material.** { *; }
+-keep class com.google.firebase.**{ *;}
+
 #Duplicate library definition notes:
 -dontnote android.net.http.*
 -dontnote org.apache.commons.codec.**
@@ -25,7 +30,6 @@
 -dontnote com.google.common.cache.**
 -dontnote com.google.appengine.api.**
 -dontnote com.google.apphosting.api.**
--dontnote com.google.firebase.**
 
 -dontwarn com.google.common.**
 -dontnote com.google.common.util.concurrent.**

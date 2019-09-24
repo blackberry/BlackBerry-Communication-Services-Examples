@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.OpenableColumns;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,10 +57,10 @@ import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.reactive.SingleshotMonitor;
 import com.bbm.sdk.support.identity.UserIdentityMapper;
+import com.bbm.sdk.support.identity.auth.MockTokenProvider;
 import com.bbm.sdk.support.identity.user.AppUser;
 import com.bbm.sdk.support.identity.user.UserManager;
 import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
-import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.BbmUtils;
 import com.bbm.sdk.support.util.IOUtils;
 import com.bbm.sdk.support.util.Logger;
@@ -210,8 +210,8 @@ public class MainActivity extends AppCompatActivity implements BBMEDataChannelCr
         //Call changed to trigger our observer to run immediately
         mBbmSetupObserver.changed();
 
-        //Provide the activity to the Auth helper so it can prompt the user for credentials
-        AuthIdentityHelper.setActivity(this);
+        //Provide the activity to the MockTokenProvider so it can prompt the user for credentials
+        MockTokenProvider.challengeAuthentication(this);
 
         mConnectionStatusTextView = (TextView)findViewById(R.id.connection_status);
         mConnectionErrorTextView = (TextView)findViewById(R.id.connection_error);

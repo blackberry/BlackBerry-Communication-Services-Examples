@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 package com.bbm.example.whiteboard;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -37,10 +37,10 @@ import com.bbm.sdk.reactive.ObservableValue;
 import com.bbm.sdk.reactive.Observer;
 import com.bbm.sdk.reactive.SingleshotMonitor;
 import com.bbm.sdk.support.identity.UserIdentityMapper;
+import com.bbm.sdk.support.identity.auth.MockTokenProvider;
 import com.bbm.sdk.support.identity.user.AppUser;
 import com.bbm.sdk.support.identity.user.UserManager;
 import com.bbm.sdk.support.ui.widgets.UserIdPrompter;
-import com.bbm.sdk.support.util.AuthIdentityHelper;
 import com.bbm.sdk.support.util.ChatStartHelper;
 import com.bbm.sdk.support.util.Logger;
 import com.bbm.sdk.support.util.SetupHelper;
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         //Start monitor to show the display name
         mDisplayNameMonitor.activate();
 
-        AuthIdentityHelper.setActivity(this);
+        MockTokenProvider.challengeAuthentication(this);
 
         //create the list of chats
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.chats_recycler_view);

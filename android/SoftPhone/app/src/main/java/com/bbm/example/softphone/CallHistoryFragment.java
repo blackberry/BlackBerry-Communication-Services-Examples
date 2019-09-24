@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,12 @@ package com.bbm.example.softphone;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.util.SortedList;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.SortedList;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -272,7 +274,7 @@ public class CallHistoryFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     if (holder.mRegId != 0) {
-                        CallUtils.makeCall(getActivity(), CallHistoryFragment.this, holder.mRegId);
+                        CallUtils.makeCall((AppCompatActivity) getActivity(), CallHistoryFragment.this, holder.mRegId);
                     } else {
                         Toast.makeText(getContext(), R.string.error_no_regid, Toast.LENGTH_LONG).show();
                     }

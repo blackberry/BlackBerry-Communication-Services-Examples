@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+/* Copyright (c) 2019 BlackBerry Limited.  All Rights Reserved.
 * 
 * Licensed under the Apache License, Version 2.0 (the "License"); 
 * you may not use this file except in compliance with the License. 
@@ -42,7 +42,7 @@ class CallListener : NSObject, BBMMediaDelegate
 
     //MARK: Incoming Call Alert
 
-    //If iOS CallKit is not supported, we will notify via an alert view.  A UILocalNotification
+    //If iOS CallKit is not supported, we will notify via an alert view.  A notification
     //will also be required if the call is in the background
     private func notifyOfIncomingCall(_ call: BBMCall!) {
         let message = String(format: "Incoming Call From %@", call.peerRegId)

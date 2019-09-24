@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@
 package com.bbm.example.softphone;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.bbm.sdk.BBMEnterprise;
@@ -211,7 +211,7 @@ public class CallUtils {
      * Starts a call with the registration id provided. If RECORD_AUDIO permission has not be granted it will prompt the user first.
      */
     @SuppressWarnings("MissingPermission")
-    public static void makeCall(final Activity activity, Fragment fragment, final long regId) {
+    public static void makeCall(final AppCompatActivity activity, Fragment fragment, final long regId) {
 
         sRegIdToCall = regId;
         //Check for permission to access the microphone before starting an outgoing call
@@ -250,7 +250,7 @@ public class CallUtils {
     /**
      * Make a call to the previously selected registration id after permission has been granted.
      */
-    public static void makeCallPermissionGranted(Activity activity, Fragment fragment) {
+    public static void makeCallPermissionGranted(AppCompatActivity activity, Fragment fragment) {
         if (sRegIdToCall != 0) {
             makeCall(activity, fragment, sRegIdToCall);
             sRegIdToCall = 0;

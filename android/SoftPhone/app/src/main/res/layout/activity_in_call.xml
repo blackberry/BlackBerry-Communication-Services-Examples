@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~ Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -111,9 +111,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:animateLayoutChanges="true">
 
-                <android.support.design.widget.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/call_screen_mute"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -123,7 +124,7 @@
                     custom:fabSize="normal"
                     custom:useCompatPadding="true" />
 
-                <android.support.design.widget.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/end_call"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -133,7 +134,7 @@
                     custom:fabSize="normal"
                     custom:useCompatPadding="true" />
 
-                <android.support.design.widget.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/call_screen_enable_camera"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

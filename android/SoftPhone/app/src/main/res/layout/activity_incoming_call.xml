@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~ Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@
         android:layout_marginBottom="@dimen/in_call_end_call_margin_bottom"
         android:orientation="horizontal">
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/accept_call_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
             android:layout_marginRight="@dimen/in_call_action_item_padding_lr"
             custom:backgroundTint="@color/call_accept_green" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/ignore_call_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

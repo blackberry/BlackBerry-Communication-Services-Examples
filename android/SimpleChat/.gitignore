@@ -8,4 +8,6 @@
 /captures
 .externalNativeBuild
 SDKExampleKeyStore.jks
+/gradlew
+/gradlew.bat
 

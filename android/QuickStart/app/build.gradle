@@ -9,7 +9,7 @@ repositories {
 }
 
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,15 +32,15 @@ appProperties.load(new FileInputStream(appPropertiesFile))
 
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdkVersion 29
+    buildToolsVersion "29.0.0"
     defaultConfig {
         applicationId "com.bbm.example.quickstart"
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdkVersion 22
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // The Spark Domain that is assigned to you.
         // For the purpose of this example app we add it here, but in a real world environment this string should be protected.
@@ -74,13 +74,13 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
 
     // Include Google play services auth module to use Open ID.
-    implementation 'com.google.android.gms:play-services-auth:16.0.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
     // BBM Enterprise SDK used Guva and is required.
-    implementation 'com.google.guava:guava:25.1-android'
+    implementation 'com.google.guava:guava:27.1-android'
 
     // Include the dependency on the BBM Enterprise SDK
     implementation (name:'bbm_sdk-release', ext:'aar')

@@ -82,7 +82,7 @@ Notes:
 * To complete a release build you must create your own signing key. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html.
   * After creating your signing key set the key store password, key password, key alias and path to the keystore file in the 'app.properties' file.
 * To successfully register for push notifications a google-services.json file must be included in the application. See https://firebase.google.com/docs/cloud-messaging/ for help on configuring Firebase Cloud Messaging.
-* This application has been built using gradle 4.2.1 (newer versions have not been validated).
+* This application has been built using gradle 5.1.1 (newer versions have not been validated).
 
 ## Walkthrough
 
@@ -115,8 +115,8 @@ To enable calling in our application we first have to add the required permissio
 Starting a call is as easy as using the
 [`startCall()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#startCall-long-boolean-com.bbm.sdk.media.BBMECallCreationObserver-)
 method. If your application compiles with Android M+, you also need to ask for
-the RECORD_AUDIO permission before we can start a voice call. If you wish to
-start a video call directly we also need to ask for the CAMERA permission.
+the [`RECORD_AUDIO`](https://developer.android.com/reference/android/Manifest.permission.html#RECORD_AUDIO) permission before we can start a voice call. If you wish to
+start a video call directly we also need to ask for the [`CAMERA`](https://developer.android.com/reference/android/Manifest.permission.html#CAMERA) permission.
 
 ```java
 /**
@@ -196,7 +196,9 @@ addIncomingCallObserver(new IncomingCallObserver(SoftPhoneApplication.this));
 *SoftPhoneApplication.java*
 
 
-Your incoming call observer will launch an activity to prompt the user to answer or decline the call. Optionally, you can choose to [`accept()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#acceptCall-int-l) an incoming call before answering. Accepting the call allows the SDK to start negotiating the audio for the call early, which can help prevent any audio delay when the call is answered.
+The incoming call observer will launch a notification to prompt the user to answer or decline the call. A full screen intent is included in the notification to launch the `IncomingCallActivity` if the device is locked. Answer and decline [`Actions`](https://developer.android.com/reference/android/app/Notification.Action) are added to the notification. The actions send a [`Broadcast`](https://developer.android.com/reference/android/content/BroadcastReceiver) event with a unique action string for answering or declining the call. 
+
+Optionally, you can choose to [`accept()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#acceptCall-int-l) an incoming call before answering. Accepting the call allows the SDK to start negotiating the audio for the call early, which can help prevent any audio delay when the call is answered.
 
 
 ```java
@@ -205,18 +207,86 @@ if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.RECORD_AUDIO
     BBMEnterprise.getInstance().getMediaManager().acceptCall(callId);
 }
 
-VoiceVideoUtils.addObserverToCall(callId);
+CallUtils.addObserverToCall(callId);
 
+// Create an intent to launch the IncomingCallActivity
 Intent incomingCallIntent = new Intent(mContext, IncomingCallActivity.class);
 incomingCallIntent.putExtra(IncomingCallActivity.INCOMING_CALL_ID, callId);
-incomingCallIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-mContext.startActivity(incomingCallIntent);
+incomingCallIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 1, incomingCallIntent, 0);
+
+// Create the notification builder. On Oreo and newer use the notification channel.
+final NotificationCompat.Builder builder;
+if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+   builder = new NotificationCompat.Builder(mContext, SOFT_PHONE_NOTIFICATION_CHANNEL);
+} else {
+    // noinspection deprecation
+    builder = new NotificationCompat.Builder(mContext);
+}
+
+// ... configure notification
+
+// Create an intent to call our decline action.
+final Intent declineCallIntent = new Intent(ACTION_DECLINE_CALL);
+final PendingIntent piDeclineCall = PendingIntent.getBroadcast(mContext, 1,
+        declineCallIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+// Create an intent to call our answer action.
+final Intent answerCallIntent = new Intent(ACTION_ACCEPT_CALL);
+final PendingIntent piAnswerCall = PendingIntent.getBroadcast(mContext, 2,
+        answerCallIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+// Format the text for the Accept and Decline buttons to display with green and red colors.
+CharSequence greenAccept = Html.fromHtml("<font color=\"green\">" + mContext.getString(R.string.incoming_call_accept) + "</font>");
+CharSequence redDecline = Html.fromHtml("<font color=\"red\">" + mContext.getString(R.string.incoming_call_decline) + "</font>");
+
+// Add the decline and answer buttons to the notification
+builder.addAction(new NotificationCompat.Action(-1, redDecline, piDeclineCall));
+builder.addAction(new NotificationCompat.Action(-1, greenAccept, piAnswerCall));
+
+Notification notification = builder.build();
+// Set the insistent flag so the ringtone continues playing until we cancel the notification
+notification.flags |= Notification.FLAG_INSISTENT;
+mgr.notify(INCOMING_CALL_NOTIFICATION_ID, notification);
 ```
 *IncomingCallObserver.java*
 
+To receive the answer and decline events from the notification, register a [`BroadcastReceiver`](https://developer.android.com/reference/android/content/BroadcastReceiver) with an [`IntentFilter`](https://developer.android.com/reference/android/content/IntentFilter) matching the actions. 
+
+```java
+// Register a BroadcastReceiver to be called when the actions in the incoming call
+// notification are used.
+IntentFilter filter = new IntentFilter();
+filter.addAction(ACTION_ACCEPT_CALL);
+filter.addAction(ACTION_DECLINE_CALL);
+mContext.registerReceiver(new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (intent.getAction() != null) {
+            BBMEMediaManager mediaManager = BBMEnterprise.getInstance().getMediaManager();
+            int callId = mediaManager.getActiveCallId().get();
+            if (callId != -1) {
+                switch (intent.getAction()) {
+                    case ACTION_ACCEPT_CALL:
+                        Logger.i(ACTION_ACCEPT_CALL);
+                        answerCall(context, callId);
+                        break;
+                    case ACTION_DECLINE_CALL:
+                        Logger.i(ACTION_DECLINE_CALL);
+                        declineCall(callId);
+                        break;
+                }
+            }
+            stopNotification(context);
+        }
+    }
+}, filter);
+```
+*IncomingCallObserver*.java
+
 #### Answer or decline an incoming call
 
-Before answering a call you need the RECORD_AUDIO permission. To answer or decline a call, use [`answer()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#answerCall-int-l) or [`endCall()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#endCall-int-l).
+Before answering a call you need the [`RECORD_AUDIO`](https://developer.android.com/reference/android/Manifest.permission.html#RECORD_AUDIO) permission. To answer or decline a call, use [`answer()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#answerCall-int-l) or [`endCall()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#endCall-int-l).
 
 ```java
 if (mediaManager.answerCall(getIncomingCall().getCallId()) == BBMEMediaManager.Error.NO_ERROR) {
@@ -228,6 +298,7 @@ if (mediaManager.answerCall(getIncomingCall().getCallId()) == BBMEMediaManager.E
 ```
 
 ***Tip: if your application needs to allow calls to appear above a lock screen use these  window flags.***
+
 ```java
 //Set window flags to allow our activity to appear above the device lock screen
 getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
@@ -414,7 +485,7 @@ Calls in the SDK can have video added at any point if both users support it. To 
 
 #### Starting video
 
-Video is started on the call by enabling the camera with [`setCameraEnabled()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#setCameraEnabled-boolean-com.bbm.sdk.media.BBMECameraOperationCallback-). Remember to get the CAMERA permission before attempting to start the camera. Stopping the camera is also done with setCameraEnabled. You can include a [`BBMECameraOperationCallback`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECameraOperationCallback.html) to be notified when the operation has completed.
+Video is started on the call by enabling the camera with [`setCameraEnabled()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEMediaManager.html#setCameraEnabled-boolean-com.bbm.sdk.media.BBMECameraOperationCallback-). Remember to get the [`CAMERA`](https://developer.android.com/reference/android/Manifest.permission.html#CAMERA) permission before attempting to start the camera. Stopping the camera is also done with setCameraEnabled. You can include a [`BBMECameraOperationCallback`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMECameraOperationCallback.html) to be notified when the operation has completed.
 
 ```java
 @SuppressWarnings("MissingPermission")
@@ -498,7 +569,7 @@ private final ObservableMonitor mVideoRenderersMonitor = new ObservableMonitor()
 
 The SDK supports several scaling types for the video content. The scaling types effect how the video is displayed within the view. You should decide which aspect scaling type best fits the needs of your UI. Changes to the video scaling will only take effect after a layout is preformed. The scaling can be changed for each video renderer by using [`setScalingType()`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEVideoRenderer.html#setScalingType-int-int-).
 
-When setting the scaling you can choose a different scaling to use when the video orientation matches your layout orientation and when it doesn't match. For example you may wish to use SCALE_ASPECT_FILL if the orientation matches and SCALE_ASPECT_BALANCE if it does not.
+When setting the scaling you can choose a different scaling to use when the video orientation matches your layout orientation and when it doesn't match. For example you may wish to use [`SCALE_ASPECT_FILL`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEVideoRenderer.html#SCALE_ASPECT_FILL) if the orientation matches and [`SCALE_ASPECT_BALANCE`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/media/BBMEVideoRenderer.html#SCALE_ASPECT_BALANCED) if it does not.
 
 ```java
 /**
@@ -573,7 +644,7 @@ When a call has completed [`getCallLog()`](https://developer.blackberry.com/file
 
 #### Sending a Call log message
 
-When the call ends, we will generate a new CALL_EVENT_TAG type [`chat message`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html). The [`ChatMessage.data`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html#data) will hold the meta data about the call. The time, duration and log reason.
+When the call ends, we will generate a new `CALL_EVENT_TAG` type [`chat message`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html). The [`ChatMessage.data`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessage.html#data) will hold the meta data about the call. The time, duration and log reason.
 
 
 ```java
@@ -612,7 +683,7 @@ ChatStartHelper.startNewChat(new long[]{bbmeCall.getRegId()}, "", new ChatStartH
 
 #### Building the combined call history
 
-To create our call log we need to find all of the call event messages matching our custom type CALL_EVENT_TAG. To do this we are going to compute a list by [`asking`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/BbmdsProtocol.html#getChatMessageList-com.bbm.sdk.bbmds.ChatMessageCriteria-) for the chat messages with [`ChatMessageCriteria`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessageCriteria.html) tag=CALL_EVENT_TAG. We are combining the messages from all of the chats into one single call history list.
+To create our call log we need to find all of the call event messages matching our custom type `CALL_EVENT_TAG`. To do this we are going to compute a list by [`asking`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/BbmdsProtocol.html#getChatMessageList-com.bbm.sdk.bbmds.ChatMessageCriteria-) for the chat messages with [`ChatMessageCriteria`](https://developer.blackberry.com/files/bbm-enterprise/documents/guide/reference/android/com/bbm/sdk/bbmds/ChatMessageCriteria.html) tag=`CALL_EVENT_TAG`. We are combining the messages from all of the chats into one single call history list.
 
 
 ```java

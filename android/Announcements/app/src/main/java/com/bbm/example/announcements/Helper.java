@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2018 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 package com.bbm.example.announcements;
 
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +47,7 @@ public final class Helper {
      * @param activity            The activity to be used to associate the alert dialog to
      * @param announcementMessage The ChatMessage to be edited
      */
-    public static void showEditAnnouncementDialog(@NonNull final Activity activity, @NonNull final ChatMessage announcementMessage) {
+    public static void showEditAnnouncementDialog(@NonNull final AppCompatActivity activity, @NonNull final ChatMessage announcementMessage) {
 
         final View contents = LayoutInflater.from(activity).inflate(R.layout.dialog_edit_announcement, null);
         final EditText editText = contents.findViewById(R.id.edit_text);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package com.bbm.example.datatransfer;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -28,7 +28,7 @@ import com.bbm.sdk.BBMEnterprise;
 import com.bbm.sdk.media.BBMEDataConnection;
 import com.bbm.sdk.reactive.SingleshotMonitor;
 
-public class IncomingDataConnectionActivity extends Activity {
+public class IncomingDataConnectionActivity extends AppCompatActivity {
 
     private int mDataConnectionId = 0;
 

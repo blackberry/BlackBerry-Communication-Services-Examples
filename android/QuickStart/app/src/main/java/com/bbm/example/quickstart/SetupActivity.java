@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package com.bbm.example.quickstart;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -510,6 +510,8 @@ public class SetupActivity extends AppCompatActivity {
         // Remove the first result to continue setup.
         removeResultsMonitor.activate();
         final String endpointId = endpoints.registeredEndpoints.get(0).endpointId;
-        BBMEnterprise.getInstance().getBbmdsProtocol().send(new EndpointDeregister(requestCookie, endpointId));
+        final EndpointDeregister deregisterMessage = new EndpointDeregister(requestCookie);
+        deregisterMessage.endpointId(endpointId);
+        BBMEnterprise.getInstance().getBbmdsProtocol().send(deregisterMessage);
     }
 }

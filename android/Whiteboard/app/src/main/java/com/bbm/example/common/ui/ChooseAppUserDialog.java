@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package com.bbm.example.common.ui;
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,17 +43,17 @@ import java.util.Collection;
  */
 public class ChooseAppUserDialog {
 
-    private Activity mActivity;
+    private AppCompatActivity mActivity;
     private AppUserSelectedCallback mCallback;
     private AppUserRecyclerViewAdapter adapter;
 
 
 
-    public static void promptToSelect(final Activity activity, String title, String buttonText, String extraEditTextHint, AppUserSelectedCallback callback) {
+    public static void promptToSelect(final AppCompatActivity activity, String title, String buttonText, String extraEditTextHint, AppUserSelectedCallback callback) {
         new ChooseAppUserDialog(activity, title, buttonText, extraEditTextHint, callback, false, null, null);
     }
 
-    public static void promptToSelect(final Activity activity, String title, String buttonText, String extraEditTextHint, AppUserSelectedCallback callback, ObservableList<AppUser> usersToPickFrom) {
+    public static void promptToSelect(final AppCompatActivity activity, String title, String buttonText, String extraEditTextHint, AppUserSelectedCallback callback, ObservableList<AppUser> usersToPickFrom) {
         new ChooseAppUserDialog(activity, title, buttonText, extraEditTextHint, callback, false, null, usersToPickFrom);
     }
 
@@ -65,7 +65,7 @@ public class ChooseAppUserDialog {
      * @param callback
      * @param defaultSelectedFilter
      */
-    public static void promptToSelectMultiple(final Activity activity, String title, String buttonText, String extraEditTextHint, AppUserSelectedCallback callback,
+    public static void promptToSelectMultiple(final AppCompatActivity activity, String title, String buttonText, String extraEditTextHint, AppUserSelectedCallback callback,
                                               AppUserFilter defaultSelectedFilter) {
         new ChooseAppUserDialog(activity, title, buttonText, extraEditTextHint, callback, true, defaultSelectedFilter, null);
     }
@@ -85,7 +85,7 @@ public class ChooseAppUserDialog {
      * @param defaultSelectedFilter the optional filter to specify which users if any should be selected by default.
      *                              This will be ignored if allowMultiSelect is false.
      */
-    public ChooseAppUserDialog(final Activity activity, String title, String buttonText, String extraEditTextHint, final AppUserSelectedCallback callback,
+    public ChooseAppUserDialog(final AppCompatActivity activity, String title, String buttonText, String extraEditTextHint, final AppUserSelectedCallback callback,
                                final boolean allowMultiSelect, AppUserFilter defaultSelectedFilter, ObservableList<AppUser> usersToPickFrom) {
         mActivity = activity;
         mCallback = callback;

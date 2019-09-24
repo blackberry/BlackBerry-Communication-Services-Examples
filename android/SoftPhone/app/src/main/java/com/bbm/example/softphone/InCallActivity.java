@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+ * Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,10 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
@@ -224,7 +224,7 @@ public class InCallActivity extends AppCompatActivity {
                 mEnableCameraButton.setVisibility(View.VISIBLE);
 
                 //Enable the camera button if the call is connected
-                mEnableCameraButton.setEnabled(call.getCallState() == BBMECall.CallState.CALL_STATE_CONNECTED);
+                mEnableCameraButton.setClickable(call.getCallState() == BBMECall.CallState.CALL_STATE_CONNECTED);
             } else {
                 //Video is not supported for this call, remove the switch camera and enable camera buttons
                 if (mSwitchCameraItem != null) {
@@ -434,7 +434,7 @@ public class InCallActivity extends AppCompatActivity {
         BBMEnterprise.getInstance().getMediaManager().setCameraEnabled(mLocalVideoRenderer == null, mCameraOnCallback);
         //Disable the button until the current camera operation has completed
         //This avoids the user pressing the button multiple times and the service potentially being overloaded.
-        mEnableCameraButton.setEnabled(false);
+        mEnableCameraButton.setClickable(false);
         //Show a progress spinner over the camera icon, when the action is completed we will remove the spinner
         mVideoProgessBar.setVisibility(View.VISIBLE);
     }
@@ -451,7 +451,7 @@ public class InCallActivity extends AppCompatActivity {
             //Waiting to clear the spinner just to avoid it flashing too briefly.
             mHandler.postDelayed(new Runnable() {
                 public void run() {
-                    mEnableCameraButton.setEnabled(true);
+                    mEnableCameraButton.setClickable(true);
                     mVideoProgessBar.setVisibility(View.GONE);
                 }
             }, VIDEO_BUTTON_RENABLE_DELAY);
@@ -464,7 +464,7 @@ public class InCallActivity extends AppCompatActivity {
             //Waiting to clear the spinner just to avoid it flashing too briefly.
             mHandler.postDelayed(new Runnable() {
                  public void run() {
-                     mEnableCameraButton.setEnabled(true);
+                     mEnableCameraButton.setClickable(true);
                      mVideoProgessBar.setVisibility(View.GONE);
                  }
             }, VIDEO_BUTTON_RENABLE_DELAY);

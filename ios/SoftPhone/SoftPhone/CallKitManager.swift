@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+/* Copyright (c) 2019 BlackBerry Limited.  All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,8 @@ class CallKitManager : NSObject, CXProviderDelegate
     }()
 
     public var activeCallId : UUID?
+
+    public var answerAction : (()->())?
 
     override init() {
         super.init()
@@ -144,21 +146,30 @@ class CallKitManager : NSObject, CXProviderDelegate
     func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord)
+            //IMPORTANT: You must only answer the call *after* the audio session is activated.
+            if let answerAction = answerAction {
+                answerAction()
+            }
+            answerAction = nil
         } catch {
             NSLog("Failed to update audio session category")
         }
     }
 
-    func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
-        action.fulfill()
-    }
-
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
         //Incoming calls need to be answered. Outgoing calls do not
-        if(BBMEnterpriseService.shared().mediaManager().currentCallInfo?.incoming)! {
-            BBMEnterpriseService.shared().mediaManager().answer()
-        }
         action.fulfill(withDateConnected: Date())
+        if(BBMEnterpriseService.shared().mediaManager().currentCallInfo?.incoming)! {
+            //IMPORTANT: You cannot answer the call here.  You must first wait for the audio
+            //session to activate
+            answerAction = {
+                BBMEnterpriseService.shared().mediaManager().answer()
+            }
+        }
+    }
+
+    func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
+        action.fulfill()
     }
 
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {

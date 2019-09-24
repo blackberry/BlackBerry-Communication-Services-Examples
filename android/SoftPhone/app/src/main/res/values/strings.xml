@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2017 BlackBerry.  All Rights Reserved.
+  ~ Copyright (c) 2017 BlackBerry Limited. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -64,4 +64,6 @@
 
     <string name="rationale_write_external_storage">BBM Enterprise requires access to your device storage to save files from the camera and save images and files sent by your contacts.</string>
     <string name="user_id_not_found">Unable to find user %1$s</string>
+
+    <string name="notification_channel_name">Incoming Calls</string>
 </resources>

@@ -28,6 +28,7 @@
 -dontnote com.google.firebase.**
 
 -dontwarn com.google.common.**
+-dontnote com.google.common.**
 -dontnote com.google.common.util.concurrent.**
 -dontwarn com.google.errorprone.**
 
