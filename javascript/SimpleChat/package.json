@@ -1,7 +1,7 @@
 {
   "name": "simple-chat",
   "description": "Displays a single chat using BlackBerry Spark Communications Services",
-  "license" : "Apache-2.0",
+  "license": "Apache-2.0",
   "keywords": [],
   "version": "1.0.0",
   "main": "index.html",
