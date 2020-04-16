@@ -1,6 +1,6 @@
 {
   "name": "Node",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A set of example applications for using BlackBerry Spark Communications Services",
   "main": "Repl",
   "keywords": [],

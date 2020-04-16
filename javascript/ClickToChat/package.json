@@ -1,7 +1,7 @@
 {
   "name": "click-to-chat",
   "description": "Shows you how to integrate a chat experience into your website using BlackBerry Spark Communications Services",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.html",
   "dependencies": {
     "bbmChat": "file:../support/ui/widgets/bbmChat"

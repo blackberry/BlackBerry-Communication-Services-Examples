@@ -3,7 +3,7 @@
   "description": "Displays a single chat which demonstrates the full power of Chat Message References using BlackBerry Spark Communications Services",
   "license": "Apache-2.0",
   "keywords": [],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.html",
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
