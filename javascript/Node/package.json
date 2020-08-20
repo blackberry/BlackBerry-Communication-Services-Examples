@@ -1,6 +1,6 @@
 {
   "name": "Node",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A set of example applications for using BlackBerry Spark Communications Services",
   "main": "Repl",
   "keywords": [],
@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "bbm-enterprise": "file:./../../",
-    "google-auth-library": "4.2.0",
-    "googleapis": "40.0.0",
-    "xml": "^1.0.1",
-    "xml2js": "^0.4.17"
+    "google-auth-library": "6.0.6",
+    "googleapis": "58.0.0",
+    "xml": "1.0.1",
+    "xml2js": "0.4.17"
   },
   "devDependencies": {},
   "scripts": {}
