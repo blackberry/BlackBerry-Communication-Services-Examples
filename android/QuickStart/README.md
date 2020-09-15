@@ -53,7 +53,7 @@ Notes:
 
 * To complete a release build you must create your own signing key. To create your own signing key, visit https://developer.android.com/studio/publish/app-signing.html.
   * After creating your signing key set the key store password, key password, key alias and path to the keystore file in the 'app.properties' file.
-* This application has been built using gradle 5.1.1 (newer versions have not been validated).
+* This application has been built using gradle 6.1.1 (newer versions have not been validated).
 
 ## Walkthrough
 
