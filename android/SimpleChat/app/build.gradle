@@ -31,15 +31,15 @@ def appProperties = new Properties()
 appProperties.load(new FileInputStream(appPropertiesFile))
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.0"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
     defaultConfig {
         applicationId "com.bbm.example.simplechat"
-        minSdkVersion 22
-        targetSdkVersion 29
+        minSdkVersion 24
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -92,7 +92,7 @@ dependencies {
     //needed for firebase DB to store user management
     //needed for firebase DB rules checking auth to work
     implementation 'com.google.guava:guava:27.1-android'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }
